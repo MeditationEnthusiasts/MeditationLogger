@@ -1,0 +1,15 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApi", "MedEnthLogsApi\MedEnthLogsApi.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MedEnthLogsApi\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
