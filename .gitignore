@@ -3,3 +3,5 @@
 /MedEnthLogs/MedEnthLogsWin10/*.pfx
 /MedEnthLogs/MedEnthLogsWin10/*.appxmanifest
 /MedEnthLogs/.vs
+/MedEnthLogs/MedEnthDesktop/bin
+/MedEnthLogs/MedEnthDesktop/obj
