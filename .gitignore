@@ -5,3 +5,6 @@
 /MedEnthLogs/.vs
 /MedEnthLogs/MedEnthDesktop/bin
 /MedEnthLogs/MedEnthDesktop/obj
+/MedEnthLogs/Test/obj
+/MedEnthLogs/Test/bin
+/MedEnthLogs/packages/NUnit.2.6.4/lib
