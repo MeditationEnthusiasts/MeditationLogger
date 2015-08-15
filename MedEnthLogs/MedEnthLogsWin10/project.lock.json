@@ -232,6 +232,16 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        }
+      },
       "System.AppContext/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -1839,6 +1849,16 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -3481,6 +3501,16 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -5130,6 +5160,16 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        }
+      },
       "System.AppContext/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -6770,6 +6810,16 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -8419,6 +8469,16 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        }
+      },
       "System.AppContext/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -10059,6 +10119,16 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "SQLite.Net-PCL/3.0.5": {
+        "compile": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/Windows8/SQLite.Net.dll": {},
+          "lib/Windows8/SQLite.Net.Platform.WinRT.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -12132,6 +12202,35 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "package/services/metadata/core-properties/1d4eb9d0228b48b88d2df3822fba2d86.psmdcp",
+        "[Content_Types].xml"
+      ]
+    },
+    "SQLite.Net-PCL/3.0.5": {
+      "sha512": "K2La4B09cI6LXNaNiVhzUdRnoTw1Yyn5Rmb85/l7UXkF6vo/MOnJch8KBvzErbzxcxhoST/tb2t5ZO41iJWC0A==",
+      "type": "Package",
+      "files": [
+        "_rels/.rels",
+        "SQLite.Net-PCL.nuspec",
+        "lib/monotouch/SQLite.Net.dll",
+        "lib/monotouch/SQLite.Net.Platform.XamarinIOS.dll",
+        "lib/Xamarin.iOS10/SQLite.Net.dll",
+        "lib/Xamarin.iOS10/SQLite.Net.Platform.XamarinIOS.Unified.dll",
+        "lib/MonoAndroid/SQLite.Net.dll",
+        "lib/MonoAndroid/SQLite.Net.Platform.XamarinAndroid.dll",
+        "lib/portable-win81+wpa81/SQLite.Net.dll",
+        "lib/portable-win81+wpa81/SQLite.Net.Platform.WinRT.dll",
+        "lib/Windows8/SQLite.Net.dll",
+        "lib/Windows8/SQLite.Net.Platform.WinRT.dll",
+        "lib/windowsphone8/ARM/SQLite.Net.dll",
+        "lib/windowsphone8/ARM/SQLite.Net.Platform.WindowsPhone8.dll",
+        "lib/windowsphone8/x86/SQLite.Net.dll",
+        "lib/windowsphone8/x86/SQLite.Net.Platform.WindowsPhone8.dll",
+        "lib/net4/SQLite.Net.dll",
+        "lib/net4/SQLite.Net.Platform.Win32.dll",
+        "lib/net40/SQLite.Net.dll",
+        "lib/net40/SQLite.Net.Platform.Generic.dll",
+        "lib/portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1/SQLite.Net.dll",
+        "package/services/metadata/core-properties/0ce7ba880c5a46fb85a378331db2636b.psmdcp",
         "[Content_Types].xml"
       ]
     },
@@ -14836,7 +14935,8 @@
       "Microsoft.ApplicationInsights >= 1.0.0",
       "Microsoft.ApplicationInsights.PersistenceChannel >= 1.0.0",
       "Microsoft.ApplicationInsights.WindowsApps >= 1.0.0",
-      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0"
+      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
+      "SQLite.Net-PCL >= 3.0.5"
     ],
     "UAP,Version=v10.0": []
   }

@@ -8,3 +8,8 @@
 /MedEnthLogs/Test/obj
 /MedEnthLogs/Test/bin
 /MedEnthLogs/packages/NUnit.2.6.4/lib
+/MedEnthLogs/packages/SQLite.Net-PCL.3.0.5/lib
+/MedEnthLogs/packages/System.Data.SQLite.Core.1.0.97.0/build
+/MedEnthLogs/packages/System.Data.SQLite.Core.1.0.97.0/lib
+/MedEnthLogs/MedEnthLogs.opensdf
+/MedEnthLogs/MedEnthLogs.sdf

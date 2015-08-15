@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite.Net.Attributes;
 
 namespace MedEnthLogsApi
 {
@@ -20,6 +21,12 @@ namespace MedEnthLogsApi
             this.Comments = string.Empty;
             this.Location = string.Empty;
         }
+
+        /// <summary>
+        /// The unique ID for SQLite.
+        /// </summary>
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
 
         /// <summary>
         /// When the log starts
