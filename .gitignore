@@ -1,7 +1,6 @@
 /MedEnthLogs/MedEnthLogsWin10/bin
 /MedEnthLogs/MedEnthLogsWin10/obj
 /MedEnthLogs/MedEnthLogsWin10/*.pfx
-/MedEnthLogs/MedEnthLogsWin10/*.appxmanifest
 /MedEnthLogs/.vs
 /MedEnthLogs/MedEnthDesktop/bin
 /MedEnthLogs/MedEnthDesktop/obj

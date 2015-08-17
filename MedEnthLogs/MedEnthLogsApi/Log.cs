@@ -16,6 +16,7 @@ namespace MedEnthLogsApi
         /// </summary>
         public Log()
         {
+            this.Id = -1;
             this.StartTime = DateTime.MinValue;
             this.EndTime = DateTime.MinValue;
             this.Comments = string.Empty;
@@ -29,14 +30,28 @@ namespace MedEnthLogsApi
         public int Id { get; set; }
 
         /// <summary>
-        /// When the log starts
+        /// When the session starts
+        /// (UTC, the UI must convert it to local time).
         /// </summary>
         public DateTime StartTime { get; set; }
 
         /// <summary>
-        /// When the log ends.
+        /// When the session ends
+        /// (UTC, the UI must convert it to local time).
         /// </summary>
         public DateTime EndTime { get; set; }
+
+        /// <summary>
+        /// When the session was first recorded
+        /// (UTC, the UI must convert it to local time).
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+
+        /// <summary>
+        /// The last time this log was edited.
+        /// (UTC, the UI must convert it to local time).
+        /// </summary>
+        public DateTime EditTime { get; set; }
 
         /// <summary>
         /// How long the session lasted.

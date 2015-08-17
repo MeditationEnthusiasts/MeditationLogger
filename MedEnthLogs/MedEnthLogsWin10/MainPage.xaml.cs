@@ -39,7 +39,7 @@ namespace MedEnthLogsWin10
             this.api = new MedEnthLogsApi.MedEnthLogsApi();
 
             // This will put the database in app data.
-            string folder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+            string folder = Windows.Storage.ApplicationData.Current.RoamingFolder.Path;
             this.api.Open( new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), folder + @"\test.db" );
             this.api.Close();
         }
