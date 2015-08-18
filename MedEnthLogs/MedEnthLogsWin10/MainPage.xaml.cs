@@ -19,7 +19,7 @@ using SQLite.Net.Attributes;
 namespace MedEnthLogsWin10
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// This page is the Home Screen.
     /// </summary>
     public sealed partial class MainPage : Page
     {
@@ -42,6 +42,11 @@ namespace MedEnthLogsWin10
             string folder = Windows.Storage.ApplicationData.Current.RoamingFolder.Path;
             this.api.Open( new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), folder + @"\test.db" );
             this.api.Close();
+        }
+
+        private void StartMeditatingButton_Click( object sender, RoutedEventArgs e )
+        {
+            this.Frame.Navigate( typeof( MeditationPage ) );
         }
     }
 }

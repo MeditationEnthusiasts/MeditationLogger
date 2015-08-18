@@ -1,0 +1,28 @@
+﻿<Page
+    x:Class="MedEnthLogsWin10.MeditationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MedEnthLogsWin10"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#FF000000" BorderBrush="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="320"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="360"/>
+            <RowDefinition Height="360"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="LogoImage" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Center" Height="720" Grid.RowSpan="3" VerticalAlignment="Center" Width="640" Source="/Assets/round_logo_640x620.png" Opacity="0.19"/>
+        <TextBlock x:Name="HappyBlock" Grid.ColumnSpan="2" Grid.Column="1" TextAlignment="Center" HorizontalAlignment="Center" Height="95" Margin="0,33,0,232" Grid.RowSpan="2" TextWrapping="Wrap" Text="Happy Meditating!" VerticalAlignment="Center" Width="640" FontSize="48" Foreground="White"/>
+        <Button x:Name="CompleteButton" Grid.ColumnSpan="2" Content="Complete" Grid.Column="1" HorizontalAlignment="Left" Height="105" Margin="0,205,0,0" Grid.Row="2" VerticalAlignment="Top" Width="640" FontSize="48" Background="#301F1F1F" BorderBrush="#FFFBFBFB" Foreground="White"/>
+        <TextBlock x:Name="TimerBlock" Grid.ColumnSpan="2" Grid.Column="1" TextAlignment="Center" HorizontalAlignment="Center" Height="147" Margin="0,285,0,288" Grid.RowSpan="3" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Center" Width="640" FontSize="96" Foreground="White"/>
+
+    </Grid>
+</Page>
