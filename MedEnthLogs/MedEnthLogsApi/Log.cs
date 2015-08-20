@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SQLite.Net.Attributes;
 
 namespace MedEnthLogsApi
@@ -11,6 +9,18 @@ namespace MedEnthLogsApi
     /// </summary>
     public class Log
     {
+        // -------- Fields ---------
+
+        /// <summary>
+        /// Comments about the session.
+        /// </summary>
+        private string comments;
+
+        /// <summary>
+        /// Where the session took place.
+        /// </summary>
+        private string location;
+
         // -------- Constructor -------
 
         /// <summary>
@@ -71,14 +81,44 @@ namespace MedEnthLogsApi
         /// <summary>
         /// The comments the user wrote about the session.
         /// </summary>
-        public string Comments { get; set; }
+        public string Comments
+        {
+            get
+            {
+                return comments;
+            }
+            set
+            {
+                if ( value == null )
+                {
+                    throw new ArgumentNullException( "value", "Log comments can not be null" );
+                }
+
+                comments = value;
+            }
+        }
 
         /// <summary>
         /// Where the user had the session.
         /// This can either be GPS coordinates or a location the user
         /// specifies.
         /// </summary>
-        public string Location { get; set; }
+        public string Location
+        {
+            get
+            {
+                return location;
+            }
+            set
+            {
+                if ( value == null )
+                {
+                    throw new ArgumentNullException( "value", "Log location can not be null" );
+                }
+
+                location = value;
+            }
+        }
 
         // -------- Functions --------
 

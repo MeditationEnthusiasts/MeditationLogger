@@ -57,6 +57,46 @@ namespace TestCommon
         }
 
         /// <summary>
+        /// Ensures we can't set the comments to null,
+        /// and what we set is what we get.
+        /// </summary>
+        [Test]
+        public void CommentsTest()
+        {
+            // Expect Exception.
+            Assert.Catch<ArgumentNullException>(
+                delegate ()
+                {
+                    uut.Comments = null;
+                }
+            );
+
+            string expectedComments = "Did stuff";
+            uut.Comments = expectedComments;
+            Assert.AreEqual( expectedComments, uut.Comments );
+        }
+
+        /// <summary>
+        /// Ensures we can't set the location to null,
+        /// and what we set is what we get.
+        /// </summary>
+        [Test]
+        public void LocationTest()
+        {
+            // Expect Exception.
+            Assert.Catch<ArgumentNullException>(
+                delegate ()
+                {
+                    uut.Location = null;
+                }
+            );
+
+            string expectedLocation = "My Room";
+            uut.Location = expectedLocation;
+            Assert.AreEqual( expectedLocation, uut.Location );
+        }
+
+        /// <summary>
         /// Tests the Log's equal function, operator==, and operator!=
         /// </summary>
         [Test]
@@ -114,7 +154,7 @@ namespace TestCommon
         /// </summary>
         /// <param name="log1">The first log to compare.</param>
         /// <param name="log2">The second log to compare.</param>
-        public void CheckLogsEqual( Log log1, Log log2 )
+        private void CheckLogsEqual( Log log1, Log log2 )
         {
             Assert.IsTrue( log1.Equals( log2 ) );
             Assert.IsTrue( log2.Equals( log1 ) );
@@ -125,7 +165,7 @@ namespace TestCommon
         /// </summary>
         /// <param name="log1">The first log to compare.</param>
         /// <param name="log2">The second log to compare.</param>
-        public void CheckLogsNotEqual( Log log1, Log log2 )
+        private void CheckLogsNotEqual( Log log1, Log log2 )
         {
             Assert.IsFalse( log1.Equals( log2 ) );
             Assert.IsFalse( log2.Equals( log1 ) );
