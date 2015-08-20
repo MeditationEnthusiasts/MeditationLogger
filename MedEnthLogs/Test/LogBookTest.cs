@@ -10,16 +10,22 @@ namespace TestCommon
     [TestFixture]
     public class LogBookTest
     {
+        // -------- Fields --------
+
         /// <summary>
         /// Unit under test.
         /// </summary>
         LogBook uut;
+
+        // -------- Setup/Teardown --------
 
         [SetUp]
         public void TestSetup()
         {
             uut = new LogBook();
         }
+
+        // -------- Tests --------
 
         /// <summary>
         /// Ensures the log list is readonly.

@@ -7,7 +7,7 @@ namespace MedEnthLogsApi
     /// This class represents a specific instance
     /// of an event logged.
     /// </summary>
-    public class Log
+    public class Log : ILog
     {
         // -------- Fields ---------
 
@@ -31,6 +31,8 @@ namespace MedEnthLogsApi
             this.Id = -1;
             this.StartTime = DateTime.MinValue;
             this.EndTime = DateTime.MinValue;
+            this.CreateTime = DateTime.MinValue;
+            this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
             this.Location = string.Empty;
         }
@@ -130,7 +132,7 @@ namespace MedEnthLogsApi
         /// <returns>true if all properties are equal, else false.</returns>
         public override bool Equals( object obj )
         {
-            Log other = obj as Log;
+            ILog other = obj as ILog;
             if ( other == null )
             {
                 return false;
@@ -155,6 +157,15 @@ namespace MedEnthLogsApi
         public override int GetHashCode()
         {
             return CreateTime.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns a Clone of this object.
+        /// </summary>
+        /// <returns>A clone of this object.</returns>
+        public Log Clone()
+        {
+            return (Log) this.MemberwiseClone();
         }
     }
 }

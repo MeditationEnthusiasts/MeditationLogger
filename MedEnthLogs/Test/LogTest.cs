@@ -147,6 +147,18 @@ namespace TestCommon
             Assert.IsFalse( uut.Equals( null ) );
         }
 
+        /// <summary>
+        /// Ensures the clone method creates a new instance,
+        /// but all properties match.
+        /// </summary>
+        [Test]
+        public void CloneTest()
+        {
+            Log clone = uut.Clone();
+            Assert.AreNotSame( clone, uut );
+            Assert.AreEqual( clone, uut );
+        }
+
         // -------- Test Helpers --------
 
         /// <summary>
