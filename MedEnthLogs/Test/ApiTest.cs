@@ -90,9 +90,9 @@ namespace TestCommon
         {
             uut.StartSession();
 
-            // Ensure the expected time is close to DateTime.Now;
-            DateTime expectedTime = DateTime.Now.ToUniversalTime();
-            TimeSpan delta = expectedTime - uut.currentLog.CreateTime;
+            // Ensure the expected creation time is close to DateTime.Now;
+            DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
+            TimeSpan delta = expectedCreationTime - uut.currentLog.CreateTime;
             double deltaTime = delta.TotalSeconds;
             Assert.LessOrEqual( deltaTime, 5 );
 
@@ -143,6 +143,31 @@ namespace TestCommon
             Assert.AreNotSame( oldLog, uut.currentLog );
 
             // Ensure we are still not in progress.
+            Assert.IsFalse( uut.IsSessionInProgress );
+        }
+
+        [Test]
+        public void StopTest()
+        {
+            // First, start the session.
+            uut.StartSession();
+
+            DateTime oldEditTime = uut.CurrentLog.EditTime;
+
+            // Now, end it.
+            uut.StopSession();
+
+            // Ensure the expected end time is close to DateTime.Now;
+            DateTime expectedEndTime = DateTime.Now.ToUniversalTime();
+            TimeSpan delta = expectedEndTime - uut.currentLog.EndTime;
+            double deltaTime = delta.TotalSeconds;
+            Assert.LessOrEqual( deltaTime, 5 );
+
+            // Ensure the edit time is greater or equal 
+            // to what it was when we called start.
+            Assert.GreaterOrEqual( uut.CurrentLog.EditTime, oldEditTime );
+
+            // Ensure the session is no longer in progress.
             Assert.IsFalse( uut.IsSessionInProgress );
         }
 

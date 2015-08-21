@@ -21,6 +21,9 @@ namespace MedEnthLogsApi
         }
     }
 
+    /// <summary>
+    /// The API for talking to the backend of the application.
+    /// </summary>
     public class MedEnthLogsApi
     {
         // -------- Fields --------
