@@ -7,22 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="#FF000000" BorderBrush="White">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="320"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0"/>
-            <RowDefinition Height="360"/>
-            <RowDefinition Height="360"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="LogoImage" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Center" Height="720" Grid.RowSpan="3" VerticalAlignment="Center" Width="640" Source="/Assets/round_logo_640x620.png" Opacity="0.19"/>
-        <TextBlock x:Name="HappyBlock" Grid.ColumnSpan="2" Grid.Column="1" TextAlignment="Center" HorizontalAlignment="Center" Height="95" Margin="0,33,0,232" Grid.RowSpan="2" TextWrapping="Wrap" Text="Happy Meditating!" VerticalAlignment="Center" Width="640" FontSize="48" Foreground="White"/>
-        <Button x:Name="CompleteButton" Grid.ColumnSpan="2" Content="Complete" Grid.Column="1" HorizontalAlignment="Left" Height="105" Margin="0,205,0,0" Grid.Row="2" VerticalAlignment="Top" Width="640" FontSize="48" Background="#301F1F1F" BorderBrush="#FFFBFBFB" Foreground="White"/>
-        <TextBlock x:Name="TimerBlock" Grid.ColumnSpan="2" Grid.Column="1" TextAlignment="Center" HorizontalAlignment="Center" Height="147" Margin="0,285,0,288" Grid.RowSpan="3" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Center" Width="640" FontSize="96" Foreground="White"/>
+    <RelativePanel Background="#FF000000" BorderBrush="White">
+        <TextBlock x:Name="HappyBlock" TextAlignment="Center"  TextWrapping="WrapWholeWords" Text="Happy Meditating!" FontSize="48" Foreground="White" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" MaxLines="2" Margin="0,0,0,-75" VerticalAlignment="Top" RelativePanel.AlignTopWithPanel="True"/>
+        <Image x:Name="LogoImage" Height="655" Width="630" Source="/Assets/round_logo_640x620.png" Opacity="0.19" RelativePanel.Below="" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignTopWith="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+        <Button x:Name="CompleteButton" Content="Complete" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch" FontSize="48" Background="#301F1F1F" BorderBrush="#FFFBFBFB" Foreground="White" RelativePanel.AlignBottomWith="" RelativePanel.AlignLeftWith="LogoImage" RelativePanel.AlignRightWith="LogoImage" RelativePanel.AlignBottomWithPanel="True" ToolTipService.ToolTip="Finish the Meditation" />
+        <TextBlock x:Name="TimerBlock" TextAlignment="Center" Height="147" TextWrapping="Wrap" Text="00:00:00" FontSize="96" Foreground="White" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignRightWith="LogoImage" RelativePanel.AlignLeftWith="LogoImage" RelativePanel.Above="CompleteButton" RelativePanel.Below="HappyBlock" Canvas.ZIndex="1" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignTopWithPanel="True"/>
 
-    </Grid>
+    </RelativePanel>
 </Page>
