@@ -1,6 +1,7 @@
 ﻿using System;
 using MedEnthLogsApi;
 using NUnit.Framework;
+using System.IO;
 
 namespace TestCommon
 {
@@ -15,14 +16,30 @@ namespace TestCommon
         /// <summary>
         /// Unit under test.
         /// </summary>
-        MedEnthLogsApi.MedEnthLogsApi uut;
+        private MedEnthLogsApi.MedEnthLogsApi uut;
+
+        private const string dbLocation = "test.db";
 
         // -------- Setup/Teardown --------
 
         [SetUp]
         public void TestSetup()
         {
+            if ( File.Exists( dbLocation ) )
+            {
+                File.Delete( dbLocation );
+            }
+
             uut = new MedEnthLogsApi.MedEnthLogsApi();
+        }
+
+        [TearDown]
+        public void TestTeardown()
+        {
+            if ( File.Exists( dbLocation ) )
+            {
+                File.Delete( dbLocation );
+            }
         }
 
         // -------- Tests --------
@@ -188,6 +205,63 @@ namespace TestCommon
         }
 
         /// <summary>
+        /// Ensures calling save without calling start
+        /// results in an exception.
+        /// </summary>
+        [Test]
+        public void SaveWithNotStarting()
+        {
+            // First, open the database.
+            try
+            {
+                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+
+                // We never called start or stop. We should fail validation.
+                CheckValidationFailed();
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
+        /// <summary>
+        /// Tries to save to the database.
+        /// </summary>
+        [Test]
+        public void SaveLogNoComments()
+        {
+            DoSaveTest();
+        }
+
+        /// <summary>
+        /// Tries to save to the database with comments.
+        /// </summary>
+        [Test]
+        public void SaveLogWithCommentsNoLocation()
+        {
+            DoSaveTest( null, "This is a comment" );
+        }
+
+        /// <summary>
+        /// Tries to save to the database with location.
+        /// </summary>
+        [Test]
+        public void SaveLogWithNoCommentsWithLocation()
+        {
+            DoSaveTest( "My Room" );
+        }
+
+        /// <summary>
+        /// Tries to save to the database.
+        /// </summary>
+        [Test]
+        public void SaveLogWithCommentsAndLocation()
+        {
+            DoSaveTest( "My Room", "This is a comment" );
+        }
+
+        /// <summary>
         /// Ensures calling PopulateLogbook with no database
         /// opened results in an exception.
         /// </summary>
@@ -242,6 +316,40 @@ namespace TestCommon
                     },
                     expectedErrorStr
                 );
+            }
+        }
+
+        /// <summary>
+        /// Tries to save to the database
+        /// </summary>
+        /// <param name="location">The location to save</param>
+        /// <param name="comments">The comments to save</param>
+        private void DoSaveTest( string location = null, string comments = null )
+        {
+            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            try
+            {
+                uut.StartSession();
+                uut.StopSession();
+                uut.ValidateAndSaveSession( location, comments );
+
+                uut.PopulateLogbook();
+
+                Assert.AreEqual( uut.CurrentLog, uut.LogBook.Logs[0] );
+                Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
+
+                Assert.AreEqual( 
+                    ( location == null ) ? string.Empty : location,
+                    uut.LogBook.Logs[0].Location
+                );
+                Assert.AreEqual(
+                    ( comments == null ) ? string.Empty : comments,
+                    uut.LogBook.Logs[0].Comments
+                );
+            }
+            finally
+            {
+                uut.Close();
             }
         }
     }

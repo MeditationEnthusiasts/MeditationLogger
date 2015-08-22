@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using SQLite.Net;
 using SQLite.Net.Interop;
@@ -236,6 +237,16 @@ namespace MedEnthLogsApi
                     DatabaseNotOpenMessage
                 );
             }
+
+            List<ILog> logs = new List<ILog>();
+
+            var query = this.sqlite.Table<Log>().Where( x => x.Id > 0 );
+            foreach( Log q in query )
+            {
+                logs.Add( q );
+            }
+
+            this.LogBook = new LogBook( logs );
         }
 
         /// <summary>
