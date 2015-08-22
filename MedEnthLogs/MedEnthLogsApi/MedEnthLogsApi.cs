@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
 using SQLite.Net;
 using SQLite.Net.Interop;
-using System.IO;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo( "Test" )]
 namespace MedEnthLogsApi
@@ -119,6 +116,8 @@ namespace MedEnthLogsApi
             }
 
             this.sqlite = new SQLiteConnection( platform, path, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite );
+            this.sqlite.CreateTable<Log>();
+            this.sqlite.Commit();
         }
 
         /// <summary>
@@ -183,6 +182,8 @@ namespace MedEnthLogsApi
         /// Throws InvalidOperationException if a session is in progress or database is not opened.
         /// 
         /// Throws LogValidationException if the CurrentLog is not valid.
+        /// 
+        /// This does NOT reset the current log.  Call ResetCurrentLog() for that.
         /// </summary>
         /// <param name="location">The location information for the session, if any (null for no location).</param>
         /// <param name="comments">The comments for the session, if any (null for no comments).</param>
@@ -202,6 +203,7 @@ namespace MedEnthLogsApi
                     SessionInProgressMessage
                 );
             }
+
             // If validating the log fails, throw.
             this.ValidateCurrentLog();
 

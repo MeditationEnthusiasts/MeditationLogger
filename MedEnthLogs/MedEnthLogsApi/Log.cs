@@ -29,9 +29,18 @@ namespace MedEnthLogsApi
         public Log()
         {
             this.Id = -1;
-            this.StartTime = DateTime.MinValue;
             this.EndTime = DateTime.MinValue;
-            this.CreateTime = DateTime.MinValue;
+
+            // Make start time ahead of end time, 
+            // this will make the log in an invalid state, as the
+            // start time is ahead of the end time which is not allowed.
+            this.StartTime = DateTime.MaxValue;
+
+            // Make Creation time ahead of edit time, 
+            // this will make the log in an invalid state, as the
+            // creation time is ahead of the edit time which is not allowed.
+            this.CreateTime = DateTime.MaxValue;
+
             this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
             this.Location = string.Empty;
@@ -40,11 +49,23 @@ namespace MedEnthLogsApi
         // -------- Properties --------
 
         /// <summary>
+        /// How long the session lasted.
+        /// </summary>
+        public TimeSpan Duration
+        {
+            get
+            {
+                return EndTime - StartTime;
+            }
+        }
+
+        /// <summary>
         /// The unique ID for SQLite.
         /// </summary>
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
+        [Indexed]
         /// <summary>
         /// When the session starts
         /// (UTC, the UI must convert it to local time).
@@ -68,17 +89,6 @@ namespace MedEnthLogsApi
         /// (UTC, the UI must convert it to local time).
         /// </summary>
         public DateTime EditTime { get; set; }
-
-        /// <summary>
-        /// How long the session lasted.
-        /// </summary>
-        public TimeSpan Duration
-        {
-            get
-            {
-                return EndTime - StartTime;
-            }
-        }
 
         /// <summary>
         /// The comments the user wrote about the session.
