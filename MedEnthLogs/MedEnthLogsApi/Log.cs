@@ -17,9 +17,9 @@ namespace MedEnthLogsApi
         private string comments;
 
         /// <summary>
-        /// Where the session took place.
+        /// The technique used.
         /// </summary>
-        private string location;
+        private string technique;
 
         // -------- Constructor -------
 
@@ -43,7 +43,7 @@ namespace MedEnthLogsApi
 
             this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
-            this.Location = string.Empty;
+            this.Technique = string.Empty;
         }
 
         // -------- Properties --------
@@ -111,24 +111,22 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
-        /// Where the user had the session.
-        /// This can either be GPS coordinates or a location the user
-        /// specifies.
+        /// The Technique of the session.
         /// </summary>
-        public string Location
+        public string Technique
         {
             get
             {
-                return location;
+                return technique;
             }
             set
             {
                 if ( value == null )
                 {
-                    throw new ArgumentNullException( "value", "Log location can not be null" );
+                    throw new ArgumentNullException( "value", "Log technique can not be null" );
                 }
 
-                location = value;
+                technique = value;
             }
         }
 
@@ -153,7 +151,7 @@ namespace MedEnthLogsApi
                 ( this.EditTime == other.EditTime ) &&
                 ( this.EndTime == other.EndTime ) &&
                 ( this.StartTime == other.StartTime ) &&
-                ( this.Location == other.Location ) &&
+                ( this.Technique == other.Technique ) &&
                 ( this.Comments == other.Comments );
         }
 

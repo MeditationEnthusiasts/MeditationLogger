@@ -186,9 +186,9 @@ namespace MedEnthLogsApi
         /// 
         /// This does NOT reset the current log.  Call ResetCurrentLog() for that.
         /// </summary>
-        /// <param name="location">The location information for the session, if any (null for no location).</param>
+        /// <param name="technique">The technique information for the session, if any (null for no technique).</param>
         /// <param name="comments">The comments for the session, if any (null for no comments).</param>
-        public void ValidateAndSaveSession( string location = null, string comments = null )
+        public void ValidateAndSaveSession( string technique = null, string comments = null )
         {
             // If sqlite is not open, throw exeption.
             if ( this.sqlite == null )
@@ -209,9 +209,9 @@ namespace MedEnthLogsApi
             this.ValidateCurrentLog();
 
             // Otherwise, Edit the log one last time and save it to the database.
-            if ( location != null )
+            if ( technique != null )
             {
-                this.currentLog.Location = location;
+                this.currentLog.Technique = technique;
                 this.currentLog.EditTime = DateTime.Now.ToUniversalTime();
             }
 

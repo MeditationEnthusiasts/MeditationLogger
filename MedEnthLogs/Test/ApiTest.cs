@@ -238,27 +238,27 @@ namespace TestCommon
         /// Tries to save to the database with comments.
         /// </summary>
         [Test]
-        public void SaveLogWithCommentsNoLocation()
+        public void SaveLogWithCommentsNoTecnique()
         {
             DoSaveTest( null, "This is a comment" );
         }
 
         /// <summary>
-        /// Tries to save to the database with location.
+        /// Tries to save to the database with technique
         /// </summary>
         [Test]
-        public void SaveLogWithNoCommentsWithLocation()
+        public void SaveLogWithNoCommentsWithTechnique()
         {
-            DoSaveTest( "My Room" );
+            DoSaveTest( "SomeTechnqiue" );
         }
 
         /// <summary>
         /// Tries to save to the database.
         /// </summary>
         [Test]
-        public void SaveLogWithCommentsAndLocation()
+        public void SaveLogWithCommentsAndTechnique()
         {
-            DoSaveTest( "My Room", "This is a comment" );
+            DoSaveTest( "SomeTechnqiue", "This is a comment" );
         }
 
         /// <summary>
@@ -322,16 +322,16 @@ namespace TestCommon
         /// <summary>
         /// Tries to save to the database
         /// </summary>
-        /// <param name="location">The location to save</param>
+        /// <param name="technique">The technique to save</param>
         /// <param name="comments">The comments to save</param>
-        private void DoSaveTest( string location = null, string comments = null )
+        private void DoSaveTest( string technique = null, string comments = null )
         {
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try
             {
                 uut.StartSession();
                 uut.StopSession();
-                uut.ValidateAndSaveSession( location, comments );
+                uut.ValidateAndSaveSession( technique, comments );
 
                 uut.PopulateLogbook();
 
@@ -339,8 +339,8 @@ namespace TestCommon
                 Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
 
                 Assert.AreEqual( 
-                    ( location == null ) ? string.Empty : location,
-                    uut.LogBook.Logs[0].Location
+                    ( technique == null ) ? string.Empty : technique,
+                    uut.LogBook.Logs[0].Technique
                 );
                 Assert.AreEqual(
                     ( comments == null ) ? string.Empty : comments,

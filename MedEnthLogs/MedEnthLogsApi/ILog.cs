@@ -39,11 +39,10 @@ namespace MedEnthLogsApi
         TimeSpan Duration { get; }
 
         /// <summary>
-        /// Where the user had the session.
-        /// This can either be GPS coordinates or a location the user
+        /// The Technique Used.
         /// specifies.
         /// </summary>
-        string Location { get; }
+        string Technique { get; }
 
         /// <summary>
         /// The comments the user wrote about the session.

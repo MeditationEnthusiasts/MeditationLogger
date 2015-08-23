@@ -87,13 +87,13 @@ namespace TestCommon
             Assert.Catch<ArgumentNullException>(
                 delegate ()
                 {
-                    uut.Location = null;
+                    uut.Technique = null;
                 }
             );
 
             string expectedLocation = "My Room";
-            uut.Location = expectedLocation;
-            Assert.AreEqual( expectedLocation, uut.Location );
+            uut.Technique = expectedLocation;
+            Assert.AreEqual( expectedLocation, uut.Technique );
         }
 
         /// <summary>
@@ -138,10 +138,10 @@ namespace TestCommon
             CheckLogsNotEqual( uut, other );
             other.Comments = uut.Comments;
 
-            // Change Location
-            other.Location = "My Room";
+            // Change Technique
+            other.Technique = "My Room";
             CheckLogsNotEqual( uut, other );
-            other.Location = uut.Location;
+            other.Technique = uut.Technique;
 
             // Check passing in nulls.
             Assert.IsFalse( uut.Equals( null ) );
