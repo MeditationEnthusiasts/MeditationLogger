@@ -70,6 +70,11 @@ namespace MedEnthLogsApi
         private SQLiteConnection sqlite;
 
         /// <summary>
+        /// Class that detects the location.
+        /// </summary>
+        private ILocationDetector locationDetector;
+
+        /// <summary>
         /// The current log being written to.
         /// internal for unit tests only.
         /// </summary>
@@ -80,10 +85,12 @@ namespace MedEnthLogsApi
         /// <summary>
         /// Constructor
         /// </summary>
-        public Api()
+        /// <param name="locationDetector">Location to the location detector.</param>
+        public Api( ILocationDetector locationDetector )
         {
             this.sqlite = null;
             this.LogBook = null;
+            this.locationDetector = locationDetector;
             ResetCurrentLog();
         }
 

@@ -37,7 +37,7 @@ namespace MedEnthLogsWin10
         {
             this.InitializeComponent();
 
-            this.api = new Api();
+            this.api = new Api( new Win10LocationDetector() );
 
             // This will put the database in app data.
             string folder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;

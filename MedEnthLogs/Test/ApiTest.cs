@@ -1,5 +1,6 @@
 ﻿using System;
 using MedEnthLogsApi;
+using MedEnthLogsDesktop;
 using NUnit.Framework;
 using System.IO;
 
@@ -30,7 +31,7 @@ namespace TestCommon
                 File.Delete( dbLocation );
             }
 
-            uut = new MedEnthLogsApi.Api();
+            uut = new MedEnthLogsApi.Api( new Win32LocationDetector() );
         }
 
         [TearDown]
