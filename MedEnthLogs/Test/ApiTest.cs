@@ -16,7 +16,7 @@ namespace TestCommon
         /// <summary>
         /// Unit under test.
         /// </summary>
-        private MedEnthLogsApi.MedEnthLogsApi uut;
+        private MedEnthLogsApi.Api uut;
 
         private const string dbLocation = "test.db";
 
@@ -30,7 +30,7 @@ namespace TestCommon
                 File.Delete( dbLocation );
             }
 
-            uut = new MedEnthLogsApi.MedEnthLogsApi();
+            uut = new MedEnthLogsApi.Api();
         }
 
         [TearDown]
@@ -68,7 +68,7 @@ namespace TestCommon
             uut.currentLog.EndTime = DateTime.MinValue;
             uut.currentLog.CreateTime = DateTime.Now;
             uut.currentLog.EditTime = uut.CurrentLog.CreateTime;
-            CheckValidationFailed( MedEnthLogsApi.MedEnthLogsApi.EndTimeLessThanStartTimeMessage );
+            CheckValidationFailed( MedEnthLogsApi.Api.EndTimeLessThanStartTimeMessage );
             uut.ResetCurrentLog();
 
             // Ensure it doesn't validate if the edit time is less than
@@ -77,7 +77,7 @@ namespace TestCommon
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
             uut.currentLog.CreateTime = DateTime.MaxValue;
             uut.currentLog.EditTime = DateTime.MinValue;
-            CheckValidationFailed( MedEnthLogsApi.MedEnthLogsApi.EditTimeLessThanCreationTimeMessage );
+            CheckValidationFailed( MedEnthLogsApi.Api.EditTimeLessThanCreationTimeMessage );
             uut.ResetCurrentLog();
 
             // Ensure everything validates if start time and end time match
@@ -200,7 +200,7 @@ namespace TestCommon
                 {
                     uut.ValidateAndSaveSession();
                 },
-                MedEnthLogsApi.MedEnthLogsApi.DatabaseNotOpenMessage
+                MedEnthLogsApi.Api.DatabaseNotOpenMessage
             );
         }
 
@@ -310,7 +310,7 @@ namespace TestCommon
                 {
                     uut.PopulateLogbook();
                 },
-                MedEnthLogsApi.MedEnthLogsApi.DatabaseNotOpenMessage
+                MedEnthLogsApi.Api.DatabaseNotOpenMessage
             );
         }
 

@@ -8,7 +8,7 @@ namespace MedEnthLogsDesktop
 {
     static class Program
     {
-        private static MedEnthLogsApi.MedEnthLogsApi api;
+        private static MedEnthLogsApi.Api api;
 
         /// <summary>
         /// The main entry point for the application.
@@ -16,7 +16,7 @@ namespace MedEnthLogsDesktop
         [STAThread]
         static void Main()
         {
-            api = new MedEnthLogsApi.MedEnthLogsApi();
+            api = new MedEnthLogsApi.Api();
 
             // Use the win32 sqlite.
             api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );

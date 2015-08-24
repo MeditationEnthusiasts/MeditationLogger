@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using MedEnthLogsApi;
 using SQLite.Net.Attributes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -28,7 +29,7 @@ namespace MedEnthLogsWin10
         /// <summary>
         /// Reference to the API.
         /// </summary>
-        private MedEnthLogsApi.MedEnthLogsApi api;
+        private Api api;
 
         // -------- Constructor --------
 
@@ -36,10 +37,10 @@ namespace MedEnthLogsWin10
         {
             this.InitializeComponent();
 
-            this.api = new MedEnthLogsApi.MedEnthLogsApi();
+            this.api = new Api();
 
             // This will put the database in app data.
-            string folder = Windows.Storage.ApplicationData.Current.RoamingFolder.Path;
+            string folder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
             this.api.Open( new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), folder + @"\test.db" );
             this.api.Close();
         }
