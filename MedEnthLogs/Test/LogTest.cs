@@ -77,11 +77,11 @@ namespace TestCommon
         }
 
         /// <summary>
-        /// Ensures we can't set the location to null,
+        /// Ensures we can't set the technique to null,
         /// and what we set is what we get.
         /// </summary>
         [Test]
-        public void LocationTest()
+        public void TechniqueTest()
         {
             // Expect Exception.
             Assert.Catch<ArgumentNullException>(
@@ -138,10 +138,34 @@ namespace TestCommon
             CheckLogsNotEqual( uut, other );
             other.Comments = uut.Comments;
 
-            // Change Technique
+            // Change Technique.
             other.Technique = "My Room";
             CheckLogsNotEqual( uut, other );
             other.Technique = uut.Technique;
+
+            // Change Latitude, with one being null.
+            other.Latitude = 10.0;
+            uut.Latitude = null;
+            CheckLogsNotEqual( uut, other );
+            CheckLogsNotEqual( other, uut );
+            // Check Latitude again, with both being not-null.
+            uut.Latitude = 11.0;
+            CheckLogsNotEqual( uut, other );
+            CheckLogsNotEqual( other, uut );
+            other.Latitude = null;
+            uut.Latitude = null;
+
+            // Change Longitude, with one being null.
+            other.Longitude = 10.0;
+            uut.Longitude = null;
+            CheckLogsNotEqual( uut, other );
+            CheckLogsNotEqual( other, uut );
+            // Check Longitude again, with both being not-null.
+            uut.Longitude = 11.0;
+            CheckLogsNotEqual( uut, other );
+            CheckLogsNotEqual( other, uut );
+            other.Longitude = null;
+            uut.Longitude = null;
 
             // Check passing in nulls.
             Assert.IsFalse( uut.Equals( null ) );

@@ -53,6 +53,18 @@ namespace MedEnthLogsApi
         internal const string EditTimeLessThanCreationTimeMessage = "Log edit Time is less than the creation time.";
 
         /// <summary>
+        /// Error message that appears
+        /// if the latitude is set on the log, but not the longitude.
+        /// </summary>
+        internal const string LatitudeSetNoLongitude = "Latitude set on log, but not longitude";
+
+        /// <summary>
+        /// Error message that appears
+        /// if the longitude is set on the log, but not the latitude.
+        /// </summary>
+        internal const string LongitudeSetNoLatitude = "Longitude set on long, but not latitude";
+
+        /// <summary>
         /// Reference to a SQLite connection.
         /// </summary>
         private SQLiteConnection sqlite;
@@ -143,6 +155,14 @@ namespace MedEnthLogsApi
             {
                 throw new LogValidationException( EditTimeLessThanCreationTimeMessage );
             }
+            else if ( ( this.currentLog.Latitude == null ) && ( this.currentLog.Longitude != null ) )
+            {
+                throw new LogValidationException( LongitudeSetNoLatitude );
+            }
+            else if ( ( this.currentLog.Longitude == null ) && ( this.currentLog.Latitude != null ) )
+            {
+                throw new LogValidationException( LatitudeSetNoLongitude );
+            }
         }
 
         /// <summary>
@@ -185,10 +205,14 @@ namespace MedEnthLogsApi
         /// Throws LogValidationException if the CurrentLog is not valid.
         /// 
         /// This does NOT reset the current log.  Call ResetCurrentLog() for that.
+        /// 
+        /// If either latitude or longitude is null, but the other is not, a LogValidationException will be thrown. 
         /// </summary>
         /// <param name="technique">The technique information for the session, if any (null for no technique).</param>
         /// <param name="comments">The comments for the session, if any (null for no comments).</param>
-        public void ValidateAndSaveSession( string technique = null, string comments = null )
+        /// <param name="latitude">The latitude location of the session.  Null for no location.</param>
+        /// <param name="longitude">The longitude location of the session.  Null for no location.</param>
+        public void ValidateAndSaveSession( string technique = null, string comments = null, double? latitude = null, double? longitude = null )
         {
             // If sqlite is not open, throw exeption.
             if ( this.sqlite == null )
@@ -204,6 +228,9 @@ namespace MedEnthLogsApi
                     SessionInProgressMessage
                 );
             }
+
+            this.currentLog.Latitude = latitude;
+            this.currentLog.Longitude = longitude;
 
             // If validating the log fails, throw.
             this.ValidateCurrentLog();

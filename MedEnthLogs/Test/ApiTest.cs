@@ -229,7 +229,7 @@ namespace TestCommon
         /// Tries to save to the database.
         /// </summary>
         [Test]
-        public void SaveLogNoComments()
+        public void SaveLogDefaults()
         {
             DoSaveTest();
         }
@@ -238,7 +238,7 @@ namespace TestCommon
         /// Tries to save to the database with comments.
         /// </summary>
         [Test]
-        public void SaveLogWithCommentsNoTecnique()
+        public void SaveLogOnlyComments()
         {
             DoSaveTest( null, "This is a comment" );
         }
@@ -247,9 +247,18 @@ namespace TestCommon
         /// Tries to save to the database with technique
         /// </summary>
         [Test]
-        public void SaveLogWithNoCommentsWithTechnique()
+        public void SaveLogOnlyTechnique()
         {
             DoSaveTest( "SomeTechnqiue" );
+        }
+
+        /// <summary>
+        /// Tries to save to the database with only location.
+        /// </summary>
+        [Test]
+        public void SaveLongOnlyLocation()
+        {
+            DoSaveTest( null, null, 10.0, 11.0 );
         }
 
         /// <summary>
@@ -259,6 +268,34 @@ namespace TestCommon
         public void SaveLogWithCommentsAndTechnique()
         {
             DoSaveTest( "SomeTechnqiue", "This is a comment" );
+        }
+
+        /// <summary>
+        /// Tries to save to the database with everything.
+        /// </summary>
+        [Test]
+        public void SaveLogEverything()
+        {
+            DoSaveTest( "SomeTechnique", "This is a comment", 10.0, 11.0 );
+        }
+
+        /// <summary>
+        /// Ensures the save fails when only latitiude is passed in.
+        /// </summary>
+        [Test]
+        public void SaveLogWithOnlyLatitude()
+        {
+            DoSaveTestOneLocation( 10.0, null );
+        }
+
+        /// <summary>
+        /// Ensures the save fails when only longitude is passed in.
+        /// </summary>
+        [Test]
+        public void SaveLogWithOnlyLongitude()
+        {
+            DoSaveTestOneLocation( null, 10.0 );
+
         }
 
         /// <summary>
@@ -285,7 +322,7 @@ namespace TestCommon
         private void CheckValidationPassed()
         {
             Assert.DoesNotThrow(
-                delegate()
+                delegate ()
                 {
                     uut.ValidateCurrentLog();
                 }
@@ -324,21 +361,23 @@ namespace TestCommon
         /// </summary>
         /// <param name="technique">The technique to save</param>
         /// <param name="comments">The comments to save</param>
-        private void DoSaveTest( string technique = null, string comments = null )
+        /// <param name="latitude">The latitude to save</param>
+        /// <param name="longitude">The longitude to save.</param>
+        private void DoSaveTest( string technique = null, string comments = null, double? latitude = null, double? longitude = null )
         {
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try
             {
                 uut.StartSession();
                 uut.StopSession();
-                uut.ValidateAndSaveSession( technique, comments );
+                uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
 
                 uut.PopulateLogbook();
 
                 Assert.AreEqual( uut.CurrentLog, uut.LogBook.Logs[0] );
                 Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
 
-                Assert.AreEqual( 
+                Assert.AreEqual(
                     ( technique == null ) ? string.Empty : technique,
                     uut.LogBook.Logs[0].Technique
                 );
@@ -346,6 +385,37 @@ namespace TestCommon
                     ( comments == null ) ? string.Empty : comments,
                     uut.LogBook.Logs[0].Comments
                 );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
+        /// <summary>
+        /// Tries to save to the database with only latitude or longitude set, not both.
+        /// Expect failure.
+        /// </summary>
+        /// <param name="latitude">The latitude to try.</param>
+        /// <param name="longitude">The longitude to try.</param>
+        private void DoSaveTestOneLocation( double? latitude, double? longitude )
+        {
+            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            try
+            {
+                uut.StartSession();
+                uut.StopSession();
+
+                Assert.Catch<LogValidationException>(
+                    delegate ()
+                    {
+                        uut.ValidateAndSaveSession( null, null, latitude, longitude );
+                    }
+                );
+
+                // Ensure it wasnt saved.
+                uut.PopulateLogbook();
+                Assert.AreEqual( 0, uut.LogBook.Logs.Count );
             }
             finally
             {

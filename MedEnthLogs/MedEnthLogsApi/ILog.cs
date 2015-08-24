@@ -48,5 +48,17 @@ namespace MedEnthLogsApi
         /// The comments the user wrote about the session.
         /// </summary>
         string Comments { get; }
+
+        /// <summary>
+        /// The latitude of where the session took place.
+        /// null if no location specified.
+        /// </summary>
+        double? Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of where the session took place.
+        /// null if no location specified.
+        /// </summary>
+        double? Longitude { get; set; }
     }
 }

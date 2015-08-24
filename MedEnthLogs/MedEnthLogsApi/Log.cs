@@ -44,6 +44,8 @@ namespace MedEnthLogsApi
             this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
             this.Technique = string.Empty;
+            this.Latitude = null;
+            this.Longitude = null;
         }
 
         // -------- Properties --------
@@ -130,6 +132,18 @@ namespace MedEnthLogsApi
             }
         }
 
+        /// <summary>
+        /// The latitude of where the session took place.
+        /// null if no location specified.
+        /// </summary>
+        public double? Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of where the session took place.
+        /// null if no location specified.
+        /// </summary>
+        public double? Longitude { get; set; }
+
         // -------- Functions --------
 
         /// <summary>
@@ -152,7 +166,9 @@ namespace MedEnthLogsApi
                 ( this.EndTime == other.EndTime ) &&
                 ( this.StartTime == other.StartTime ) &&
                 ( this.Technique == other.Technique ) &&
-                ( this.Comments == other.Comments );
+                ( this.Comments == other.Comments ) &&
+                ( this.Latitude == other.Latitude ) &&
+                ( this.Longitude == other.Longitude );
         }
 
         /// <summary>
