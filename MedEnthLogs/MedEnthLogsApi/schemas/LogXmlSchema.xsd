@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="LogXmlSchema"
+    targetNamespace="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd"
+    xmlns:mstns="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <!-- The log type -->
+    <xs:group name="log">
+        <xs:sequence>
+            <xs:element name="CreationTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="EditTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="StartTime" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EndTime" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Technique" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Comments" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Latitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Longitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- The logbook that keeps track of the logs -->
+    <xs:complexType name="logbook">
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref ="log"/>
+    </xs:complexType>
+</xs:schema>

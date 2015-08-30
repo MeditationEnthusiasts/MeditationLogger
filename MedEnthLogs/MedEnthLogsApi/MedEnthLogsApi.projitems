@@ -15,4 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LogBook.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MedEnthLogsApi.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LogXmlSchema.xsd" />
+  </ItemGroup>
 </Project>
