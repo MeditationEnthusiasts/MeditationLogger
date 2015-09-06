@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Xml;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
@@ -25,6 +27,8 @@ namespace MedEnthLogsApi
     public class Api
     {
         // -------- Fields --------
+
+        const string xmlNameSpace = "http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd";
 
         /// <summary>
         /// Error message that appears in save if the database is not open.
@@ -284,7 +288,97 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
-        /// Closes the sqlite connection, and clears the logbook.
+        /// Exports the loaded logbook to XML.
+        /// </summary>
+        /// <param name="outFile">The stream the outputs the file.</param>
+        public void ExportToXml( Stream outFile )
+        {
+            XmlDocument doc = new XmlDocument();
+
+            // Create declaration.
+            XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
+
+            // Add declaration to document.
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore( dec, root );
+
+            XmlNode logbookNode = doc.CreateNode( XmlNodeType.Element, "logbook", xmlNameSpace );
+
+            foreach ( Log log in this.LogBook.Logs )
+            {
+                XmlNode logNode = doc.CreateNode( XmlNodeType.Element, "log", xmlNameSpace );
+
+                // Reducing scope so I don't accidently add the wrong attribute.
+                {
+                    XmlAttribute creationTime = doc.CreateAttribute( "CreationTime" );
+                    creationTime.Value = log.CreateTime.ToString( "o" );
+                    logNode.Attributes.Append( creationTime );
+                }
+                {
+                    XmlAttribute editTime = doc.CreateAttribute( "EditTime" );
+                    editTime.Value = log.EditTime.ToString( "o" );
+                    logNode.Attributes.Append( editTime );
+                }
+                {
+                    XmlAttribute startTime = doc.CreateAttribute( "StartTime" );
+                    startTime.Value = log.StartTime.ToString( "o" );
+                    logNode.Attributes.Append( startTime );
+                }
+                {
+                    XmlAttribute endTime = doc.CreateAttribute( "EndTime" );
+                    endTime.Value = log.EndTime.ToString( "o" );
+                    logNode.Attributes.Append( endTime );
+                }
+                {
+                    XmlAttribute technique = doc.CreateAttribute( "Technique" );
+                    technique.Value = log.Technique;
+                    logNode.Attributes.Append( technique );
+                }
+                {
+                    XmlAttribute comments = doc.CreateAttribute( "Comments" );
+                    comments.Value = log.Comments;
+                    logNode.Attributes.Append( comments );
+                }
+                {
+                    XmlAttribute lat = doc.CreateAttribute( "Latitude" );
+                    lat.Value = log.Latitude.ToString();
+                    logNode.Attributes.Append( lat );
+                }
+                {
+                    XmlAttribute lon = doc.CreateAttribute( "Longitude" );
+                    lon.Value = log.Longitude.ToString();
+                    logNode.Attributes.Append( lon );
+                }
+
+                logbookNode.AppendChild( logNode );
+            }
+
+            doc.InsertAfter( logbookNode, dec );
+
+            doc.Save( outFile );
+        }
+
+        /// <summary>
+        /// Exports the loaded logbook to json.
+        /// </summary>
+        /// <param name="fileName">The file name to export.</param>
+        public void ExportToJson( string fileName )
+        {
+            // Use JSon.net package.
+            throw new NotImplementedException( "Not implemented yet." );
+        }
+
+        /// <summary>
+        /// Exports the loaded logbook to MLG (SQLite database).
+        /// </summary>
+        /// <param name="fileName"></param>
+        public void ExportToMlg( string fileName )
+        {
+            throw new NotImplementedException( "Not implemented yet." );
+        }
+
+        /// <summary>
+        /// Closes the sqlite connection.  Does not clear the logbook.
         /// </summary>
         public void Close()
         {
@@ -292,7 +386,6 @@ namespace MedEnthLogsApi
             {
                 this.sqlite.Close();
                 this.sqlite = null;
-                this.LogBook = null;
             }
         }
     }

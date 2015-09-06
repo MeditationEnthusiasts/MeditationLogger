@@ -3,6 +3,8 @@ using MedEnthLogsApi;
 using MedEnthLogsDesktop;
 using NUnit.Framework;
 using System.IO;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace TestCommon
 {
@@ -296,7 +298,6 @@ namespace TestCommon
         public void SaveLogWithOnlyLongitude()
         {
             DoSaveTestOneLocation( null, 10.0 );
-
         }
 
         /// <summary>
@@ -313,6 +314,47 @@ namespace TestCommon
                 },
                 MedEnthLogsApi.Api.DatabaseNotOpenMessage
             );
+        }
+
+        [Test]
+        public void PopulateLogBookMultipleTimes()
+        {
+            DoSaveTest( 10 );
+        }
+
+        // ---- Xml Tests ----
+        [Test]
+        public void XmlSchemaTest()
+        {
+            const string fileName = "testXml.xml";
+
+            DoSaveTest( 5 );
+
+            using ( StreamWriter writer = new StreamWriter( fileName ) )
+            {
+                uut.ExportToXml( writer.BaseStream );
+            }
+            try
+            {
+                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+
+                XmlSchema schema = XmlSchema.Read( reader, null );
+
+                XmlDocument doc = new XmlDocument();
+                doc.Load( fileName );
+                doc.Schemas.Add( schema );
+
+                Assert.DoesNotThrow(
+                    delegate ()
+                    {
+                        doc.Validate( null );
+                    }
+                );
+            }
+            finally
+            {
+                File.Delete( fileName );
+            }
         }
 
         // -------- Test Helpers ---------
@@ -386,6 +428,50 @@ namespace TestCommon
                     ( comments == null ) ? string.Empty : comments,
                     uut.LogBook.Logs[0].Comments
                 );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
+        /// <summary>
+        /// Does the save test for the number of entries.
+        /// </summary>
+        /// <param name="numberOfEntries">The number of entries to add.</param>
+        private void DoSaveTest( int numberOfEntries )
+        {
+            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            try
+            {
+                for ( int i = 0; i < numberOfEntries; ++i )
+                {
+                    uut.StartSession();
+                    uut.StopSession();
+
+                    string technique = "SomeTechnique" + i;
+                    string comments = "Some Comment" + i;
+                    double latitude = i;
+                    double longitude = i;
+                    uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
+
+                    uut.PopulateLogbook();
+
+                    // Most recent logs are in index 0.
+                    Assert.AreEqual( uut.CurrentLog, uut.LogBook.Logs[0] );
+                    Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
+
+                    Assert.AreEqual(
+                        technique,
+                        uut.LogBook.Logs[0].Technique
+                    );
+                    Assert.AreEqual(
+                        comments,
+                        uut.LogBook.Logs[0].Comments
+                    );
+
+                    uut.ResetCurrentLog();
+                }
             }
             finally
             {

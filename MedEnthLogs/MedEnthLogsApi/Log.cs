@@ -171,6 +171,19 @@ namespace MedEnthLogsApi
                 ( this.Longitude == other.Longitude );
         }
 
+        public override string ToString()
+        {
+            return
+                "Creation Time: " + this.CreateTime.ToString() + Environment.NewLine +
+                "Edit Time: " + this.EditTime.ToString() + Environment.NewLine +
+                "Start Time: " + this.StartTime.ToString() + Environment.NewLine +
+                "End Time: " + this.EndTime.ToString() + Environment.NewLine +
+                "Technique: " + this.Technique + Environment.NewLine +
+                "Latitude:" + this.Latitude + Environment.NewLine +
+                "Longitude: " + this.Longitude + Environment.NewLine +
+                "Comments: " + this.Comments + Environment.NewLine;
+        }
+
         /// <summary>
         /// Returns the hash code.
         /// The hash code is based on the Creation Date of the Log.

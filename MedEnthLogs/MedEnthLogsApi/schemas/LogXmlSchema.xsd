@@ -6,22 +6,25 @@
     xmlns:mstns="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
-    <!-- The log type -->
-    <xs:group name="log">
-        <xs:sequence>
-            <xs:element name="CreationTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="EditTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="StartTime" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="EndTime" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="Technique" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="Comments" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="Latitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="Longitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>
-    </xs:group>
+    <xs:element name="logbook" type ="LogBookType"/>
 
-    <!-- The logbook that keeps track of the logs -->
-    <xs:complexType name="logbook">
-        <xs:group minOccurs="0" maxOccurs="unbounded" ref ="log"/>
+    <xs:element name="log" type="Log"/>
+
+    <xs:complexType name="LogBookType">
+        <xs:sequence>
+            <xs:element name="log" type="Log" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- The log type -->
+    <xs:complexType name ="Log">
+        <xs:attribute name="CreationTime" type="xs:dateTime" use="optional"/>
+        <xs:attribute name="EditTime" type="xs:dateTime" use="optional"/>
+        <xs:attribute name="StartTime" type="xs:dateTime" use="required"/>
+        <xs:attribute name="EndTime" type="xs:dateTime" use="required"/>
+        <xs:attribute name="Technique" type="xs:string" use="optional"/>
+        <xs:attribute name="Comments" type="xs:string" use="optional"/>
+        <xs:attribute name="Latitude" type="xs:double" use="optional"/>
+        <xs:attribute name="Longitude" type="xs:double" use="optional"/>
     </xs:complexType>
 </xs:schema>
