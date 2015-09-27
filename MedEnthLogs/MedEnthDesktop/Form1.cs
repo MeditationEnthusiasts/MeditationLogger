@@ -8,18 +8,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MedEnthDesktop;
+using MedEnthLogsApi;
 
 namespace MedEnthLogsDesktop
 {
     public partial class HomePage : Form
     {
+        enum StartState
+        {
+            Idle,    // No activity is happeneing.
+            Start,   // The activity has started.
+            End      // The activity has ended, but not been saved yet.
+        }
+
         MedEnthLogsApi.Api api;
+
+        List<LogView> logViews;
+
+        StartState currentState;
 
         public HomePage( MedEnthLogsApi.Api api )
         {
             InitializeComponent();
             this.api = api;
             this.api.PopulateLogbook();
+            this.logViews = new List<LogView>();
+            foreach ( ILog log in this.api.LogBook.Logs )
+            {
+                this.logViews.Add(
+                    new LogView( log )
+                );
+            }
+            this.currentState = StartState.Idle;
         }
 
         private void Form1_Load( object sender, EventArgs e )
@@ -168,6 +189,76 @@ namespace MedEnthLogsDesktop
                     );
                 }
             }
+        }
+
+        // -------- View Logbook Tab --------
+
+        private void LogbookView_Enter( object sender, EventArgs e )
+        {
+            if ( this.logViews.Count == 0 )
+            {
+
+            }
+            else
+            {
+                foreach ( LogView view in this.logViews )
+                {
+                    view.Width = this.ViewLogbookView.Width;
+                    this.ViewLogbookView.Controls.Add( view );
+                }
+            }
+        }
+
+        // -------- Start Tab --------
+
+        private void StartButton_Click( object sender, EventArgs e )
+        {
+            try
+            {
+                switch ( this.currentState )
+                {
+                    case StartState.Idle:
+                        this.api.StartSession();
+                        this.StartButton.Text = "Finish";
+                        this.currentState = StartState.Start;
+                        break;
+                    case StartState.Start:
+                        this.api.StopSession();
+                        this.StartButton.Text = "Save";
+                        this.currentState = StartState.End;
+                        break;
+                    case StartState.End:
+                        this.api.ValidateAndSaveSession( "Mindfullness", "This is a comment" );
+                        this.api.PopulateLogbook();
+                        this.StartButton.Text = "Start";
+                        this.currentState = StartState.Idle;
+                        break;
+                }
+            }
+            catch ( Exception err )
+            {
+                string errorStr = "Error when ";
+                switch ( this.currentState )
+                {
+                    case StartState.Idle:
+                        errorStr = errorStr + "starting the session.";
+                        break;
+                    case StartState.Start:
+                        errorStr = errorStr + "ending the session.";
+                        this.currentState = StartState.End;
+                        break;
+                    case StartState.End:
+                        errorStr = errorStr + "saving the session.";
+                        this.currentState = StartState.Idle;
+                        break;
+                }
+                MessageBox.Show( err.Message, errorStr, MessageBoxButtons.OK, MessageBoxIcon.Error );
+            }
+        }
+
+        private void LogbookView_Click( object sender, EventArgs e )
+        {
+
         }
     }
 }

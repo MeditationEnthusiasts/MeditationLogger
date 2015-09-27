@@ -31,7 +31,9 @@
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.Home = new System.Windows.Forms.TabPage();
             this.StartTab = new System.Windows.Forms.TabPage();
+            this.StartButton = new System.Windows.Forms.Button();
             this.LogbookView = new System.Windows.Forms.TabPage();
+            this.ViewLogbookView = new System.Windows.Forms.FlowLayoutPanel();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
@@ -61,6 +63,8 @@
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.MainTabControl.SuspendLayout();
+            this.StartTab.SuspendLayout();
+            this.LogbookView.SuspendLayout();
             this.ManageLogbookView.SuspendLayout();
             this.ManageTabControl.SuspendLayout();
             this.ImportView.SuspendLayout();
@@ -81,7 +85,7 @@
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.Padding = new System.Drawing.Point(0, 0);
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(583, 474);
+            this.MainTabControl.Size = new System.Drawing.Size(609, 491);
             this.MainTabControl.TabIndex = 0;
             // 
             // Home
@@ -89,30 +93,55 @@
             this.Home.Location = new System.Drawing.Point(4, 34);
             this.Home.Name = "Home";
             this.Home.Padding = new System.Windows.Forms.Padding(3);
-            this.Home.Size = new System.Drawing.Size(575, 436);
+            this.Home.Size = new System.Drawing.Size(601, 453);
             this.Home.TabIndex = 0;
             this.Home.Text = "Home";
             this.Home.UseVisualStyleBackColor = true;
             // 
             // StartTab
             // 
+            this.StartTab.Controls.Add(this.StartButton);
             this.StartTab.Location = new System.Drawing.Point(4, 34);
             this.StartTab.Name = "StartTab";
             this.StartTab.Padding = new System.Windows.Forms.Padding(3);
-            this.StartTab.Size = new System.Drawing.Size(575, 436);
+            this.StartTab.Size = new System.Drawing.Size(601, 453);
             this.StartTab.TabIndex = 4;
             this.StartTab.Text = "Start";
             this.StartTab.UseVisualStyleBackColor = true;
             // 
+            // StartButton
+            // 
+            this.StartButton.Location = new System.Drawing.Point(402, 373);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(165, 55);
+            this.StartButton.TabIndex = 0;
+            this.StartButton.Text = "Start";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
+            // 
             // LogbookView
             // 
+            this.LogbookView.Controls.Add(this.ViewLogbookView);
             this.LogbookView.Location = new System.Drawing.Point(4, 34);
             this.LogbookView.Name = "LogbookView";
             this.LogbookView.Padding = new System.Windows.Forms.Padding(3);
-            this.LogbookView.Size = new System.Drawing.Size(575, 436);
+            this.LogbookView.Size = new System.Drawing.Size(601, 453);
             this.LogbookView.TabIndex = 1;
             this.LogbookView.Text = "View Logbook";
             this.LogbookView.UseVisualStyleBackColor = true;
+            this.LogbookView.Click += new System.EventHandler(this.LogbookView_Click);
+            this.LogbookView.Enter += new System.EventHandler(this.LogbookView_Enter);
+            // 
+            // ViewLogbookView
+            // 
+            this.ViewLogbookView.AutoScroll = true;
+            this.ViewLogbookView.AutoSize = true;
+            this.ViewLogbookView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ViewLogbookView.Location = new System.Drawing.Point(3, 3);
+            this.ViewLogbookView.Margin = new System.Windows.Forms.Padding(5);
+            this.ViewLogbookView.Name = "ViewLogbookView";
+            this.ViewLogbookView.Size = new System.Drawing.Size(595, 447);
+            this.ViewLogbookView.TabIndex = 0;
             // 
             // ManageLogbookView
             // 
@@ -121,7 +150,7 @@
             this.ManageLogbookView.Location = new System.Drawing.Point(4, 34);
             this.ManageLogbookView.Name = "ManageLogbookView";
             this.ManageLogbookView.Padding = new System.Windows.Forms.Padding(3);
-            this.ManageLogbookView.Size = new System.Drawing.Size(575, 436);
+            this.ManageLogbookView.Size = new System.Drawing.Size(601, 453);
             this.ManageLogbookView.TabIndex = 2;
             this.ManageLogbookView.Text = "Manage Logbook";
             this.ManageLogbookView.UseVisualStyleBackColor = true;
@@ -137,7 +166,7 @@
             this.ManageTabControl.Location = new System.Drawing.Point(3, 3);
             this.ManageTabControl.Name = "ManageTabControl";
             this.ManageTabControl.SelectedIndex = 0;
-            this.ManageTabControl.Size = new System.Drawing.Size(569, 430);
+            this.ManageTabControl.Size = new System.Drawing.Size(595, 447);
             this.ManageTabControl.TabIndex = 0;
             // 
             // EditLogView
@@ -145,7 +174,7 @@
             this.EditLogView.Location = new System.Drawing.Point(4, 29);
             this.EditLogView.Name = "EditLogView";
             this.EditLogView.Padding = new System.Windows.Forms.Padding(3);
-            this.EditLogView.Size = new System.Drawing.Size(561, 397);
+            this.EditLogView.Size = new System.Drawing.Size(587, 414);
             this.EditLogView.TabIndex = 0;
             this.EditLogView.Text = "Edit Logs";
             this.EditLogView.UseVisualStyleBackColor = true;
@@ -371,7 +400,7 @@
             this.AboutView.Location = new System.Drawing.Point(4, 34);
             this.AboutView.Name = "AboutView";
             this.AboutView.Padding = new System.Windows.Forms.Padding(3);
-            this.AboutView.Size = new System.Drawing.Size(575, 436);
+            this.AboutView.Size = new System.Drawing.Size(601, 453);
             this.AboutView.TabIndex = 3;
             this.AboutView.Text = "About";
             this.AboutView.UseVisualStyleBackColor = true;
@@ -394,12 +423,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(583, 474);
+            this.ClientSize = new System.Drawing.Size(609, 491);
             this.Controls.Add(this.MainTabControl);
+            this.MinimumSize = new System.Drawing.Size(625, 525);
             this.Name = "HomePage";
             this.Text = "Logger";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainTabControl.ResumeLayout(false);
+            this.StartTab.ResumeLayout(false);
+            this.LogbookView.ResumeLayout(false);
+            this.LogbookView.PerformLayout();
             this.ManageLogbookView.ResumeLayout(false);
             this.ManageTabControl.ResumeLayout(false);
             this.ImportView.ResumeLayout(false);
@@ -446,6 +479,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog SyncOpenDialog;
+        private System.Windows.Forms.FlowLayoutPanel ViewLogbookView;
+        private System.Windows.Forms.Button StartButton;
     }
 }
 
