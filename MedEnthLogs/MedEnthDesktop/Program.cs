@@ -20,11 +20,12 @@ namespace MedEnthLogsDesktop
 
             // Use the win32 sqlite.
             api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );
-            api.Close();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new HomePage() );
+            Application.Run( new HomePage( api ) );
+
+            api.Close();
         }
     }
 }
