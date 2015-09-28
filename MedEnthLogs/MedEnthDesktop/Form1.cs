@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,16 +23,45 @@ namespace MedEnthLogsDesktop
             End      // The activity has ended, but not been saved yet.
         }
 
+        // ------- Fields --------
+
         MedEnthLogsApi.Api api;
 
         List<LogView> logViews;
 
         StartState currentState;
 
+        // ---- Views ----
+
+        OptionsView optionView;
+        MeditateView meditateView;
+        SaveView saveView;
+
         public HomePage( MedEnthLogsApi.Api api )
         {
             InitializeComponent();
+
             this.api = api;
+            ReloadLogs();
+            this.currentState = StartState.Idle;
+
+            // Setup Option View
+            this.optionView = new OptionsView();
+            this.optionView.Visible = true;
+            ChangableStartView.Controls.Add( this.optionView );
+
+            // Setup meditate view
+            this.meditateView = new MeditateView();
+            this.meditateView.Visible = false;
+            ChangableStartView.Controls.Add( this.meditateView );
+
+            this.saveView = new SaveView();
+            this.saveView.Visible = false;
+            ChangableStartView.Controls.Add( this.saveView );
+        }
+
+        private void ReloadLogs()
+        {
             this.api.PopulateLogbook();
             this.logViews = new List<LogView>();
             foreach ( ILog log in this.api.LogBook.Logs )
@@ -40,7 +70,6 @@ namespace MedEnthLogsDesktop
                     new LogView( log )
                 );
             }
-            this.currentState = StartState.Idle;
         }
 
         private void Form1_Load( object sender, EventArgs e )
@@ -201,6 +230,7 @@ namespace MedEnthLogsDesktop
             }
             else
             {
+                this.ViewLogbookView.Controls.Clear();
                 foreach ( LogView view in this.logViews )
                 {
                     view.Width = this.ViewLogbookView.Width;
@@ -211,6 +241,28 @@ namespace MedEnthLogsDesktop
 
         // -------- Start Tab --------
 
+        private void StartTab_Enter( object sender, EventArgs e )
+        {
+            switch ( this.currentState )
+            {
+                case StartState.Idle:
+                    this.optionView.Visible = true;
+                    this.meditateView.Visible = false;
+                    this.saveView.Visible = false;
+                    break;
+                case StartState.Start:
+                    this.optionView.Visible = false;
+                    this.meditateView.Visible = true;
+                    this.saveView.Visible = false;
+                    break;
+                case StartState.End:
+                    this.optionView.Visible = false;
+                    this.meditateView.Visible = false;
+                    this.saveView.Visible = true;
+                    break;
+            }
+        }
+
         private void StartButton_Click( object sender, EventArgs e )
         {
             try
@@ -218,19 +270,50 @@ namespace MedEnthLogsDesktop
                 switch ( this.currentState )
                 {
                     case StartState.Idle:
+                        // API calls
                         this.api.StartSession();
+
+                        // Switch View.
+                        this.optionView.Visible = false;
+                        this.meditateView.Visible = true;
+                        this.saveView.Visible = false;
                         this.StartButton.Text = "Finish";
+
+                        // Update State
                         this.currentState = StartState.Start;
                         break;
                     case StartState.Start:
+                        // API Calls
                         this.api.StopSession();
+
+                        // Switch View
+                        this.optionView.Visible = false;
+                        this.meditateView.Visible = false;
+                        this.saveView.Visible = true;
+                        this.saveView.MinutesValueLabel.Text =
+                            this.api.CurrentLog.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture );
                         this.StartButton.Text = "Save";
+
+                        // Update State
                         this.currentState = StartState.End;
                         break;
                     case StartState.End:
-                        this.api.ValidateAndSaveSession( "Mindfullness", "This is a comment" );
-                        this.api.PopulateLogbook();
+                        // API Calls
+                        this.api.ValidateAndSaveSession(
+                            this.saveView.TechniqueUsedTextbox.Text,
+                            this.saveView.CommentsTextBox.Text
+                        );
+                                                ReloadLogs();
+
+                        // Switch View
+                        this.saveView.Visible = false;
+                        this.optionView.Visible = true;
+                        this.meditateView.Visible = false;
+                        this.saveView.TechniqueUsedTextbox.Text = string.Empty;
+                        this.saveView.CommentsTextBox.Text = string.Empty;
                         this.StartButton.Text = "Start";
+
+                        // Update State.
                         this.currentState = StartState.Idle;
                         break;
                 }
