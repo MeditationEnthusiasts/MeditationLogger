@@ -99,16 +99,14 @@
             // 
             // CommentValueTextBox
             // 
-            this.CommentValueTextBox.AutoSize = false;
             this.CommentValueTextBox.Location = new System.Drawing.Point(19, 129);
             this.CommentValueTextBox.Name = "CommentValueTextBox";
-            this.CommentValueTextBox.Size = new System.Drawing.Size(345, 54);
+            this.CommentValueTextBox.Size = new System.Drawing.Size(361, 56);
             this.CommentValueTextBox.TabIndex = 6;
-            this.CommentValueTextBox.Text = "";
             // 
             // LogView
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.CommentValueTextBox);
             this.Controls.Add(this.CommentLabel);
@@ -119,7 +117,7 @@
             this.Controls.Add(this.StartDateLabel);
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "LogView";
-            this.Size = new System.Drawing.Size(375, 195);
+            this.Size = new System.Drawing.Size(600, 229);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -31,6 +31,8 @@
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.Home = new System.Windows.Forms.TabPage();
             this.StartTab = new System.Windows.Forms.TabPage();
+            this.ChangableStartView = new System.Windows.Forms.Panel();
+            this.StartButton = new System.Windows.Forms.Button();
             this.LogbookView = new System.Windows.Forms.TabPage();
             this.ViewLogbookView = new System.Windows.Forms.FlowLayoutPanel();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
@@ -61,8 +63,6 @@
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.StartButton = new System.Windows.Forms.Button();
-            this.ChangableStartView = new System.Windows.Forms.Panel();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -111,6 +111,23 @@
             this.StartTab.Text = "Start";
             this.StartTab.UseVisualStyleBackColor = true;
             this.StartTab.Enter += new System.EventHandler(this.StartTab_Enter);
+            // 
+            // ChangableStartView
+            // 
+            this.ChangableStartView.Location = new System.Drawing.Point(0, 0);
+            this.ChangableStartView.Name = "ChangableStartView";
+            this.ChangableStartView.Size = new System.Drawing.Size(601, 388);
+            this.ChangableStartView.TabIndex = 3;
+            // 
+            // StartButton
+            // 
+            this.StartButton.Location = new System.Drawing.Point(458, 394);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(140, 53);
+            this.StartButton.TabIndex = 2;
+            this.StartButton.Text = "Start";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // LogbookView
             // 
@@ -410,23 +427,6 @@
             // SyncOpenDialog
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
-            // 
-            // StartButton
-            // 
-            this.StartButton.Location = new System.Drawing.Point(458, 394);
-            this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(140, 53);
-            this.StartButton.TabIndex = 2;
-            this.StartButton.Text = "Start";
-            this.StartButton.UseVisualStyleBackColor = true;
-            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
-            // 
-            // ChangableStartView
-            // 
-            this.ChangableStartView.Location = new System.Drawing.Point(0, 0);
-            this.ChangableStartView.Name = "ChangableStartView";
-            this.ChangableStartView.Size = new System.Drawing.Size(601, 388);
-            this.ChangableStartView.TabIndex = 3;
             // 
             // HomePage
             // 
