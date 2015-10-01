@@ -51,7 +51,15 @@ namespace MedEnthLogsDesktop
             ChangableStartView.Controls.Add( this.optionView );
 
             // Setup meditate view
-            this.meditateView = new MeditateView();
+            this.meditateView = new MeditateView(
+                delegate()
+                {
+                    if ( this.currentState == StartState.Start )
+                    {
+                        GoToNextState();
+                    }
+                }
+            );
             this.meditateView.Visible = false;
             ChangableStartView.Controls.Add( this.meditateView );
 
@@ -265,6 +273,11 @@ namespace MedEnthLogsDesktop
 
         private void StartButton_Click( object sender, EventArgs e )
         {
+            GoToNextState();
+        }
+
+        private void GoToNextState()
+        {
             try
             {
                 switch ( this.currentState )
@@ -272,6 +285,20 @@ namespace MedEnthLogsDesktop
                     case StartState.Idle:
                         // API calls
                         this.api.StartSession();
+
+                        if ( this.optionView.EnableTimerCheckbox.Checked )
+                        {
+                            TimeSpan timeToGo = new TimeSpan(
+                                int.Parse( this.optionView.HourListBox.SelectedItem.ToString() ),
+                                int.Parse( this.optionView.MinuteListBox.SelectedItem.ToString() ),
+                                0
+                            );
+                            this.meditateView.StartTimer( timeToGo );
+                        }
+                        else
+                        {
+                            this.meditateView.StartTimer( null );
+                        }
 
                         // Switch View.
                         this.optionView.Visible = false;
@@ -285,6 +312,7 @@ namespace MedEnthLogsDesktop
                     case StartState.Start:
                         // API Calls
                         this.api.StopSession();
+                        this.meditateView.StopAndResetTimer();
 
                         // Switch View
                         this.optionView.Visible = false;
@@ -303,7 +331,7 @@ namespace MedEnthLogsDesktop
                             this.saveView.TechniqueUsedTextbox.Text,
                             this.saveView.CommentsTextBox.Text
                         );
-                                                ReloadLogs();
+                        ReloadLogs();
 
                         // Switch View
                         this.saveView.Visible = false;

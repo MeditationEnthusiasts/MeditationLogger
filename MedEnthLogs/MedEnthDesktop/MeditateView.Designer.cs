@@ -29,26 +29,42 @@
         private void InitializeComponent()
         {
             this.MeditateLabel = new System.Windows.Forms.Label();
+            this.TimerLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MeditateLabel
             // 
+            this.MeditateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.MeditateLabel.AutoSize = true;
             this.MeditateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MeditateLabel.Location = new System.Drawing.Point(89, 18);
+            this.MeditateLabel.Location = new System.Drawing.Point(200, 55);
             this.MeditateLabel.Name = "MeditateLabel";
             this.MeditateLabel.Size = new System.Drawing.Size(91, 20);
             this.MeditateLabel.TabIndex = 0;
             this.MeditateLabel.Text = "Have Fun!";
             this.MeditateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // TimerLabel
+            // 
+            this.TimerLabel.AllowDrop = true;
+            this.TimerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.TimerLabel.AutoSize = true;
+            this.TimerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimerLabel.Location = new System.Drawing.Point(174, 145);
+            this.TimerLabel.Name = "TimerLabel";
+            this.TimerLabel.Size = new System.Drawing.Size(153, 39);
+            this.TimerLabel.TabIndex = 1;
+            this.TimerLabel.Text = "xx:xx:xx";
+            this.TimerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MeditateView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSize = true;
+            this.Controls.Add(this.TimerLabel);
             this.Controls.Add(this.MeditateLabel);
             this.Name = "MeditateView";
-            this.Size = new System.Drawing.Size(292, 175);
+            this.Size = new System.Drawing.Size(500, 250);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -57,5 +73,6 @@
         #endregion
 
         private System.Windows.Forms.Label MeditateLabel;
+        private System.Windows.Forms.Label TimerLabel;
     }
 }
