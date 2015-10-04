@@ -371,5 +371,22 @@ namespace MedEnthLogsDesktop
         {
 
         }
+
+        // --------- About View Events ---------
+
+        private void VistSiteLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            System.Diagnostics.Process.Start( "http://meditationenthusiasts.org" );
+        }
+
+        private void ReportABugValue_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            System.Diagnostics.Process.Start( "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/issues" );
+        }
+
+        private void ViewSourceValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            System.Diagnostics.Process.Start( "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src" );
+        }
     }
 }

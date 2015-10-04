@@ -63,6 +63,15 @@
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.VersionLabel = new System.Windows.Forms.Label();
+            this.VersionValueLabel = new System.Windows.Forms.Label();
+            this.BugLabel = new System.Windows.Forms.Label();
+            this.ReportABugValue = new System.Windows.Forms.LinkLabel();
+            this.ViewSourceLabel = new System.Windows.Forms.Label();
+            this.ViewSourceValueLabel = new System.Windows.Forms.LinkLabel();
+            this.VisitSiteLabel = new System.Windows.Forms.Label();
+            this.VistSiteLabel = new System.Windows.Forms.LinkLabel();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -71,6 +80,8 @@
             this.ImportView.SuspendLayout();
             this.ExportView.SuspendLayout();
             this.SyncView.SuspendLayout();
+            this.AboutView.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -407,6 +418,7 @@
             // 
             // AboutView
             // 
+            this.AboutView.Controls.Add(this.tableLayoutPanel1);
             this.AboutView.Location = new System.Drawing.Point(4, 34);
             this.AboutView.Name = "AboutView";
             this.AboutView.Padding = new System.Windows.Forms.Padding(3);
@@ -427,6 +439,112 @@
             // SyncOpenDialog
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.34965F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.65035F));
+            this.tableLayoutPanel1.Controls.Add(this.VersionLabel, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.VersionValueLabel, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.ReportABugValue, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.BugLabel, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.ViewSourceLabel, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.ViewSourceValueLabel, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.VisitSiteLabel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.VistSiteLabel, 1, 2);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(21, 6);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 88F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 117F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 439);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.AutoSize = true;
+            this.VersionLabel.Location = new System.Drawing.Point(3, 68);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(85, 25);
+            this.VersionLabel.TabIndex = 0;
+            this.VersionLabel.Text = "Version:";
+            // 
+            // VersionValueLabel
+            // 
+            this.VersionValueLabel.AutoSize = true;
+            this.VersionValueLabel.Location = new System.Drawing.Point(147, 68);
+            this.VersionValueLabel.Name = "VersionValueLabel";
+            this.VersionValueLabel.Size = new System.Drawing.Size(55, 25);
+            this.VersionValueLabel.TabIndex = 1;
+            this.VersionValueLabel.Text = "0.1.0";
+            // 
+            // BugLabel
+            // 
+            this.BugLabel.AutoSize = true;
+            this.BugLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BugLabel.Location = new System.Drawing.Point(3, 204);
+            this.BugLabel.Name = "BugLabel";
+            this.BugLabel.Size = new System.Drawing.Size(129, 25);
+            this.BugLabel.TabIndex = 2;
+            this.BugLabel.Text = "Report a bug:";
+            // 
+            // ReportABugValue
+            // 
+            this.ReportABugValue.AutoSize = true;
+            this.ReportABugValue.Location = new System.Drawing.Point(147, 204);
+            this.ReportABugValue.Name = "ReportABugValue";
+            this.ReportABugValue.Size = new System.Drawing.Size(421, 50);
+            this.ReportABugValue.TabIndex = 3;
+            this.ReportABugValue.TabStop = true;
+            this.ReportABugValue.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/issues";
+            this.ReportABugValue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportABugValue_LinkClicked);
+            // 
+            // ViewSourceLabel
+            // 
+            this.ViewSourceLabel.AutoSize = true;
+            this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 321);
+            this.ViewSourceLabel.Name = "ViewSourceLabel";
+            this.ViewSourceLabel.Size = new System.Drawing.Size(129, 25);
+            this.ViewSourceLabel.TabIndex = 4;
+            this.ViewSourceLabel.Text = "View Source:";
+            // 
+            // ViewSourceValueLabel
+            // 
+            this.ViewSourceValueLabel.AutoSize = true;
+            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 321);
+            this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
+            this.ViewSourceValueLabel.Size = new System.Drawing.Size(421, 50);
+            this.ViewSourceValueLabel.TabIndex = 5;
+            this.ViewSourceValueLabel.TabStop = true;
+            this.ViewSourceValueLabel.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src";
+            this.ViewSourceValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewSourceValueLabel_LinkClicked);
+            // 
+            // VisitSiteLabel
+            // 
+            this.VisitSiteLabel.AutoSize = true;
+            this.VisitSiteLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.VisitSiteLabel.Location = new System.Drawing.Point(3, 116);
+            this.VisitSiteLabel.Name = "VisitSiteLabel";
+            this.VisitSiteLabel.Size = new System.Drawing.Size(94, 25);
+            this.VisitSiteLabel.TabIndex = 6;
+            this.VisitSiteLabel.Text = "Visit Site:";
+            // 
+            // VistSiteLabel
+            // 
+            this.VistSiteLabel.AutoSize = true;
+            this.VistSiteLabel.Location = new System.Drawing.Point(147, 116);
+            this.VistSiteLabel.Name = "VistSiteLabel";
+            this.VistSiteLabel.Size = new System.Drawing.Size(320, 25);
+            this.VistSiteLabel.TabIndex = 7;
+            this.VistSiteLabel.TabStop = true;
+            this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
+            this.VistSiteLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VistSiteLabel_LinkClicked);
             // 
             // HomePage
             // 
@@ -451,6 +569,9 @@
             this.ExportView.PerformLayout();
             this.SyncView.ResumeLayout(false);
             this.SyncView.PerformLayout();
+            this.AboutView.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -492,6 +613,15 @@
         private System.Windows.Forms.FlowLayoutPanel ViewLogbookView;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Panel ChangableStartView;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label VersionLabel;
+        private System.Windows.Forms.Label VersionValueLabel;
+        private System.Windows.Forms.Label BugLabel;
+        private System.Windows.Forms.LinkLabel ReportABugValue;
+        private System.Windows.Forms.Label ViewSourceLabel;
+        private System.Windows.Forms.LinkLabel ViewSourceValueLabel;
+        private System.Windows.Forms.Label VisitSiteLabel;
+        private System.Windows.Forms.LinkLabel VistSiteLabel;
     }
 }
 
