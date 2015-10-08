@@ -84,6 +84,11 @@ namespace MedEnthLogsApi
         /// </summary>
         internal Log currentLog;
 
+        /// <summary>
+        /// The version of the API.
+        /// </summary>
+        public const string Version = "0.1.0";
+
         // -------- Constructor --------
 
         /// <summary>
@@ -361,8 +366,8 @@ namespace MedEnthLogsApi
         /// <summary>
         /// Exports the loaded logbook to json.
         /// </summary>
-        /// <param name="fileName">The file name to export.</param>
-        public void ExportToJson( string fileName )
+        /// <param name="outFile">The stream the outputs the file.</param>
+        public void ExportToJson( Stream outFile )
         {
             // Use JSon.net package.
             throw new NotImplementedException( "Not implemented yet." );

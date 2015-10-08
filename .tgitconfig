@@ -1,0 +1,8 @@
+[bugtraq]
+	url = https://dev.meditationenthusiasts.org/mantis/view.php?id=%BUGID%
+	label = Issue ID:
+	append = false
+	number = true
+	warnifnoissue = false
+[bugtraq]
+	message = Issue: %BUGID%

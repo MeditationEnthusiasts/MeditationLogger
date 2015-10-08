@@ -9,3 +9,6 @@
 /MedEnthLogs/packages
 /MedEnthLogs/MedEnthLogs.opensdf
 /MedEnthLogs/MedEnthLogs.sdf
+bin
+Debug
+Release
