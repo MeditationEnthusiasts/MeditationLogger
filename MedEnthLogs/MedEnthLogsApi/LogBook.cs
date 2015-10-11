@@ -56,7 +56,6 @@ namespace MedEnthLogsApi
                 }
             );
 
-            //
             this.Logs = logTableByStartTime.AsReadOnly();
         }
 

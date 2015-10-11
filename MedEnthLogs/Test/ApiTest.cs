@@ -71,7 +71,7 @@ namespace TestCommon
             uut.currentLog.EndTime = DateTime.MinValue;
             uut.currentLog.CreateTime = DateTime.Now;
             uut.currentLog.EditTime = uut.CurrentLog.CreateTime;
-            CheckValidationFailed( MedEnthLogsApi.Api.EndTimeLessThanStartTimeMessage );
+            CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
             uut.ResetCurrentLog();
 
             // Ensure it doesn't validate if the edit time is less than
@@ -80,7 +80,7 @@ namespace TestCommon
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
             uut.currentLog.CreateTime = DateTime.MaxValue;
             uut.currentLog.EditTime = DateTime.MinValue;
-            CheckValidationFailed( MedEnthLogsApi.Api.EditTimeLessThanCreationTimeMessage );
+            CheckValidationFailed( Log.EditTimeLessThanCreationTimeMessage );
             uut.ResetCurrentLog();
 
             // Ensure everything validates if start time and end time match
@@ -261,7 +261,7 @@ namespace TestCommon
         [Test]
         public void SaveLongOnlyLocation()
         {
-            DoSaveTest( null, null, 10.0, 11.0 );
+            DoSaveTest( null, null, 10.0M, 11.0M );
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace TestCommon
         [Test]
         public void SaveLogEverything()
         {
-            DoSaveTest( "SomeTechnique", "This is a comment", 10.0, 11.0 );
+            DoSaveTest( "SomeTechnique", "This is a comment", 10.0M, 11.0M );
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace TestCommon
         [Test]
         public void SaveLogWithOnlyLatitude()
         {
-            DoSaveTestOneLocation( 10.0, null );
+            DoSaveTestOneLocation( 10.0M, null );
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace TestCommon
         [Test]
         public void SaveLogWithOnlyLongitude()
         {
-            DoSaveTestOneLocation( null, 10.0 );
+            DoSaveTestOneLocation( null, 10.0M );
         }
 
         /// <summary>
@@ -326,14 +326,11 @@ namespace TestCommon
         [Test]
         public void XmlSchemaTest()
         {
-            const string fileName = "testXml.xml";
+            const string fileName = "XmlSchemaTest1.xml";
 
             DoSaveTest( 5 );
 
-            using ( StreamWriter writer = new StreamWriter( fileName ) )
-            {
-                uut.ExportToXml( writer.BaseStream );
-            }
+            uut.Export( fileName );
             try
             {
                 XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
@@ -357,6 +354,97 @@ namespace TestCommon
             }
         }
 
+        [Test]
+        public void XmlSchemaTestNoValues()
+        {
+            const string fileName = "XmlSchemaTest2.xml";
+
+            DoSaveTest();
+            DoSaveTest();
+            DoSaveTest();
+
+            uut.Export( fileName );
+            try
+            {
+                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+
+                XmlSchema schema = XmlSchema.Read( reader, null );
+
+                XmlDocument doc = new XmlDocument();
+                doc.Load( fileName );
+                doc.Schemas.Add( schema );
+
+                Assert.DoesNotThrow(
+                    delegate ()
+                    {
+                        doc.Validate( null );
+                    }
+                );
+            }
+            finally
+            {
+                File.Delete( fileName );
+            }
+        }
+
+        /// <summary>
+        /// Ensures the exporting and importing of
+        /// logs via XML works.
+        /// </summary>
+        [Test]
+        public void XmlExportImportTest()
+        {
+            const string fileName = "XmlImportExport.xml";
+            const string newDb = "test2.db";
+            DoSaveTest();
+            DoSaveTest();
+            DoSaveTest( 5 );
+
+            uut.Export( fileName );
+
+            LogBook oldBook = this.uut.LogBook;
+
+            // Now, create a new database, and import the xml file.
+            // it should match the old logbook.
+            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), newDb );
+            try
+            {
+                uut.PopulateLogbook();
+                // Ensure we are not the same logbook.
+                Assert.AreNotSame( oldBook, uut.LogBook );
+
+                uut.Import( fileName );
+                uut.PopulateLogbook();
+                LogBook newBook = uut.LogBook;
+
+                // Ensure we are not the same logbook reference.
+                Assert.AreNotSame( oldBook, newBook );
+
+                // Now, iterate through the logs.  Compared to the old logbook,
+                // Everything should be the same EXCEPT for creation time and edit time,
+                // which should be newer (assuming our computer didnt time travel).
+                Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
+
+                for ( int i = 0; i < oldBook.Logs.Count; ++i )
+                {
+                    Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
+                    Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
+                    Assert.AreEqual( oldBook.Logs[i].Latitude, newBook.Logs[i].Latitude );
+                    Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
+                    Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
+                    Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
+                    Assert.GreaterOrEqual( newBook.Logs[i].CreateTime, oldBook.Logs[i].CreateTime );
+                    Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
+                }
+            }
+            finally
+            {
+                uut.Close();
+                File.Delete( newDb );
+                File.Delete( fileName );
+            }
+        }
+
         // -------- Test Helpers ---------
 
         /// <summary>
@@ -367,7 +455,7 @@ namespace TestCommon
             Assert.DoesNotThrow(
                 delegate ()
                 {
-                    uut.ValidateCurrentLog();
+                    uut.CurrentLog.Validate();
                 }
             );
         }
@@ -383,7 +471,7 @@ namespace TestCommon
                 Assert.Catch<LogValidationException>(
                     delegate ()
                     {
-                        uut.ValidateCurrentLog();
+                        uut.CurrentLog.Validate();
                     }
                 );
             }
@@ -392,7 +480,7 @@ namespace TestCommon
                 Assert.Catch<LogValidationException>(
                     delegate ()
                     {
-                        uut.ValidateCurrentLog();
+                        uut.CurrentLog.Validate();
                     },
                     expectedErrorStr
                 );
@@ -406,7 +494,7 @@ namespace TestCommon
         /// <param name="comments">The comments to save</param>
         /// <param name="latitude">The latitude to save</param>
         /// <param name="longitude">The longitude to save.</param>
-        private void DoSaveTest( string technique = null, string comments = null, double? latitude = null, double? longitude = null )
+        private void DoSaveTest( string technique = null, string comments = null, decimal? latitude = null, decimal? longitude = null )
         {
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try
@@ -451,8 +539,8 @@ namespace TestCommon
 
                     string technique = "SomeTechnique" + i;
                     string comments = "Some Comment" + i;
-                    double latitude = i;
-                    double longitude = i;
+                    decimal latitude = i;
+                    decimal longitude = i;
                     uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
 
                     uut.PopulateLogbook();
@@ -485,7 +573,7 @@ namespace TestCommon
         /// </summary>
         /// <param name="latitude">The latitude to try.</param>
         /// <param name="longitude">The longitude to try.</param>
-        private void DoSaveTestOneLocation( double? latitude, double? longitude )
+        private void DoSaveTestOneLocation( decimal? latitude, decimal? longitude )
         {
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try

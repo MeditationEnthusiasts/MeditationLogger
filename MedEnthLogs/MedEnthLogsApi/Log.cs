@@ -4,12 +4,50 @@ using SQLite.Net.Attributes;
 namespace MedEnthLogsApi
 {
     /// <summary>
+    /// Exception thrown when a log fails validation.
+    /// </summary>
+    public class LogValidationException : Exception
+    {
+        public LogValidationException( string message ) :
+            base( message )
+        {
+
+        }
+    }
+
+    /// <summary>
     /// This class represents a specific instance
     /// of an event logged.
     /// </summary>
     public class Log : ILog
     {
         // -------- Fields ---------
+
+        /// <summary>
+        /// Error message that appears
+        /// in validate if the end time is less than that start time.
+        /// internal for unit tests.
+        /// </summary>
+        internal const string EndTimeLessThanStartTimeMessage = "Log End Time is less than the start time.";
+
+        /// <summary>
+        /// Error message that appears
+        /// in validate if the edit time is less than the creation time.
+        /// internal for unit tests.
+        /// </summary>
+        internal const string EditTimeLessThanCreationTimeMessage = "Log edit Time is less than the creation time.";
+
+        /// <summary>
+        /// Error message that appears
+        /// if the latitude is set on the log, but not the longitude.
+        /// </summary>
+        internal const string LatitudeSetNoLongitude = "Latitude set on log, but not longitude";
+
+        /// <summary>
+        /// Error message that appears
+        /// if the longitude is set on the log, but not the latitude.
+        /// </summary>
+        internal const string LongitudeSetNoLatitude = "Longitude set on long, but not latitude";
 
         /// <summary>
         /// Comments about the session.
@@ -136,13 +174,13 @@ namespace MedEnthLogsApi
         /// The latitude of where the session took place.
         /// null if no location specified.
         /// </summary>
-        public double? Latitude { get; set; }
+        public decimal? Latitude { get; set; }
 
         /// <summary>
         /// The longitude of where the session took place.
         /// null if no location specified.
         /// </summary>
-        public double? Longitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         // -------- Functions --------
 
@@ -194,6 +232,34 @@ namespace MedEnthLogsApi
         public override int GetHashCode()
         {
             return CreateTime.GetHashCode();
+        }
+
+        /// <summary>
+        /// Ensures the log is in a good state.  Should be called before saving it.
+        /// Throws LogValidationException if:
+        /// Start time > End Time.
+        /// Creation Time > Edit Time.
+        /// Latitude exists, longitude does not.
+        /// Longitude exists, latitude does not. 
+        /// </summary>
+        public void Validate()
+        {
+            if ( this.EndTime < this.StartTime )
+            {
+                throw new LogValidationException( EndTimeLessThanStartTimeMessage );
+            }
+            else if ( this.EditTime < this.CreateTime )
+            {
+                throw new LogValidationException( EditTimeLessThanCreationTimeMessage );
+            }
+            else if ( ( this.Latitude == null ) && ( this.Longitude != null ) )
+            {
+                throw new LogValidationException( LongitudeSetNoLatitude );
+            }
+            else if ( ( this.Longitude == null ) && ( this.Latitude != null ) )
+            {
+                throw new LogValidationException( LatitudeSetNoLongitude );
+            }
         }
 
         /// <summary>

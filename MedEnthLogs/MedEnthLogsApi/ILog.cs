@@ -53,12 +53,18 @@ namespace MedEnthLogsApi
         /// The latitude of where the session took place.
         /// null if no location specified.
         /// </summary>
-        double? Latitude { get; set; }
+        decimal? Latitude { get; set; }
 
         /// <summary>
         /// The longitude of where the session took place.
         /// null if no location specified.
         /// </summary>
-        double? Longitude { get; set; }
+        decimal? Longitude { get; set; }
+
+        /// <summary>
+        /// Ensures the log is in a good state.  Should be called before saving it.
+        /// Throws Exceptions if not.
+        /// </summary>
+        void Validate();
     }
 }

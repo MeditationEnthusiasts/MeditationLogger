@@ -37,12 +37,14 @@ namespace MedEnthLogsCli
                     try
                     {
                         api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );
+                        api.PopulateLogbook();
                         switch ( args[0] )
                         {
                             case "import":
                                 break;
 
                             case "export":
+                                api.Export( args[1] );
                                 break;
 
                             case "sync":

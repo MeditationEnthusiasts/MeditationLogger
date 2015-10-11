@@ -10,18 +10,6 @@ using SQLite.Net.Interop;
 namespace MedEnthLogsApi
 {
     /// <summary>
-    /// Exception thrown when a log fails validation.
-    /// </summary>
-    public class LogValidationException : Exception
-    {
-        public LogValidationException( string message ) :
-            base( message )
-        {
-
-        }
-    }
-
-    /// <summary>
     /// The API for talking to the backend of the application.
     /// </summary>
     public class Api
@@ -41,32 +29,6 @@ namespace MedEnthLogsApi
         /// internal for unit tests.
         /// </summary>
         internal const string SessionInProgressMessage = "Can not save a session that is currently in progress";
-
-        /// <summary>
-        /// Error message that appears
-        /// in validate if the end time is less than that start time.
-        /// internal for unit tests.
-        /// </summary>
-        internal const string EndTimeLessThanStartTimeMessage = "Log End Time is less than the start time.";
-
-        /// <summary>
-        /// Error message that appears
-        /// in validate if the edit time is less than the creation time.
-        /// internal for unit tests.
-        /// </summary>
-        internal const string EditTimeLessThanCreationTimeMessage = "Log edit Time is less than the creation time.";
-
-        /// <summary>
-        /// Error message that appears
-        /// if the latitude is set on the log, but not the longitude.
-        /// </summary>
-        internal const string LatitudeSetNoLongitude = "Latitude set on log, but not longitude";
-
-        /// <summary>
-        /// Error message that appears
-        /// if the longitude is set on the log, but not the latitude.
-        /// </summary>
-        internal const string LongitudeSetNoLatitude = "Longitude set on long, but not latitude";
 
         /// <summary>
         /// Reference to a SQLite connection.
@@ -158,30 +120,6 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
-        /// Ensures the current log is okay before being saved to the database.
-        /// Throws LogValidationException if its not.
-        /// </summary>
-        internal void ValidateCurrentLog()
-        {
-            if ( this.currentLog.EndTime < this.currentLog.StartTime )
-            {
-                throw new LogValidationException( EndTimeLessThanStartTimeMessage );
-            }
-            else if ( this.currentLog.EditTime < this.currentLog.CreateTime )
-            {
-                throw new LogValidationException( EditTimeLessThanCreationTimeMessage );
-            }
-            else if ( ( this.currentLog.Latitude == null ) && ( this.currentLog.Longitude != null ) )
-            {
-                throw new LogValidationException( LongitudeSetNoLatitude );
-            }
-            else if ( ( this.currentLog.Longitude == null ) && ( this.currentLog.Latitude != null ) )
-            {
-                throw new LogValidationException( LatitudeSetNoLongitude );
-            }
-        }
-
-        /// <summary>
         /// Starts the session.
         /// This creates a log (and by extension, sets the creation time to now),
         /// and sets the start time to now as well.
@@ -228,7 +166,7 @@ namespace MedEnthLogsApi
         /// <param name="comments">The comments for the session, if any (null for no comments).</param>
         /// <param name="latitude">The latitude location of the session.  Null for no location.</param>
         /// <param name="longitude">The longitude location of the session.  Null for no location.</param>
-        public void ValidateAndSaveSession( string technique = null, string comments = null, double? latitude = null, double? longitude = null )
+        public void ValidateAndSaveSession( string technique = null, string comments = null, decimal? latitude = null, decimal? longitude = null )
         {
             // If sqlite is not open, throw exeption.
             if ( this.sqlite == null )
@@ -249,7 +187,7 @@ namespace MedEnthLogsApi
             this.currentLog.Longitude = longitude;
 
             // If validating the log fails, throw.
-            this.ValidateCurrentLog();
+            this.CurrentLog.Validate();
 
             // Otherwise, Edit the log one last time and save it to the database.
             if ( technique != null )
@@ -292,10 +230,203 @@ namespace MedEnthLogsApi
             this.LogBook = new LogBook( logs );
         }
 
+        // ---- Import Functions ----
+
+        /// <summary>
+        /// Performs an Import.
+        /// The type of Import (XML, JSON, MLG) depends on the
+        /// file extension (case doesn't matter).
+        /// </summary>
+        /// <param name="fileName">Where to import the file to.</param>
+        public void Import( string fileName )
+        {
+            string[] splitString = fileName.Split( '.' );
+            switch ( splitString[splitString.Length - 1].ToLower() )
+            {
+                case "xml":
+                    using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+                    {
+                        ImportFromXml( outFile );
+                    }
+                    break;
+
+                case "json":
+                    using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+                    {
+                        ImportFromJson( outFile );
+                    }
+                    break;
+                case "mlg":
+                    ImportFromMlg( fileName );
+                    break;
+                default:
+                    throw new ArgumentException(
+                        "Invalid filename passed into Import, can only be .xml, .json, .mlg.",
+                        "fileName"
+                    );
+            }
+        }
+
+        /// <summary>
+        /// Imports logs from XML to the database.
+        /// This will not repopulate the logbook itself.  You must call that after
+        /// to get the latest logs.
+        /// </summary>
+        /// <param name="outFile">The stream the outputs the file.</param>
+        public void ImportFromXml( Stream outFile )
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load( outFile );
+
+            List<Log> logs = new List<Log>();
+
+            XmlElement rootNode = doc.DocumentElement;
+            if ( rootNode.Name != "logbook" )
+            {
+                throw new XmlException(
+                    "Root node should be named \"logbook\".  Got: " + rootNode.Name
+                );
+            }
+
+            foreach ( XmlNode node in rootNode.ChildNodes )
+            {
+                if ( node.Name != "log" )
+                {
+                    throw new XmlException(
+                        "Element is not a log.  Got: " + node.Name
+                    );
+                }
+
+                Log log = new Log();
+
+                foreach ( XmlAttribute attr in node.Attributes )
+                {
+                    switch ( attr.Name )
+                    {
+                        case ( "StartTime" ):
+                            log.StartTime = DateTime.Parse( attr.Value );
+                            break;
+
+                        case ( "EndTime" ):
+                            log.EndTime = DateTime.Parse( attr.Value );
+                            break;
+
+                        case ( "Technique" ):
+                            log.Technique = attr.Value;
+                            break;
+
+                        case ( "Comments" ):
+                            log.Comments = attr.Value;
+                            break;
+
+                        case ( "Latitude" ):
+                            // Try to parse the latitude.  If fails, just make it empty.
+                            decimal lat;
+                            if ( decimal.TryParse( attr.Value, out lat ) )
+                            {
+                                log.Latitude = lat;
+                            }
+                            else
+                            {
+                                log.Latitude = null;
+                            }
+                            break;
+
+                        case ( "Longitude" ):
+                            // Try to parse the Longitude.  If fails, just make it empty.
+                            decimal lon;
+                            if ( decimal.TryParse( attr.Value, out lon ) )
+                            {
+                                log.Longitude = lon;
+                            }
+                            else
+                            {
+                                log.Longitude = null;
+                            }
+                            break;
+                    }
+                }
+
+                DateTime creationTime = DateTime.Now.ToUniversalTime();
+
+                // Keep looking until we have a unique creation date.
+                while ( this.LogBook.LogExists( creationTime ) || ( logs.Find( i => i.CreateTime == creationTime ) != null ) )
+                {
+                    creationTime = DateTime.Now.ToUniversalTime();
+                }
+                log.CreateTime = creationTime;
+                log.EditTime = creationTime;
+
+                // Ensure the log is good.
+                log.Validate();
+
+                // Add to list.
+                logs.Add( log );
+            }
+
+            // Last thing to do is add the new logs to the database.
+            if ( logs.Count != 0 )
+            {
+                foreach ( Log newLog in logs )
+                {
+                    this.sqlite.Insert( newLog );
+                }
+
+                this.sqlite.Commit();
+            }
+        }
+
+        private void ImportFromJson( FileStream outFile )
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ImportFromMlg( string fileName )
+        {
+            throw new NotImplementedException();
+        }
+
+        // ---- Export Functions ----
+
+        /// <summary>
+        /// Performs an Export.
+        /// The type of export (XML, JSON, MLG) depends on the
+        /// file extension (case doesn't matter).
+        /// </summary>
+        /// <param name="fileName">Where to export the file to.</param>
+        public void Export( string fileName )
+        {
+            string[] splitString = fileName.Split( '.' );
+            switch(splitString[splitString.Length - 1].ToLower())
+            {
+                case "xml":
+                    using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
+                    {
+                        ExportToXml( outFile );
+                    }
+                    break;
+
+                case "json":
+                    using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
+                    {
+                        ExportToJson( outFile );
+                    }
+                    break;
+                case "mlg":
+                    ExportToMlg( fileName );
+                    break;
+                default:
+                    throw new ArgumentException(
+                        "Invalid filename passed into Export, can only be .xml, .json, .mlg.",
+                        "fileName"
+                    );
+            }
+        }
+
         /// <summary>
         /// Exports the loaded logbook to XML.
         /// </summary>
-        /// <param name="outFile">The stream the outputs the file.</param>
+        /// <param name="outFile">The stream which outputs the file.</param>
         public void ExportToXml( Stream outFile )
         {
             XmlDocument doc = new XmlDocument();
@@ -346,12 +477,12 @@ namespace MedEnthLogsApi
                 }
                 {
                     XmlAttribute lat = doc.CreateAttribute( "Latitude" );
-                    lat.Value = log.Latitude.ToString();
+                    lat.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lat );
                 }
                 {
                     XmlAttribute lon = doc.CreateAttribute( "Longitude" );
-                    lon.Value = log.Longitude.ToString();
+                    lon.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lon );
                 }
 
@@ -366,7 +497,7 @@ namespace MedEnthLogsApi
         /// <summary>
         /// Exports the loaded logbook to json.
         /// </summary>
-        /// <param name="outFile">The stream the outputs the file.</param>
+        /// <param name="outFile">The stream which outputs the file.</param>
         public void ExportToJson( Stream outFile )
         {
             // Use JSon.net package.

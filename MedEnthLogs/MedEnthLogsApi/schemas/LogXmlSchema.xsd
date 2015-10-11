@@ -24,7 +24,9 @@
         <xs:attribute name="EndTime" type="xs:dateTime" use="required"/>
         <xs:attribute name="Technique" type="xs:string" use="optional"/>
         <xs:attribute name="Comments" type="xs:string" use="optional"/>
-        <xs:attribute name="Latitude" type="xs:double" use="optional"/>
-        <xs:attribute name="Longitude" type="xs:double" use="optional"/>
+
+        <!-- Make lat/lon strings, as they could be empty strings. -->
+        <xs:attribute name="Latitude" type="xs:string" use="optional"/>
+        <xs:attribute name="Longitude" type="xs:string" use="optional"/>
     </xs:complexType>
 </xs:schema>
