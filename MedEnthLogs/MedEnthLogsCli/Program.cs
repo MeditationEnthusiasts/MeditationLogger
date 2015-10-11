@@ -41,6 +41,7 @@ namespace MedEnthLogsCli
                         switch ( args[0] )
                         {
                             case "import":
+                                api.Import( args[1] );
                                 break;
 
                             case "export":

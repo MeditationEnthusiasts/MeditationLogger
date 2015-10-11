@@ -156,6 +156,24 @@ namespace MedEnthLogsDesktop
             {
                 MessageBox.Show( "No import file selected." );
             }
+            else
+            {
+                try
+                {
+                    this.api.Import( ImportFileLocation.Text );
+                    ReloadLogs();
+                    this.ImportFileLocation.Text = string.Empty;
+                }
+                catch ( Exception err )
+                {
+                    MessageBox.Show(
+                        err.Message,
+                        "Error importing to logbook.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
         }
 
         // -------- Export View --------
@@ -197,30 +215,14 @@ namespace MedEnthLogsDesktop
             {
                 try
                 {
-                    string[] fileNameParts = ExportLocationText.Text.Split( '.' );
-                    if ( fileNameParts[fileNameParts.Length - 1].ToLower() == "xml" )
-                    {
-                        using ( FileStream outFile = new FileStream( ExportLocationText.Text, FileMode.OpenOrCreate, FileAccess.Write ) )
-                        {
-                            this.api.ExportToXml( outFile );
-                            ExportLocationText.Text = string.Empty;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "Can only export .xml, .json, or .mlg.  Not " + fileNameParts[fileNameParts.Length - 1],
-                            "Error exporting log",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
-                    }
+                    this.api.Export( ExportLocationText.Text );
+                    this.ExportLocationText.Text = string.Empty;
                 }
                 catch ( Exception err )
                 {
                     MessageBox.Show( 
                         err.Message,
-                        "Error exporting log",
+                        "Error exporting logbook.",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
