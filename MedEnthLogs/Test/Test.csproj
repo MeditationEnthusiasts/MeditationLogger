@@ -105,6 +105,21 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\InvalidLatLong.xml" />
+    <Content Include="TestFiles\InvalidLong.xml" />
+    <Content Include="TestFiles\InvalidLat.xml" />
+    <Content Include="TestFiles\MissingLong.xml" />
+    <Content Include="TestFiles\MissingLat.xml" />
+    <Content Include="TestFiles\BadLogStartEnd.xml" />
+    <Content Include="TestFiles\JustStartAndEnd.xml" />
+    <Content Include="TestFiles\NoLogs.xml" />
+    <Content Include="TestFiles\MissingEndTime.xml" />
+    <Content Include="TestFiles\MissingStartTime.xml" />
+    <Content Include="TestFiles\BadLogCreationEdit.xml" />
+    <Content Include="TestFiles\BadLogName.xml" />
+    <Content Include="TestFiles\BadLogBook.xml" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<logbook xmlns="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd">
+    <log CreationTime="2015-09-06T00:17:12.8755922Z" EditTime="2015-09-06T00:17:12.8755922Z" StartTime="2015-09-06T00:17:12.8755922Z" EndTime="2015-09-06T00:17:12.8755922Z" Technique="SomeTechnique2" Comments="Some Comment2" Latitude="derp" Longitude="derp" />
+</logbook>

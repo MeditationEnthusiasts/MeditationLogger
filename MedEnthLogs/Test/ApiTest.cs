@@ -19,7 +19,7 @@ namespace TestCommon
         /// <summary>
         /// Unit under test.
         /// </summary>
-        private MedEnthLogsApi.Api uut;
+        private Api uut;
 
         private const string dbLocation = "test.db";
 
@@ -33,7 +33,7 @@ namespace TestCommon
                 File.Delete( dbLocation );
             }
 
-            uut = new MedEnthLogsApi.Api( new Win32LocationDetector() );
+            uut = new Api( new Win32LocationDetector() );
         }
 
         [TearDown]
@@ -203,7 +203,7 @@ namespace TestCommon
                 {
                     uut.ValidateAndSaveSession();
                 },
-                MedEnthLogsApi.Api.DatabaseNotOpenMessage
+                Api.DatabaseNotOpenMessage
             );
         }
 
@@ -312,7 +312,7 @@ namespace TestCommon
                 {
                     uut.PopulateLogbook();
                 },
-                MedEnthLogsApi.Api.DatabaseNotOpenMessage
+                Api.DatabaseNotOpenMessage
             );
         }
 
@@ -323,6 +323,12 @@ namespace TestCommon
         }
 
         // ---- Xml Tests ----
+        
+        // -- XML Schema Tests
+
+        /// <summary>
+        /// Tests the XML schema with all values.
+        /// </summary>
         [Test]
         public void XmlSchemaTest()
         {
@@ -354,6 +360,9 @@ namespace TestCommon
             }
         }
 
+        /// <summary>
+        /// Tests the XML schema with optional values.
+        /// </summary>
         [Test]
         public void XmlSchemaTestNoValues()
         {
@@ -386,6 +395,8 @@ namespace TestCommon
                 File.Delete( fileName );
             }
         }
+
+        // -- XML Export --
 
         /// <summary>
         /// Ensures the exporting and importing of
@@ -445,7 +456,158 @@ namespace TestCommon
             }
         }
 
+        // -- XML import --
+
+        /// <summary>
+        /// Ensures importing an XML file without the LogBook or Log tag results in a failure,
+        /// AND the database is not updated.
+        /// </summary>
+        [Test]
+        public void XmlImportBadLogbookTest()
+        {
+            DoBadXmlTest<XmlException>( @"..\..\TestFiles\BadLogBook.xml" );
+            DoBadXmlTest<XmlException>( @"..\..\TestFiles\BadLogName.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with no start or no end time results in a failure,
+        /// AND the database is not updated.  Also ensures having StartTime > EndTime results
+        /// in a failure.
+        /// </summary>
+        [Test]
+        public void XmlImportNoStartTime()
+        {
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.xml" );
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.xml" );
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.xml" );
+        }
+
+        /// <summary>
+        /// Ensures having a missing latitude while having a longitude
+        /// (or vice vera) results in a failure.
+        /// </summary>
+        [Test]
+        public void XmlImportBadMissingLat()
+        {
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingLat.xml" );
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingLong.xml" );
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.xml" );
+            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with creation time > edit time results
+        /// in no error.  The reason for this is we ignore the Creation and Edit time,
+        /// and just set them to DateTime.Now.
+        /// </summary>
+        [Test]
+        public void XmlImportBadCreationEditTime()
+        {
+            DoGoodXmlTest( 1, @"..\..\TestFiles\BadLogCreationEdit.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with no logs results
+        /// in no error.  Nothing is added.
+        /// </summary>
+        [Test]
+        public void XmlImportNoLogs()
+        {
+            DoGoodXmlTest( 0, @"..\..\TestFiles\NoLogs.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with just start time
+        /// and end time is valid.
+        /// </summary>
+        [Test]
+        public void XmlImportJustStartAndEnd()
+        {
+            DoGoodXmlTest( 5, @"..\..\TestFiles\JustStartAndEnd.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with lat and long
+        /// set to not numbers results in no error, but both
+        /// having null values.
+        /// </summary>
+        [Test]
+        public void XmlImportBadLatLong()
+        {
+            DoGoodXmlTest( 1, @"..\..\TestFiles\InvalidLatLong.xml" );
+            Assert.IsNull( uut.LogBook.Logs[0].Latitude );
+            Assert.IsNull( uut.LogBook.Logs[0].Longitude );
+        }
+
         // -------- Test Helpers ---------
+
+        /// <summary>
+        /// Give this function a good XML file, and it will ensure
+        /// the XML file is good since it will import everything.
+        /// </summary>
+        /// <param name="newElements">How many new elements are going to be added.</param>
+        /// <param name="xmlFile">The good XML file.</param>
+        private void DoGoodXmlTest( int newElements, string xmlFile )
+        {
+            try
+            {
+                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+
+                uut.PopulateLogbook();
+
+                int originalSize = uut.LogBook.Logs.Count;
+
+                Assert.DoesNotThrow(
+                    delegate ()
+                    {
+                        uut.Import( xmlFile );
+                    }
+                );
+
+                uut.PopulateLogbook();
+
+                // Ensure new logs were added.
+                Assert.AreEqual( originalSize + newElements, uut.LogBook.Logs.Count );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
+        /// <summary>
+        /// Give this function a bad XML file, and it will ensure
+        /// the XML file is bad since it will throw the given exception.
+        /// </summary>
+        /// <param name="xmlFile">The bad XML file.</param>
+        /// <typeparam name="exceptionType">The exeption that is expected to be thrown.</typeparam>
+        private void DoBadXmlTest<exceptionType>( string xmlFile ) where exceptionType : Exception
+        {
+            try
+            {
+                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+
+                uut.PopulateLogbook();
+
+                int originalSize = uut.LogBook.Logs.Count;
+
+                Assert.Throws<exceptionType>(
+                    delegate ()
+                    {
+                        uut.Import( xmlFile );
+                    }
+                );
+
+                uut.PopulateLogbook();
+
+                // Ensure no new logs were added.
+                Assert.AreEqual( originalSize, uut.LogBook.Logs.Count );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
 
         /// <summary>
         /// Calls uut.ValidateStagged and ensures it does validate
