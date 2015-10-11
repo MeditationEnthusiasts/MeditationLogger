@@ -36,11 +36,6 @@ namespace MedEnthLogsApi
         private SQLiteConnection sqlite;
 
         /// <summary>
-        /// Class that detects the location.
-        /// </summary>
-        private ILocationDetector locationDetector;
-
-        /// <summary>
         /// The current log being written to.
         /// internal for unit tests only.
         /// </summary>
@@ -61,7 +56,7 @@ namespace MedEnthLogsApi
         {
             this.sqlite = null;
             this.LogBook = null;
-            this.locationDetector = locationDetector;
+            this.LocationDetector = locationDetector;
             ResetCurrentLog();
         }
 
@@ -77,6 +72,11 @@ namespace MedEnthLogsApi
         /// That is, start has been called, but stop has not.
         /// </summary>
         public bool IsSessionInProgress { get; private set; }
+
+        /// <summary>
+        /// Class that detects the location.
+        /// </summary>
+        public ILocationDetector LocationDetector { get; private set; }
 
         /// <summary>
         /// The current log being written to.
@@ -490,7 +490,6 @@ namespace MedEnthLogsApi
             }
 
             doc.InsertAfter( logbookNode, dec );
-
             doc.Save( outFile );
         }
 

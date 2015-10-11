@@ -9,21 +9,22 @@
         /// <summary>
         /// Latitude Position.
         /// </summary>
-        double Latitude { get; }
+        decimal Latitude { get; }
 
         /// <summary>
         /// Longitude Position.
         /// </summary>
-        double Longitude { get; }
+        decimal Longitude { get; }
 
         /// <summary>
-        /// Accuracy of location in METERS.
+        /// True if we have a valid position, else false.
         /// </summary>
-        double Accuracy { get; }
+        bool IsReady { get; }
 
         /// <summary>
         /// Refreshes the position information.
         /// </summary>
-        void RefreshPosition();
+        /// <returns>True if we got a position.</returns>
+        bool RefreshPosition();
     }
 }

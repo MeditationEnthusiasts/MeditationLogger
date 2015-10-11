@@ -329,9 +329,36 @@ namespace MedEnthLogsDesktop
                         break;
                     case StartState.End:
                         // API Calls
+                        decimal? latitude = null;
+                        decimal? longitude = null;
+
+                        if ( this.saveView.UseLocationCheckbox.Checked )
+                        {
+                            this.api.LocationDetector.RefreshPosition();
+                            if ( this.api.LocationDetector.IsReady )
+                            {
+                                latitude = this.api.LocationDetector.Latitude;
+                                longitude = this.api.LocationDetector.Longitude;
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    "Could not get location. Try saving again, or uncheck the location box to save without location.",
+                                    "Error getting location.",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+
+                                // Do not change states.
+                                break;
+                            }
+                        }
+
                         this.api.ValidateAndSaveSession(
                             this.saveView.TechniqueUsedTextbox.Text,
-                            this.saveView.CommentsTextBox.Text
+                            this.saveView.CommentsTextBox.Text,
+                            latitude,
+                            longitude
                         );
                         ReloadLogs();
 

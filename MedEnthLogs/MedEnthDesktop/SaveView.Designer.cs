@@ -122,11 +122,11 @@
         #endregion
 
         private System.Windows.Forms.Label MinutesLabel;
-        private System.Windows.Forms.CheckBox UseLocationCheckbox;
         private System.Windows.Forms.Label TechniqueUsedLabel;
         private System.Windows.Forms.Label CommentsLabel;
         public System.Windows.Forms.TextBox TechniqueUsedTextbox;
         public System.Windows.Forms.RichTextBox CommentsTextBox;
         public System.Windows.Forms.Label MinutesValueLabel;
+        public System.Windows.Forms.CheckBox UseLocationCheckbox;
     }
 }

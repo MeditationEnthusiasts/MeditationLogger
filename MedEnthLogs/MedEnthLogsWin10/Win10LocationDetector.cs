@@ -24,26 +24,27 @@ namespace MedEnthLogsWin10
         /// <summary>
         /// Latitude Position.
         /// </summary>
-        public double Latitude { get; }
+        public decimal Latitude { get; }
 
         /// <summary>
         /// Longitude Position.
         /// </summary>
-        public double Longitude { get; }
+        public decimal Longitude { get; }
 
         /// <summary>
-        /// Accuracy of location in METERS.
+        /// True if we have a valid position, else false.
         /// </summary>
-        public double Accuracy { get; }
+        public bool IsReady { get; private set; }
 
         // -------- Functions --------
 
         /// <summary>
         /// Refreshes the position information.
         /// </summary>
-        public void RefreshPosition()
+        /// <returns>True if we got a position.</returns>
+        public bool RefreshPosition()
         {
-
+            return false;
         }
     }
 }
