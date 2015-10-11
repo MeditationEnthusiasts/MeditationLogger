@@ -60,18 +60,20 @@
             this.SyncLocationText = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.AboutView = new System.Windows.Forms.TabPage();
-            this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
-            this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.VersionValueLabel = new System.Windows.Forms.Label();
-            this.BugLabel = new System.Windows.Forms.Label();
             this.ReportABugValue = new System.Windows.Forms.LinkLabel();
+            this.BugLabel = new System.Windows.Forms.Label();
             this.ViewSourceLabel = new System.Windows.Forms.Label();
             this.ViewSourceValueLabel = new System.Windows.Forms.LinkLabel();
             this.VisitSiteLabel = new System.Windows.Forms.Label();
             this.VistSiteLabel = new System.Windows.Forms.LinkLabel();
+            this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.ViewWikiValueLabel = new System.Windows.Forms.LinkLabel();
+            this.WikiLabel = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -427,19 +429,6 @@
             this.AboutView.Text = "About";
             this.AboutView.UseVisualStyleBackColor = true;
             // 
-            // ExportSaveDialog
-            // 
-            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
-            // 
-            // ImportOpenDialog
-            // 
-            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            // 
-            // SyncOpenDialog
-            // 
-            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
@@ -449,21 +438,25 @@
             this.tableLayoutPanel1.Controls.Add(this.VersionValueLabel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.ReportABugValue, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.BugLabel, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.ViewSourceLabel, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.ViewSourceValueLabel, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.VisitSiteLabel, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.VistSiteLabel, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.ViewSourceLabel, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.ViewSourceValueLabel, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.ViewWikiValueLabel, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.WikiLabel, 0, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(21, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 88F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 117F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 107F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 439);
             this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // VersionLabel
             // 
@@ -483,6 +476,17 @@
             this.VersionValueLabel.TabIndex = 1;
             this.VersionValueLabel.Text = "0.1.0";
             // 
+            // ReportABugValue
+            // 
+            this.ReportABugValue.AutoSize = true;
+            this.ReportABugValue.Location = new System.Drawing.Point(147, 204);
+            this.ReportABugValue.Name = "ReportABugValue";
+            this.ReportABugValue.Size = new System.Drawing.Size(399, 25);
+            this.ReportABugValue.TabIndex = 3;
+            this.ReportABugValue.TabStop = true;
+            this.ReportABugValue.Text = "https://dev.meditationenthusiasts.org/mantis/";
+            this.ReportABugValue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportABugValue_LinkClicked);
+            // 
             // BugLabel
             // 
             this.BugLabel.AutoSize = true;
@@ -493,22 +497,11 @@
             this.BugLabel.TabIndex = 2;
             this.BugLabel.Text = "Report a bug:";
             // 
-            // ReportABugValue
-            // 
-            this.ReportABugValue.AutoSize = true;
-            this.ReportABugValue.Location = new System.Drawing.Point(147, 204);
-            this.ReportABugValue.Name = "ReportABugValue";
-            this.ReportABugValue.Size = new System.Drawing.Size(421, 50);
-            this.ReportABugValue.TabIndex = 3;
-            this.ReportABugValue.TabStop = true;
-            this.ReportABugValue.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/issues";
-            this.ReportABugValue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportABugValue_LinkClicked);
-            // 
             // ViewSourceLabel
             // 
             this.ViewSourceLabel.AutoSize = true;
             this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 321);
+            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 331);
             this.ViewSourceLabel.Name = "ViewSourceLabel";
             this.ViewSourceLabel.Size = new System.Drawing.Size(129, 25);
             this.ViewSourceLabel.TabIndex = 4;
@@ -517,7 +510,7 @@
             // ViewSourceValueLabel
             // 
             this.ViewSourceValueLabel.AutoSize = true;
-            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 321);
+            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 331);
             this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
             this.ViewSourceValueLabel.Size = new System.Drawing.Size(421, 50);
             this.ViewSourceValueLabel.TabIndex = 5;
@@ -545,6 +538,40 @@
             this.VistSiteLabel.TabStop = true;
             this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
             this.VistSiteLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VistSiteLabel_LinkClicked);
+            // 
+            // ExportSaveDialog
+            // 
+            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
+            // 
+            // ImportOpenDialog
+            // 
+            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            // 
+            // SyncOpenDialog
+            // 
+            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            // 
+            // ViewWikiValueLabel
+            // 
+            this.ViewWikiValueLabel.AutoSize = true;
+            this.ViewWikiValueLabel.Location = new System.Drawing.Point(147, 258);
+            this.ViewWikiValueLabel.Name = "ViewWikiValueLabel";
+            this.ViewWikiValueLabel.Size = new System.Drawing.Size(417, 50);
+            this.ViewWikiValueLabel.TabIndex = 8;
+            this.ViewWikiValueLabel.TabStop = true;
+            this.ViewWikiValueLabel.Text = "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logg" +
+    "er:start";
+            this.ViewWikiValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewWikiValueLabel_LinkClicked);
+            // 
+            // WikiLabel
+            // 
+            this.WikiLabel.AutoSize = true;
+            this.WikiLabel.Location = new System.Drawing.Point(3, 258);
+            this.WikiLabel.Name = "WikiLabel";
+            this.WikiLabel.Size = new System.Drawing.Size(104, 25);
+            this.WikiLabel.TabIndex = 9;
+            this.WikiLabel.Text = "View Wiki:";
             // 
             // HomePage
             // 
@@ -622,6 +649,8 @@
         private System.Windows.Forms.LinkLabel ViewSourceValueLabel;
         private System.Windows.Forms.Label VisitSiteLabel;
         private System.Windows.Forms.LinkLabel VistSiteLabel;
+        private System.Windows.Forms.LinkLabel ViewWikiValueLabel;
+        private System.Windows.Forms.Label WikiLabel;
     }
 }
 

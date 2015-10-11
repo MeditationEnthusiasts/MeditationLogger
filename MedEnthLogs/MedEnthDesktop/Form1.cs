@@ -383,12 +383,22 @@ namespace MedEnthLogsDesktop
 
         private void ReportABugValue_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
-            System.Diagnostics.Process.Start( "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/issues" );
+            System.Diagnostics.Process.Start( "https://dev.meditationenthusiasts.org/mantis/" );
         }
 
         private void ViewSourceValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
             System.Diagnostics.Process.Start( "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src" );
+        }
+
+        private void tableLayoutPanel1_Paint( object sender, PaintEventArgs e )
+        {
+
+        }
+
+        private void ViewWikiValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            System.Diagnostics.Process.Start( "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logger:start" );
         }
     }
 }
