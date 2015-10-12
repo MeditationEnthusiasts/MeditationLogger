@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,6 +31,13 @@ namespace MedEnthLogsDesktop
         List<LogView> logViews;
 
         StartState currentState;
+
+        /// <summary>
+        /// Where the execution direcotry is.
+        ///
+        /// https://msdn.microsoft.com/en-us/library/aa457089.aspx
+        /// </summary>
+        private static readonly string exeDirectory = Path.GetDirectoryName( Assembly.GetExecutingAssembly().GetName().CodeBase ).Replace( '\\', '/' );
 
         // ---- Views ----
 
@@ -68,6 +76,84 @@ namespace MedEnthLogsDesktop
             ChangableStartView.Controls.Add( this.saveView );
         }
 
+        readonly string mapHtmlStart = @"
+<!doctype html>
+<head>
+    <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
+    <link type=""text/css"" rel=""stylesheet"" href=""" + exeDirectory + @"/html/css/leaflet.css""/>
+    <script src=""" + exeDirectory + @"/html/js/leaflet.js""></script>
+    <title>Meditation Map</title>
+    <!-- Plug in the map information -->
+    <script type = ""text/javascript"">
+        window.onload=function()
+        {
+            // Create Map
+            var map = L.map( 'map' ).setView([51.505, -0.09], 13);
+
+            // Pull from the OSM API
+            var osmURL = ""http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"";
+
+            // In order to use open street map, we need to attribute to it.
+            var osmAttrib = 'Map Data &copy; <a href=""http://openstreetmap.org/copyright"">OpenStreetMap</a> contributors';
+
+            // Create the OSM layer.
+            var osm = new L.TileLayer( osmURL, { minZoom: 0, maxZoom: 18, attribution: osmAttrib});
+
+            // Set the map to start at RIT at zoom level 15.
+            map.setView(new L.LatLng(43.085, -77.678419), 3);
+
+            // Add the osm layer to the map
+            map.addLayer(osm);
+
+            // Create the icon.
+            var icon = L.icon({
+                iconUrl: """ + exeDirectory + @"/html/media/marker-icon.png"",
+                iconSize: [25, 41],
+                iconAnchor:[12.5, 41],
+                popupAnchor:[0, -30]
+            });
+
+            // Insert the data.
+        ";
+
+        const string mapHtmlEnd = @"
+        }
+    </script>
+</head>
+<body>
+    <div class=""center"" id=""map"" style=""height:350px;""/>
+</body>
+</html>";
+
+        /// <summary>
+        /// Gets the html of all the log's locations.
+        /// </summary>
+        /// <returns></returns>
+        private string GetPositionHtml()
+        {
+            string js = string.Empty;
+            foreach ( ILog log in this.api.LogBook.Logs )
+            {
+                if ( ( log.Latitude == null ) || ( log.Longitude == null ) )
+                {
+                    continue;
+                }
+
+                js += @"
+var markerHTML" + log.Id + @" = '<div class = ""left"" style=""overflow: auto; color: black; "">' + 
+                                '<p><strong>" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>' + 
+                                '<p><strong>Duration:</strong> " + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" minutes</p>' + 
+                                '<p><strong>Technique:</strong> " + log.Technique + @"</p>' +
+                                '<p><strong>Comments:</strong> " + log.Comments + @"</p>';
+
+                var newPopup" + log.Id + @" = L.popup({maxwidth:500}).setContent(markerHTML" + log.Id + @");
+var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude + @"]).setIcon(icon).addTo(map).bindPopup(newPopup" + log.Id + @");
+";
+            }
+
+            return js;
+        }
+
         private void ReloadLogs()
         {
             this.api.PopulateLogbook();
@@ -78,6 +164,8 @@ namespace MedEnthLogsDesktop
                     new LogView( log )
                 );
             }
+
+            this.MapViewBrowser.DocumentText = mapHtmlStart + GetPositionHtml() + mapHtmlEnd;
         }
 
         private void Form1_Load( object sender, EventArgs e )

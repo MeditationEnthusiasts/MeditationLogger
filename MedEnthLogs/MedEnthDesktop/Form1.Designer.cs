@@ -77,6 +77,7 @@
             this.ViewLogbookInnerTabControl = new System.Windows.Forms.TabControl();
             this.StandardViewTab = new System.Windows.Forms.TabPage();
             this.MapLogViewTab = new System.Windows.Forms.TabPage();
+            this.MapViewBrowser = new System.Windows.Forms.WebBrowser();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -89,6 +90,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.ViewLogbookInnerTabControl.SuspendLayout();
             this.StandardViewTab.SuspendLayout();
+            this.MapLogViewTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -603,6 +605,7 @@
             // 
             // MapLogViewTab
             // 
+            this.MapLogViewTab.Controls.Add(this.MapViewBrowser);
             this.MapLogViewTab.Location = new System.Drawing.Point(4, 29);
             this.MapLogViewTab.Name = "MapLogViewTab";
             this.MapLogViewTab.Padding = new System.Windows.Forms.Padding(3);
@@ -610,6 +613,18 @@
             this.MapLogViewTab.TabIndex = 1;
             this.MapLogViewTab.Text = "Map View";
             this.MapLogViewTab.UseVisualStyleBackColor = true;
+            // 
+            // MapViewBrowser
+            // 
+            this.MapViewBrowser.AllowNavigation = false;
+            this.MapViewBrowser.AllowWebBrowserDrop = false;
+            this.MapViewBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MapViewBrowser.Location = new System.Drawing.Point(3, 3);
+            this.MapViewBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.MapViewBrowser.Name = "MapViewBrowser";
+            this.MapViewBrowser.ScrollBarsEnabled = false;
+            this.MapViewBrowser.Size = new System.Drawing.Size(581, 408);
+            this.MapViewBrowser.TabIndex = 0;
             // 
             // HomePage
             // 
@@ -639,6 +654,7 @@
             this.ViewLogbookInnerTabControl.ResumeLayout(false);
             this.StandardViewTab.ResumeLayout(false);
             this.StandardViewTab.PerformLayout();
+            this.MapLogViewTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -694,6 +710,7 @@
         private System.Windows.Forms.TabControl ViewLogbookInnerTabControl;
         private System.Windows.Forms.TabPage StandardViewTab;
         private System.Windows.Forms.TabPage MapLogViewTab;
+        private System.Windows.Forms.WebBrowser MapViewBrowser;
     }
 }
 
