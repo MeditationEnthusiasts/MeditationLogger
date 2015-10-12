@@ -34,7 +34,7 @@
             this.ChangableStartView = new System.Windows.Forms.Panel();
             this.StartButton = new System.Windows.Forms.Button();
             this.LogbookView = new System.Windows.Forms.TabPage();
-            this.ViewLogbookView = new System.Windows.Forms.FlowLayoutPanel();
+            this.StandardLogView = new System.Windows.Forms.FlowLayoutPanel();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
@@ -65,15 +65,18 @@
             this.VersionValueLabel = new System.Windows.Forms.Label();
             this.ReportABugValue = new System.Windows.Forms.LinkLabel();
             this.BugLabel = new System.Windows.Forms.Label();
-            this.ViewSourceLabel = new System.Windows.Forms.Label();
-            this.ViewSourceValueLabel = new System.Windows.Forms.LinkLabel();
             this.VisitSiteLabel = new System.Windows.Forms.Label();
             this.VistSiteLabel = new System.Windows.Forms.LinkLabel();
+            this.ViewSourceLabel = new System.Windows.Forms.Label();
+            this.ViewSourceValueLabel = new System.Windows.Forms.LinkLabel();
+            this.ViewWikiValueLabel = new System.Windows.Forms.LinkLabel();
+            this.WikiLabel = new System.Windows.Forms.Label();
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.ViewWikiValueLabel = new System.Windows.Forms.LinkLabel();
-            this.WikiLabel = new System.Windows.Forms.Label();
+            this.ViewLogbookInnerTabControl = new System.Windows.Forms.TabControl();
+            this.StandardViewTab = new System.Windows.Forms.TabPage();
+            this.MapLogViewTab = new System.Windows.Forms.TabPage();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -84,6 +87,8 @@
             this.SyncView.SuspendLayout();
             this.AboutView.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.ViewLogbookInnerTabControl.SuspendLayout();
+            this.StandardViewTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -144,7 +149,7 @@
             // 
             // LogbookView
             // 
-            this.LogbookView.Controls.Add(this.ViewLogbookView);
+            this.LogbookView.Controls.Add(this.ViewLogbookInnerTabControl);
             this.LogbookView.Location = new System.Drawing.Point(4, 34);
             this.LogbookView.Name = "LogbookView";
             this.LogbookView.Padding = new System.Windows.Forms.Padding(3);
@@ -155,16 +160,16 @@
             this.LogbookView.Click += new System.EventHandler(this.LogbookView_Click);
             this.LogbookView.Enter += new System.EventHandler(this.LogbookView_Enter);
             // 
-            // ViewLogbookView
+            // StandardLogView
             // 
-            this.ViewLogbookView.AutoScroll = true;
-            this.ViewLogbookView.AutoSize = true;
-            this.ViewLogbookView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewLogbookView.Location = new System.Drawing.Point(3, 3);
-            this.ViewLogbookView.Margin = new System.Windows.Forms.Padding(5);
-            this.ViewLogbookView.Name = "ViewLogbookView";
-            this.ViewLogbookView.Size = new System.Drawing.Size(595, 447);
-            this.ViewLogbookView.TabIndex = 0;
+            this.StandardLogView.AutoScroll = true;
+            this.StandardLogView.AutoSize = true;
+            this.StandardLogView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.StandardLogView.Location = new System.Drawing.Point(3, 3);
+            this.StandardLogView.Margin = new System.Windows.Forms.Padding(5);
+            this.StandardLogView.Name = "StandardLogView";
+            this.StandardLogView.Size = new System.Drawing.Size(581, 408);
+            this.StandardLogView.TabIndex = 0;
             // 
             // ManageLogbookView
             // 
@@ -497,27 +502,6 @@
             this.BugLabel.TabIndex = 2;
             this.BugLabel.Text = "Report a bug:";
             // 
-            // ViewSourceLabel
-            // 
-            this.ViewSourceLabel.AutoSize = true;
-            this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 331);
-            this.ViewSourceLabel.Name = "ViewSourceLabel";
-            this.ViewSourceLabel.Size = new System.Drawing.Size(129, 25);
-            this.ViewSourceLabel.TabIndex = 4;
-            this.ViewSourceLabel.Text = "View Source:";
-            // 
-            // ViewSourceValueLabel
-            // 
-            this.ViewSourceValueLabel.AutoSize = true;
-            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 331);
-            this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
-            this.ViewSourceValueLabel.Size = new System.Drawing.Size(421, 50);
-            this.ViewSourceValueLabel.TabIndex = 5;
-            this.ViewSourceValueLabel.TabStop = true;
-            this.ViewSourceValueLabel.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src";
-            this.ViewSourceValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewSourceValueLabel_LinkClicked);
-            // 
             // VisitSiteLabel
             // 
             this.VisitSiteLabel.AutoSize = true;
@@ -539,18 +523,26 @@
             this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
             this.VistSiteLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VistSiteLabel_LinkClicked);
             // 
-            // ExportSaveDialog
+            // ViewSourceLabel
             // 
-            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
+            this.ViewSourceLabel.AutoSize = true;
+            this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 331);
+            this.ViewSourceLabel.Name = "ViewSourceLabel";
+            this.ViewSourceLabel.Size = new System.Drawing.Size(129, 25);
+            this.ViewSourceLabel.TabIndex = 4;
+            this.ViewSourceLabel.Text = "View Source:";
             // 
-            // ImportOpenDialog
+            // ViewSourceValueLabel
             // 
-            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            // 
-            // SyncOpenDialog
-            // 
-            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            this.ViewSourceValueLabel.AutoSize = true;
+            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 331);
+            this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
+            this.ViewSourceValueLabel.Size = new System.Drawing.Size(421, 50);
+            this.ViewSourceValueLabel.TabIndex = 5;
+            this.ViewSourceValueLabel.TabStop = true;
+            this.ViewSourceValueLabel.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src";
+            this.ViewSourceValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewSourceValueLabel_LinkClicked);
             // 
             // ViewWikiValueLabel
             // 
@@ -573,6 +565,52 @@
             this.WikiLabel.TabIndex = 9;
             this.WikiLabel.Text = "View Wiki:";
             // 
+            // ExportSaveDialog
+            // 
+            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
+            // 
+            // ImportOpenDialog
+            // 
+            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            // 
+            // SyncOpenDialog
+            // 
+            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            // 
+            // ViewLogbookInnerTabControl
+            // 
+            this.ViewLogbookInnerTabControl.Controls.Add(this.StandardViewTab);
+            this.ViewLogbookInnerTabControl.Controls.Add(this.MapLogViewTab);
+            this.ViewLogbookInnerTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ViewLogbookInnerTabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ViewLogbookInnerTabControl.Location = new System.Drawing.Point(3, 3);
+            this.ViewLogbookInnerTabControl.Name = "ViewLogbookInnerTabControl";
+            this.ViewLogbookInnerTabControl.SelectedIndex = 0;
+            this.ViewLogbookInnerTabControl.Size = new System.Drawing.Size(595, 447);
+            this.ViewLogbookInnerTabControl.TabIndex = 1;
+            // 
+            // StandardViewTab
+            // 
+            this.StandardViewTab.Controls.Add(this.StandardLogView);
+            this.StandardViewTab.Location = new System.Drawing.Point(4, 29);
+            this.StandardViewTab.Name = "StandardViewTab";
+            this.StandardViewTab.Padding = new System.Windows.Forms.Padding(3);
+            this.StandardViewTab.Size = new System.Drawing.Size(587, 414);
+            this.StandardViewTab.TabIndex = 0;
+            this.StandardViewTab.Text = "Standard View";
+            this.StandardViewTab.UseVisualStyleBackColor = true;
+            // 
+            // MapLogViewTab
+            // 
+            this.MapLogViewTab.Location = new System.Drawing.Point(4, 29);
+            this.MapLogViewTab.Name = "MapLogViewTab";
+            this.MapLogViewTab.Padding = new System.Windows.Forms.Padding(3);
+            this.MapLogViewTab.Size = new System.Drawing.Size(587, 414);
+            this.MapLogViewTab.TabIndex = 1;
+            this.MapLogViewTab.Text = "Map View";
+            this.MapLogViewTab.UseVisualStyleBackColor = true;
+            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -587,7 +625,6 @@
             this.MainTabControl.ResumeLayout(false);
             this.StartTab.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
-            this.LogbookView.PerformLayout();
             this.ManageLogbookView.ResumeLayout(false);
             this.ManageTabControl.ResumeLayout(false);
             this.ImportView.ResumeLayout(false);
@@ -599,6 +636,9 @@
             this.AboutView.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.ViewLogbookInnerTabControl.ResumeLayout(false);
+            this.StandardViewTab.ResumeLayout(false);
+            this.StandardViewTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -637,7 +677,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog SyncOpenDialog;
-        private System.Windows.Forms.FlowLayoutPanel ViewLogbookView;
+        private System.Windows.Forms.FlowLayoutPanel StandardLogView;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Panel ChangableStartView;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -651,6 +691,9 @@
         private System.Windows.Forms.LinkLabel VistSiteLabel;
         private System.Windows.Forms.LinkLabel ViewWikiValueLabel;
         private System.Windows.Forms.Label WikiLabel;
+        private System.Windows.Forms.TabControl ViewLogbookInnerTabControl;
+        private System.Windows.Forms.TabPage StandardViewTab;
+        private System.Windows.Forms.TabPage MapLogViewTab;
     }
 }
 

@@ -240,11 +240,11 @@ namespace MedEnthLogsDesktop
             }
             else
             {
-                this.ViewLogbookView.Controls.Clear();
+                this.StandardLogView.Controls.Clear();
                 foreach ( LogView view in this.logViews )
                 {
-                    view.Width = this.ViewLogbookView.Width;
-                    this.ViewLogbookView.Controls.Add( view );
+                    view.Width = this.StandardLogView.Width;
+                    this.StandardLogView.Controls.Add( view );
                 }
             }
         }
