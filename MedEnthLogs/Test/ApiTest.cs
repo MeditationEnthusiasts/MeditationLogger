@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using Test.TestFiles;
 
 namespace TestCommon
 {
@@ -21,6 +22,8 @@ namespace TestCommon
         /// </summary>
         private Api uut;
 
+        private MockTimer mockTimer;
+
         private const string dbLocation = "test.db";
 
         // -------- Setup/Teardown --------
@@ -33,7 +36,8 @@ namespace TestCommon
                 File.Delete( dbLocation );
             }
 
-            uut = new Api( new Win32LocationDetector() );
+            this.mockTimer = new MockTimer();
+            uut = new Api( new Win32LocationDetector(), this.mockTimer );
         }
 
         [TearDown]
@@ -109,6 +113,7 @@ namespace TestCommon
         public void StartTest()
         {
             uut.StartSession();
+            Assert.IsTrue( mockTimer.IsRunning );
 
             // Ensure the expected creation time is close to DateTime.Now;
             DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
@@ -135,6 +140,7 @@ namespace TestCommon
 
             // In progress should still be true
             Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.IsTrue( mockTimer.IsRunning );
 
             // Lastly, ensure if we call save, we get an exception.
             Assert.Catch<InvalidOperationException>(
@@ -155,6 +161,7 @@ namespace TestCommon
 
             // Sanity check, ensure we are not in progress.
             Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockTimer.IsRunning );
 
             uut.StopSession();
             Assert.AreEqual( oldLog, uut.currentLog );
@@ -164,6 +171,7 @@ namespace TestCommon
 
             // Ensure we are still not in progress.
             Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockTimer.IsRunning );
         }
 
         [Test]
@@ -171,11 +179,13 @@ namespace TestCommon
         {
             // First, start the session.
             uut.StartSession();
+            Assert.IsTrue( mockTimer.IsRunning );
 
             DateTime oldEditTime = uut.CurrentLog.EditTime;
 
             // Now, end it.
             uut.StopSession();
+            Assert.IsFalse( mockTimer.IsRunning );
 
             // Ensure the expected end time is close to DateTime.Now;
             DateTime expectedEndTime = DateTime.Now.ToUniversalTime();

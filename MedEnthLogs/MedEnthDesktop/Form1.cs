@@ -59,17 +59,24 @@ namespace MedEnthLogsDesktop
             ChangableStartView.Controls.Add( this.optionView );
 
             // Setup meditate view
-            this.meditateView = new MeditateView(
-                delegate()
+            this.meditateView = new MeditateView();
+            this.meditateView.Visible = false;
+            ChangableStartView.Controls.Add( this.meditateView );
+
+            this.api.Timer.OnComplete =
+                delegate ()
                 {
                     if ( this.currentState == StartState.Start )
                     {
                         GoToNextState();
                     }
-                }
-            );
-            this.meditateView.Visible = false;
-            ChangableStartView.Controls.Add( this.meditateView );
+                };
+
+            this.api.Timer.OnUpdate =
+                delegate ( string updateString )
+                {
+                    this.meditateView.TimerLabel.Text = updateString;
+                };
 
             this.saveView = new SaveView();
             this.saveView.Visible = false;
@@ -374,8 +381,6 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                 {
                     case StartState.Idle:
                         // API calls
-                        this.api.StartSession();
-
                         if ( this.optionView.EnableTimerCheckbox.Checked )
                         {
                             TimeSpan timeToGo = new TimeSpan(
@@ -383,11 +388,11 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                                 int.Parse( this.optionView.MinuteListBox.SelectedItem.ToString() ),
                                 0
                             );
-                            this.meditateView.StartTimer( timeToGo );
+                            this.api.StartSession( timeToGo );
                         }
                         else
                         {
-                            this.meditateView.StartTimer( null );
+                            this.api.StartSession( null );
                         }
 
                         // Switch View.
@@ -402,7 +407,6 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                     case StartState.Start:
                         // API Calls
                         this.api.StopSession();
-                        this.meditateView.StopAndResetTimer();
 
                         // Switch View
                         this.optionView.Visible = false;

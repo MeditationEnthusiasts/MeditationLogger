@@ -94,6 +94,7 @@
     <Compile Include="LogBookTest.cs" />
     <Compile Include="LogTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestFiles\MockTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MedEnthDesktop\MedEnthLogsDesktop.csproj">

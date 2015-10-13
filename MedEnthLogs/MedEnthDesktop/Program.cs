@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MedEnthDesktop;
 
 namespace MedEnthLogsDesktop
 {
@@ -16,7 +17,7 @@ namespace MedEnthLogsDesktop
         [STAThread]
         static void Main()
         {
-            api = new MedEnthLogsApi.Api( new Win32LocationDetector() );
+            api = new MedEnthLogsApi.Api( new Win32LocationDetector(), new Win32Timer() );
 
             // Use the win32 sqlite.
             api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );

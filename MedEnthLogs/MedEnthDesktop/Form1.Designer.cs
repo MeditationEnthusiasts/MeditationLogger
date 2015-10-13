@@ -34,7 +34,11 @@
             this.ChangableStartView = new System.Windows.Forms.Panel();
             this.StartButton = new System.Windows.Forms.Button();
             this.LogbookView = new System.Windows.Forms.TabPage();
+            this.ViewLogbookInnerTabControl = new System.Windows.Forms.TabControl();
+            this.StandardViewTab = new System.Windows.Forms.TabPage();
             this.StandardLogView = new System.Windows.Forms.FlowLayoutPanel();
+            this.MapLogViewTab = new System.Windows.Forms.TabPage();
+            this.MapViewBrowser = new System.Windows.Forms.WebBrowser();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
@@ -74,13 +78,13 @@
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.ViewLogbookInnerTabControl = new System.Windows.Forms.TabControl();
-            this.StandardViewTab = new System.Windows.Forms.TabPage();
-            this.MapLogViewTab = new System.Windows.Forms.TabPage();
-            this.MapViewBrowser = new System.Windows.Forms.WebBrowser();
+            this.GraphTab = new System.Windows.Forms.TabPage();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
+            this.ViewLogbookInnerTabControl.SuspendLayout();
+            this.StandardViewTab.SuspendLayout();
+            this.MapLogViewTab.SuspendLayout();
             this.ManageLogbookView.SuspendLayout();
             this.ManageTabControl.SuspendLayout();
             this.ImportView.SuspendLayout();
@@ -88,9 +92,6 @@
             this.SyncView.SuspendLayout();
             this.AboutView.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.ViewLogbookInnerTabControl.SuspendLayout();
-            this.StandardViewTab.SuspendLayout();
-            this.MapLogViewTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -162,6 +163,30 @@
             this.LogbookView.Click += new System.EventHandler(this.LogbookView_Click);
             this.LogbookView.Enter += new System.EventHandler(this.LogbookView_Enter);
             // 
+            // ViewLogbookInnerTabControl
+            // 
+            this.ViewLogbookInnerTabControl.Controls.Add(this.StandardViewTab);
+            this.ViewLogbookInnerTabControl.Controls.Add(this.MapLogViewTab);
+            this.ViewLogbookInnerTabControl.Controls.Add(this.GraphTab);
+            this.ViewLogbookInnerTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ViewLogbookInnerTabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ViewLogbookInnerTabControl.Location = new System.Drawing.Point(3, 3);
+            this.ViewLogbookInnerTabControl.Name = "ViewLogbookInnerTabControl";
+            this.ViewLogbookInnerTabControl.SelectedIndex = 0;
+            this.ViewLogbookInnerTabControl.Size = new System.Drawing.Size(595, 447);
+            this.ViewLogbookInnerTabControl.TabIndex = 1;
+            // 
+            // StandardViewTab
+            // 
+            this.StandardViewTab.Controls.Add(this.StandardLogView);
+            this.StandardViewTab.Location = new System.Drawing.Point(4, 29);
+            this.StandardViewTab.Name = "StandardViewTab";
+            this.StandardViewTab.Padding = new System.Windows.Forms.Padding(3);
+            this.StandardViewTab.Size = new System.Drawing.Size(587, 414);
+            this.StandardViewTab.TabIndex = 0;
+            this.StandardViewTab.Text = "Standard View";
+            this.StandardViewTab.UseVisualStyleBackColor = true;
+            // 
             // StandardLogView
             // 
             this.StandardLogView.AutoScroll = true;
@@ -172,6 +197,29 @@
             this.StandardLogView.Name = "StandardLogView";
             this.StandardLogView.Size = new System.Drawing.Size(581, 408);
             this.StandardLogView.TabIndex = 0;
+            // 
+            // MapLogViewTab
+            // 
+            this.MapLogViewTab.Controls.Add(this.MapViewBrowser);
+            this.MapLogViewTab.Location = new System.Drawing.Point(4, 29);
+            this.MapLogViewTab.Name = "MapLogViewTab";
+            this.MapLogViewTab.Padding = new System.Windows.Forms.Padding(3);
+            this.MapLogViewTab.Size = new System.Drawing.Size(587, 414);
+            this.MapLogViewTab.TabIndex = 1;
+            this.MapLogViewTab.Text = "Map View";
+            this.MapLogViewTab.UseVisualStyleBackColor = true;
+            // 
+            // MapViewBrowser
+            // 
+            this.MapViewBrowser.AllowNavigation = false;
+            this.MapViewBrowser.AllowWebBrowserDrop = false;
+            this.MapViewBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MapViewBrowser.Location = new System.Drawing.Point(3, 3);
+            this.MapViewBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.MapViewBrowser.Name = "MapViewBrowser";
+            this.MapViewBrowser.ScrollBarsEnabled = false;
+            this.MapViewBrowser.Size = new System.Drawing.Size(581, 408);
+            this.MapViewBrowser.TabIndex = 0;
             // 
             // ManageLogbookView
             // 
@@ -580,51 +628,15 @@
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // ViewLogbookInnerTabControl
+            // GraphTab
             // 
-            this.ViewLogbookInnerTabControl.Controls.Add(this.StandardViewTab);
-            this.ViewLogbookInnerTabControl.Controls.Add(this.MapLogViewTab);
-            this.ViewLogbookInnerTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewLogbookInnerTabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ViewLogbookInnerTabControl.Location = new System.Drawing.Point(3, 3);
-            this.ViewLogbookInnerTabControl.Name = "ViewLogbookInnerTabControl";
-            this.ViewLogbookInnerTabControl.SelectedIndex = 0;
-            this.ViewLogbookInnerTabControl.Size = new System.Drawing.Size(595, 447);
-            this.ViewLogbookInnerTabControl.TabIndex = 1;
-            // 
-            // StandardViewTab
-            // 
-            this.StandardViewTab.Controls.Add(this.StandardLogView);
-            this.StandardViewTab.Location = new System.Drawing.Point(4, 29);
-            this.StandardViewTab.Name = "StandardViewTab";
-            this.StandardViewTab.Padding = new System.Windows.Forms.Padding(3);
-            this.StandardViewTab.Size = new System.Drawing.Size(587, 414);
-            this.StandardViewTab.TabIndex = 0;
-            this.StandardViewTab.Text = "Standard View";
-            this.StandardViewTab.UseVisualStyleBackColor = true;
-            // 
-            // MapLogViewTab
-            // 
-            this.MapLogViewTab.Controls.Add(this.MapViewBrowser);
-            this.MapLogViewTab.Location = new System.Drawing.Point(4, 29);
-            this.MapLogViewTab.Name = "MapLogViewTab";
-            this.MapLogViewTab.Padding = new System.Windows.Forms.Padding(3);
-            this.MapLogViewTab.Size = new System.Drawing.Size(587, 414);
-            this.MapLogViewTab.TabIndex = 1;
-            this.MapLogViewTab.Text = "Map View";
-            this.MapLogViewTab.UseVisualStyleBackColor = true;
-            // 
-            // MapViewBrowser
-            // 
-            this.MapViewBrowser.AllowNavigation = false;
-            this.MapViewBrowser.AllowWebBrowserDrop = false;
-            this.MapViewBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MapViewBrowser.Location = new System.Drawing.Point(3, 3);
-            this.MapViewBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.MapViewBrowser.Name = "MapViewBrowser";
-            this.MapViewBrowser.ScrollBarsEnabled = false;
-            this.MapViewBrowser.Size = new System.Drawing.Size(581, 408);
-            this.MapViewBrowser.TabIndex = 0;
+            this.GraphTab.Location = new System.Drawing.Point(4, 29);
+            this.GraphTab.Name = "GraphTab";
+            this.GraphTab.Padding = new System.Windows.Forms.Padding(3);
+            this.GraphTab.Size = new System.Drawing.Size(587, 414);
+            this.GraphTab.TabIndex = 2;
+            this.GraphTab.Text = "Graph View";
+            this.GraphTab.UseVisualStyleBackColor = true;
             // 
             // HomePage
             // 
@@ -640,6 +652,10 @@
             this.MainTabControl.ResumeLayout(false);
             this.StartTab.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
+            this.ViewLogbookInnerTabControl.ResumeLayout(false);
+            this.StandardViewTab.ResumeLayout(false);
+            this.StandardViewTab.PerformLayout();
+            this.MapLogViewTab.ResumeLayout(false);
             this.ManageLogbookView.ResumeLayout(false);
             this.ManageTabControl.ResumeLayout(false);
             this.ImportView.ResumeLayout(false);
@@ -651,10 +667,6 @@
             this.AboutView.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.ViewLogbookInnerTabControl.ResumeLayout(false);
-            this.StandardViewTab.ResumeLayout(false);
-            this.StandardViewTab.PerformLayout();
-            this.MapLogViewTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -711,6 +723,7 @@
         private System.Windows.Forms.TabPage StandardViewTab;
         private System.Windows.Forms.TabPage MapLogViewTab;
         private System.Windows.Forms.WebBrowser MapViewBrowser;
+        private System.Windows.Forms.TabPage GraphTab;
     }
 }
 

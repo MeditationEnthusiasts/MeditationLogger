@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MedEnthDesktop;
 using MedEnthLogsApi;
 using MedEnthLogsDesktop;
 
@@ -33,7 +34,7 @@ namespace MedEnthLogsCli
             {
                 if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = new Api( new Win32LocationDetector() );
+                    Api api = new Api( new Win32LocationDetector(), new Win32Timer() );
                     try
                     {
                         api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );

@@ -52,11 +52,13 @@ namespace MedEnthLogsApi
         /// Constructor
         /// </summary>
         /// <param name="locationDetector">Location to the location detector.</param>
-        public Api( ILocationDetector locationDetector )
+        /// <param name="timer">The timing engine to use.</param>
+        public Api( ILocationDetector locationDetector, ITimer timer )
         {
             this.sqlite = null;
             this.LogBook = null;
             this.LocationDetector = locationDetector;
+            this.Timer = timer;
             ResetCurrentLog();
         }
 
@@ -77,6 +79,11 @@ namespace MedEnthLogsApi
         /// Class that detects the location.
         /// </summary>
         public ILocationDetector LocationDetector { get; private set; }
+
+        /// <summary>
+        /// The timer engine to use.
+        /// </summary>
+        public ITimer Timer { get; private set; }
 
         /// <summary>
         /// The current log being written to.
@@ -125,7 +132,8 @@ namespace MedEnthLogsApi
         /// and sets the start time to now as well.
         /// No-op if session in progress.
         /// </summary>
-        public void StartSession()
+        /// <param name="length">How long to meditate for.  Null for unlimited.</param>
+        public void StartSession( TimeSpan? length = null )
         {
             if ( this.IsSessionInProgress == false )
             {
@@ -134,6 +142,7 @@ namespace MedEnthLogsApi
                 this.currentLog.StartTime = this.currentLog.CreateTime;
                 this.currentLog.EditTime = this.currentLog.CreateTime;
                 this.IsSessionInProgress = true;
+                this.Timer.StartTimer( length );
             }
         }
 
@@ -148,6 +157,7 @@ namespace MedEnthLogsApi
                 this.currentLog.EndTime = DateTime.Now.ToUniversalTime();
                 this.currentLog.EditTime = currentLog.EndTime;
                 this.IsSessionInProgress = false;
+                this.Timer.StopAndResetTimer();
             }
         }
 

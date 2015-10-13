@@ -73,6 +73,6 @@
         #endregion
 
         private System.Windows.Forms.Label MeditateLabel;
-        private System.Windows.Forms.Label TimerLabel;
+        public System.Windows.Forms.Label TimerLabel;
     }
 }

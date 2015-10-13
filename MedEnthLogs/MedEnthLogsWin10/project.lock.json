@@ -232,6 +232,14 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.0.5": {
         "compile": {
           "lib/Windows8/SQLite.Net.dll": {},
@@ -1849,6 +1857,14 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "SQLite.Net-PCL/3.0.5": {
@@ -3501,6 +3517,14 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "SQLite.Net-PCL/3.0.5": {
@@ -5160,6 +5184,14 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.0.5": {
         "compile": {
           "lib/Windows8/SQLite.Net.dll": {},
@@ -6810,6 +6842,14 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "SQLite.Net-PCL/3.0.5": {
@@ -8469,6 +8509,14 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.0.5": {
         "compile": {
           "lib/Windows8/SQLite.Net.dll": {},
@@ -10119,6 +10167,14 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "SQLite.Net-PCL/3.0.5": {
@@ -12202,6 +12258,22 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "package/services/metadata/core-properties/1d4eb9d0228b48b88d2df3822fba2d86.psmdcp",
+        "[Content_Types].xml"
+      ]
+    },
+    "NAudio/1.7.3": {
+      "sha512": "RfjCKqewCJ7OhVRqkVgiJv5ByPzPk5YWElyC7jLqcV2a9777HDGU00kmVzoMV9gbcNiTJn9ijVrTAgq4GeQP2w==",
+      "type": "Package",
+      "files": [
+        "_rels/.rels",
+        "NAudio.nuspec",
+        "lib/net35/NAudio.dll",
+        "lib/net35/NAudio.XML",
+        "lib/windows8/NAudio.Win8.dll",
+        "lib/windows8/NAudio.Win8.XML",
+        "license.txt",
+        "readme.txt",
+        "package/services/metadata/core-properties/b8fe86bb57934d148611287e4eba158c.psmdcp",
         "[Content_Types].xml"
       ]
     },
@@ -14936,6 +15008,7 @@
       "Microsoft.ApplicationInsights.PersistenceChannel >= 1.0.0",
       "Microsoft.ApplicationInsights.WindowsApps >= 1.0.0",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
+      "NAudio >= 1.7.3",
       "SQLite.Net-PCL >= 3.0.5"
     ],
     "UAP,Version=v10.0": []
