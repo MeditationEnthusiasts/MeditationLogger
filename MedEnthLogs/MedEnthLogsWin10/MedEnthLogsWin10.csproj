@@ -155,7 +155,8 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)\LICENSE.txt $(ProjectDir)$(OutDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(SolutionDir)..\LICENSE.txt $(ProjectDir)$(OutDir)
+copy $(SolutionDir)..\CREDITS.txt $(ProjectDir)$(OutDir)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
