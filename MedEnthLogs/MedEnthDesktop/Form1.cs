@@ -67,6 +67,10 @@ namespace MedEnthLogsDesktop
         {
             InitializeComponent();
 
+            this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
+            this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
+            this.VersionValueLabel.Text = Api.Version;
+
             this.api = api;
             ReloadLogs();
             this.currentState = StartState.Idle;

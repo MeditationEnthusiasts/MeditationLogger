@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ILocationDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ITimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)License.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogBook.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MedEnthLogsApi.cs" />

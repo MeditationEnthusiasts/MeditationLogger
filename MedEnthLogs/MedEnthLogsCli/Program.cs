@@ -47,6 +47,14 @@ namespace MedEnthLogsCli
                 {
                     Console.WriteLine( "Medition Logger Version: " + Api.Version );
                 }
+                else if ( ( args[0] == "--license" ) || args[0] == "-l" )
+                {
+                    Console.WriteLine( MedEnthLogsApi.License.MedEnthLicense );
+                }
+                else if ( ( args[0] == "--external" ) || args[0] == "-e" )
+                {
+                    Console.WriteLine( MedEnthLogsApi.License.ExternalLicenses );
+                }
             }
             else if ( args.Length == 2 )
             {
@@ -105,6 +113,8 @@ namespace MedEnthLogsCli
             Console.WriteLine( "Arguments:" );
             Console.WriteLine( "--help, -h, \\?\t\tShow this message." );
             Console.WriteLine( "--version, -v\t\tShow the version." );
+            Console.WriteLine( "--license, -l\t\tShows this program's license" );
+            Console.WriteLine( "--external, -e\t\tShows info and license about the external libraries" );
             Console.WriteLine( "import fileName\t\tImport the given file name to the logbook." );
             Console.WriteLine( "export fileName\t\tExport the logbook to the given filename." );
             Console.WriteLine( "sync fileName.mlg\tSync the logbook with the given .mlg file" );

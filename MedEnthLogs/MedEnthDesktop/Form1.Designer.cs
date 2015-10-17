@@ -57,6 +57,7 @@ namespace MedEnthLogsDesktop
             this.StandardLogView = new System.Windows.Forms.FlowLayoutPanel();
             this.MapLogViewTab = new System.Windows.Forms.TabPage();
             this.MapViewBrowser = new System.Windows.Forms.WebBrowser();
+            this.GraphTab = new System.Windows.Forms.TabPage();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
@@ -82,7 +83,7 @@ namespace MedEnthLogsDesktop
             this.SyncLocationText = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.AboutView = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.AppInfoTable = new System.Windows.Forms.TableLayoutPanel();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.VersionValueLabel = new System.Windows.Forms.Label();
             this.ReportABugValue = new System.Windows.Forms.LinkLabel();
@@ -96,7 +97,17 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.GraphTab = new System.Windows.Forms.TabPage();
+            this.AppInfo = new System.Windows.Forms.TabControl();
+            this.AppInfoTab = new System.Windows.Forms.TabPage();
+            this.MedEnthLicense = new System.Windows.Forms.TabPage();
+            this.GplLicenseLabel = new System.Windows.Forms.Label();
+            this.GplTextBox = new System.Windows.Forms.TextBox();
+            this.ExternalLibTab = new System.Windows.Forms.TabPage();
+            this.ExtLibTable = new System.Windows.Forms.TableLayoutPanel();
+            this.LicenseTable = new System.Windows.Forms.TableLayoutPanel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.ExternalLibTextBox = new System.Windows.Forms.TextBox();
+            this.CopyrightValue = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -109,7 +120,13 @@ namespace MedEnthLogsDesktop
             this.ExportView.SuspendLayout();
             this.SyncView.SuspendLayout();
             this.AboutView.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.AppInfoTable.SuspendLayout();
+            this.AppInfo.SuspendLayout();
+            this.AppInfoTab.SuspendLayout();
+            this.MedEnthLicense.SuspendLayout();
+            this.ExternalLibTab.SuspendLayout();
+            this.ExtLibTable.SuspendLayout();
+            this.LicenseTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -238,6 +255,16 @@ namespace MedEnthLogsDesktop
             this.MapViewBrowser.ScrollBarsEnabled = false;
             this.MapViewBrowser.Size = new System.Drawing.Size(581, 408);
             this.MapViewBrowser.TabIndex = 0;
+            // 
+            // GraphTab
+            // 
+            this.GraphTab.Location = new System.Drawing.Point(4, 29);
+            this.GraphTab.Name = "GraphTab";
+            this.GraphTab.Padding = new System.Windows.Forms.Padding(3);
+            this.GraphTab.Size = new System.Drawing.Size(587, 414);
+            this.GraphTab.TabIndex = 2;
+            this.GraphTab.Text = "Graph View";
+            this.GraphTab.UseVisualStyleBackColor = true;
             // 
             // ManageLogbookView
             // 
@@ -493,7 +520,7 @@ namespace MedEnthLogsDesktop
             // 
             // AboutView
             // 
-            this.AboutView.Controls.Add(this.tableLayoutPanel1);
+            this.AboutView.Controls.Add(this.AppInfo);
             this.AboutView.Location = new System.Drawing.Point(4, 34);
             this.AboutView.Name = "AboutView";
             this.AboutView.Padding = new System.Windows.Forms.Padding(3);
@@ -502,59 +529,62 @@ namespace MedEnthLogsDesktop
             this.AboutView.Text = "About";
             this.AboutView.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // AppInfoTable
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.34965F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.65035F));
-            this.tableLayoutPanel1.Controls.Add(this.VersionLabel, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.VersionValueLabel, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.ReportABugValue, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.BugLabel, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.VisitSiteLabel, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.VistSiteLabel, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.ViewSourceLabel, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.ViewSourceValueLabel, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.ViewWikiValueLabel, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.WikiLabel, 0, 4);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(21, 6);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 88F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 107F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 439);
-            this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            this.AppInfoTable.ColumnCount = 2;
+            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.34965F));
+            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.65035F));
+            this.AppInfoTable.Controls.Add(this.VersionLabel, 0, 1);
+            this.AppInfoTable.Controls.Add(this.VersionValueLabel, 1, 1);
+            this.AppInfoTable.Controls.Add(this.ReportABugValue, 1, 3);
+            this.AppInfoTable.Controls.Add(this.BugLabel, 0, 3);
+            this.AppInfoTable.Controls.Add(this.VisitSiteLabel, 0, 2);
+            this.AppInfoTable.Controls.Add(this.VistSiteLabel, 1, 2);
+            this.AppInfoTable.Controls.Add(this.ViewSourceLabel, 0, 5);
+            this.AppInfoTable.Controls.Add(this.ViewSourceValueLabel, 1, 5);
+            this.AppInfoTable.Controls.Add(this.ViewWikiValueLabel, 1, 4);
+            this.AppInfoTable.Controls.Add(this.WikiLabel, 0, 4);
+            this.AppInfoTable.Controls.Add(this.CopyrightValue, 1, 6);
+            this.AppInfoTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AppInfoTable.Location = new System.Drawing.Point(3, 3);
+            this.AppInfoTable.Name = "AppInfoTable";
+            this.AppInfoTable.RowCount = 7;
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 59F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 86F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 97F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.AppInfoTable.Size = new System.Drawing.Size(581, 408);
+            this.AppInfoTable.TabIndex = 0;
+            this.AppInfoTable.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // VersionLabel
             // 
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(3, 68);
+            this.VersionLabel.Location = new System.Drawing.Point(3, 38);
             this.VersionLabel.Name = "VersionLabel";
-            this.VersionLabel.Size = new System.Drawing.Size(85, 25);
+            this.VersionLabel.Size = new System.Drawing.Size(67, 20);
             this.VersionLabel.TabIndex = 0;
             this.VersionLabel.Text = "Version:";
             // 
             // VersionValueLabel
             // 
             this.VersionValueLabel.AutoSize = true;
-            this.VersionValueLabel.Location = new System.Drawing.Point(147, 68);
+            this.VersionValueLabel.Location = new System.Drawing.Point(150, 38);
             this.VersionValueLabel.Name = "VersionValueLabel";
-            this.VersionValueLabel.Size = new System.Drawing.Size(55, 25);
+            this.VersionValueLabel.Size = new System.Drawing.Size(44, 20);
             this.VersionValueLabel.TabIndex = 1;
             this.VersionValueLabel.Text = "0.1.0";
             // 
             // ReportABugValue
             // 
             this.ReportABugValue.AutoSize = true;
-            this.ReportABugValue.Location = new System.Drawing.Point(147, 204);
+            this.ReportABugValue.Location = new System.Drawing.Point(150, 120);
             this.ReportABugValue.Name = "ReportABugValue";
-            this.ReportABugValue.Size = new System.Drawing.Size(399, 25);
+            this.ReportABugValue.Size = new System.Drawing.Size(324, 20);
             this.ReportABugValue.TabIndex = 3;
             this.ReportABugValue.TabStop = true;
             this.ReportABugValue.Text = "https://dev.meditationenthusiasts.org/mantis/";
@@ -564,9 +594,9 @@ namespace MedEnthLogsDesktop
             // 
             this.BugLabel.AutoSize = true;
             this.BugLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BugLabel.Location = new System.Drawing.Point(3, 204);
+            this.BugLabel.Location = new System.Drawing.Point(3, 120);
             this.BugLabel.Name = "BugLabel";
-            this.BugLabel.Size = new System.Drawing.Size(129, 25);
+            this.BugLabel.Size = new System.Drawing.Size(106, 20);
             this.BugLabel.TabIndex = 2;
             this.BugLabel.Text = "Report a bug:";
             // 
@@ -574,18 +604,18 @@ namespace MedEnthLogsDesktop
             // 
             this.VisitSiteLabel.AutoSize = true;
             this.VisitSiteLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.VisitSiteLabel.Location = new System.Drawing.Point(3, 116);
+            this.VisitSiteLabel.Location = new System.Drawing.Point(3, 65);
             this.VisitSiteLabel.Name = "VisitSiteLabel";
-            this.VisitSiteLabel.Size = new System.Drawing.Size(94, 25);
+            this.VisitSiteLabel.Size = new System.Drawing.Size(75, 20);
             this.VisitSiteLabel.TabIndex = 6;
             this.VisitSiteLabel.Text = "Visit Site:";
             // 
             // VistSiteLabel
             // 
             this.VistSiteLabel.AutoSize = true;
-            this.VistSiteLabel.Location = new System.Drawing.Point(147, 116);
+            this.VistSiteLabel.Location = new System.Drawing.Point(150, 65);
             this.VistSiteLabel.Name = "VistSiteLabel";
-            this.VistSiteLabel.Size = new System.Drawing.Size(320, 25);
+            this.VistSiteLabel.Size = new System.Drawing.Size(261, 20);
             this.VistSiteLabel.TabIndex = 7;
             this.VistSiteLabel.TabStop = true;
             this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
@@ -595,18 +625,18 @@ namespace MedEnthLogsDesktop
             // 
             this.ViewSourceLabel.AutoSize = true;
             this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 331);
+            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 224);
             this.ViewSourceLabel.Name = "ViewSourceLabel";
-            this.ViewSourceLabel.Size = new System.Drawing.Size(129, 25);
+            this.ViewSourceLabel.Size = new System.Drawing.Size(102, 20);
             this.ViewSourceLabel.TabIndex = 4;
             this.ViewSourceLabel.Text = "View Source:";
             // 
             // ViewSourceValueLabel
             // 
             this.ViewSourceValueLabel.AutoSize = true;
-            this.ViewSourceValueLabel.Location = new System.Drawing.Point(147, 331);
+            this.ViewSourceValueLabel.Location = new System.Drawing.Point(150, 224);
             this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
-            this.ViewSourceValueLabel.Size = new System.Drawing.Size(421, 50);
+            this.ViewSourceValueLabel.Size = new System.Drawing.Size(426, 40);
             this.ViewSourceValueLabel.TabIndex = 5;
             this.ViewSourceValueLabel.TabStop = true;
             this.ViewSourceValueLabel.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src";
@@ -615,9 +645,9 @@ namespace MedEnthLogsDesktop
             // ViewWikiValueLabel
             // 
             this.ViewWikiValueLabel.AutoSize = true;
-            this.ViewWikiValueLabel.Location = new System.Drawing.Point(147, 258);
+            this.ViewWikiValueLabel.Location = new System.Drawing.Point(150, 165);
             this.ViewWikiValueLabel.Name = "ViewWikiValueLabel";
-            this.ViewWikiValueLabel.Size = new System.Drawing.Size(417, 50);
+            this.ViewWikiValueLabel.Size = new System.Drawing.Size(424, 40);
             this.ViewWikiValueLabel.TabIndex = 8;
             this.ViewWikiValueLabel.TabStop = true;
             this.ViewWikiValueLabel.Text = "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logg" +
@@ -627,9 +657,9 @@ namespace MedEnthLogsDesktop
             // WikiLabel
             // 
             this.WikiLabel.AutoSize = true;
-            this.WikiLabel.Location = new System.Drawing.Point(3, 258);
+            this.WikiLabel.Location = new System.Drawing.Point(3, 165);
             this.WikiLabel.Name = "WikiLabel";
-            this.WikiLabel.Size = new System.Drawing.Size(104, 25);
+            this.WikiLabel.Size = new System.Drawing.Size(80, 20);
             this.WikiLabel.TabIndex = 9;
             this.WikiLabel.Text = "View Wiki:";
             // 
@@ -646,15 +676,140 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // GraphTab
+            // AppInfo
             // 
-            this.GraphTab.Location = new System.Drawing.Point(4, 29);
-            this.GraphTab.Name = "GraphTab";
-            this.GraphTab.Padding = new System.Windows.Forms.Padding(3);
-            this.GraphTab.Size = new System.Drawing.Size(587, 414);
-            this.GraphTab.TabIndex = 2;
-            this.GraphTab.Text = "Graph View";
-            this.GraphTab.UseVisualStyleBackColor = true;
+            this.AppInfo.Controls.Add(this.AppInfoTab);
+            this.AppInfo.Controls.Add(this.MedEnthLicense);
+            this.AppInfo.Controls.Add(this.ExternalLibTab);
+            this.AppInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AppInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppInfo.Location = new System.Drawing.Point(3, 3);
+            this.AppInfo.Name = "AppInfo";
+            this.AppInfo.SelectedIndex = 0;
+            this.AppInfo.Size = new System.Drawing.Size(595, 447);
+            this.AppInfo.TabIndex = 1;
+            // 
+            // AppInfoTab
+            // 
+            this.AppInfoTab.Controls.Add(this.AppInfoTable);
+            this.AppInfoTab.Location = new System.Drawing.Point(4, 29);
+            this.AppInfoTab.Name = "AppInfoTab";
+            this.AppInfoTab.Padding = new System.Windows.Forms.Padding(3);
+            this.AppInfoTab.Size = new System.Drawing.Size(587, 414);
+            this.AppInfoTab.TabIndex = 0;
+            this.AppInfoTab.Text = "App Info";
+            this.AppInfoTab.UseVisualStyleBackColor = true;
+            // 
+            // MedEnthLicense
+            // 
+            this.MedEnthLicense.Controls.Add(this.LicenseTable);
+            this.MedEnthLicense.Location = new System.Drawing.Point(4, 29);
+            this.MedEnthLicense.Name = "MedEnthLicense";
+            this.MedEnthLicense.Padding = new System.Windows.Forms.Padding(3);
+            this.MedEnthLicense.Size = new System.Drawing.Size(587, 414);
+            this.MedEnthLicense.TabIndex = 1;
+            this.MedEnthLicense.Text = "License";
+            this.MedEnthLicense.UseVisualStyleBackColor = true;
+            // 
+            // GplLicenseLabel
+            // 
+            this.GplLicenseLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.GplLicenseLabel.AutoSize = true;
+            this.GplLicenseLabel.Location = new System.Drawing.Point(122, 0);
+            this.GplLicenseLabel.Name = "GplLicenseLabel";
+            this.GplLicenseLabel.Size = new System.Drawing.Size(336, 57);
+            this.GplLicenseLabel.TabIndex = 0;
+            this.GplLicenseLabel.Text = "License for using and distrubting this software:";
+            this.GplLicenseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // GplTextBox
+            // 
+            this.GplTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GplTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GplTextBox.Location = new System.Drawing.Point(3, 60);
+            this.GplTextBox.Multiline = true;
+            this.GplTextBox.Name = "GplTextBox";
+            this.GplTextBox.ReadOnly = true;
+            this.GplTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.GplTextBox.Size = new System.Drawing.Size(575, 345);
+            this.GplTextBox.TabIndex = 1;
+            this.GplTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // ExternalLibTab
+            // 
+            this.ExternalLibTab.Controls.Add(this.ExtLibTable);
+            this.ExternalLibTab.Location = new System.Drawing.Point(4, 29);
+            this.ExternalLibTab.Name = "ExternalLibTab";
+            this.ExternalLibTab.Padding = new System.Windows.Forms.Padding(3);
+            this.ExternalLibTab.Size = new System.Drawing.Size(587, 414);
+            this.ExternalLibTab.TabIndex = 2;
+            this.ExternalLibTab.Text = "External Libraries";
+            this.ExternalLibTab.UseVisualStyleBackColor = true;
+            // 
+            // ExtLibTable
+            // 
+            this.ExtLibTable.ColumnCount = 1;
+            this.ExtLibTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ExtLibTable.Controls.Add(this.ExternalLibTextBox, 0, 1);
+            this.ExtLibTable.Controls.Add(this.label8, 0, 0);
+            this.ExtLibTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExtLibTable.Location = new System.Drawing.Point(3, 3);
+            this.ExtLibTable.Name = "ExtLibTable";
+            this.ExtLibTable.RowCount = 2;
+            this.ExtLibTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.39323F));
+            this.ExtLibTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.60677F));
+            this.ExtLibTable.Size = new System.Drawing.Size(581, 408);
+            this.ExtLibTable.TabIndex = 0;
+            // 
+            // LicenseTable
+            // 
+            this.LicenseTable.ColumnCount = 1;
+            this.LicenseTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.LicenseTable.Controls.Add(this.GplTextBox, 0, 1);
+            this.LicenseTable.Controls.Add(this.GplLicenseLabel, 0, 0);
+            this.LicenseTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LicenseTable.Location = new System.Drawing.Point(3, 3);
+            this.LicenseTable.Name = "LicenseTable";
+            this.LicenseTable.RowCount = 2;
+            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.16011F));
+            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.83989F));
+            this.LicenseTable.Size = new System.Drawing.Size(581, 408);
+            this.LicenseTable.TabIndex = 2;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(567, 58);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "This project is made possible by several external libraries.  Below is a listing " +
+    "of all of them, and their corresponding license.";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ExternalLibTextBox
+            // 
+            this.ExternalLibTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExternalLibTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExternalLibTextBox.Location = new System.Drawing.Point(3, 61);
+            this.ExternalLibTextBox.Multiline = true;
+            this.ExternalLibTextBox.Name = "ExternalLibTextBox";
+            this.ExternalLibTextBox.ReadOnly = true;
+            this.ExternalLibTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ExternalLibTextBox.Size = new System.Drawing.Size(575, 344);
+            this.ExternalLibTextBox.TabIndex = 2;
+            this.ExternalLibTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // CopyrightValue
+            // 
+            this.CopyrightValue.AutoSize = true;
+            this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CopyrightValue.Location = new System.Drawing.Point(150, 310);
+            this.CopyrightValue.Name = "CopyrightValue";
+            this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
+            this.CopyrightValue.TabIndex = 10;
+            this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
             // 
             // HomePage
             // 
@@ -683,8 +838,16 @@ namespace MedEnthLogsDesktop
             this.SyncView.ResumeLayout(false);
             this.SyncView.PerformLayout();
             this.AboutView.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.AppInfoTable.ResumeLayout(false);
+            this.AppInfoTable.PerformLayout();
+            this.AppInfo.ResumeLayout(false);
+            this.AppInfoTab.ResumeLayout(false);
+            this.MedEnthLicense.ResumeLayout(false);
+            this.ExternalLibTab.ResumeLayout(false);
+            this.ExtLibTable.ResumeLayout(false);
+            this.ExtLibTable.PerformLayout();
+            this.LicenseTable.ResumeLayout(false);
+            this.LicenseTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -726,7 +889,7 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.FlowLayoutPanel StandardLogView;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Panel ChangableStartView;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel AppInfoTable;
         private System.Windows.Forms.Label VersionLabel;
         private System.Windows.Forms.Label VersionValueLabel;
         private System.Windows.Forms.Label BugLabel;
@@ -742,6 +905,17 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.TabPage MapLogViewTab;
         private System.Windows.Forms.WebBrowser MapViewBrowser;
         private System.Windows.Forms.TabPage GraphTab;
+        private System.Windows.Forms.TabControl AppInfo;
+        private System.Windows.Forms.TabPage AppInfoTab;
+        private System.Windows.Forms.TabPage MedEnthLicense;
+        private System.Windows.Forms.Label GplLicenseLabel;
+        private System.Windows.Forms.TextBox GplTextBox;
+        private System.Windows.Forms.TabPage ExternalLibTab;
+        private System.Windows.Forms.TableLayoutPanel LicenseTable;
+        private System.Windows.Forms.TableLayoutPanel ExtLibTable;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox ExternalLibTextBox;
+        private System.Windows.Forms.Label CopyrightValue;
     }
 }
 
