@@ -35,6 +35,7 @@ namespace TestCommon
         Log log2;
         Log log3;
         Log log4;
+        double expectedTotalTime;
 
         // -------- Setup / Teardown --------
 
@@ -42,20 +43,30 @@ namespace TestCommon
         public void TestSetup()
         {
             log1 = new Log();
-            log1.StartTime = DateTime.Now + new TimeSpan( 1, 0, 0 );
+            log1.StartTime = new DateTime( 2015, 1, 1, 0, 0, 0 );
+            log1.EndTime = log1.StartTime + new TimeSpan( 1, 0, 0 );
             log1.CreateTime = log1.StartTime;
 
             log2 = new Log();
-            log2.StartTime = DateTime.Now + new TimeSpan( 2, 0, 0 );
+            log2.StartTime = new DateTime( 2015, 1, 2, 0, 0, 0 );
+            log2.EndTime = log2.StartTime + new TimeSpan( 2, 0, 0 );
             log2.CreateTime = log2.StartTime;
 
             log3 = new Log();
-            log3.StartTime = DateTime.Now + new TimeSpan( 3, 0, 0 );
+            log3.StartTime = new DateTime( 2015, 1, 3, 0, 0, 0 );
+            log3.EndTime = log3.StartTime + new TimeSpan( 3, 0, 0 );
             log3.CreateTime = log3.StartTime;
 
+            // Make log4 the most recent, and have the longest session.
             log4 = new Log();
-            log4.StartTime = DateTime.Now + new TimeSpan( 4, 0, 0 );
+            log4.StartTime = new DateTime( 2015, 1, 4, 0, 0, 0 );
+            log4.EndTime = log4.StartTime + new TimeSpan( 4, 0, 0 );
             log4.CreateTime = log4.StartTime;
+
+            expectedTotalTime = log1.Duration.TotalMinutes +
+                                log2.Duration.TotalMinutes +
+                                log3.Duration.TotalMinutes +
+                                log4.Duration.TotalMinutes;
         }
 
         // -------- Tests --------
@@ -100,6 +111,10 @@ namespace TestCommon
             Assert.IsTrue( uut.LogExists( log2.CreateTime ) );
             Assert.IsTrue( uut.LogExists( log3.CreateTime ) );
             Assert.IsTrue( uut.LogExists( log4.CreateTime ) );
+
+            // Ensure the total time and longest time are what they should be.
+            Assert.AreEqual( this.expectedTotalTime, uut.TotalTime, 1.0 );
+            Assert.AreEqual( log4.Duration.TotalMinutes, uut.LongestTime, 0.1 );
         }
 
         /// <summary>

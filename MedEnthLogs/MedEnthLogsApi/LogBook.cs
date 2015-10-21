@@ -1,5 +1,4 @@
-﻿#region LICENSE
-// 
+﻿// 
 // Meditation Logger.
 // Copyright (C) 2015  Seth Hendrick.
 // 
@@ -16,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // 
-#endregion LICENSE
 
 using System;
 using System.Collections.Generic;
@@ -77,6 +75,14 @@ namespace MedEnthLogsApi
             );
 
             this.Logs = logTableByStartTime.AsReadOnly();
+
+            this.TotalTime = 0;
+            this.LongestTime = 0;
+            foreach ( ILog log in this.Logs )
+            {
+                this.TotalTime += log.Duration.TotalMinutes;
+                this.LongestTime = Math.Max( log.Duration.TotalMinutes, this.LongestTime );
+            }
         }
 
         // --------- Properties --------
@@ -88,6 +94,16 @@ namespace MedEnthLogsApi
         /// Earlier sessions are towards the end of the list.
         /// </summary>
         public IList<ILog> Logs { get; private set; }
+
+        /// <summary>
+        /// The total time of all the logs.
+        /// </summary>
+        public double TotalTime { get; private set; }
+
+        /// <summary>
+        /// The longest session time of all logs.
+        /// </summary>
+        public double LongestTime { get; private set; }
 
         // --------- Functions --------
 
