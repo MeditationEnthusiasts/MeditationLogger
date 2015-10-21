@@ -83,6 +83,8 @@ namespace MedEnthLogsDesktop
             this.SyncLocationText = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.AboutView = new System.Windows.Forms.TabPage();
+            this.AppInfo = new System.Windows.Forms.TabControl();
+            this.AppInfoTab = new System.Windows.Forms.TabPage();
             this.AppInfoTable = new System.Windows.Forms.TableLayoutPanel();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.VersionValueLabel = new System.Windows.Forms.Label();
@@ -94,21 +96,30 @@ namespace MedEnthLogsDesktop
             this.ViewSourceValueLabel = new System.Windows.Forms.LinkLabel();
             this.ViewWikiValueLabel = new System.Windows.Forms.LinkLabel();
             this.WikiLabel = new System.Windows.Forms.Label();
+            this.CopyrightValue = new System.Windows.Forms.Label();
+            this.MedEnthLicense = new System.Windows.Forms.TabPage();
+            this.LicenseTable = new System.Windows.Forms.TableLayoutPanel();
+            this.GplTextBox = new System.Windows.Forms.TextBox();
+            this.GplLicenseLabel = new System.Windows.Forms.Label();
+            this.ExternalLibTab = new System.Windows.Forms.TabPage();
+            this.ExtLibTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ExternalLibTextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.AppInfo = new System.Windows.Forms.TabControl();
-            this.AppInfoTab = new System.Windows.Forms.TabPage();
-            this.MedEnthLicense = new System.Windows.Forms.TabPage();
-            this.GplLicenseLabel = new System.Windows.Forms.Label();
-            this.GplTextBox = new System.Windows.Forms.TextBox();
-            this.ExternalLibTab = new System.Windows.Forms.TabPage();
-            this.ExtLibTable = new System.Windows.Forms.TableLayoutPanel();
-            this.LicenseTable = new System.Windows.Forms.TableLayoutPanel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.ExternalLibTextBox = new System.Windows.Forms.TextBox();
-            this.CopyrightValue = new System.Windows.Forms.Label();
+            this.HomeTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.HomeStatTable = new System.Windows.Forms.TableLayoutPanel();
+            this.TotalMinLabel = new System.Windows.Forms.Label();
+            this.LongestSessionLabel = new System.Windows.Forms.Label();
+            this.TotalSessionLabel = new System.Windows.Forms.Label();
+            this.TotalMinutesValueLabel = new System.Windows.Forms.Label();
+            this.LongestSessionValueLabel = new System.Windows.Forms.Label();
+            this.TotalSessionsValueLabel = new System.Windows.Forms.Label();
+            this.LastSessionLabel = new System.Windows.Forms.Label();
+            this.LastSessionValueLabel = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
+            this.Home.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
             this.ViewLogbookInnerTabControl.SuspendLayout();
@@ -120,13 +131,15 @@ namespace MedEnthLogsDesktop
             this.ExportView.SuspendLayout();
             this.SyncView.SuspendLayout();
             this.AboutView.SuspendLayout();
-            this.AppInfoTable.SuspendLayout();
             this.AppInfo.SuspendLayout();
             this.AppInfoTab.SuspendLayout();
+            this.AppInfoTable.SuspendLayout();
             this.MedEnthLicense.SuspendLayout();
+            this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
-            this.LicenseTable.SuspendLayout();
+            this.HomeTableLayout.SuspendLayout();
+            this.HomeStatTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -147,6 +160,7 @@ namespace MedEnthLogsDesktop
             // 
             // Home
             // 
+            this.Home.Controls.Add(this.HomeTableLayout);
             this.Home.Location = new System.Drawing.Point(4, 34);
             this.Home.Name = "Home";
             this.Home.Padding = new System.Windows.Forms.Padding(3);
@@ -529,6 +543,30 @@ namespace MedEnthLogsDesktop
             this.AboutView.Text = "About";
             this.AboutView.UseVisualStyleBackColor = true;
             // 
+            // AppInfo
+            // 
+            this.AppInfo.Controls.Add(this.AppInfoTab);
+            this.AppInfo.Controls.Add(this.MedEnthLicense);
+            this.AppInfo.Controls.Add(this.ExternalLibTab);
+            this.AppInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AppInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppInfo.Location = new System.Drawing.Point(3, 3);
+            this.AppInfo.Name = "AppInfo";
+            this.AppInfo.SelectedIndex = 0;
+            this.AppInfo.Size = new System.Drawing.Size(595, 447);
+            this.AppInfo.TabIndex = 1;
+            // 
+            // AppInfoTab
+            // 
+            this.AppInfoTab.Controls.Add(this.AppInfoTable);
+            this.AppInfoTab.Location = new System.Drawing.Point(4, 29);
+            this.AppInfoTab.Name = "AppInfoTab";
+            this.AppInfoTab.Padding = new System.Windows.Forms.Padding(3);
+            this.AppInfoTab.Size = new System.Drawing.Size(587, 414);
+            this.AppInfoTab.TabIndex = 0;
+            this.AppInfoTab.Text = "App Info";
+            this.AppInfoTab.UseVisualStyleBackColor = true;
+            // 
             // AppInfoTable
             // 
             this.AppInfoTable.ColumnCount = 2;
@@ -663,42 +701,15 @@ namespace MedEnthLogsDesktop
             this.WikiLabel.TabIndex = 9;
             this.WikiLabel.Text = "View Wiki:";
             // 
-            // ExportSaveDialog
+            // CopyrightValue
             // 
-            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
-            // 
-            // ImportOpenDialog
-            // 
-            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
-            // 
-            // SyncOpenDialog
-            // 
-            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
-            // 
-            // AppInfo
-            // 
-            this.AppInfo.Controls.Add(this.AppInfoTab);
-            this.AppInfo.Controls.Add(this.MedEnthLicense);
-            this.AppInfo.Controls.Add(this.ExternalLibTab);
-            this.AppInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AppInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AppInfo.Location = new System.Drawing.Point(3, 3);
-            this.AppInfo.Name = "AppInfo";
-            this.AppInfo.SelectedIndex = 0;
-            this.AppInfo.Size = new System.Drawing.Size(595, 447);
-            this.AppInfo.TabIndex = 1;
-            // 
-            // AppInfoTab
-            // 
-            this.AppInfoTab.Controls.Add(this.AppInfoTable);
-            this.AppInfoTab.Location = new System.Drawing.Point(4, 29);
-            this.AppInfoTab.Name = "AppInfoTab";
-            this.AppInfoTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AppInfoTab.Size = new System.Drawing.Size(587, 414);
-            this.AppInfoTab.TabIndex = 0;
-            this.AppInfoTab.Text = "App Info";
-            this.AppInfoTab.UseVisualStyleBackColor = true;
+            this.CopyrightValue.AutoSize = true;
+            this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CopyrightValue.Location = new System.Drawing.Point(150, 310);
+            this.CopyrightValue.Name = "CopyrightValue";
+            this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
+            this.CopyrightValue.TabIndex = 10;
+            this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
             // 
             // MedEnthLicense
             // 
@@ -711,16 +722,20 @@ namespace MedEnthLogsDesktop
             this.MedEnthLicense.Text = "License";
             this.MedEnthLicense.UseVisualStyleBackColor = true;
             // 
-            // GplLicenseLabel
+            // LicenseTable
             // 
-            this.GplLicenseLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.GplLicenseLabel.AutoSize = true;
-            this.GplLicenseLabel.Location = new System.Drawing.Point(122, 0);
-            this.GplLicenseLabel.Name = "GplLicenseLabel";
-            this.GplLicenseLabel.Size = new System.Drawing.Size(336, 57);
-            this.GplLicenseLabel.TabIndex = 0;
-            this.GplLicenseLabel.Text = "License for using and distrubting this software:";
-            this.GplLicenseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LicenseTable.ColumnCount = 1;
+            this.LicenseTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.LicenseTable.Controls.Add(this.GplTextBox, 0, 1);
+            this.LicenseTable.Controls.Add(this.GplLicenseLabel, 0, 0);
+            this.LicenseTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LicenseTable.Location = new System.Drawing.Point(3, 3);
+            this.LicenseTable.Name = "LicenseTable";
+            this.LicenseTable.RowCount = 2;
+            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.16011F));
+            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.83989F));
+            this.LicenseTable.Size = new System.Drawing.Size(581, 408);
+            this.LicenseTable.TabIndex = 2;
             // 
             // GplTextBox
             // 
@@ -734,6 +749,17 @@ namespace MedEnthLogsDesktop
             this.GplTextBox.Size = new System.Drawing.Size(575, 345);
             this.GplTextBox.TabIndex = 1;
             this.GplTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // GplLicenseLabel
+            // 
+            this.GplLicenseLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.GplLicenseLabel.AutoSize = true;
+            this.GplLicenseLabel.Location = new System.Drawing.Point(122, 0);
+            this.GplLicenseLabel.Name = "GplLicenseLabel";
+            this.GplLicenseLabel.Size = new System.Drawing.Size(336, 57);
+            this.GplLicenseLabel.TabIndex = 0;
+            this.GplLicenseLabel.Text = "License for using and distrubting this software:";
+            this.GplLicenseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ExternalLibTab
             // 
@@ -761,33 +787,6 @@ namespace MedEnthLogsDesktop
             this.ExtLibTable.Size = new System.Drawing.Size(581, 408);
             this.ExtLibTable.TabIndex = 0;
             // 
-            // LicenseTable
-            // 
-            this.LicenseTable.ColumnCount = 1;
-            this.LicenseTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LicenseTable.Controls.Add(this.GplTextBox, 0, 1);
-            this.LicenseTable.Controls.Add(this.GplLicenseLabel, 0, 0);
-            this.LicenseTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LicenseTable.Location = new System.Drawing.Point(3, 3);
-            this.LicenseTable.Name = "LicenseTable";
-            this.LicenseTable.RowCount = 2;
-            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.16011F));
-            this.LicenseTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.83989F));
-            this.LicenseTable.Size = new System.Drawing.Size(581, 408);
-            this.LicenseTable.TabIndex = 2;
-            // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(567, 58);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "This project is made possible by several external libraries.  Below is a listing " +
-    "of all of them, and their corresponding license.";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ExternalLibTextBox
             // 
             this.ExternalLibTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -801,15 +800,149 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTextBox.TabIndex = 2;
             this.ExternalLibTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // CopyrightValue
+            // label8
             // 
-            this.CopyrightValue.AutoSize = true;
-            this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.CopyrightValue.Location = new System.Drawing.Point(150, 310);
-            this.CopyrightValue.Name = "CopyrightValue";
-            this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
-            this.CopyrightValue.TabIndex = 10;
-            this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(567, 58);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "This project is made possible by several external libraries.  Below is a listing " +
+    "of all of them, and their corresponding license.";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ExportSaveDialog
+            // 
+            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
+            // 
+            // ImportOpenDialog
+            // 
+            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            // 
+            // SyncOpenDialog
+            // 
+            this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            // 
+            // HomeTableLayout
+            // 
+            this.HomeTableLayout.ColumnCount = 2;
+            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.68908F));
+            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.31092F));
+            this.HomeTableLayout.Controls.Add(this.HomeStatTable, 1, 1);
+            this.HomeTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomeTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.HomeTableLayout.Name = "HomeTableLayout";
+            this.HomeTableLayout.RowCount = 2;
+            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.85906F));
+            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.14094F));
+            this.HomeTableLayout.Size = new System.Drawing.Size(595, 447);
+            this.HomeTableLayout.TabIndex = 0;
+            // 
+            // HomeStatTable
+            // 
+            this.HomeStatTable.ColumnCount = 2;
+            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.63736F));
+            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.36264F));
+            this.HomeStatTable.Controls.Add(this.LastSessionLabel, 0, 3);
+            this.HomeStatTable.Controls.Add(this.TotalMinutesValueLabel, 1, 0);
+            this.HomeStatTable.Controls.Add(this.TotalMinLabel, 0, 0);
+            this.HomeStatTable.Controls.Add(this.LongestSessionLabel, 0, 1);
+            this.HomeStatTable.Controls.Add(this.TotalSessionLabel, 0, 2);
+            this.HomeStatTable.Controls.Add(this.LongestSessionValueLabel, 1, 1);
+            this.HomeStatTable.Controls.Add(this.TotalSessionsValueLabel, 1, 2);
+            this.HomeStatTable.Controls.Add(this.LastSessionValueLabel, 1, 3);
+            this.HomeStatTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomeStatTable.Location = new System.Drawing.Point(137, 131);
+            this.HomeStatTable.Name = "HomeStatTable";
+            this.HomeStatTable.RowCount = 4;
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.Size = new System.Drawing.Size(455, 313);
+            this.HomeStatTable.TabIndex = 0;
+            // 
+            // TotalMinLabel
+            // 
+            this.TotalMinLabel.AutoSize = true;
+            this.TotalMinLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalMinLabel.Location = new System.Drawing.Point(3, 0);
+            this.TotalMinLabel.Name = "TotalMinLabel";
+            this.TotalMinLabel.Size = new System.Drawing.Size(150, 25);
+            this.TotalMinLabel.TabIndex = 0;
+            this.TotalMinLabel.Text = "Total Minutes:";
+            // 
+            // LongestSessionLabel
+            // 
+            this.LongestSessionLabel.AutoSize = true;
+            this.LongestSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LongestSessionLabel.Location = new System.Drawing.Point(3, 78);
+            this.LongestSessionLabel.Name = "LongestSessionLabel";
+            this.LongestSessionLabel.Size = new System.Drawing.Size(180, 25);
+            this.LongestSessionLabel.TabIndex = 1;
+            this.LongestSessionLabel.Text = "Longest Session:";
+            // 
+            // TotalSessionLabel
+            // 
+            this.TotalSessionLabel.AutoSize = true;
+            this.TotalSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalSessionLabel.Location = new System.Drawing.Point(3, 156);
+            this.TotalSessionLabel.Name = "TotalSessionLabel";
+            this.TotalSessionLabel.Size = new System.Drawing.Size(163, 25);
+            this.TotalSessionLabel.TabIndex = 2;
+            this.TotalSessionLabel.Text = "Total Sessions:";
+            // 
+            // TotalMinutesValueLabel
+            // 
+            this.TotalMinutesValueLabel.AutoSize = true;
+            this.TotalMinutesValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalMinutesValueLabel.Location = new System.Drawing.Point(196, 0);
+            this.TotalMinutesValueLabel.Name = "TotalMinutesValueLabel";
+            this.TotalMinutesValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.TotalMinutesValueLabel.TabIndex = 3;
+            this.TotalMinutesValueLabel.Text = "Loading...";
+            // 
+            // LongestSessionValueLabel
+            // 
+            this.LongestSessionValueLabel.AutoSize = true;
+            this.LongestSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LongestSessionValueLabel.Location = new System.Drawing.Point(196, 78);
+            this.LongestSessionValueLabel.Name = "LongestSessionValueLabel";
+            this.LongestSessionValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.LongestSessionValueLabel.TabIndex = 4;
+            this.LongestSessionValueLabel.Text = "Loading...";
+            // 
+            // TotalSessionsValueLabel
+            // 
+            this.TotalSessionsValueLabel.AutoSize = true;
+            this.TotalSessionsValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalSessionsValueLabel.Location = new System.Drawing.Point(196, 156);
+            this.TotalSessionsValueLabel.Name = "TotalSessionsValueLabel";
+            this.TotalSessionsValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.TotalSessionsValueLabel.TabIndex = 5;
+            this.TotalSessionsValueLabel.Text = "Loading...";
+            // 
+            // LastSessionLabel
+            // 
+            this.LastSessionLabel.AutoSize = true;
+            this.LastSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LastSessionLabel.Location = new System.Drawing.Point(3, 234);
+            this.LastSessionLabel.Name = "LastSessionLabel";
+            this.LastSessionLabel.Size = new System.Drawing.Size(144, 25);
+            this.LastSessionLabel.TabIndex = 6;
+            this.LastSessionLabel.Text = "Last Session:";
+            // 
+            // LastSessionValueLabel
+            // 
+            this.LastSessionValueLabel.AutoSize = true;
+            this.LastSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LastSessionValueLabel.Location = new System.Drawing.Point(196, 234);
+            this.LastSessionValueLabel.Name = "LastSessionValueLabel";
+            this.LastSessionValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.LastSessionValueLabel.TabIndex = 7;
+            this.LastSessionValueLabel.Text = "Loading...";
             // 
             // HomePage
             // 
@@ -823,6 +956,7 @@ namespace MedEnthLogsDesktop
             this.Text = "Logger";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainTabControl.ResumeLayout(false);
+            this.Home.ResumeLayout(false);
             this.StartTab.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
             this.ViewLogbookInnerTabControl.ResumeLayout(false);
@@ -838,16 +972,19 @@ namespace MedEnthLogsDesktop
             this.SyncView.ResumeLayout(false);
             this.SyncView.PerformLayout();
             this.AboutView.ResumeLayout(false);
-            this.AppInfoTable.ResumeLayout(false);
-            this.AppInfoTable.PerformLayout();
             this.AppInfo.ResumeLayout(false);
             this.AppInfoTab.ResumeLayout(false);
+            this.AppInfoTable.ResumeLayout(false);
+            this.AppInfoTable.PerformLayout();
             this.MedEnthLicense.ResumeLayout(false);
+            this.LicenseTable.ResumeLayout(false);
+            this.LicenseTable.PerformLayout();
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
-            this.LicenseTable.ResumeLayout(false);
-            this.LicenseTable.PerformLayout();
+            this.HomeTableLayout.ResumeLayout(false);
+            this.HomeStatTable.ResumeLayout(false);
+            this.HomeStatTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -916,6 +1053,16 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox ExternalLibTextBox;
         private System.Windows.Forms.Label CopyrightValue;
+        private System.Windows.Forms.TableLayoutPanel HomeTableLayout;
+        private System.Windows.Forms.TableLayoutPanel HomeStatTable;
+        private System.Windows.Forms.Label TotalMinLabel;
+        private System.Windows.Forms.Label LongestSessionLabel;
+        private System.Windows.Forms.Label TotalSessionLabel;
+        private System.Windows.Forms.Label TotalMinutesValueLabel;
+        private System.Windows.Forms.Label LongestSessionValueLabel;
+        private System.Windows.Forms.Label TotalSessionsValueLabel;
+        private System.Windows.Forms.Label LastSessionLabel;
+        private System.Windows.Forms.Label LastSessionValueLabel;
     }
 }
 

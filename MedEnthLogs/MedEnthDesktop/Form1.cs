@@ -78,11 +78,13 @@ namespace MedEnthLogsDesktop
             // Setup Option View
             this.optionView = new OptionsView();
             this.optionView.Visible = true;
+            this.optionView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.optionView );
 
             // Setup meditate view
             this.meditateView = new MeditateView();
             this.meditateView.Visible = false;
+            this.meditateView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.meditateView );
 
             this.api.Timer.OnComplete =
@@ -102,6 +104,7 @@ namespace MedEnthLogsDesktop
 
             this.saveView = new SaveView();
             this.saveView.Visible = false;
+            this.saveView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.saveView );
         }
 
@@ -195,6 +198,17 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
 
             this.MapViewBrowser.DocumentText = mapHtmlStart + GetPositionHtml() + mapHtmlEnd;
+            this.TotalMinutesValueLabel.Text = this.api.LogBook.TotalTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
+            this.LongestSessionValueLabel.Text = this.api.LogBook.LongestTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
+            this.TotalSessionsValueLabel.Text = this.api.LogBook.Logs.Count.ToString() + " Sessions.";
+            if ( this.api.LogBook.Logs.Count == 0 )
+            {
+                this.LastSessionValueLabel.Text = "Nothing yet.";
+            }
+            else
+            {
+                this.LastSessionValueLabel.Text = this.api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
+            }
         }
 
         private void Form1_Load( object sender, EventArgs e )
