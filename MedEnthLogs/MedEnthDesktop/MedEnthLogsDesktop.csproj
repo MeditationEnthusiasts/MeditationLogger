@@ -106,6 +106,7 @@
     <Compile Include="MeditateView.Designer.cs">
       <DependentUpon>MeditateView.cs</DependentUpon>
     </Compile>
+    <Compile Include="NAudioMusicManager.cs" />
     <Compile Include="OptionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>

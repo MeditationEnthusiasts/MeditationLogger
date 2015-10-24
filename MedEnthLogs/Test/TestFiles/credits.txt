@@ -1,0 +1,2 @@
+thunder.mp3 is from http://publicsounds.org/
+thunder.wav is from http://publicsounds/org/ and converted to .wav via ffmpeg.

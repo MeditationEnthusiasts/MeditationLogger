@@ -60,7 +60,11 @@ namespace MedEnthLogsCli
             {
                 if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = new Api( new Win32LocationDetector(), new Win32Timer() );
+                    Api api = new Api( 
+                        new Win32LocationDetector(),
+                        new Win32Timer(),
+                        new NAudioMusicManager()
+                    );
                     try
                     {
                         api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );

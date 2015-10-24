@@ -35,7 +35,11 @@ namespace MedEnthLogsDesktop
         [STAThread]
         static void Main()
         {
-            api = new MedEnthLogsApi.Api( new Win32LocationDetector(), new Win32Timer() );
+            api = new MedEnthLogsApi.Api(
+                new Win32LocationDetector(),
+                new Win32Timer(),
+                new NAudioMusicManager()
+            );
 
             // Use the win32 sqlite.
             api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );

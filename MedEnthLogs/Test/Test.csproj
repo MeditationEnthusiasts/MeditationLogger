@@ -93,8 +93,10 @@
     <Compile Include="ApiTest.cs" />
     <Compile Include="LogBookTest.cs" />
     <Compile Include="LogTest.cs" />
+    <Compile Include="Mocks\MockMusicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFiles\MockTimer.cs" />
+    <Compile Include="Mocks\MockTimer.cs" />
+    <Compile Include="NAudioMusicManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MedEnthDesktop\MedEnthLogsDesktop.csproj">

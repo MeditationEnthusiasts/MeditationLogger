@@ -71,12 +71,14 @@ namespace MedEnthLogsApi
         /// </summary>
         /// <param name="locationDetector">Location to the location detector.</param>
         /// <param name="timer">The timing engine to use.</param>
-        public Api( ILocationDetector locationDetector, ITimer timer )
+        /// <param name="musicManager">The music manager to use.</param>
+        public Api( ILocationDetector locationDetector, ITimer timer, IMusicManager musicManager )
         {
             this.sqlite = null;
             this.LogBook = null;
             this.LocationDetector = locationDetector;
             this.Timer = timer;
+            this.MusicManager = musicManager;
             ResetCurrentLog();
         }
 
@@ -102,6 +104,11 @@ namespace MedEnthLogsApi
         /// The timer engine to use.
         /// </summary>
         public ITimer Timer { get; private set; }
+
+        /// <summary>
+        /// The Audio engine to use.
+        /// </summary>
+        public IMusicManager MusicManager { get; private set; }
 
         /// <summary>
         /// The current log being written to.
@@ -172,10 +179,10 @@ namespace MedEnthLogsApi
         {
             if ( this.IsSessionInProgress == true )
             {
+                this.Timer.StopAndResetTimer();
                 this.currentLog.EndTime = DateTime.Now.ToUniversalTime();
                 this.currentLog.EditTime = currentLog.EndTime;
                 this.IsSessionInProgress = false;
-                this.Timer.StopAndResetTimer();
             }
         }
 

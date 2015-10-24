@@ -24,6 +24,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using Test.TestFiles;
+using Test.Mocks;
 
 namespace TestCommon
 {
@@ -42,6 +43,8 @@ namespace TestCommon
 
         private MockTimer mockTimer;
 
+        private MockMusicManager mockAudio;
+
         private const string dbLocation = "test.db";
 
         // -------- Setup/Teardown --------
@@ -55,7 +58,8 @@ namespace TestCommon
             }
 
             this.mockTimer = new MockTimer();
-            uut = new Api( new Win32LocationDetector(), this.mockTimer );
+            this.mockAudio = new MockMusicManager();
+            uut = new Api( new Win32LocationDetector(), this.mockTimer, this.mockAudio );
         }
 
         [TearDown]
