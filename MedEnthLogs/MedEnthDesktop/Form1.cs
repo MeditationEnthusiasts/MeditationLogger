@@ -87,7 +87,7 @@ namespace MedEnthLogsDesktop
             this.meditateView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.meditateView );
 
-            this.api.Timer.OnComplete =
+            this.api.timer.OnComplete =
                 delegate ()
                 {
                     if ( this.currentState == StartState.Start )
@@ -96,7 +96,7 @@ namespace MedEnthLogsDesktop
                     }
                 };
 
-            this.api.Timer.OnUpdate =
+            this.api.timer.OnUpdate =
                 delegate ( string updateString )
                 {
                     this.meditateView.TimerLabel.Text = updateString;

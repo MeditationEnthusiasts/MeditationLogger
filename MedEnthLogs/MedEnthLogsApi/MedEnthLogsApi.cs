@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Xml;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
@@ -33,8 +32,6 @@ namespace MedEnthLogsApi
     public class Api
     {
         // -------- Fields --------
-
-        const string xmlNameSpace = "http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd";
 
         /// <summary>
         /// Error message that appears in save if the database is not open.
@@ -52,6 +49,11 @@ namespace MedEnthLogsApi
         /// Reference to a SQLite connection.
         /// </summary>
         private SQLiteConnection sqlite;
+
+        /// <summary>
+        /// The Audio engine to use.
+        /// </summary>
+        private IMusicManager musicManager;
 
         /// <summary>
         /// The current log being written to.
@@ -77,8 +79,8 @@ namespace MedEnthLogsApi
             this.sqlite = null;
             this.LogBook = null;
             this.LocationDetector = locationDetector;
-            this.Timer = timer;
-            this.MusicManager = musicManager;
+            this.timer = timer;
+            this.musicManager = musicManager;
             ResetCurrentLog();
         }
 
@@ -103,12 +105,7 @@ namespace MedEnthLogsApi
         /// <summary>
         /// The timer engine to use.
         /// </summary>
-        public ITimer Timer { get; private set; }
-
-        /// <summary>
-        /// The Audio engine to use.
-        /// </summary>
-        public IMusicManager MusicManager { get; private set; }
+        public ITimer timer { get; private set; }
 
         /// <summary>
         /// The current log being written to.
@@ -178,27 +175,27 @@ namespace MedEnthLogsApi
 
                     if ( config.PlayMusic )
                     {
-                        this.MusicManager.Validate( config.AudioFile );
+                        this.musicManager.Validate( config.AudioFile );
                         if ( config.LoopMusic )
                         {
-                            this.MusicManager.OnStop =
+                            this.musicManager.OnStop =
                                 delegate ()
                                 {
                                     if ( this.IsSessionInProgress )
                                     {
-                                        this.MusicManager.Stop();
-                                        this.MusicManager.Play( config.AudioFile );
+                                        this.musicManager.Stop();
+                                        this.musicManager.Play( config.AudioFile );
                                     }
                                 };
                         }
                         else
                         {
-                            TimeSpan audioLength = this.MusicManager.GetLengthOfFile( config.AudioFile ) + new TimeSpan( 0, 0, 2 );
+                            TimeSpan audioLength = this.musicManager.GetLengthOfFile( config.AudioFile ) + new TimeSpan( 0, 0, 2 );
                             length = new TimeSpan( audioLength.Hours, audioLength.Minutes, audioLength.Seconds ); // Truncate milliseconds.
                         }
-                        this.MusicManager.Play( config.AudioFile );
+                        this.musicManager.Play( config.AudioFile );
                     }
-                    this.Timer.StartTimer( length );
+                    this.timer.StartTimer( length );
 
                     this.IsSessionInProgress = true;
                 }
@@ -218,10 +215,10 @@ namespace MedEnthLogsApi
         {
             if ( this.IsSessionInProgress == true )
             {
-                this.Timer.StopAndResetTimer();
+                this.timer.StopAndResetTimer();
                 this.currentLog.EndTime = DateTime.Now.ToUniversalTime();
                 this.currentLog.EditTime = currentLog.EndTime;
-                this.MusicManager.Stop();
+                this.musicManager.Stop();
                 this.IsSessionInProgress = false;
             }
         }
@@ -321,7 +318,7 @@ namespace MedEnthLogsApi
                 case "xml":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
-                        ImportFromXml( outFile );
+                        XmlExporter.ImportFromXml( outFile, this.LogBook, this.sqlite );
                     }
                     break;
 
@@ -339,115 +336,6 @@ namespace MedEnthLogsApi
                         "Invalid filename passed into Import, can only be .xml, .json, .mlg.",
                         "fileName"
                     );
-            }
-        }
-
-        /// <summary>
-        /// Imports logs from XML to the database.
-        /// This will not repopulate the logbook itself.  You must call that after
-        /// to get the latest logs.
-        /// </summary>
-        /// <param name="outFile">The stream the outputs the file.</param>
-        public void ImportFromXml( Stream outFile )
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load( outFile );
-
-            List<Log> logs = new List<Log>();
-
-            XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != "logbook" )
-            {
-                throw new XmlException(
-                    "Root node should be named \"logbook\".  Got: " + rootNode.Name
-                );
-            }
-
-            foreach ( XmlNode node in rootNode.ChildNodes )
-            {
-                if ( node.Name != "log" )
-                {
-                    throw new XmlException(
-                        "Element is not a log.  Got: " + node.Name
-                    );
-                }
-
-                Log log = new Log();
-
-                foreach ( XmlAttribute attr in node.Attributes )
-                {
-                    switch ( attr.Name )
-                    {
-                        case ( "StartTime" ):
-                            log.StartTime = DateTime.Parse( attr.Value );
-                            break;
-
-                        case ( "EndTime" ):
-                            log.EndTime = DateTime.Parse( attr.Value );
-                            break;
-
-                        case ( "Technique" ):
-                            log.Technique = attr.Value;
-                            break;
-
-                        case ( "Comments" ):
-                            log.Comments = attr.Value;
-                            break;
-
-                        case ( "Latitude" ):
-                            // Try to parse the latitude.  If fails, just make it empty.
-                            decimal lat;
-                            if ( decimal.TryParse( attr.Value, out lat ) )
-                            {
-                                log.Latitude = lat;
-                            }
-                            else
-                            {
-                                log.Latitude = null;
-                            }
-                            break;
-
-                        case ( "Longitude" ):
-                            // Try to parse the Longitude.  If fails, just make it empty.
-                            decimal lon;
-                            if ( decimal.TryParse( attr.Value, out lon ) )
-                            {
-                                log.Longitude = lon;
-                            }
-                            else
-                            {
-                                log.Longitude = null;
-                            }
-                            break;
-                    }
-                }
-
-                DateTime creationTime = DateTime.Now.ToUniversalTime();
-
-                // Keep looking until we have a unique creation date.
-                while ( this.LogBook.LogExists( creationTime ) || ( logs.Find( i => i.CreateTime == creationTime ) != null ) )
-                {
-                    creationTime = DateTime.Now.ToUniversalTime();
-                }
-                log.CreateTime = creationTime;
-                log.EditTime = creationTime;
-
-                // Ensure the log is good.
-                log.Validate();
-
-                // Add to list.
-                logs.Add( log );
-            }
-
-            // Last thing to do is add the new logs to the database.
-            if ( logs.Count != 0 )
-            {
-                foreach ( Log newLog in logs )
-                {
-                    this.sqlite.Insert( newLog );
-                }
-
-                this.sqlite.Commit();
             }
         }
 
@@ -477,7 +365,7 @@ namespace MedEnthLogsApi
                 case "xml":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
-                        ExportToXml( outFile );
+                        XmlExporter.ExportToXml( outFile, this.LogBook );
                     }
                     break;
 
@@ -496,76 +384,6 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
-        }
-
-        /// <summary>
-        /// Exports the loaded logbook to XML.
-        /// </summary>
-        /// <param name="outFile">The stream which outputs the file.</param>
-        public void ExportToXml( Stream outFile )
-        {
-            XmlDocument doc = new XmlDocument();
-
-            // Create declaration.
-            XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
-
-            // Add declaration to document.
-            XmlElement root = doc.DocumentElement;
-            doc.InsertBefore( dec, root );
-
-            XmlNode logbookNode = doc.CreateNode( XmlNodeType.Element, "logbook", xmlNameSpace );
-
-            foreach ( Log log in this.LogBook.Logs )
-            {
-                XmlNode logNode = doc.CreateNode( XmlNodeType.Element, "log", xmlNameSpace );
-
-                // Reducing scope so I don't accidently add the wrong attribute.
-                {
-                    XmlAttribute creationTime = doc.CreateAttribute( "CreationTime" );
-                    creationTime.Value = log.CreateTime.ToString( "o" );
-                    logNode.Attributes.Append( creationTime );
-                }
-                {
-                    XmlAttribute editTime = doc.CreateAttribute( "EditTime" );
-                    editTime.Value = log.EditTime.ToString( "o" );
-                    logNode.Attributes.Append( editTime );
-                }
-                {
-                    XmlAttribute startTime = doc.CreateAttribute( "StartTime" );
-                    startTime.Value = log.StartTime.ToString( "o" );
-                    logNode.Attributes.Append( startTime );
-                }
-                {
-                    XmlAttribute endTime = doc.CreateAttribute( "EndTime" );
-                    endTime.Value = log.EndTime.ToString( "o" );
-                    logNode.Attributes.Append( endTime );
-                }
-                {
-                    XmlAttribute technique = doc.CreateAttribute( "Technique" );
-                    technique.Value = log.Technique;
-                    logNode.Attributes.Append( technique );
-                }
-                {
-                    XmlAttribute comments = doc.CreateAttribute( "Comments" );
-                    comments.Value = log.Comments;
-                    logNode.Attributes.Append( comments );
-                }
-                {
-                    XmlAttribute lat = doc.CreateAttribute( "Latitude" );
-                    lat.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
-                    logNode.Attributes.Append( lat );
-                }
-                {
-                    XmlAttribute lon = doc.CreateAttribute( "Longitude" );
-                    lon.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
-                    logNode.Attributes.Append( lon );
-                }
-
-                logbookNode.AppendChild( logNode );
-            }
-
-            doc.InsertAfter( logbookNode, dec );
-            doc.Save( outFile );
         }
 
         /// <summary>

@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LogBook.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MedEnthLogsApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SessionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)schemas\LogXmlSchema.xsd" />
