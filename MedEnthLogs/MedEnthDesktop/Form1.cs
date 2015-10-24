@@ -417,6 +417,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                 {
                     case StartState.Idle:
                         // API calls
+                        SessionConfig config = new SessionConfig();
                         if ( this.optionView.EnableTimerCheckbox.Checked )
                         {
                             TimeSpan timeToGo = new TimeSpan(
@@ -424,12 +425,20 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                                 int.Parse( this.optionView.MinuteListBox.SelectedItem.ToString() ),
                                 0
                             );
-                            this.api.StartSession( timeToGo );
+                            config.Length = timeToGo;
                         }
                         else
                         {
-                            this.api.StartSession( null );
+                            config.Length = null;
                         }
+
+                        config.PlayMusic = ( this.optionView.LoopMusicRadioButton.Checked ) || 
+                                           ( this.optionView.MusicPlayOnceRadioButton.Checked );
+                        config.LoopMusic = this.optionView.LoopMusicRadioButton.Checked;
+                        config.AudioFile = this.optionView.MusicLocationTextBox.Text;
+
+                        // Will throw exception (and not start the timers) if validation fails.
+                        this.api.StartSession( config );
 
                         // Switch View.
                         this.optionView.Visible = false;

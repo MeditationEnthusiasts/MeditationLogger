@@ -208,6 +208,7 @@ namespace MedEnthDesktop
             this.NoMusicRadioButton.Text = "No Music";
             this.OptionsToolTip.SetToolTip(this.NoMusicRadioButton, "No music is played.");
             this.NoMusicRadioButton.UseVisualStyleBackColor = true;
+            this.NoMusicRadioButton.CheckedChanged += new System.EventHandler(this.NoMusicRadioButton_CheckedChanged);
             // 
             // LoopMusicRadioButton
             // 
@@ -234,7 +235,7 @@ namespace MedEnthDesktop
             this.MusicPlayOnceRadioButton.TabIndex = 2;
             this.MusicPlayOnceRadioButton.TabStop = true;
             this.MusicPlayOnceRadioButton.Text = "Play Once";
-            this.OptionsToolTip.SetToolTip(this.MusicPlayOnceRadioButton, "Music is played in a loop until the session ends.");
+            this.OptionsToolTip.SetToolTip(this.MusicPlayOnceRadioButton, "Music is played once.  When the music stops, so does the session.");
             this.MusicPlayOnceRadioButton.UseVisualStyleBackColor = true;
             this.MusicPlayOnceRadioButton.CheckedChanged += new System.EventHandler(this.MusicPlayOnceRadioButton_CheckedChanged);
             // 
@@ -345,6 +346,10 @@ namespace MedEnthDesktop
             this.flowLayoutPanel1.Size = new System.Drawing.Size(600, 250);
             this.flowLayoutPanel1.TabIndex = 8;
             // 
+            // MusicOpenDialog
+            // 
+            this.MusicOpenDialog.Filter = "MP3 Files|*.mp3|Wave Files|*.wav";
+            // 
             // OptionDescriptionLabel
             // 
             this.OptionDescriptionLabel.AutoSize = true;
@@ -384,15 +389,15 @@ namespace MedEnthDesktop
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox MusicOptionsGroup;
-        private System.Windows.Forms.RadioButton MusicPlayOnceRadioButton;
-        private System.Windows.Forms.RadioButton LoopMusicRadioButton;
-        private System.Windows.Forms.RadioButton NoMusicRadioButton;
         private System.Windows.Forms.Button MusicBrowseButton;
         private System.Windows.Forms.Label MusicLocationLabel;
-        private System.Windows.Forms.TextBox MusicLocationTextBox;
         private System.Windows.Forms.GroupBox TimerOptionsGroup;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.OpenFileDialog MusicOpenDialog;
         private System.Windows.Forms.Label OptionDescriptionLabel;
+        public System.Windows.Forms.RadioButton NoMusicRadioButton;
+        public System.Windows.Forms.RadioButton LoopMusicRadioButton;
+        public System.Windows.Forms.RadioButton MusicPlayOnceRadioButton;
+        public System.Windows.Forms.TextBox MusicLocationTextBox;
     }
 }

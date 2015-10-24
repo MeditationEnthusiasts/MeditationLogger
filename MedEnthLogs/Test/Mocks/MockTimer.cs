@@ -47,6 +47,11 @@ namespace Test.TestFiles
         public bool IsRunning { get; private set; }
 
         /// <summary>
+        /// The time to run on the timer.
+        /// </summary>
+        public TimeSpan? Time { get; set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public MockTimer()
@@ -64,6 +69,7 @@ namespace Test.TestFiles
         public void StartTimer( TimeSpan? countDownTime )
         {
             this.IsRunning = true;
+            this.Time = countDownTime;
         }
 
         /// <summary>
@@ -73,6 +79,7 @@ namespace Test.TestFiles
         public void StopAndResetTimer()
         {
             this.IsRunning = false;
+            this.Time = null;
         }
     }
 }

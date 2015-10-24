@@ -134,8 +134,9 @@ namespace TestCommon
         [Test]
         public void StartTest()
         {
-            uut.StartSession();
+            uut.StartSession( new SessionConfig() );
             Assert.IsTrue( mockTimer.IsRunning );
+            Assert.IsFalse( mockAudio.IsPlaying ); // Default setting passed in, should not be playing.
 
             // Ensure the expected creation time is close to DateTime.Now;
             DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
@@ -153,7 +154,7 @@ namespace TestCommon
 
             // Calling start again should result in a no-op
             DateTime oldTime = uut.CurrentLog.CreateTime;
-            uut.StartSession();
+            uut.StartSession( new SessionConfig() );
 
             // Ensure the times didn't change.
             Assert.AreEqual( oldTime, uut.CurrentLog.CreateTime );
@@ -171,6 +172,126 @@ namespace TestCommon
                     uut.ValidateAndSaveSession();
                 }
             );
+        }
+
+        [Test]
+        public void StartStopWithLoopingMusic()
+        {
+            SessionConfig config = new SessionConfig();
+            config.PlayMusic = true;
+            config.LoopMusic = true;
+            config.Length = new TimeSpan( 0, 1, 0 );
+            config.AudioFile = "test.mp3";
+
+            uut.StartSession( config );
+            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.IsTrue( mockAudio.IsPlaying );
+            Assert.IsTrue( mockTimer.IsRunning );
+            Assert.AreEqual( config.Length, mockTimer.Time );
+
+            uut.StopSession();
+            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockAudio.IsPlaying );
+            Assert.IsFalse( mockTimer.IsRunning );
+            Assert.AreEqual( null, mockTimer.Time );
+        }
+
+        [Test]
+        public void StartWithNoMusic()
+        {
+            SessionConfig config = new SessionConfig();
+            config.PlayMusic = false;
+            config.LoopMusic = true;
+            config.Length = new TimeSpan( 0, 1, 0 );
+            config.AudioFile = "test.mp3";
+
+            uut.StartSession( config );
+            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.IsFalse( mockAudio.IsPlaying ); // Play music is false, this should be false.
+            Assert.IsTrue( mockTimer.IsRunning );
+            Assert.AreEqual( config.Length, mockTimer.Time );
+        }
+
+        [Test]
+        public void StartStopWithInvalidMusicConfig()
+        {
+            SessionConfig config = new SessionConfig();
+            config.PlayMusic = true;
+            config.LoopMusic = true;
+            config.Length = new TimeSpan( 0, 1, 0 );
+            config.AudioFile = "doesNotExist.mp3";
+
+            mockAudio.ThrownFromValidate = new Exception( "I got thrown" );
+
+            Assert.Throws<Exception>(
+                delegate ()
+                {
+                    uut.StartSession( config );
+                }
+            );
+
+            // Ensure that we are not running, and the log was reset.
+            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockAudio.IsPlaying );
+            Assert.IsFalse( mockTimer.IsRunning );
+            Assert.AreEqual( null, mockTimer.Time );
+            Assert.AreEqual( new Log(), uut.CurrentLog );
+        }
+
+        [Test]
+        public void StartStopWithPlayOnceMusic()
+        {
+            SessionConfig config = new SessionConfig();
+            config.PlayMusic = true;
+            config.LoopMusic = false;
+            config.Length = new TimeSpan( 0, 1, 0 );
+            config.AudioFile = "test.mp3";
+
+            this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
+
+            uut.StartSession( config );
+            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.IsTrue( mockAudio.IsPlaying );
+            Assert.IsTrue( mockTimer.IsRunning );
+
+            // Ensure if play-though once that config's length is ignored, and
+            // is more than the audio's playtime.
+            Assert.Greater( mockTimer.Time, config.Length );
+            Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
+
+            uut.StopSession();
+            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockAudio.IsPlaying );
+            Assert.IsFalse( mockTimer.IsRunning );
+            Assert.AreEqual( null, mockTimer.Time );
+        }
+
+        [Test]
+        public void StartStopWithPlayOnceNullLength()
+        {
+            SessionConfig config = new SessionConfig();
+            config.PlayMusic = true;
+            config.LoopMusic = false;
+            config.Length = null;
+            config.AudioFile = "test.mp3";
+
+            this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
+
+            uut.StartSession( config );
+            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.IsTrue( mockAudio.IsPlaying );
+            Assert.IsTrue( mockTimer.IsRunning );
+
+            // Ensure if play-though once that config's length is ignored, and
+            // is more than the audio's playtime.
+            Assert.NotNull( mockTimer.Time );
+            Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
+
+            uut.StopSession();
+            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.IsFalse( mockAudio.IsPlaying );
+            Assert.IsFalse( mockTimer.IsRunning );
+            Assert.AreEqual( null, mockTimer.Time );
         }
 
         /// <summary>
@@ -200,8 +321,9 @@ namespace TestCommon
         public void StopTest()
         {
             // First, start the session.
-            uut.StartSession();
+            uut.StartSession( new SessionConfig() );
             Assert.IsTrue( mockTimer.IsRunning );
+            Assert.IsFalse( mockAudio.IsPlaying ); // Default config, should not be playing.
 
             DateTime oldEditTime = uut.CurrentLog.EditTime;
 
@@ -693,7 +815,7 @@ namespace TestCommon
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try
             {
-                uut.StartSession();
+                uut.StartSession( new SessionConfig() );
                 uut.StopSession();
                 uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
 
@@ -728,7 +850,7 @@ namespace TestCommon
             {
                 for ( int i = 0; i < numberOfEntries; ++i )
                 {
-                    uut.StartSession();
+                    uut.StartSession( new SessionConfig() );
                     uut.StopSession();
 
                     string technique = "SomeTechnique" + i;
@@ -772,7 +894,7 @@ namespace TestCommon
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
             try
             {
-                uut.StartSession();
+                uut.StartSession( new SessionConfig() );
                 uut.StopSession();
 
                 Assert.Catch<LogValidationException>(

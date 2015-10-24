@@ -70,11 +70,19 @@ namespace MedEnthDesktop
             UpdateButtons();
         }
 
+        private void NoMusicRadioButton_CheckedChanged( object sender, EventArgs e )
+        {
+            UpdateButtons();
+        }
+
         private void UpdateButtons()
         {
             this.EnableTimerCheckbox.Enabled = ( MusicPlayOnceRadioButton.Checked == false );
             this.HourListBox.Enabled = this.EnableTimerCheckbox.Checked && ( MusicPlayOnceRadioButton.Checked == false );
             this.MinuteListBox.Enabled = this.EnableTimerCheckbox.Checked && ( MusicPlayOnceRadioButton.Checked == false );
+
+            this.MusicLocationTextBox.Enabled = this.NoMusicRadioButton.Checked == false;
+            this.MusicBrowseButton.Enabled = this.NoMusicRadioButton.Checked == false;
 
             if ( NoMusicRadioButton.Checked || LoopMusicRadioButton.Checked )
             {

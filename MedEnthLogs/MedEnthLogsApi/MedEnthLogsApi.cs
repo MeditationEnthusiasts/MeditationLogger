@@ -157,17 +157,56 @@ namespace MedEnthLogsApi
         /// and sets the start time to now as well.
         /// No-op if session in progress.
         /// </summary>
-        /// <param name="length">How long to meditate for.  Null for unlimited.</param>
-        public void StartSession( TimeSpan? length = null )
+        /// <param name="config">The config for the session.</param>
+        public void StartSession( SessionConfig config )
         {
-            if ( this.IsSessionInProgress == false )
+            if ( config == null )
+            {
+                throw new ArgumentNullException( "config" );
+            }
+
+            try
+            {
+                if ( this.IsSessionInProgress == false )
+                {
+                    this.currentLog = new Log();
+                    this.currentLog.CreateTime = DateTime.Now.ToUniversalTime();
+                    this.currentLog.StartTime = this.currentLog.CreateTime;
+                    this.currentLog.EditTime = this.currentLog.CreateTime;
+
+                    TimeSpan? length = config.Length;
+
+                    if ( config.PlayMusic )
+                    {
+                        this.MusicManager.Validate( config.AudioFile );
+                        if ( config.LoopMusic )
+                        {
+                            this.MusicManager.OnStop =
+                                delegate ()
+                                {
+                                    if ( this.IsSessionInProgress )
+                                    {
+                                        this.MusicManager.Stop();
+                                        this.MusicManager.Play( config.AudioFile );
+                                    }
+                                };
+                        }
+                        else
+                        {
+                            TimeSpan audioLength = this.MusicManager.GetLengthOfFile( config.AudioFile ) + new TimeSpan( 0, 0, 2 );
+                            length = new TimeSpan( audioLength.Hours, audioLength.Minutes, audioLength.Seconds ); // Truncate milliseconds.
+                        }
+                        this.MusicManager.Play( config.AudioFile );
+                    }
+                    this.Timer.StartTimer( length );
+
+                    this.IsSessionInProgress = true;
+                }
+            }
+            catch ( Exception )
             {
                 this.currentLog = new Log();
-                this.currentLog.CreateTime = DateTime.Now.ToUniversalTime();
-                this.currentLog.StartTime = this.currentLog.CreateTime;
-                this.currentLog.EditTime = this.currentLog.CreateTime;
-                this.IsSessionInProgress = true;
-                this.Timer.StartTimer( length );
+                throw;
             }
         }
 
@@ -182,6 +221,7 @@ namespace MedEnthLogsApi
                 this.Timer.StopAndResetTimer();
                 this.currentLog.EndTime = DateTime.Now.ToUniversalTime();
                 this.currentLog.EditTime = currentLog.EndTime;
+                this.MusicManager.Stop();
                 this.IsSessionInProgress = false;
             }
         }
