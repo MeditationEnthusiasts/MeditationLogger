@@ -372,7 +372,7 @@ namespace MedEnthLogsApi
                 case "json":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
-                        ExportToJson( outFile );
+                        JsonExporter.ExportJson( outFile, this.LogBook );
                     }
                     break;
                 case "mlg":
@@ -384,16 +384,6 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
-        }
-
-        /// <summary>
-        /// Exports the loaded logbook to json.
-        /// </summary>
-        /// <param name="outFile">The stream which outputs the file.</param>
-        public void ExportToJson( Stream outFile )
-        {
-            // Use JSon.net package.
-            throw new NotImplementedException( "Not implemented yet." );
         }
 
         /// <summary>
