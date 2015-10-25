@@ -62,7 +62,7 @@ namespace MedEnthLogsApi
             this.logTable = new Dictionary<DateTime, ILog>();
             foreach ( ILog log in logs )
             {
-                logTable[log.CreateTime] = log;
+                logTable[log.CreationTime] = log;
             }
 
             // Sort the logs.

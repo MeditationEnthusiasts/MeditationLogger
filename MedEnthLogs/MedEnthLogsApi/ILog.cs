@@ -43,7 +43,7 @@ namespace MedEnthLogsApi
         /// When the session was first recorded
         /// (UTC, the UI must convert it to local time).
         /// </summary>
-        DateTime CreateTime { get; }
+        DateTime CreationTime { get; }
 
         /// <summary>
         /// The last time this log was edited.

@@ -19,32 +19,140 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SQLite.Net;
 
 namespace MedEnthLogsApi
 {
     public class JsonExporter
     {
+        /// <summary>
+        /// Exports the given logbook to json.
+        /// </summary>
+        /// <param name="outFile">Where to write the json to.</param>
+        /// <param name="logBook">The logbook to convert to json.</param>
         public static void ExportJson( Stream outFile, LogBook logBook )
         {
             using ( StreamWriter writer = new StreamWriter( outFile ) )
             {
+                JArray array = new JArray();
                 foreach ( Log log in logBook.Logs )
                 {
                     JObject o = new JObject();
-                    o["CreationTime"] = log.CreateTime.ToString( "o" );
-                    o["EditTime"] = log.EditTime.ToString( "o" );
-                    o["StartTime"] = log.StartTime.ToString( "o" );
-                    o["EndTime"] = log.EndTime.ToString( "o" );
-                    o["Technique"] = log.Technique;
-                    o["Comments"] = log.Comments;
-                    o["Latitude"] = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
-                    o["Longitude"] = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
+                    o[Log.CreationTimeString] = log.CreationTime.ToString( "o" );
+                    o[Log.EditTimeString] = log.EditTime.ToString( "o" );
+                    o[Log.StartTimeString] = log.StartTime.ToString( "o" );
+                    o[Log.EndTimeString] = log.EndTime.ToString( "o" );
+                    o[Log.TechniqueString] = log.Technique;
+                    o[Log.CommentsString] = log.Comments;
+                    o[Log.LatitudeString] = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
+                    o[Log.LongitudeString] = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
 
-                    writer.WriteLine( o.ToString() );
+                    array.Add( o );
                 }
+                writer.WriteLine( array.ToString() );
+            }
+        }
+
+        /// <summary>
+        /// Imports logs from JSON to the database.
+        /// This will not repopulate the logbook itself.  You must call PopulateLogbook() to do that.
+        /// </summary>
+        /// <param name="outFile">The stream to read from.</param>
+        /// <param name="logBook">The logbook to import to.</param>
+        /// <param name="sqlite">The sqlite connection to import the logs to.</param>
+        public static void ImportFromJson( Stream outFile, LogBook logBook, SQLiteConnection sqlite )
+        {
+            List<Log> logs = new List<Log>();
+
+            using ( StreamReader reader = new StreamReader( outFile ) )
+            {
+                string json = reader.ReadToEnd();
+                JArray array = JArray.Parse( json );
+                foreach ( JObject o in array.Children() )
+                {
+                    Log log = new Log();
+
+                    JToken token;
+
+                    // Get the start time.
+                    if ( o.TryGetValue( Log.StartTimeString, out token ) )
+                    {
+                        log.StartTime = DateTime.Parse( token.ToString() );
+                    }
+
+                    // Get the End time.
+                    if ( o.TryGetValue( Log.EndTimeString, out token ) )
+                    {
+                        log.EndTime = DateTime.Parse( token.ToString() );
+                    }
+
+                    // Get the technique
+                    if ( o.TryGetValue( Log.TechniqueString, out token ) )
+                    {
+                        log.Technique = token.ToString();
+                    }
+
+                    // Get the comments
+                    if ( o.TryGetValue( Log.CommentsString, out token ) )
+                    {
+                        log.Comments = token.ToString();
+                    }
+
+                    // Get the Latitude
+                    if ( o.TryGetValue( Log.LatitudeString, out token ) )
+                    {
+                        // Try to parse the Latitude.  If fails, just make it empty.
+                        decimal lat;
+                        if ( decimal.TryParse( token.ToString(), out lat ) )
+                        {
+                            log.Latitude = lat;
+                        }
+                        else
+                        {
+                            log.Latitude = null;
+                        }
+                    }
+
+                    // Get the Longitude
+                    if ( o.TryGetValue( Log.LongitudeString, out token ) )
+                    {
+                        // Try to parse the Longitude.  If fails, just make it empty.
+                        decimal lon;
+                        if ( decimal.TryParse( token.ToString(), out lon ) )
+                        {
+                            log.Longitude = lon;
+                        }
+                        else
+                        {
+                            log.Longitude = null;
+                        }
+                    }
+
+                    DateTime creationTime = DateTime.Now.ToUniversalTime();
+
+                    // Keep looking until we have a unique creation date.
+                    while ( logBook.LogExists( creationTime ) || ( logs.Find( i => i.CreationTime == creationTime ) != null ) )
+                    {
+                        creationTime = DateTime.Now.ToUniversalTime();
+                    }
+                    log.CreationTime = creationTime;
+                    log.EditTime = creationTime;
+
+                    log.Validate();
+                    logs.Add( log );
+                } // End foreach
+            } // End using
+
+            // Last thing to do is add the new logs to the database.
+            if ( logs.Count != 0 )
+            {
+                foreach ( Log newLog in logs )
+                {
+                    sqlite.Insert( newLog );
+                }
+
+                sqlite.Commit();
             }
         }
     }

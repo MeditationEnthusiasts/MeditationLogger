@@ -32,7 +32,7 @@ namespace MedEnthLogsApi
         /// Imports logs from XML to the database.
         /// This will not repopulate the logbook itself.  You must call PopulateLogbook() to do that.
         /// </summary>
-        /// <param name="outFile">The stream the outputs the file.</param>
+        /// <param name="outFile">The stream to read the XML from.</param>
         /// <param name="logBook">The logbook to import to.</param>
         /// <param name="sqlite">The sqlite connection to import the logs to.</param>
         public static void ImportFromXml( Stream outFile, LogBook logBook, SQLiteConnection sqlite )
@@ -65,23 +65,23 @@ namespace MedEnthLogsApi
                 {
                     switch ( attr.Name )
                     {
-                        case ( "StartTime" ):
+                        case ( Log.StartTimeString ):
                             log.StartTime = DateTime.Parse( attr.Value );
                             break;
 
-                        case ( "EndTime" ):
+                        case ( Log.EndTimeString ):
                             log.EndTime = DateTime.Parse( attr.Value );
                             break;
 
-                        case ( "Technique" ):
+                        case ( Log.TechniqueString ):
                             log.Technique = attr.Value;
                             break;
 
-                        case ( "Comments" ):
+                        case ( Log.CommentsString ):
                             log.Comments = attr.Value;
                             break;
 
-                        case ( "Latitude" ):
+                        case ( Log.LatitudeString ):
                             // Try to parse the latitude.  If fails, just make it empty.
                             decimal lat;
                             if ( decimal.TryParse( attr.Value, out lat ) )
@@ -94,7 +94,7 @@ namespace MedEnthLogsApi
                             }
                             break;
 
-                        case ( "Longitude" ):
+                        case ( Log.LongitudeString ):
                             // Try to parse the Longitude.  If fails, just make it empty.
                             decimal lon;
                             if ( decimal.TryParse( attr.Value, out lon ) )
@@ -112,11 +112,11 @@ namespace MedEnthLogsApi
                 DateTime creationTime = DateTime.Now.ToUniversalTime();
 
                 // Keep looking until we have a unique creation date.
-                while ( logBook.LogExists( creationTime ) || ( logs.Find( i => i.CreateTime == creationTime ) != null ) )
+                while ( logBook.LogExists( creationTime ) || ( logs.Find( i => i.CreationTime == creationTime ) != null ) )
                 {
                     creationTime = DateTime.Now.ToUniversalTime();
                 }
-                log.CreateTime = creationTime;
+                log.CreationTime = creationTime;
                 log.EditTime = creationTime;
 
                 // Ensure the log is good.
@@ -162,42 +162,42 @@ namespace MedEnthLogsApi
 
                 // Reducing scope so I don't accidently add the wrong attribute.
                 {
-                    XmlAttribute creationTime = doc.CreateAttribute( "CreationTime" );
-                    creationTime.Value = log.CreateTime.ToString( "o" );
+                    XmlAttribute creationTime = doc.CreateAttribute( Log.CreationTimeString );
+                    creationTime.Value = log.CreationTime.ToString( "o" );
                     logNode.Attributes.Append( creationTime );
                 }
                 {
-                    XmlAttribute editTime = doc.CreateAttribute( "EditTime" );
+                    XmlAttribute editTime = doc.CreateAttribute( Log.EditTimeString );
                     editTime.Value = log.EditTime.ToString( "o" );
                     logNode.Attributes.Append( editTime );
                 }
                 {
-                    XmlAttribute startTime = doc.CreateAttribute( "StartTime" );
+                    XmlAttribute startTime = doc.CreateAttribute( Log.StartTimeString );
                     startTime.Value = log.StartTime.ToString( "o" );
                     logNode.Attributes.Append( startTime );
                 }
                 {
-                    XmlAttribute endTime = doc.CreateAttribute( "EndTime" );
+                    XmlAttribute endTime = doc.CreateAttribute( Log.EndTimeString );
                     endTime.Value = log.EndTime.ToString( "o" );
                     logNode.Attributes.Append( endTime );
                 }
                 {
-                    XmlAttribute technique = doc.CreateAttribute( "Technique" );
+                    XmlAttribute technique = doc.CreateAttribute( Log.TechniqueString );
                     technique.Value = log.Technique;
                     logNode.Attributes.Append( technique );
                 }
                 {
-                    XmlAttribute comments = doc.CreateAttribute( "Comments" );
+                    XmlAttribute comments = doc.CreateAttribute( Log.CommentsString );
                     comments.Value = log.Comments;
                     logNode.Attributes.Append( comments );
                 }
                 {
-                    XmlAttribute lat = doc.CreateAttribute( "Latitude" );
+                    XmlAttribute lat = doc.CreateAttribute( Log.LatitudeString );
                     lat.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lat );
                 }
                 {
-                    XmlAttribute lon = doc.CreateAttribute( "Longitude" );
+                    XmlAttribute lon = doc.CreateAttribute( Log.LongitudeString );
                     lon.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lon );
                 }

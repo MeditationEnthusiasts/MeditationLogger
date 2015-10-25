@@ -77,6 +77,46 @@ namespace MedEnthLogsApi
         /// </summary>
         private string technique;
 
+        /// <summary>
+        /// The string for start time when importing/exporting.
+        /// </summary>
+        public const string StartTimeString = "StartTime";
+
+        /// <summary>
+        /// The string for end time when importing/exporting.
+        /// </summary>
+        public const string EndTimeString = "EndTime";
+
+        /// <summary>
+        /// The string for creation time when importing/exporting.
+        /// </summary>
+        public const string CreationTimeString = "CreationTime";
+
+        /// <summary>
+        /// The string for edit time when importing/exporting.
+        /// </summary>
+        public const string EditTimeString = "EditTime";
+
+        /// <summary>
+        /// The string for Comments when importing/exporting.
+        /// </summary>
+        public const string CommentsString = "Comments";
+
+        /// <summary>
+        /// The string for Technique when importing/exporting.
+        /// </summary>
+        public const string TechniqueString = "Technique";
+
+        /// <summary>
+        /// The string for Latitude when importing/exporting.
+        /// </summary>
+        public const string LatitudeString = "Latitude";
+
+        /// <summary>
+        /// The string for Latitude when importing/exporting.
+        /// </summary>
+        public const string LongitudeString = "Longitude";
+
         // -------- Constructor -------
 
         /// <summary>
@@ -95,7 +135,7 @@ namespace MedEnthLogsApi
             // Make Creation time ahead of edit time, 
             // this will make the log in an invalid state, as the
             // creation time is ahead of the edit time which is not allowed.
-            this.CreateTime = DateTime.MaxValue;
+            this.CreationTime = DateTime.MaxValue;
 
             this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
@@ -140,7 +180,7 @@ namespace MedEnthLogsApi
         /// When the session was first recorded
         /// (UTC, the UI must convert it to local time).
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public DateTime CreationTime { get; set; }
 
         /// <summary>
         /// The last time this log was edited.
@@ -217,7 +257,7 @@ namespace MedEnthLogsApi
             }
 
             return
-                ( this.CreateTime == other.CreateTime ) &&
+                ( this.CreationTime == other.CreationTime ) &&
                 ( this.EditTime == other.EditTime ) &&
                 ( this.EndTime == other.EndTime ) &&
                 ( this.StartTime == other.StartTime ) &&
@@ -230,7 +270,7 @@ namespace MedEnthLogsApi
         public override string ToString()
         {
             return
-                "Creation Time: " + this.CreateTime.ToString() + Environment.NewLine +
+                "Creation Time: " + this.CreationTime.ToString() + Environment.NewLine +
                 "Edit Time: " + this.EditTime.ToString() + Environment.NewLine +
                 "Start Time: " + this.StartTime.ToString() + Environment.NewLine +
                 "End Time: " + this.EndTime.ToString() + Environment.NewLine +
@@ -249,7 +289,7 @@ namespace MedEnthLogsApi
         /// <returns>The hash code based on the creation date's hashcode.</returns>
         public override int GetHashCode()
         {
-            return CreateTime.GetHashCode();
+            return CreationTime.GetHashCode();
         }
 
         /// <summary>
@@ -266,7 +306,7 @@ namespace MedEnthLogsApi
             {
                 throw new LogValidationException( EndTimeLessThanStartTimeMessage );
             }
-            else if ( this.EditTime < this.CreateTime )
+            else if ( this.EditTime < this.CreationTime )
             {
                 throw new LogValidationException( EditTimeLessThanCreationTimeMessage );
             }

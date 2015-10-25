@@ -95,8 +95,8 @@ namespace TestCommon
             // later than the end time.
             uut.currentLog.StartTime = DateTime.MaxValue;
             uut.currentLog.EndTime = DateTime.MinValue;
-            uut.currentLog.CreateTime = DateTime.Now;
-            uut.currentLog.EditTime = uut.CurrentLog.CreateTime;
+            uut.currentLog.CreationTime = DateTime.Now;
+            uut.currentLog.EditTime = uut.CurrentLog.CreationTime;
             CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
             uut.ResetCurrentLog();
 
@@ -104,7 +104,7 @@ namespace TestCommon
             // the creationtime.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
-            uut.currentLog.CreateTime = DateTime.MaxValue;
+            uut.currentLog.CreationTime = DateTime.MaxValue;
             uut.currentLog.EditTime = DateTime.MinValue;
             CheckValidationFailed( Log.EditTimeLessThanCreationTimeMessage );
             uut.ResetCurrentLog();
@@ -113,8 +113,8 @@ namespace TestCommon
             // and create time and edit time match.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
-            uut.currentLog.CreateTime = DateTime.Now;
-            uut.currentLog.EditTime = uut.CurrentLog.CreateTime;
+            uut.currentLog.CreationTime = DateTime.Now;
+            uut.currentLog.EditTime = uut.CurrentLog.CreationTime;
             CheckValidationPassed();
             uut.ResetCurrentLog();
 
@@ -122,7 +122,7 @@ namespace TestCommon
             // and create time is less than edit time.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = DateTime.MaxValue;
-            uut.currentLog.CreateTime = DateTime.Now;
+            uut.currentLog.CreationTime = DateTime.Now;
             uut.currentLog.EditTime = DateTime.MaxValue;
             CheckValidationPassed();
             uut.ResetCurrentLog();
@@ -140,24 +140,24 @@ namespace TestCommon
 
             // Ensure the expected creation time is close to DateTime.Now;
             DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
-            TimeSpan delta = expectedCreationTime - uut.currentLog.CreateTime;
+            TimeSpan delta = expectedCreationTime - uut.currentLog.CreationTime;
             double deltaTime = delta.TotalSeconds;
             Assert.LessOrEqual( deltaTime, 5 );
 
             // Ensure start time and edit time match the creation time.
-            Assert.AreEqual( uut.CurrentLog.CreateTime, uut.CurrentLog.StartTime );
-            Assert.AreEqual( uut.CurrentLog.CreateTime, uut.CurrentLog.EditTime );
+            Assert.AreEqual( uut.CurrentLog.CreationTime, uut.CurrentLog.StartTime );
+            Assert.AreEqual( uut.CurrentLog.CreationTime, uut.CurrentLog.EditTime );
             Assert.IsTrue( uut.IsSessionInProgress );
 
             // Validation should fail, as we haven't stopped a session yet.
             CheckValidationFailed();
 
             // Calling start again should result in a no-op
-            DateTime oldTime = uut.CurrentLog.CreateTime;
+            DateTime oldTime = uut.CurrentLog.CreationTime;
             uut.StartSession( new SessionConfig() );
 
             // Ensure the times didn't change.
-            Assert.AreEqual( oldTime, uut.CurrentLog.CreateTime );
+            Assert.AreEqual( oldTime, uut.CurrentLog.CreationTime );
             Assert.AreEqual( oldTime, uut.CurrentLog.StartTime );
             Assert.AreEqual( oldTime, uut.CurrentLog.EditTime );
 
@@ -598,7 +598,7 @@ namespace TestCommon
                     Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
                     Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
                     Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
-                    Assert.GreaterOrEqual( newBook.Logs[i].CreateTime, oldBook.Logs[i].CreateTime );
+                    Assert.GreaterOrEqual( newBook.Logs[i].CreationTime, oldBook.Logs[i].CreationTime );
                     Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
                 }
             }

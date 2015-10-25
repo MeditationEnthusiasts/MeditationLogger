@@ -167,9 +167,9 @@ namespace MedEnthLogsApi
                 if ( this.IsSessionInProgress == false )
                 {
                     this.currentLog = new Log();
-                    this.currentLog.CreateTime = DateTime.Now.ToUniversalTime();
-                    this.currentLog.StartTime = this.currentLog.CreateTime;
-                    this.currentLog.EditTime = this.currentLog.CreateTime;
+                    this.currentLog.CreationTime = DateTime.Now.ToUniversalTime();
+                    this.currentLog.StartTime = this.currentLog.CreationTime;
+                    this.currentLog.EditTime = this.currentLog.CreationTime;
 
                     TimeSpan? length = config.Length;
 
@@ -325,7 +325,7 @@ namespace MedEnthLogsApi
                 case "json":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
-                        ImportFromJson( outFile );
+                        JsonExporter.ImportFromJson( outFile, this.LogBook, this.sqlite );
                     }
                     break;
                 case "mlg":
@@ -337,11 +337,6 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
-        }
-
-        private void ImportFromJson( FileStream outFile )
-        {
-            throw new NotImplementedException();
         }
 
         private void ImportFromMlg( string fileName )
