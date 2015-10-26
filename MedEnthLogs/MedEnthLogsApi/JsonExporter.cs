@@ -78,13 +78,15 @@ namespace MedEnthLogsApi
                     // Get the start time.
                     if ( o.TryGetValue( Log.StartTimeString, out token ) )
                     {
-                        log.StartTime = DateTime.Parse( token.ToString() );
+                        // ToObject will create the DateTime object for us.
+                        log.StartTime = token.ToObject<DateTime>();
                     }
 
                     // Get the End time.
                     if ( o.TryGetValue( Log.EndTimeString, out token ) )
                     {
-                        log.EndTime = DateTime.Parse( token.ToString() );
+                        // ToObject will create the DateTime object for us.
+                        log.EndTime = token.ToObject<DateTime>();
                     }
 
                     // Get the technique

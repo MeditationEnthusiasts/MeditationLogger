@@ -17,14 +17,15 @@
 //
 
 using System;
-using MedEnthLogsApi;
-using MedEnthLogsDesktop;
-using NUnit.Framework;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
-using Test.TestFiles;
+using MedEnthLogsApi;
+using MedEnthLogsDesktop;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using Test.Mocks;
+using Test.TestFiles;
 
 namespace TestCommon
 {
@@ -478,7 +479,7 @@ namespace TestCommon
 
         // ---- Xml Tests ----
         
-        // -- XML Schema Tests
+        // -- XML Schema Tests --
 
         /// <summary>
         /// Tests the XML schema with all values.
@@ -560,6 +561,202 @@ namespace TestCommon
         public void XmlExportImportTest()
         {
             const string fileName = "XmlImportExport.xml";
+            DoImportExportTest( fileName );
+        }
+
+        // -- XML import --
+
+        /// <summary>
+        /// Ensures importing an XML file without the LogBook or Log tag results in a failure,
+        /// AND the database is not updated.
+        /// </summary>
+        [Test]
+        public void XmlImportBadLogbookTest()
+        {
+            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogBook.xml" );
+            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogName.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with no start or no end time results in a failure,
+        /// AND the database is not updated.  Also ensures having StartTime > EndTime results
+        /// in a failure.
+        /// </summary>
+        [Test]
+        public void XmlImportNoStartTime()
+        {
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.xml" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.xml" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.xml" );
+        }
+
+        /// <summary>
+        /// Ensures having a missing latitude while having a longitude
+        /// (or vice vera) results in a failure.
+        /// </summary>
+        [Test]
+        public void XmlImportBadMissingLat()
+        {
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.xml" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.xml" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.xml" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with creation time > edit time results
+        /// in no error.  The reason for this is we ignore the Creation and Edit time,
+        /// and just set them to DateTime.Now.
+        /// </summary>
+        [Test]
+        public void XmlImportBadCreationEditTime()
+        {
+            DoGoodImportTest( 1, @"..\..\TestFiles\BadLogCreationEdit.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with no logs results
+        /// in no error.  Nothing is added.
+        /// </summary>
+        [Test]
+        public void XmlImportNoLogs()
+        {
+            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with just start time
+        /// and end time is valid.
+        /// </summary>
+        [Test]
+        public void XmlImportJustStartAndEnd()
+        {
+            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.xml" );
+        }
+
+        /// <summary>
+        /// Ensures importing an XML file with lat and long
+        /// set to not numbers results in no error, but both
+        /// having null values.
+        /// </summary>
+        [Test]
+        public void XmlImportBadLatLong()
+        {
+            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.xml" );
+            Assert.IsNull( uut.LogBook.Logs[0].Latitude );
+            Assert.IsNull( uut.LogBook.Logs[0].Longitude );
+        }
+
+        // ---- JSON tests ----
+
+        // -- JSON Export --
+
+        /// <summary>
+        /// Ensures the exporting and importing of
+        /// logs via XML works.
+        /// </summary>
+        [Test]
+        public void JsonExportImportTest()
+        {
+            const string fileName = "JsonImportExport.json";
+            DoImportExportTest( fileName );
+        }
+
+        // -- JSON import --
+
+        /// <summary>
+        /// Ensures importing a malformed json logbook results in failues,
+        /// and the database is not updated.
+        /// There are also cases where malformed json are okay.  Those should pass.
+        /// </summary>
+        [Test]
+        public void JsonImportMalformedJsonTest()
+        {
+            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonNoClosingArray.json" );
+            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingComma.json" );
+            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingCommaOnProperty.json" );
+            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraComma.json" );
+            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraCommaOnProperty.json" );
+        }
+
+        /// <summary>
+        /// Ensures importing a Json file with no start or no end time results in a failure,
+        /// AND the database is not updated.  Also ensures having StartTime > EndTime results
+        /// in a failure.
+        /// </summary>
+        [Test]
+        public void JsonImportNoStartTime()
+        {
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.json" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.json" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.json" );
+        }
+        
+        /// <summary>
+        /// Ensures having a missing latitude while having a longitude
+        /// (or vice vera) results in a failure.
+        /// </summary>
+        [Test]
+        public void JsonImportBadMissingLat()
+        {
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.json" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.json" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.json" );
+            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.json" );
+        }
+    
+        /// <summary>
+        /// Ensures importing a json file with creation time > edit time results
+        /// in no error.  The reason for this is we ignore the Creation and Edit time,
+        /// and just set them to DateTime.Now.
+        /// </summary>
+        [Test]
+        public void JsonImportBadCreationEditTime()
+        {
+            DoGoodImportTest( 1, @"..\..\TestFiles\BadLogCreationEdit.json" );
+        }
+
+        /// <summary>
+        /// Ensures importing a Json file with no logs results
+        /// in no error.  Nothing is added.
+        /// </summary>
+        [Test]
+        public void JsonImportNoLogs()
+        {
+            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.json" );
+        }
+
+        /// <summary>
+        /// Ensures importing a Json file with just start time
+        /// and end time is valid.
+        /// </summary>
+        [Test]
+        public void JsonImportJustStartAndEnd()
+        {
+            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.json" );
+        }
+        
+        /// <summary>
+        /// Ensures importing an XML file with lat and long
+        /// set to not numbers results in no error, but both
+        /// having null values.
+        /// </summary>
+        [Test]
+        public void JsonImportBadLatLong()
+        {
+            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.json" );
+            Assert.IsNull( uut.LogBook.Logs[0].Latitude );
+            Assert.IsNull( uut.LogBook.Logs[0].Longitude );
+        }
+
+        // -------- Test Helpers ---------
+
+        /// <summary>
+        /// Does the import/export test for the given XML/JSON/CSV file.
+        /// </summary>
+        /// <param name="fileName">The XML/JSON/CSV file to test.</param>
+        private void DoImportExportTest( string fileName )
+        {
             const string newDb = "test2.db";
             DoSaveTest();
             DoSaveTest();
@@ -569,7 +766,7 @@ namespace TestCommon
 
             LogBook oldBook = this.uut.LogBook;
 
-            // Now, create a new database, and import the xml file.
+            // Now, create a new database, and import the file file.
             // it should match the old logbook.
             uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), newDb );
             try
@@ -610,98 +807,13 @@ namespace TestCommon
             }
         }
 
-        // -- XML import --
-
         /// <summary>
-        /// Ensures importing an XML file without the LogBook or Log tag results in a failure,
-        /// AND the database is not updated.
-        /// </summary>
-        [Test]
-        public void XmlImportBadLogbookTest()
-        {
-            DoBadXmlTest<XmlException>( @"..\..\TestFiles\BadLogBook.xml" );
-            DoBadXmlTest<XmlException>( @"..\..\TestFiles\BadLogName.xml" );
-        }
-
-        /// <summary>
-        /// Ensures importing an XML file with no start or no end time results in a failure,
-        /// AND the database is not updated.  Also ensures having StartTime > EndTime results
-        /// in a failure.
-        /// </summary>
-        [Test]
-        public void XmlImportNoStartTime()
-        {
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.xml" );
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.xml" );
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.xml" );
-        }
-
-        /// <summary>
-        /// Ensures having a missing latitude while having a longitude
-        /// (or vice vera) results in a failure.
-        /// </summary>
-        [Test]
-        public void XmlImportBadMissingLat()
-        {
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingLat.xml" );
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\MissingLong.xml" );
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.xml" );
-            DoBadXmlTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.xml" );
-        }
-
-        /// <summary>
-        /// Ensures importing an XML file with creation time > edit time results
-        /// in no error.  The reason for this is we ignore the Creation and Edit time,
-        /// and just set them to DateTime.Now.
-        /// </summary>
-        [Test]
-        public void XmlImportBadCreationEditTime()
-        {
-            DoGoodXmlTest( 1, @"..\..\TestFiles\BadLogCreationEdit.xml" );
-        }
-
-        /// <summary>
-        /// Ensures importing an XML file with no logs results
-        /// in no error.  Nothing is added.
-        /// </summary>
-        [Test]
-        public void XmlImportNoLogs()
-        {
-            DoGoodXmlTest( 0, @"..\..\TestFiles\NoLogs.xml" );
-        }
-
-        /// <summary>
-        /// Ensures importing an XML file with just start time
-        /// and end time is valid.
-        /// </summary>
-        [Test]
-        public void XmlImportJustStartAndEnd()
-        {
-            DoGoodXmlTest( 5, @"..\..\TestFiles\JustStartAndEnd.xml" );
-        }
-
-        /// <summary>
-        /// Ensures importing an XML file with lat and long
-        /// set to not numbers results in no error, but both
-        /// having null values.
-        /// </summary>
-        [Test]
-        public void XmlImportBadLatLong()
-        {
-            DoGoodXmlTest( 1, @"..\..\TestFiles\InvalidLatLong.xml" );
-            Assert.IsNull( uut.LogBook.Logs[0].Latitude );
-            Assert.IsNull( uut.LogBook.Logs[0].Longitude );
-        }
-
-        // -------- Test Helpers ---------
-
-        /// <summary>
-        /// Give this function a good XML file, and it will ensure
-        /// the XML file is good since it will import everything.
+        /// Give this function a good XML/JSON/CSV file, and it will ensure
+        /// the XML/JSON/CSV  file is good since it will import everything.
         /// </summary>
         /// <param name="newElements">How many new elements are going to be added.</param>
-        /// <param name="xmlFile">The good XML file.</param>
-        private void DoGoodXmlTest( int newElements, string xmlFile )
+        /// <param name="importFile">The good XML/JSON/CSV file.</param>
+        private void DoGoodImportTest( int newElements, string importFile )
         {
             try
             {
@@ -714,7 +826,7 @@ namespace TestCommon
                 Assert.DoesNotThrow(
                     delegate ()
                     {
-                        uut.Import( xmlFile );
+                        uut.Import( importFile );
                     }
                 );
 
@@ -730,12 +842,12 @@ namespace TestCommon
         }
 
         /// <summary>
-        /// Give this function a bad XML file, and it will ensure
-        /// the XML file is bad since it will throw the given exception.
+        /// Give this function a bad XML/JSON/CSV file, and it will ensure
+        /// the XML/JSON/CSV file is bad since it will throw the given exception.
         /// </summary>
-        /// <param name="xmlFile">The bad XML file.</param>
+        /// <param name="importFile">The good XML/JSON/CSV file.</param>
         /// <typeparam name="exceptionType">The exeption that is expected to be thrown.</typeparam>
-        private void DoBadXmlTest<exceptionType>( string xmlFile ) where exceptionType : Exception
+        private void DoBadImportTest<exceptionType>( string importFile ) where exceptionType : Exception
         {
             try
             {
@@ -748,7 +860,7 @@ namespace TestCommon
                 Assert.Throws<exceptionType>(
                     delegate ()
                     {
-                        uut.Import( xmlFile );
+                        uut.Import( importFile );
                     }
                 );
 

@@ -1,0 +1,72 @@
+﻿[
+    {
+        "CreationTime": "2015-10-26T01:49:28.1004670Z",
+        "EditTime": "2015-10-26T01:49:28.1004670Z",
+        "StartTime": "2015-10-26T01:49:28.1004670Z",
+        "EndTime": "2015-10-26T01:49:28.1004670Z",
+        "Technique": "SomeTechnique4",
+        "Comments": "Some Comment4",
+        "Latitude": "4",
+        "Longitude": "4"
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:28.0260187Z",
+        "EditTime": "2015-10-26T01:49:28.0260187Z",
+        "StartTime": "2015-10-26T01:49:28.0260187Z",
+        "EndTime": "2015-10-26T01:49:28.0260187Z",
+        "Technique": "SomeTechnique3",
+        "Comments": "Some Comment3",
+        "Latitude": "3",
+        "Longitude": "3"
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:27.9536673Z",
+        "EditTime": "2015-10-26T01:49:27.9536673Z",
+        "StartTime": "2015-10-26T01:49:27.9536673Z",
+        "EndTime": "2015-10-26T01:49:27.9536673Z",
+        "Technique": "SomeTechnique2",
+        "Comments": "Some Comment2",
+        "Latitude": "2",
+        "Longitude": "2"
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:27.8779056Z",
+        "EditTime": "2015-10-26T01:49:27.8779056Z",
+        "StartTime": "2015-10-26T01:49:27.8779056Z",
+        "EndTime": "2015-10-26T01:49:27.8779056Z",
+        "Technique": "SomeTechnique1"
+        "Comments": "Some Comment1",
+        "Latitude": "1",
+        "Longitude": "1"
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:27.7794675Z",
+        "EditTime": "2015-10-26T01:49:27.7794675Z",
+        "StartTime": "2015-10-26T01:49:27.7794675Z",
+        "EndTime": "2015-10-26T01:49:27.7794675Z",
+        "Technique": "SomeTechnique0",
+        "Comments": "Some Comment0",
+        "Latitude": "0",
+        "Longitude": "0"
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:27.6897713Z",
+        "EditTime": "2015-10-26T01:49:27.6897713Z",
+        "StartTime": "2015-10-26T01:49:27.6897713Z",
+        "EndTime": "2015-10-26T01:49:27.6897713Z",
+        "Technique": "",
+        "Comments": "",
+        "Latitude": "",
+        "Longitude": ""
+    },
+    {
+        "CreationTime": "2015-10-26T01:49:27.5211979Z",
+        "EditTime": "2015-10-26T01:49:27.5221952Z",
+        "StartTime": "2015-10-26T01:49:27.5211979Z",
+        "EndTime": "2015-10-26T01:49:27.5221952Z",
+        "Technique": "",
+        "Comments": "",
+        "Latitude": "",
+        "Longitude": ""
+    }
+]

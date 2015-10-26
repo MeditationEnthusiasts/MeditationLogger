@@ -2,7 +2,7 @@
 <logbook xmlns="http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd">
     <log CreationTime="2015-09-06T00:17:13.0086652Z" EditTime="2015-09-06T00:17:13.0086652Z" StartTime="2015-09-06T00:17:13.0086652Z" EndTime="2015-09-06T00:17:13.0086652Z" Technique="SomeTechnique4" Comments="Some Comment4" Latitude="4" Longitude="4" />
     <log CreationTime="2015-09-06T00:17:12.9413448Z" EditTime="2015-09-06T00:17:12.9413448Z" StartTime="2015-09-06T00:17:12.9413448Z" EndTime="2015-09-06T00:17:12.9413448Z" Technique="SomeTechnique3" Comments="Some Comment3" Latitude="3" Longitude="3" />
-    <log CreationTime="2015-09-06T00:17:12.8755922Z" EditTime="2015-09-06T00:17:12.8755922Z" StartTime="2015-09-06T00:17:12.8755922Z" EndTime="2015-09-06T00:17:12.8755922Z" Technique="SomeTechnique2" Comments="Some Comment2" Latitude="" Longitude="2" />
+    <log CreationTime="2015-09-06T00:17:12.8755922Z" EditTime="2015-09-06T00:17:12.8755922Z" StartTime="2015-09-06T00:17:12.8755922Z" EndTime="2015-09-06T00:17:12.8755922Z" Technique="SomeTechnique2" Comments="Some Comment2" Longitude="2" />
     <log CreationTime="2015-09-06T00:17:12.8097968Z" EditTime="2015-09-06T00:17:12.8097968Z" StartTime="2015-09-06T00:17:12.8097968Z" EndTime="2015-09-06T00:17:12.8097968Z" Technique="SomeTechnique1" Comments="Some Comment1" Latitude="1" Longitude="1" />
     <log CreationTime="2015-09-06T00:17:12.6672504Z" EditTime="2015-09-06T00:17:12.6682505Z" StartTime="2015-09-06T00:17:12.6672504Z" EndTime="2015-09-06T00:17:12.6672504Z" Technique="SomeTechnique0" Comments="Some Comment0" Latitude="0" Longitude="0" />
 </logbook>

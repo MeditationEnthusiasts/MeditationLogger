@@ -45,6 +45,10 @@
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -107,11 +111,27 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="TestFiles\BadLogCreationEdit.json" />
+    <None Include="TestFiles\BadLogStartEnd.json" />
+    <None Include="TestFiles\InvalidLat.json" />
+    <None Include="TestFiles\InvalidLatLong.json" />
+    <None Include="TestFiles\InvalidLong.json" />
+    <None Include="TestFiles\JustStartAndEnd.json" />
+    <None Include="TestFiles\MalformedJsonExtraComma.json" />
+    <None Include="TestFiles\MalformedJsonExtraCommaOnProperty.json" />
+    <None Include="TestFiles\MalformedJsonMissingComma.json" />
+    <None Include="TestFiles\MalformedJsonMissingCommaOnProperty.json" />
+    <None Include="TestFiles\MissingEndTime.json" />
+    <None Include="TestFiles\MissingLat.json" />
+    <None Include="TestFiles\MissingLong.json" />
+    <None Include="TestFiles\MissingStartTime.json" />
+    <None Include="TestFiles\NoLogs.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestFiles\InvalidLatLong.xml" />
     <Content Include="TestFiles\InvalidLong.xml" />
     <Content Include="TestFiles\InvalidLat.xml" />
+    <None Include="TestFiles\MalformedJsonNoClosingArray.json" />
     <Content Include="TestFiles\MissingLong.xml" />
     <Content Include="TestFiles\MissingLat.xml" />
     <Content Include="TestFiles\BadLogStartEnd.xml" />
