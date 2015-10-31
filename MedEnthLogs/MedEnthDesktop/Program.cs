@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -42,7 +43,15 @@ namespace MedEnthLogsDesktop
             );
 
             // Use the win32 sqlite.
-            api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );
+            string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+            dbLocation = Path.Combine( dbLocation, "MeditationLoggerDesktop" );
+
+            if ( Directory.Exists( dbLocation ) == false )
+            {
+                Directory.CreateDirectory( dbLocation );
+            }
+
+            api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), Path.Combine( dbLocation, "logbook.mlg" ) );
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
