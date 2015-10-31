@@ -48,6 +48,16 @@ namespace MedEnthLogsDesktop
         {
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.Home = new System.Windows.Forms.TabPage();
+            this.HomeTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.HomeStatTable = new System.Windows.Forms.TableLayoutPanel();
+            this.LastSessionLabel = new System.Windows.Forms.Label();
+            this.TotalMinutesValueLabel = new System.Windows.Forms.Label();
+            this.TotalMinLabel = new System.Windows.Forms.Label();
+            this.LongestSessionLabel = new System.Windows.Forms.Label();
+            this.TotalSessionLabel = new System.Windows.Forms.Label();
+            this.LongestSessionValueLabel = new System.Windows.Forms.Label();
+            this.TotalSessionsValueLabel = new System.Windows.Forms.Label();
+            this.LastSessionValueLabel = new System.Windows.Forms.Label();
             this.StartTab = new System.Windows.Forms.TabPage();
             this.ChangableStartView = new System.Windows.Forms.Panel();
             this.StartButton = new System.Windows.Forms.Button();
@@ -108,18 +118,10 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.HomeTableLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.HomeStatTable = new System.Windows.Forms.TableLayoutPanel();
-            this.TotalMinLabel = new System.Windows.Forms.Label();
-            this.LongestSessionLabel = new System.Windows.Forms.Label();
-            this.TotalSessionLabel = new System.Windows.Forms.Label();
-            this.TotalMinutesValueLabel = new System.Windows.Forms.Label();
-            this.LongestSessionValueLabel = new System.Windows.Forms.Label();
-            this.TotalSessionsValueLabel = new System.Windows.Forms.Label();
-            this.LastSessionLabel = new System.Windows.Forms.Label();
-            this.LastSessionValueLabel = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
+            this.HomeTableLayout.SuspendLayout();
+            this.HomeStatTable.SuspendLayout();
             this.StartTab.SuspendLayout();
             this.LogbookView.SuspendLayout();
             this.ViewLogbookInnerTabControl.SuspendLayout();
@@ -138,8 +140,6 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
-            this.HomeTableLayout.SuspendLayout();
-            this.HomeStatTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -168,6 +168,125 @@ namespace MedEnthLogsDesktop
             this.Home.TabIndex = 0;
             this.Home.Text = "Home";
             this.Home.UseVisualStyleBackColor = true;
+            // 
+            // HomeTableLayout
+            // 
+            this.HomeTableLayout.ColumnCount = 2;
+            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.68908F));
+            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.31092F));
+            this.HomeTableLayout.Controls.Add(this.HomeStatTable, 1, 1);
+            this.HomeTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomeTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.HomeTableLayout.Name = "HomeTableLayout";
+            this.HomeTableLayout.RowCount = 2;
+            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.85906F));
+            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.14094F));
+            this.HomeTableLayout.Size = new System.Drawing.Size(595, 447);
+            this.HomeTableLayout.TabIndex = 0;
+            // 
+            // HomeStatTable
+            // 
+            this.HomeStatTable.ColumnCount = 2;
+            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.63736F));
+            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.36264F));
+            this.HomeStatTable.Controls.Add(this.LastSessionLabel, 0, 3);
+            this.HomeStatTable.Controls.Add(this.TotalMinutesValueLabel, 1, 0);
+            this.HomeStatTable.Controls.Add(this.TotalMinLabel, 0, 0);
+            this.HomeStatTable.Controls.Add(this.LongestSessionLabel, 0, 1);
+            this.HomeStatTable.Controls.Add(this.TotalSessionLabel, 0, 2);
+            this.HomeStatTable.Controls.Add(this.LongestSessionValueLabel, 1, 1);
+            this.HomeStatTable.Controls.Add(this.TotalSessionsValueLabel, 1, 2);
+            this.HomeStatTable.Controls.Add(this.LastSessionValueLabel, 1, 3);
+            this.HomeStatTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomeStatTable.Location = new System.Drawing.Point(138, 131);
+            this.HomeStatTable.Name = "HomeStatTable";
+            this.HomeStatTable.RowCount = 4;
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HomeStatTable.Size = new System.Drawing.Size(454, 313);
+            this.HomeStatTable.TabIndex = 0;
+            // 
+            // LastSessionLabel
+            // 
+            this.LastSessionLabel.AutoSize = true;
+            this.LastSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LastSessionLabel.Location = new System.Drawing.Point(3, 234);
+            this.LastSessionLabel.Name = "LastSessionLabel";
+            this.LastSessionLabel.Size = new System.Drawing.Size(144, 25);
+            this.LastSessionLabel.TabIndex = 6;
+            this.LastSessionLabel.Text = "Last Session:";
+            // 
+            // TotalMinutesValueLabel
+            // 
+            this.TotalMinutesValueLabel.AutoSize = true;
+            this.TotalMinutesValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalMinutesValueLabel.Location = new System.Drawing.Point(196, 0);
+            this.TotalMinutesValueLabel.Name = "TotalMinutesValueLabel";
+            this.TotalMinutesValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.TotalMinutesValueLabel.TabIndex = 3;
+            this.TotalMinutesValueLabel.Text = "Loading...";
+            // 
+            // TotalMinLabel
+            // 
+            this.TotalMinLabel.AutoSize = true;
+            this.TotalMinLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalMinLabel.Location = new System.Drawing.Point(3, 0);
+            this.TotalMinLabel.Name = "TotalMinLabel";
+            this.TotalMinLabel.Size = new System.Drawing.Size(150, 25);
+            this.TotalMinLabel.TabIndex = 0;
+            this.TotalMinLabel.Text = "Total Minutes:";
+            // 
+            // LongestSessionLabel
+            // 
+            this.LongestSessionLabel.AutoSize = true;
+            this.LongestSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LongestSessionLabel.Location = new System.Drawing.Point(3, 78);
+            this.LongestSessionLabel.Name = "LongestSessionLabel";
+            this.LongestSessionLabel.Size = new System.Drawing.Size(180, 25);
+            this.LongestSessionLabel.TabIndex = 1;
+            this.LongestSessionLabel.Text = "Longest Session:";
+            // 
+            // TotalSessionLabel
+            // 
+            this.TotalSessionLabel.AutoSize = true;
+            this.TotalSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalSessionLabel.Location = new System.Drawing.Point(3, 156);
+            this.TotalSessionLabel.Name = "TotalSessionLabel";
+            this.TotalSessionLabel.Size = new System.Drawing.Size(163, 25);
+            this.TotalSessionLabel.TabIndex = 2;
+            this.TotalSessionLabel.Text = "Total Sessions:";
+            // 
+            // LongestSessionValueLabel
+            // 
+            this.LongestSessionValueLabel.AutoSize = true;
+            this.LongestSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LongestSessionValueLabel.Location = new System.Drawing.Point(196, 78);
+            this.LongestSessionValueLabel.Name = "LongestSessionValueLabel";
+            this.LongestSessionValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.LongestSessionValueLabel.TabIndex = 4;
+            this.LongestSessionValueLabel.Text = "Loading...";
+            // 
+            // TotalSessionsValueLabel
+            // 
+            this.TotalSessionsValueLabel.AutoSize = true;
+            this.TotalSessionsValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalSessionsValueLabel.Location = new System.Drawing.Point(196, 156);
+            this.TotalSessionsValueLabel.Name = "TotalSessionsValueLabel";
+            this.TotalSessionsValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.TotalSessionsValueLabel.TabIndex = 5;
+            this.TotalSessionsValueLabel.Text = "Loading...";
+            // 
+            // LastSessionValueLabel
+            // 
+            this.LastSessionValueLabel.AutoSize = true;
+            this.LastSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LastSessionValueLabel.Location = new System.Drawing.Point(196, 234);
+            this.LastSessionValueLabel.Name = "LastSessionValueLabel";
+            this.LastSessionValueLabel.Size = new System.Drawing.Size(97, 25);
+            this.LastSessionValueLabel.TabIndex = 7;
+            this.LastSessionValueLabel.Text = "Loading...";
             // 
             // StartTab
             // 
@@ -260,7 +379,6 @@ namespace MedEnthLogsDesktop
             // 
             // MapViewBrowser
             // 
-            this.MapViewBrowser.AllowNavigation = false;
             this.MapViewBrowser.AllowWebBrowserDrop = false;
             this.MapViewBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MapViewBrowser.Location = new System.Drawing.Point(3, 3);
@@ -825,125 +943,6 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // HomeTableLayout
-            // 
-            this.HomeTableLayout.ColumnCount = 2;
-            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.68908F));
-            this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.31092F));
-            this.HomeTableLayout.Controls.Add(this.HomeStatTable, 1, 1);
-            this.HomeTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HomeTableLayout.Location = new System.Drawing.Point(3, 3);
-            this.HomeTableLayout.Name = "HomeTableLayout";
-            this.HomeTableLayout.RowCount = 2;
-            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.85906F));
-            this.HomeTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.14094F));
-            this.HomeTableLayout.Size = new System.Drawing.Size(595, 447);
-            this.HomeTableLayout.TabIndex = 0;
-            // 
-            // HomeStatTable
-            // 
-            this.HomeStatTable.ColumnCount = 2;
-            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.63736F));
-            this.HomeStatTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.36264F));
-            this.HomeStatTable.Controls.Add(this.LastSessionLabel, 0, 3);
-            this.HomeStatTable.Controls.Add(this.TotalMinutesValueLabel, 1, 0);
-            this.HomeStatTable.Controls.Add(this.TotalMinLabel, 0, 0);
-            this.HomeStatTable.Controls.Add(this.LongestSessionLabel, 0, 1);
-            this.HomeStatTable.Controls.Add(this.TotalSessionLabel, 0, 2);
-            this.HomeStatTable.Controls.Add(this.LongestSessionValueLabel, 1, 1);
-            this.HomeStatTable.Controls.Add(this.TotalSessionsValueLabel, 1, 2);
-            this.HomeStatTable.Controls.Add(this.LastSessionValueLabel, 1, 3);
-            this.HomeStatTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HomeStatTable.Location = new System.Drawing.Point(137, 131);
-            this.HomeStatTable.Name = "HomeStatTable";
-            this.HomeStatTable.RowCount = 4;
-            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.HomeStatTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.HomeStatTable.Size = new System.Drawing.Size(455, 313);
-            this.HomeStatTable.TabIndex = 0;
-            // 
-            // TotalMinLabel
-            // 
-            this.TotalMinLabel.AutoSize = true;
-            this.TotalMinLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotalMinLabel.Location = new System.Drawing.Point(3, 0);
-            this.TotalMinLabel.Name = "TotalMinLabel";
-            this.TotalMinLabel.Size = new System.Drawing.Size(150, 25);
-            this.TotalMinLabel.TabIndex = 0;
-            this.TotalMinLabel.Text = "Total Minutes:";
-            // 
-            // LongestSessionLabel
-            // 
-            this.LongestSessionLabel.AutoSize = true;
-            this.LongestSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LongestSessionLabel.Location = new System.Drawing.Point(3, 78);
-            this.LongestSessionLabel.Name = "LongestSessionLabel";
-            this.LongestSessionLabel.Size = new System.Drawing.Size(180, 25);
-            this.LongestSessionLabel.TabIndex = 1;
-            this.LongestSessionLabel.Text = "Longest Session:";
-            // 
-            // TotalSessionLabel
-            // 
-            this.TotalSessionLabel.AutoSize = true;
-            this.TotalSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotalSessionLabel.Location = new System.Drawing.Point(3, 156);
-            this.TotalSessionLabel.Name = "TotalSessionLabel";
-            this.TotalSessionLabel.Size = new System.Drawing.Size(163, 25);
-            this.TotalSessionLabel.TabIndex = 2;
-            this.TotalSessionLabel.Text = "Total Sessions:";
-            // 
-            // TotalMinutesValueLabel
-            // 
-            this.TotalMinutesValueLabel.AutoSize = true;
-            this.TotalMinutesValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotalMinutesValueLabel.Location = new System.Drawing.Point(196, 0);
-            this.TotalMinutesValueLabel.Name = "TotalMinutesValueLabel";
-            this.TotalMinutesValueLabel.Size = new System.Drawing.Size(97, 25);
-            this.TotalMinutesValueLabel.TabIndex = 3;
-            this.TotalMinutesValueLabel.Text = "Loading...";
-            // 
-            // LongestSessionValueLabel
-            // 
-            this.LongestSessionValueLabel.AutoSize = true;
-            this.LongestSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LongestSessionValueLabel.Location = new System.Drawing.Point(196, 78);
-            this.LongestSessionValueLabel.Name = "LongestSessionValueLabel";
-            this.LongestSessionValueLabel.Size = new System.Drawing.Size(97, 25);
-            this.LongestSessionValueLabel.TabIndex = 4;
-            this.LongestSessionValueLabel.Text = "Loading...";
-            // 
-            // TotalSessionsValueLabel
-            // 
-            this.TotalSessionsValueLabel.AutoSize = true;
-            this.TotalSessionsValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotalSessionsValueLabel.Location = new System.Drawing.Point(196, 156);
-            this.TotalSessionsValueLabel.Name = "TotalSessionsValueLabel";
-            this.TotalSessionsValueLabel.Size = new System.Drawing.Size(97, 25);
-            this.TotalSessionsValueLabel.TabIndex = 5;
-            this.TotalSessionsValueLabel.Text = "Loading...";
-            // 
-            // LastSessionLabel
-            // 
-            this.LastSessionLabel.AutoSize = true;
-            this.LastSessionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LastSessionLabel.Location = new System.Drawing.Point(3, 234);
-            this.LastSessionLabel.Name = "LastSessionLabel";
-            this.LastSessionLabel.Size = new System.Drawing.Size(144, 25);
-            this.LastSessionLabel.TabIndex = 6;
-            this.LastSessionLabel.Text = "Last Session:";
-            // 
-            // LastSessionValueLabel
-            // 
-            this.LastSessionValueLabel.AutoSize = true;
-            this.LastSessionValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LastSessionValueLabel.Location = new System.Drawing.Point(196, 234);
-            this.LastSessionValueLabel.Name = "LastSessionValueLabel";
-            this.LastSessionValueLabel.Size = new System.Drawing.Size(97, 25);
-            this.LastSessionValueLabel.TabIndex = 7;
-            this.LastSessionValueLabel.Text = "Loading...";
-            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -957,6 +956,9 @@ namespace MedEnthLogsDesktop
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainTabControl.ResumeLayout(false);
             this.Home.ResumeLayout(false);
+            this.HomeTableLayout.ResumeLayout(false);
+            this.HomeStatTable.ResumeLayout(false);
+            this.HomeStatTable.PerformLayout();
             this.StartTab.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
             this.ViewLogbookInnerTabControl.ResumeLayout(false);
@@ -982,9 +984,6 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
-            this.HomeTableLayout.ResumeLayout(false);
-            this.HomeStatTable.ResumeLayout(false);
-            this.HomeStatTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
