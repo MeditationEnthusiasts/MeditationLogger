@@ -3,15 +3,27 @@
 	<Product Id="8D6DB59C-8EB1-4BC7-91F8-51D8D6068825" Name="Meditation Logger" Language="1033" Version="1.0.0" Manufacturer="Meditation Enthusiasts" UpgradeCode="3816E4DB-68AA-4A70-B755-C35A0DCC9946">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
+        <!-- UI Stuff -->
+        
+        <UIRef Id="WixUI_FeatureTree"/>
+        <UIRef Id="WixUI_ErrorProgressText" />
+        
+        <!-- Found from https://www.firegiant.com/wix/tutorial/user-interface/ui-wizardry/ -->
+        <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+        <!--
+        <WixVariable Id="WixUIBannerBmp" Value="path\banner.bmp" />
+        <WixVariable Id="WixUIDialogBmp" Value="path\dialog.bmp" />
+        <WixVariable Id="WixUIExclamationIco" Value="path\exclamation.ico" />
+        <WixVariable Id="WixUIInfoIco" Value="path\information.ico" />
+        <WixVariable Id="WixUINewIco" Value="path\new.ico" />
+        <WixVariable Id="WixUIUpIco" Value="path\up.ico" />
+        -->
+        
 		<MajorUpgrade DowngradeErrorMessage="A newer version of Meditation Logger is already installed." />
 		<MediaTemplate />
-
-		<Feature Id="ProductFeature" Title="Program" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
-
-	<Fragment>
+        
+        <!-- Directories to create -->
+            
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
                 <Directory Id="Meditation_Enthusiasts" Name="Meditation Enthusiasts">
@@ -25,9 +37,8 @@
             <Directory Id="DesktopFolder"/>
             <Directory Id="ProgramMenuFolder"/>
 		</Directory>
-	</Fragment>
 
-	<Fragment>
+        <!-- Files -->
 		<ComponentGroup Id="ProductComponents">
 			<Component Id="Program" Guid="5D42C466-53D5-41E5-91F3-F3E69ABF4E58" Directory="INSTALLFOLDER">
                 <RemoveFolder Id="INSTALLFOLDER" On="both"/>
@@ -55,5 +66,10 @@
                 <File Id="x64SqliteInteropDll" Name="SQLite.Interop.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\x64\SQLite.Interop.dll"/>
             </Component>
 		</ComponentGroup>
-	</Fragment>
+    
+        <!-- Features -->       
+        <Feature Id="Complete" Title="Meditation Logger" Description="Install the program" Display="expand" Level="1" ConfigurableDirectory="INSTALLFOLDER" AllowAdvertise="no" Absent="disallow">
+            <ComponentGroupRef Id="ProductComponents"/>
+        </Feature>
+	</Product>
 </Wix>
