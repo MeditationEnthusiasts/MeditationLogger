@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="8D6DB59C-8EB1-4BC7-91F8-51D8D6068825" Name="Meditation Logger" Language="1033" Version="1.0.0" Manufacturer="Meditation Enthusiasts" UpgradeCode="3816E4DB-68AA-4A70-B755-C35A0DCC9946">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of Meditation Logger is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="Program" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+                <Directory Id="Meditation_Enthusiasts" Name="Meditation Enthusiasts">
+				    <Directory Id="INSTALLFOLDER" Name="Meditation Logger">
+                        <Directory Id="mediaFolder" Name="media"/>
+                        <Directory Id="x86Folder" Name="x86"/>
+                        <Directory Id="x64Folder" Name="x64"/>
+                    </Directory>
+                </Directory>
+			</Directory>
+            <Directory Id="DesktopFolder"/>
+            <Directory Id="ProgramMenuFolder"/>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+			<Component Id="Program" Guid="5D42C466-53D5-41E5-91F3-F3E69ABF4E58" Directory="INSTALLFOLDER">
+                <RemoveFolder Id="INSTALLFOLDER" On="both"/>
+                <File Id="GuiExe" Name="MedEnthDesktop.exe" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\MedEnthDesktop.exe" KeyPath="yes">
+                    <Shortcut Id="GuiStartShortcut" Name="Meditation Logger" Directory="ProgramMenuFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes"/>
+                    <Shortcut Id="GuiDesktopShortcut" Name="Meditation Logger" Directory="DesktopFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes"/>
+                </File>
+                <File Id="CliExe" Name="MedEnthLogsCli.exe" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\MedEnthLogsCli.exe"/>
+                <File Id="LicenseTxt" Name="LICENSE.txt" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\LICENSE.txt"/>
+                <File Id="CreditsTxt" Name="CREDITS.txt" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\CREDITS.txt"/>
+                <File Id="NAudioDll" Name="NAudio.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\NAudio.dll"/>
+                <File Id="JSonDll" Name="Newtonsoft.Json.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\Newtonsoft.Json.dll"/>
+                <File Id="SqliteDll" Name="SQLite.Net.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\SQLite.Net.dll"/>
+                <File Id="SqlitePlatformDll" Name="SQLite.Net.Platform.Generic.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\SQLite.Net.Platform.Generic.dll"/>
+                <File Id="SqliteWin32Dll" Name="SQLite.Net.Platform.Win32.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\SQLite.Net.Platform.Win32.dll"/>
+                <File Id="SqliteDataDll" Name="System.Data.SQLite.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\System.Data.SQLite.dll"/>
+			</Component>
+            <Component Id="Media" Guid="7506520D-A2B3-4946-806C-517CD528E83C" Directory="mediaFolder">
+                <File Id="MarkerIcon" Name="marker-icon.png" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\media\marker-icon.png"/>
+            </Component>
+            <Component Id="x86Components" Guid="F6E635FD-9F23-4F18-B980-B704A470910A" Directory="x86Folder">
+                <File Id="x86SqliteInteropDll" Name="SQLite.Interop.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\x86\SQLite.Interop.dll"/>
+            </Component>
+            <Component Id="x64Components" Guid="2480B3C6-9A57-4D0F-809B-CF2D765EE22A" Directory="x64Folder">
+                <File Id="x64SqliteInteropDll" Name="SQLite.Interop.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\x64\SQLite.Interop.dll"/>
+            </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
