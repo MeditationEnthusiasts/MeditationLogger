@@ -29,6 +29,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MedEnthDesktop;
+using MedEnthDesktop.Properties;
 using MedEnthLogsApi;
 
 namespace MedEnthLogsDesktop
@@ -113,10 +114,14 @@ namespace MedEnthLogsDesktop
 <head>
     <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
     <link type=""text/css"" rel=""stylesheet"" href=""" + exeDirectory + @"/html/css/leaflet.css""/>
-    <script src=""" + exeDirectory + @"/html/js/leaflet.js""></script>
     <title>Meditation Map</title>
+    <style>
+    " + Resources.leaflet_css + @"
+    </style>
     <!-- Plug in the map information -->
     <script type = ""text/javascript"">
+        " + Resources.leaflet_js + @"
+
         window.onload=function()
         {
             // Create Map
@@ -139,7 +144,7 @@ namespace MedEnthLogsDesktop
 
             // Create the icon.
             var icon = L.icon({
-                iconUrl: """ + exeDirectory + @"/html/media/marker-icon.png"",
+                iconUrl: """ + exeDirectory + @"/media/marker-icon.png"",
                 iconSize: [25, 41],
                 iconAnchor:[12.5, 41],
                 popupAnchor:[0, -30]
