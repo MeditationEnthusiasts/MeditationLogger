@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    
+    <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
 	<Product Id="8D6DB59C-8EB1-4BC7-91F8-51D8D6068825" Name="Meditation Logger" Language="1033" Version="1.0.0" Manufacturer="Meditation Enthusiasts" UpgradeCode="3816E4DB-68AA-4A70-B755-C35A0DCC9946">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -39,12 +41,15 @@
 		</Directory>
 
         <!-- Files -->
+        <Icon Id="mainLogo.ico" SourceFile="..\MedEnthDesktop\media\mainlogo.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="mainLogo.ico" />
+
 		<ComponentGroup Id="ProductComponents">
 			<Component Id="Program" Guid="5D42C466-53D5-41E5-91F3-F3E69ABF4E58" Directory="INSTALLFOLDER">
                 <RemoveFolder Id="INSTALLFOLDER" On="both"/>
                 <File Id="GuiExe" Name="MedEnthDesktop.exe" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\MedEnthDesktop.exe" KeyPath="yes">
-                    <Shortcut Id="GuiStartShortcut" Name="Meditation Logger" Directory="ProgramMenuFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes"/>
-                    <Shortcut Id="GuiDesktopShortcut" Name="Meditation Logger" Directory="DesktopFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes"/>
+                    <Shortcut Id="GuiStartShortcut" Name="Meditation Logger" Directory="ProgramMenuFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes" Icon="mainLogo.ico"/>
+                    <Shortcut Id="GuiDesktopShortcut" Name="Meditation Logger" Directory="DesktopFolder" WorkingDirectory="INSTALLDIR" IconIndex="0" Advertise="yes" Icon="mainLogo.ico"/>
                 </File>
                 <File Id="CliExe" Name="MedEnthLogsCli.exe" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\MedEnthLogsCli.exe"/>
                 <File Id="LicenseTxt" Name="LICENSE.txt" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\LICENSE.txt"/>
