@@ -29,10 +29,10 @@ namespace MedEnthLogsApi
         // -------- Fields --------
 
         /// <summary>
-        /// Table of logs whose key is the creation time of the logs.
+        /// Table of logs whose key is the guid of the logs.
         /// Useful for quick lookups to see if a log exists.
         /// </summary>
-        private Dictionary<DateTime, ILog> logTable;
+        private Dictionary<Guid, ILog> logTable;
 
         /// <summary>
         /// A list of logs in the order from which the start time is,
@@ -50,7 +50,7 @@ namespace MedEnthLogsApi
         /// the logs parameter.  If you want the logbook to contain copies,
         /// create a new list with copies and pass that list in.
         /// 
-        /// Note, if any logs have conflicting CreationDates, the one that appears
+        /// Note, if any logs have conflicting guids, the one that appears
         /// later in the list will be saved, and the older one discarded.
         /// Please ensure you check for this before calling this if you
         /// want to keep both.
@@ -59,10 +59,10 @@ namespace MedEnthLogsApi
         public LogBook( IList<ILog> logs )
         {
             // Populate Dictionary.
-            this.logTable = new Dictionary<DateTime, ILog>();
+            this.logTable = new Dictionary<Guid, ILog>();
             foreach ( ILog log in logs )
             {
-                logTable[log.CreationTime] = log;
+                logTable[log.Guid] = log;
             }
 
             // Sort the logs.
@@ -109,25 +109,25 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Checks to see if a log exists based on
-        /// The creation time.
+        /// the Guid.
         /// </summary>
-        /// <param name="creationTime">The time to check.</param>
+        /// <param name="guid">The Guid to check.</param>
         /// <returns>True if the log exists, else false.</returns>
-        public bool LogExists( DateTime creationTime )
+        public bool LogExists( Guid guid )
         {
-            return this.logTable.ContainsKey( creationTime );
+            return this.logTable.ContainsKey( guid );
         }
 
         /// <summary>
-        /// Returns the reference to a log based on the creation time.
+        /// Returns the reference to a log based on the Guid.
         /// 
         /// Throws KeyNotFoundException if time does not exist.
         /// </summary>
-        /// <param name="creationTime">The creation time that should contain the log.</param>
-        /// <returns>The log that was created at the specified time.</returns>
-        public ILog GetLog( DateTime creationTime )
+        /// <param name="guid">The Guid to check.</param>
+        /// <returns>The with the given guid.</returns>
+        public ILog GetLog( Guid guid )
         {
-            return logTable[creationTime];
+            return logTable[guid];
         }
     }
 }

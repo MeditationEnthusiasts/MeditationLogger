@@ -39,7 +39,7 @@ namespace MedEnthLogsApi
                 foreach ( Log log in logBook.Logs )
                 {
                     JObject o = new JObject();
-                    o[Log.CreationTimeString] = log.CreationTime.ToString( "o" );
+                    o[Log.GuidString] = log.Guid.ToString();
                     o[Log.EditTimeString] = log.EditTime.ToString( "o" );
                     o[Log.StartTimeString] = log.StartTime.ToString( "o" );
                     o[Log.EndTimeString] = log.EndTime.ToString( "o" );
@@ -131,15 +131,17 @@ namespace MedEnthLogsApi
                         }
                     }
 
-                    DateTime creationTime = DateTime.Now.ToUniversalTime();
+                    // We ignore GUID and Edit time in the file,
+                    // and create them here.
+                    Guid guid = Guid.NewGuid();
 
-                    // Keep looking until we have a unique creation date.
-                    while ( logBook.LogExists( creationTime ) || ( logs.Find( i => i.CreationTime == creationTime ) != null ) )
+                    // Keep looking until we have a unique guid.
+                    while ( logBook.LogExists( guid ) || ( logs.Find( i => i.Guid == guid ) != null ) )
                     {
-                        creationTime = DateTime.Now.ToUniversalTime();
+                        guid = Guid.NewGuid();
                     }
-                    log.CreationTime = creationTime;
-                    log.EditTime = creationTime;
+                    log.Guid = guid;
+                    log.EditTime = DateTime.Now;
 
                     log.Validate();
                     logs.Add( log );

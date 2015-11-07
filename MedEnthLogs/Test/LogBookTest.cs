@@ -45,23 +45,19 @@ namespace TestCommon
             log1 = new Log();
             log1.StartTime = new DateTime( 2015, 1, 1, 0, 0, 0 );
             log1.EndTime = log1.StartTime + new TimeSpan( 1, 0, 0 );
-            log1.CreationTime = log1.StartTime;
 
             log2 = new Log();
             log2.StartTime = new DateTime( 2015, 1, 2, 0, 0, 0 );
             log2.EndTime = log2.StartTime + new TimeSpan( 2, 0, 0 );
-            log2.CreationTime = log2.StartTime;
 
             log3 = new Log();
             log3.StartTime = new DateTime( 2015, 1, 3, 0, 0, 0 );
             log3.EndTime = log3.StartTime + new TimeSpan( 3, 0, 0 );
-            log3.CreationTime = log3.StartTime;
 
             // Make log4 the most recent, and have the longest session.
             log4 = new Log();
             log4.StartTime = new DateTime( 2015, 1, 4, 0, 0, 0 );
             log4.EndTime = log4.StartTime + new TimeSpan( 4, 0, 0 );
-            log4.CreationTime = log4.StartTime;
 
             expectedTotalTime = log1.Duration.TotalMinutes +
                                 log2.Duration.TotalMinutes +
@@ -107,10 +103,10 @@ namespace TestCommon
             Assert.AreEqual( log1, uut.Logs[3] );
 
             // Ensure all logs exist.
-            Assert.IsTrue( uut.LogExists( log1.CreationTime ) );
-            Assert.IsTrue( uut.LogExists( log2.CreationTime ) );
-            Assert.IsTrue( uut.LogExists( log3.CreationTime ) );
-            Assert.IsTrue( uut.LogExists( log4.CreationTime ) );
+            Assert.IsTrue( uut.LogExists( log1.Guid ) );
+            Assert.IsTrue( uut.LogExists( log2.Guid ) );
+            Assert.IsTrue( uut.LogExists( log3.Guid ) );
+            Assert.IsTrue( uut.LogExists( log4.Guid ) );
 
             // Ensure the total time and longest time are what they should be.
             Assert.AreEqual( this.expectedTotalTime, uut.TotalTime, 1.0 );
@@ -118,14 +114,14 @@ namespace TestCommon
         }
 
         /// <summary>
-        /// Ensures a conflicting creation date results in the
+        /// Ensures a conflicting guid results in the
         /// last one in the list gets saved.
         /// </summary>
         [Test]
-        public void ConflictingCreationDateTest()
+        public void ConflictingGuidTest()
         {
             // Make conflict.
-            log2.CreationTime = log1.CreationTime;
+            log2.Guid = log1.Guid;
 
             List<ILog> logs = new List<ILog> { log1, log2 };
 
@@ -136,7 +132,7 @@ namespace TestCommon
             Assert.AreEqual( log2, uut.Logs[0] );
 
             // Ensure log exists.
-            Assert.IsTrue( uut.LogExists( log2.CreationTime ) );
+            Assert.IsTrue( uut.LogExists( log2.Guid ) );
         }
 
         /// <summary>
@@ -150,8 +146,8 @@ namespace TestCommon
 
             LogBook uut = new LogBook( logs );
 
-            Assert.IsTrue( uut.LogExists( log1.CreationTime ) );
-            Assert.IsFalse( uut.LogExists( log2.CreationTime ) );
+            Assert.IsTrue( uut.LogExists( log1.Guid ) );
+            Assert.IsFalse( uut.LogExists( log2.Guid ) );
         }
 
         /// <summary>
@@ -167,7 +163,7 @@ namespace TestCommon
 
             // Ensure when we get log 1, the logs match
             // and the reference is the same.
-            Log log1Clone = uut.GetLog( log1.CreationTime ) as Log;
+            Log log1Clone = uut.GetLog( log1.Guid ) as Log;
             Assert.AreEqual( log1, log1Clone );
             Assert.AreSame( log1, log1Clone );
 
@@ -176,7 +172,7 @@ namespace TestCommon
             Assert.Catch<KeyNotFoundException>(
                 delegate ()
                 {
-                    uut.GetLog( log2.CreationTime );
+                    uut.GetLog( log2.Guid );
                 }
             );
         }

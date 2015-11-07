@@ -50,13 +50,6 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Error message that appears
-        /// in validate if the edit time is less than the creation time.
-        /// internal for unit tests.
-        /// </summary>
-        internal const string EditTimeLessThanCreationTimeMessage = "Log edit Time is less than the creation time.";
-
-        /// <summary>
-        /// Error message that appears
         /// if the latitude is set on the log, but not the longitude.
         /// </summary>
         internal const string LatitudeSetNoLongitude = "Latitude set on log, but not longitude";
@@ -88,9 +81,9 @@ namespace MedEnthLogsApi
         public const string EndTimeString = "EndTime";
 
         /// <summary>
-        /// The string for creation time when importing/exporting.
+        /// The string for Guid when importing/exporting.
         /// </summary>
-        public const string CreationTimeString = "CreationTime";
+        public const string GuidString = "Guid";
 
         /// <summary>
         /// The string for edit time when importing/exporting.
@@ -132,10 +125,7 @@ namespace MedEnthLogsApi
             // start time is ahead of the end time which is not allowed.
             this.StartTime = DateTime.MaxValue;
 
-            // Make Creation time ahead of edit time, 
-            // this will make the log in an invalid state, as the
-            // creation time is ahead of the edit time which is not allowed.
-            this.CreationTime = DateTime.MaxValue;
+            this.Guid = Guid.NewGuid();
 
             this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
@@ -177,10 +167,9 @@ namespace MedEnthLogsApi
         public DateTime EndTime { get; set; }
 
         /// <summary>
-        /// When the session was first recorded
-        /// (UTC, the UI must convert it to local time).
+        /// Unique GUID for the log objet.
         /// </summary>
-        public DateTime CreationTime { get; set; }
+        public Guid Guid { get; set; }
 
         /// <summary>
         /// The last time this log was edited.
@@ -243,7 +232,7 @@ namespace MedEnthLogsApi
         // -------- Functions --------
 
         /// <summary>
-        /// Returns true if ALL properties EXCEPT for ID match.
+        /// Returns true if ALL properties EXCEPT for ID and GUID match.
         /// Useful to tell if two logs from two different databases match.
         /// </summary>
         /// <param name="obj">The other object to compare.</param>
@@ -257,7 +246,6 @@ namespace MedEnthLogsApi
             }
 
             return
-                ( this.CreationTime == other.CreationTime ) &&
                 ( this.EditTime == other.EditTime ) &&
                 ( this.EndTime == other.EndTime ) &&
                 ( this.StartTime == other.StartTime ) &&
@@ -270,7 +258,7 @@ namespace MedEnthLogsApi
         public override string ToString()
         {
             return
-                "Creation Time: " + this.CreationTime.ToString() + Environment.NewLine +
+                "Guid: " + this.Guid.ToString() + Environment.NewLine +
                 "Edit Time: " + this.EditTime.ToString() + Environment.NewLine +
                 "Start Time: " + this.StartTime.ToString() + Environment.NewLine +
                 "End Time: " + this.EndTime.ToString() + Environment.NewLine +
@@ -282,21 +270,20 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Returns the hash code.
-        /// The hash code is based on the Creation Date of the Log.
-        /// There can never be two logs with the same creation date in a log book,
-        /// making the create time the best candidate to use for the hash code.
+        /// The hash code is based on the Guid of the Log.
+        /// There can never be two logs with the same Guid in a log book,
+        /// making the guid the best candidate to use for the hash code.
         /// </summary>
-        /// <returns>The hash code based on the creation date's hashcode.</returns>
+        /// <returns>The hash code based on the Guid's hashcode.</returns>
         public override int GetHashCode()
         {
-            return CreationTime.GetHashCode();
+            return Guid.GetHashCode();
         }
 
         /// <summary>
         /// Ensures the log is in a good state.  Should be called before saving it.
         /// Throws LogValidationException if:
         /// Start time > End Time.
-        /// Creation Time > Edit Time.
         /// Latitude exists, longitude does not.
         /// Longitude exists, latitude does not. 
         /// </summary>
@@ -305,10 +292,6 @@ namespace MedEnthLogsApi
             if ( this.EndTime < this.StartTime )
             {
                 throw new LogValidationException( EndTimeLessThanStartTimeMessage );
-            }
-            else if ( this.EditTime < this.CreationTime )
-            {
-                throw new LogValidationException( EditTimeLessThanCreationTimeMessage );
             }
             else if ( ( this.Latitude == null ) && ( this.Longitude != null ) )
             {
@@ -322,6 +305,7 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Returns a Clone of this object.
+        /// Note, this means the Guid will be the same on the original and the clone.
         /// </summary>
         /// <returns>A clone of this object.</returns>
         public Log Clone()

@@ -96,35 +96,19 @@ namespace TestCommon
             // later than the end time.
             uut.currentLog.StartTime = DateTime.MaxValue;
             uut.currentLog.EndTime = DateTime.MinValue;
-            uut.currentLog.CreationTime = DateTime.Now;
-            uut.currentLog.EditTime = uut.CurrentLog.CreationTime;
+
             CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
             uut.ResetCurrentLog();
 
-            // Ensure it doesn't validate if the edit time is less than
-            // the creationtime.
+            // Ensure everything validates if start time and end time.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
-            uut.currentLog.CreationTime = DateTime.MaxValue;
-            uut.currentLog.EditTime = DateTime.MinValue;
-            CheckValidationFailed( Log.EditTimeLessThanCreationTimeMessage );
-            uut.ResetCurrentLog();
-
-            // Ensure everything validates if start time and end time match
-            // and create time and edit time match.
-            uut.currentLog.StartTime = DateTime.Now;
-            uut.currentLog.EndTime = uut.CurrentLog.StartTime;
-            uut.currentLog.CreationTime = DateTime.Now;
-            uut.currentLog.EditTime = uut.CurrentLog.CreationTime;
             CheckValidationPassed();
             uut.ResetCurrentLog();
 
-            // Ensure everything validates if start time is less than end time
-            // and create time is less than edit time.
+            // Ensure everything validates if start time is less than end time.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = DateTime.MaxValue;
-            uut.currentLog.CreationTime = DateTime.Now;
-            uut.currentLog.EditTime = DateTime.MaxValue;
             CheckValidationPassed();
             uut.ResetCurrentLog();
         }
@@ -139,26 +123,24 @@ namespace TestCommon
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.IsFalse( mockAudio.IsPlaying ); // Default setting passed in, should not be playing.
 
-            // Ensure the expected creation time is close to DateTime.Now;
+            // Ensure the expected edit time is close to DateTime.Now;
             DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
-            TimeSpan delta = expectedCreationTime - uut.currentLog.CreationTime;
+            TimeSpan delta = expectedCreationTime - uut.currentLog.EditTime;
             double deltaTime = delta.TotalSeconds;
             Assert.LessOrEqual( deltaTime, 5 );
 
             // Ensure start time and edit time match the creation time.
-            Assert.AreEqual( uut.CurrentLog.CreationTime, uut.CurrentLog.StartTime );
-            Assert.AreEqual( uut.CurrentLog.CreationTime, uut.CurrentLog.EditTime );
+            Assert.AreEqual( uut.CurrentLog.EditTime, uut.CurrentLog.StartTime );
             Assert.IsTrue( uut.IsSessionInProgress );
 
             // Validation should fail, as we haven't stopped a session yet.
             CheckValidationFailed();
 
             // Calling start again should result in a no-op
-            DateTime oldTime = uut.CurrentLog.CreationTime;
+            DateTime oldTime = uut.CurrentLog.EditTime;
             uut.StartSession( new SessionConfig() );
 
             // Ensure the times didn't change.
-            Assert.AreEqual( oldTime, uut.CurrentLog.CreationTime );
             Assert.AreEqual( oldTime, uut.CurrentLog.StartTime );
             Assert.AreEqual( oldTime, uut.CurrentLog.EditTime );
 
@@ -604,17 +586,6 @@ namespace TestCommon
         }
 
         /// <summary>
-        /// Ensures importing an XML file with creation time > edit time results
-        /// in no error.  The reason for this is we ignore the Creation and Edit time,
-        /// and just set them to DateTime.Now.
-        /// </summary>
-        [Test]
-        public void XmlImportBadCreationEditTime()
-        {
-            DoGoodImportTest( 1, @"..\..\TestFiles\BadLogCreationEdit.xml" );
-        }
-
-        /// <summary>
         /// Ensures importing an XML file with no logs results
         /// in no error.  Nothing is added.
         /// </summary>
@@ -706,17 +677,6 @@ namespace TestCommon
         }
     
         /// <summary>
-        /// Ensures importing a json file with creation time > edit time results
-        /// in no error.  The reason for this is we ignore the Creation and Edit time,
-        /// and just set them to DateTime.Now.
-        /// </summary>
-        [Test]
-        public void JsonImportBadCreationEditTime()
-        {
-            DoGoodImportTest( 1, @"..\..\TestFiles\BadLogCreationEdit.json" );
-        }
-
-        /// <summary>
         /// Ensures importing a Json file with no logs results
         /// in no error.  Nothing is added.
         /// </summary>
@@ -783,7 +743,7 @@ namespace TestCommon
                 Assert.AreNotSame( oldBook, newBook );
 
                 // Now, iterate through the logs.  Compared to the old logbook,
-                // Everything should be the same EXCEPT for creation time and edit time,
+                // Everything should be the same EXCEPT for GUID and edit time,
                 // which should be newer (assuming our computer didnt time travel).
                 Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
 
@@ -795,8 +755,9 @@ namespace TestCommon
                     Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
                     Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
                     Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
-                    Assert.GreaterOrEqual( newBook.Logs[i].CreationTime, oldBook.Logs[i].CreationTime );
+                    Assert.AreNotEqual( newBook.Logs[i].Guid, oldBook.Logs[i].Guid );
                     Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
+                    Assert.AreNotEqual( newBook.Logs[i].Guid, new Guid() ); // Ensure the new GUID is not 0.
                 }
             }
             finally

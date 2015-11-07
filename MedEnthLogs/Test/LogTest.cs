@@ -69,9 +69,8 @@ namespace TestCommon
         public void TestGetHashCode()
         {
             // Ensures that the hash code of the log is the same as the hashcode
-            // of the creation time.  Two logs in a logbook can not have the same creation
-            // time.
-            Assert.AreEqual( uut.CreationTime.GetHashCode(), uut.GetHashCode() );
+            // of the guid.  Two logs in a logbook can not have the same guid.
+            Assert.AreEqual( uut.Guid.GetHashCode(), uut.GetHashCode() );
         }
 
         /// <summary>
@@ -122,6 +121,10 @@ namespace TestCommon
         {
             Log other = new Log();
 
+            // Ensure when we create a new log, the GUIDs do not match.
+            // Operator == doesn't care if guids match or not.
+            Assert.AreNotEqual( uut.Guid, other.Guid );
+
             // Ensure uut and other match.
             CheckLogsEqual( uut, other );
 
@@ -140,11 +143,6 @@ namespace TestCommon
             other.EndTime = DateTime.Now;
             CheckLogsNotEqual( uut, other );
             other.EndTime = uut.EndTime;
-
-            // Change Create Time.
-            other.CreationTime = DateTime.Now;
-            CheckLogsNotEqual( uut, other );
-            other.CreationTime = uut.CreationTime;
 
             // Change Edit Time.
             other.EditTime = DateTime.Now;
@@ -204,22 +202,10 @@ namespace TestCommon
         [Test]
         public void ValidationPassTest()
         {
-            // CreationTime == EditTime should pass.
-            uut.CreationTime = DateTime.Now;
-            uut.EditTime = uut.CreationTime;
-            uut.StartTime = DateTime.Now; // Set start and end so the thing validates.
-            uut.EndTime = DateTime.Now;
-            ValidationPassedTest( uut );
-
-            // CreationTime < EditTime should pass.
-            uut.EditTime = uut.CreationTime + new TimeSpan( 0, 0, 1 );
-            ValidationPassedTest( uut );
-
             // Reset.
             uut = new Log();
 
             // Start time == End Time should pass.
-            uut.CreationTime = DateTime.Now; // Set Create time and edit time so the thing validates.
             uut.EditTime = DateTime.Now;
             uut.StartTime = DateTime.Now;
             uut.EndTime = uut.StartTime;
@@ -232,7 +218,6 @@ namespace TestCommon
             // Reset.
             uut = new Log();
             // Set the times so the thing validates.
-            uut.CreationTime = DateTime.Now;
             uut.EditTime = DateTime.Now;
             uut.StartTime = DateTime.Now;
             uut.EndTime = DateTime.Now;
@@ -253,11 +238,6 @@ namespace TestCommon
         {
             // A default log should fail throw.
             ValidationFailedTest( uut, Log.EndTimeLessThanStartTimeMessage );
-
-            // CreationTime > EditTime should pass.
-            uut.CreationTime = DateTime.Now;
-            uut.EditTime = uut.CreationTime - new TimeSpan( 0, 0, 1 );
-            ValidationFailedTest( uut, Log.EditTimeLessThanCreationTimeMessage );
 
             // Reset.
             uut = new Log();

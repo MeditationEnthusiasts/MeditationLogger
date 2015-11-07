@@ -109,15 +109,17 @@ namespace MedEnthLogsApi
                     }
                 }
 
-                DateTime creationTime = DateTime.Now.ToUniversalTime();
+                // We ignore GUID and Edit time in the file,
+                // and create them here.
+                Guid guid = Guid.NewGuid(); 
 
-                // Keep looking until we have a unique creation date.
-                while ( logBook.LogExists( creationTime ) || ( logs.Find( i => i.CreationTime == creationTime ) != null ) )
+                // Keep looking until we have a unique guid.
+                while ( logBook.LogExists( guid ) || ( logs.Find( i => i.Guid == guid ) != null ) )
                 {
-                    creationTime = DateTime.Now.ToUniversalTime();
+                    guid = Guid.NewGuid();
                 }
-                log.CreationTime = creationTime;
-                log.EditTime = creationTime;
+                log.Guid = guid;
+                log.EditTime = DateTime.Now.ToUniversalTime();
 
                 // Ensure the log is good.
                 log.Validate();
@@ -161,41 +163,57 @@ namespace MedEnthLogsApi
                 XmlNode logNode = doc.CreateNode( XmlNodeType.Element, "log", xmlNameSpace );
 
                 // Reducing scope so I don't accidently add the wrong attribute.
+
+                // Add Guid
                 {
-                    XmlAttribute creationTime = doc.CreateAttribute( Log.CreationTimeString );
-                    creationTime.Value = log.CreationTime.ToString( "o" );
-                    logNode.Attributes.Append( creationTime );
+                    XmlAttribute guid = doc.CreateAttribute( Log.GuidString );
+                    guid.Value = log.Guid.ToString();
+                    logNode.Attributes.Append( guid );
                 }
+
+                // Add Edit Time.
                 {
                     XmlAttribute editTime = doc.CreateAttribute( Log.EditTimeString );
                     editTime.Value = log.EditTime.ToString( "o" );
                     logNode.Attributes.Append( editTime );
                 }
+
+                // Add Start Time.
                 {
                     XmlAttribute startTime = doc.CreateAttribute( Log.StartTimeString );
                     startTime.Value = log.StartTime.ToString( "o" );
                     logNode.Attributes.Append( startTime );
                 }
+
+                // Add End time.
                 {
                     XmlAttribute endTime = doc.CreateAttribute( Log.EndTimeString );
                     endTime.Value = log.EndTime.ToString( "o" );
                     logNode.Attributes.Append( endTime );
                 }
+
+                // Add technique.
                 {
                     XmlAttribute technique = doc.CreateAttribute( Log.TechniqueString );
                     technique.Value = log.Technique;
                     logNode.Attributes.Append( technique );
                 }
+
+                // Add Comments
                 {
                     XmlAttribute comments = doc.CreateAttribute( Log.CommentsString );
                     comments.Value = log.Comments;
                     logNode.Attributes.Append( comments );
                 }
+
+                // Add Latitude
                 {
                     XmlAttribute lat = doc.CreateAttribute( Log.LatitudeString );
                     lat.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lat );
                 }
+
+                // Add Longitude.
                 {
                     XmlAttribute lon = doc.CreateAttribute( Log.LongitudeString );
                     lon.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;

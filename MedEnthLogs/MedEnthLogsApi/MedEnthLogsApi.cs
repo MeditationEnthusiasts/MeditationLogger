@@ -150,7 +150,7 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Starts the session.
-        /// This creates a log (and by extension, sets the creation time to now),
+        /// This creates a log (and by extension, sets the edit time to now),
         /// and sets the start time to now as well.
         /// No-op if session in progress.
         /// </summary>
@@ -167,9 +167,8 @@ namespace MedEnthLogsApi
                 if ( this.IsSessionInProgress == false )
                 {
                     this.currentLog = new Log();
-                    this.currentLog.CreationTime = DateTime.Now.ToUniversalTime();
-                    this.currentLog.StartTime = this.currentLog.CreationTime;
-                    this.currentLog.EditTime = this.currentLog.CreationTime;
+                    this.currentLog.StartTime = DateTime.Now.ToUniversalTime();
+                    this.currentLog.EditTime = this.currentLog.StartTime;
 
                     TimeSpan? length = config.Length;
 

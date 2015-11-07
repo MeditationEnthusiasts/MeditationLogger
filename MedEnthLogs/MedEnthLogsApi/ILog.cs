@@ -25,6 +25,11 @@ namespace MedEnthLogsApi
     /// </summary>
     public interface ILog
     {
+        // -------- Properties --------
+
+        /// <summary>
+        /// ID of the log.
+        /// </summary>
         int Id { get; }
 
         /// <summary>
@@ -40,10 +45,9 @@ namespace MedEnthLogsApi
         DateTime EndTime { get; }
 
         /// <summary>
-        /// When the session was first recorded
-        /// (UTC, the UI must convert it to local time).
+        /// Unique GUID for the log objet.
         /// </summary>
-        DateTime CreationTime { get; }
+        Guid Guid { get; }
 
         /// <summary>
         /// The last time this log was edited.
@@ -78,6 +82,8 @@ namespace MedEnthLogsApi
         /// null if no location specified.
         /// </summary>
         decimal? Longitude { get; set; }
+
+        // -------- Functions --------
 
         /// <summary>
         /// Ensures the log is in a good state.  Should be called before saving it.

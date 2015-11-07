@@ -111,7 +111,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="TestFiles\BadLogCreationEdit.json" />
     <None Include="TestFiles\BadLogStartEnd.json" />
     <None Include="TestFiles\InvalidLat.json" />
     <None Include="TestFiles\InvalidLatLong.json" />
@@ -139,7 +138,6 @@
     <Content Include="TestFiles\NoLogs.xml" />
     <Content Include="TestFiles\MissingEndTime.xml" />
     <Content Include="TestFiles\MissingStartTime.xml" />
-    <Content Include="TestFiles\BadLogCreationEdit.xml" />
     <Content Include="TestFiles\BadLogName.xml" />
     <Content Include="TestFiles\BadLogBook.xml" />
   </ItemGroup>
