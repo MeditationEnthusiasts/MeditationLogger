@@ -55,11 +55,16 @@ namespace MedEnthLogsWin10
         {
             this.InitializeComponent();
 
-            this.api = new Api( new Win10LocationDetector(), null, new Win10MusicManager() );
+            this.api = new Api(
+                new Win10LocationDetector(),
+                null,
+                new Win10MusicManager(),
+                new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT()
+            );
 
             // This will put the database in app data.
             string folder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-            this.api.Open( new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), folder + @"\test.db" );
+            this.api.Open( folder + @"\test.db" );
             this.api.Close();
         }
 

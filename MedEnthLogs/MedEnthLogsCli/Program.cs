@@ -63,11 +63,12 @@ namespace MedEnthLogsCli
                     Api api = new Api( 
                         new Win32LocationDetector(),
                         new Win32Timer(),
-                        new NAudioMusicManager()
+                        new NAudioMusicManager(),
+                        new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
                     );
                     try
                     {
-                        api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), "test.db" );
+                        api.Open( "test.db" );
                         api.PopulateLogbook();
                         switch ( args[0] )
                         {

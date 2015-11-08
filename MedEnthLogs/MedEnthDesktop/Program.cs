@@ -39,7 +39,8 @@ namespace MedEnthLogsDesktop
             api = new MedEnthLogsApi.Api(
                 new Win32LocationDetector(),
                 new Win32Timer(),
-                new NAudioMusicManager()
+                new NAudioMusicManager(),
+                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
             );
 
             // Use the win32 sqlite.
@@ -51,7 +52,7 @@ namespace MedEnthLogsDesktop
                 Directory.CreateDirectory( dbLocation );
             }
 
-            api.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), Path.Combine( dbLocation, "logbook.mlg" ) );
+            api.Open( Path.Combine( dbLocation, "logbook.mlg" ) );
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );

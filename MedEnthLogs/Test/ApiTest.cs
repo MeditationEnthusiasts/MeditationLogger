@@ -60,7 +60,12 @@ namespace TestCommon
 
             this.mockTimer = new MockTimer();
             this.mockAudio = new MockMusicManager();
-            uut = new Api( new Win32LocationDetector(), this.mockTimer, this.mockAudio );
+            uut = new Api(
+                new Win32LocationDetector(),
+                this.mockTimer,
+                this.mockAudio,
+                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
+            );
         }
 
         [TearDown]
@@ -354,7 +359,7 @@ namespace TestCommon
             // First, open the database.
             try
             {
-                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+                uut.Open( dbLocation );
 
                 // We never called start or stop. We should fail validation.
                 CheckValidationFailed();
@@ -709,6 +714,19 @@ namespace TestCommon
             Assert.IsNull( uut.LogBook.Logs[0].Longitude );
         }
 
+        // ---- MLG import/export ----
+
+        /// <summary>
+        /// Ensures the exporting and importing of
+        /// logs via MLG works.
+        /// </summary>
+        [Test]
+        public void MlgExportImportTest()
+        {
+            const string fileName = "MlgImportExport.mlg";
+            DoImportExportTest( fileName );
+        }
+
         // -------- Test Helpers ---------
 
         /// <summary>
@@ -728,7 +746,7 @@ namespace TestCommon
 
             // Now, create a new database, and import the file file.
             // it should match the old logbook.
-            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), newDb );
+            uut.Open( newDb );
             try
             {
                 uut.PopulateLogbook();
@@ -778,7 +796,7 @@ namespace TestCommon
         {
             try
             {
-                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+                uut.Open( dbLocation );
 
                 uut.PopulateLogbook();
 
@@ -812,7 +830,7 @@ namespace TestCommon
         {
             try
             {
-                uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+                uut.Open( dbLocation );
 
                 uut.PopulateLogbook();
 
@@ -885,7 +903,7 @@ namespace TestCommon
         /// <param name="longitude">The longitude to save.</param>
         private void DoSaveTest( string technique = null, string comments = null, decimal? latitude = null, decimal? longitude = null )
         {
-            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            uut.Open( dbLocation );
             try
             {
                 uut.StartSession( new SessionConfig() );
@@ -918,7 +936,7 @@ namespace TestCommon
         /// <param name="numberOfEntries">The number of entries to add.</param>
         private void DoSaveTest( int numberOfEntries )
         {
-            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            uut.Open( dbLocation );
             try
             {
                 for ( int i = 0; i < numberOfEntries; ++i )
@@ -964,7 +982,7 @@ namespace TestCommon
         /// <param name="longitude">The longitude to try.</param>
         private void DoSaveTestOneLocation( decimal? latitude, decimal? longitude )
         {
-            uut.Open( new SQLite.Net.Platform.Win32.SQLitePlatformWin32(), dbLocation );
+            uut.Open( dbLocation );
             try
             {
                 uut.StartSession( new SessionConfig() );

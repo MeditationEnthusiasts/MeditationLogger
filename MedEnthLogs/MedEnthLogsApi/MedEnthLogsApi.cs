@@ -62,6 +62,11 @@ namespace MedEnthLogsApi
         internal Log currentLog;
 
         /// <summary>
+        /// The platform that is being used.
+        /// </summary>
+        private ISQLitePlatform platform;
+
+        /// <summary>
         /// The version of the API.
         /// </summary>
         public const string Version = "0.1.0";
@@ -74,10 +79,12 @@ namespace MedEnthLogsApi
         /// <param name="locationDetector">Location to the location detector.</param>
         /// <param name="timer">The timing engine to use.</param>
         /// <param name="musicManager">The music manager to use.</param>
-        public Api( ILocationDetector locationDetector, ITimer timer, IMusicManager musicManager )
+        /// <param name="platform">The sqlite platform we are using.</param>
+        public Api( ILocationDetector locationDetector, ITimer timer, IMusicManager musicManager, ISQLitePlatform platform )
         {
             this.sqlite = null;
             this.LogBook = null;
+            this.platform = platform;
             this.LocationDetector = locationDetector;
             this.timer = timer;
             this.musicManager = musicManager;
@@ -125,17 +132,16 @@ namespace MedEnthLogsApi
         /// Opens the given SQLite database, and populates
         /// the Logbook.
         /// </summary>
-        /// <param name="platform">The sqlite platform we are using.</param>
         /// <param name="path">The path to the sqlite database.</param>
         /// <remarks>If a databse is already open, it will be closed first.</remarks>
-        public void Open( ISQLitePlatform platform, string path )
+        public void Open( string path )
         {
             if ( this.sqlite != null )
             {
                 this.Close();
             }
 
-            this.sqlite = new SQLiteConnection( platform, path, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite );
+            this.sqlite = new SQLiteConnection( this.platform, path, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite );
             this.sqlite.CreateTable<Log>();
             this.sqlite.Commit();
         }
@@ -328,7 +334,7 @@ namespace MedEnthLogsApi
                     }
                     break;
                 case "mlg":
-                    ImportFromMlg( fileName );
+                    MlgExporter.ImportMlg( fileName, this.LogBook, this.platform, this.sqlite );
                     break;
                 default:
                     throw new ArgumentException(
@@ -336,11 +342,6 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
-        }
-
-        private void ImportFromMlg( string fileName )
-        {
-            throw new NotImplementedException();
         }
 
         // ---- Export Functions ----
@@ -354,7 +355,7 @@ namespace MedEnthLogsApi
         public void Export( string fileName )
         {
             string[] splitString = fileName.Split( '.' );
-            switch(splitString[splitString.Length - 1].ToLower())
+            switch ( splitString[splitString.Length - 1].ToLower() )
             {
                 case "xml":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
@@ -370,7 +371,7 @@ namespace MedEnthLogsApi
                     }
                     break;
                 case "mlg":
-                    ExportToMlg( fileName );
+                    MlgExporter.ExportMlg( fileName, this.LogBook, this.platform );
                     break;
                 default:
                     throw new ArgumentException(
@@ -378,15 +379,6 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
-        }
-
-        /// <summary>
-        /// Exports the loaded logbook to MLG (SQLite database).
-        /// </summary>
-        /// <param name="fileName"></param>
-        public void ExportToMlg( string fileName )
-        {
-            throw new NotImplementedException( "Not implemented yet." );
         }
 
         /// <summary>
