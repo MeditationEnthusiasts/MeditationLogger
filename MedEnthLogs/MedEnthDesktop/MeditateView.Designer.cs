@@ -48,43 +48,62 @@ namespace MedEnthDesktop
         {
             this.MeditateLabel = new System.Windows.Forms.Label();
             this.TimerLabel = new System.Windows.Forms.Label();
+            this.MeditateViewTable = new System.Windows.Forms.TableLayoutPanel();
+            this.MeditateViewTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MeditateLabel
             // 
-            this.MeditateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.MeditateLabel.AutoSize = true;
-            this.MeditateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MeditateLabel.Location = new System.Drawing.Point(200, 55);
+            this.MeditateLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.MeditateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MeditateLabel.Location = new System.Drawing.Point(3, 46);
             this.MeditateLabel.Name = "MeditateLabel";
-            this.MeditateLabel.Size = new System.Drawing.Size(91, 20);
+            this.MeditateLabel.Size = new System.Drawing.Size(494, 37);
             this.MeditateLabel.TabIndex = 0;
             this.MeditateLabel.Text = "Have Fun!";
             this.MeditateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.MeditateLabel.VisibleChanged += new System.EventHandler(this.MeditateLabel_VisibleChanged);
             // 
             // TimerLabel
             // 
             this.TimerLabel.AllowDrop = true;
-            this.TimerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.TimerLabel.AutoSize = true;
-            this.TimerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TimerLabel.Location = new System.Drawing.Point(174, 145);
+            this.TimerLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TimerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimerLabel.Location = new System.Drawing.Point(3, 166);
             this.TimerLabel.Name = "TimerLabel";
-            this.TimerLabel.Size = new System.Drawing.Size(153, 39);
+            this.TimerLabel.Size = new System.Drawing.Size(494, 73);
             this.TimerLabel.TabIndex = 1;
             this.TimerLabel.Text = "xx:xx:xx";
             this.TimerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // MeditateViewTable
+            // 
+            this.MeditateViewTable.ColumnCount = 1;
+            this.MeditateViewTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MeditateViewTable.Controls.Add(this.MeditateLabel, 0, 0);
+            this.MeditateViewTable.Controls.Add(this.TimerLabel, 0, 2);
+            this.MeditateViewTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MeditateViewTable.Location = new System.Drawing.Point(0, 0);
+            this.MeditateViewTable.Name = "MeditateViewTable";
+            this.MeditateViewTable.RowCount = 3;
+            this.MeditateViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.MeditateViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.MeditateViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.MeditateViewTable.Size = new System.Drawing.Size(500, 250);
+            this.MeditateViewTable.TabIndex = 2;
             // 
             // MeditateView
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.Controls.Add(this.TimerLabel);
-            this.Controls.Add(this.MeditateLabel);
+            this.Controls.Add(this.MeditateViewTable);
             this.Name = "MeditateView";
             this.Size = new System.Drawing.Size(500, 250);
+            this.MeditateViewTable.ResumeLayout(false);
+            this.MeditateViewTable.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -92,5 +111,6 @@ namespace MedEnthDesktop
 
         private System.Windows.Forms.Label MeditateLabel;
         public System.Windows.Forms.Label TimerLabel;
+        private System.Windows.Forms.TableLayoutPanel MeditateViewTable;
     }
 }

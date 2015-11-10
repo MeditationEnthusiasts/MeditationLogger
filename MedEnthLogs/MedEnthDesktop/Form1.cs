@@ -58,6 +58,11 @@ namespace MedEnthLogsDesktop
         /// </summary>
         private static readonly string exeDirectory = Path.GetDirectoryName( Assembly.GetExecutingAssembly().GetName().CodeBase ).Replace( '\\', '/' );
 
+        /// <summary>
+        /// Original background color (for restoring).
+        /// </summary>
+        private Color originalColor;
+
         // ---- Views ----
 
         OptionsView optionView;
@@ -88,6 +93,8 @@ namespace MedEnthLogsDesktop
             this.meditateView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.meditateView );
 
+            this.originalColor = this.meditateView.BackColor;
+
             this.api.timer.OnComplete =
                 delegate ()
                 {
@@ -101,6 +108,8 @@ namespace MedEnthLogsDesktop
                 delegate ( string updateString )
                 {
                     this.meditateView.TimerLabel.Text = updateString;
+                    this.meditateView.UpdateBackground();
+                    this.StartTableLayout.BackColor = this.meditateView.BackColor;
                 };
 
             this.saveView = new SaveView();
@@ -451,6 +460,8 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         this.saveView.Visible = false;
                         this.StartButton.Text = "Finish";
 
+                        this.StartTableLayout.BackColor = this.meditateView.BackColor;
+
                         // Update State
                         this.currentState = StartState.Start;
                         break;
@@ -463,8 +474,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         this.meditateView.Visible = false;
                         this.saveView.Visible = true;
                         this.saveView.MinutesValueLabel.Text =
-                            this.api.CurrentLog.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture );
+                        this.api.CurrentLog.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture );
                         this.StartButton.Text = "Save";
+
+                        this.StartTableLayout.BackColor = originalColor;
 
                         // Update State
                         this.currentState = StartState.End;

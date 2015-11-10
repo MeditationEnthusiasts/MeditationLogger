@@ -118,6 +118,7 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.StartTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
@@ -140,6 +141,7 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
+            this.StartTableLayout.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -290,8 +292,7 @@ namespace MedEnthLogsDesktop
             // 
             // StartTab
             // 
-            this.StartTab.Controls.Add(this.ChangableStartView);
-            this.StartTab.Controls.Add(this.StartButton);
+            this.StartTab.Controls.Add(this.StartTableLayout);
             this.StartTab.Location = new System.Drawing.Point(4, 34);
             this.StartTab.Name = "StartTab";
             this.StartTab.Padding = new System.Windows.Forms.Padding(3);
@@ -303,16 +304,18 @@ namespace MedEnthLogsDesktop
             // 
             // ChangableStartView
             // 
-            this.ChangableStartView.Location = new System.Drawing.Point(0, 0);
+            this.ChangableStartView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChangableStartView.Location = new System.Drawing.Point(3, 3);
             this.ChangableStartView.Name = "ChangableStartView";
-            this.ChangableStartView.Size = new System.Drawing.Size(601, 388);
+            this.ChangableStartView.Size = new System.Drawing.Size(589, 366);
             this.ChangableStartView.TabIndex = 3;
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(458, 394);
+            this.StartButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.StartButton.Location = new System.Drawing.Point(440, 375);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(140, 53);
+            this.StartButton.Size = new System.Drawing.Size(152, 69);
             this.StartButton.TabIndex = 2;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = true;
@@ -943,6 +946,21 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
+            // StartTableLayout
+            // 
+            this.StartTableLayout.ColumnCount = 1;
+            this.StartTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.StartTableLayout.Controls.Add(this.ChangableStartView, 0, 0);
+            this.StartTableLayout.Controls.Add(this.StartButton, 0, 1);
+            this.StartTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.StartTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.StartTableLayout.Name = "StartTableLayout";
+            this.StartTableLayout.RowCount = 2;
+            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.StartTableLayout.Size = new System.Drawing.Size(595, 447);
+            this.StartTableLayout.TabIndex = 4;
+            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -984,6 +1002,7 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
+            this.StartTableLayout.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1062,6 +1081,7 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Label TotalSessionsValueLabel;
         private System.Windows.Forms.Label LastSessionLabel;
         private System.Windows.Forms.Label LastSessionValueLabel;
+        private System.Windows.Forms.TableLayoutPanel StartTableLayout;
     }
 }
 

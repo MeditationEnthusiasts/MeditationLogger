@@ -37,5 +37,27 @@ namespace MedEnthDesktop
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Updates the background color based on the current time.
+        /// </summary>
+        public void UpdateBackground()
+        {
+            DateTime time = DateTime.Now;
+            this.BackColor = Color.FromArgb(
+                ( ( time.Hour * 4 ) + 134 ),
+                ( ( time.Minute * 2 ) + 134 ),
+                ( ( time.Second * 2 ) + 134 )
+            );
+        }
+
+        private void MeditateLabel_VisibleChanged( object sender, EventArgs e )
+        {
+            // If we are now visible, update our initial time.
+            if ( this.Visible )
+            {
+                UpdateBackground();
+            }
+        }
     }
 }
