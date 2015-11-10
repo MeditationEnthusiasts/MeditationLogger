@@ -59,6 +59,7 @@ namespace MedEnthLogsDesktop
             this.TotalSessionsValueLabel = new System.Windows.Forms.Label();
             this.LastSessionValueLabel = new System.Windows.Forms.Label();
             this.StartTab = new System.Windows.Forms.TabPage();
+            this.StartTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.ChangableStartView = new System.Windows.Forms.Panel();
             this.StartButton = new System.Windows.Forms.Button();
             this.LogbookView = new System.Windows.Forms.TabPage();
@@ -118,12 +119,12 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.StartTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
             this.HomeStatTable.SuspendLayout();
             this.StartTab.SuspendLayout();
+            this.StartTableLayout.SuspendLayout();
             this.LogbookView.SuspendLayout();
             this.ViewLogbookInnerTabControl.SuspendLayout();
             this.StandardViewTab.SuspendLayout();
@@ -141,7 +142,6 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
-            this.StartTableLayout.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -173,6 +173,7 @@ namespace MedEnthLogsDesktop
             // 
             // HomeTableLayout
             // 
+            this.HomeTableLayout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.HomeTableLayout.ColumnCount = 2;
             this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.68908F));
             this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.31092F));
@@ -302,8 +303,25 @@ namespace MedEnthLogsDesktop
             this.StartTab.UseVisualStyleBackColor = true;
             this.StartTab.Enter += new System.EventHandler(this.StartTab_Enter);
             // 
+            // StartTableLayout
+            // 
+            this.StartTableLayout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.StartTableLayout.ColumnCount = 1;
+            this.StartTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.StartTableLayout.Controls.Add(this.ChangableStartView, 0, 0);
+            this.StartTableLayout.Controls.Add(this.StartButton, 0, 1);
+            this.StartTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.StartTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.StartTableLayout.Name = "StartTableLayout";
+            this.StartTableLayout.RowCount = 2;
+            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.StartTableLayout.Size = new System.Drawing.Size(595, 447);
+            this.StartTableLayout.TabIndex = 4;
+            // 
             // ChangableStartView
             // 
+            this.ChangableStartView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.ChangableStartView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChangableStartView.Location = new System.Drawing.Point(3, 3);
             this.ChangableStartView.Name = "ChangableStartView";
@@ -323,6 +341,7 @@ namespace MedEnthLogsDesktop
             // 
             // LogbookView
             // 
+            this.LogbookView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.LogbookView.Controls.Add(this.ViewLogbookInnerTabControl);
             this.LogbookView.Location = new System.Drawing.Point(4, 34);
             this.LogbookView.Name = "LogbookView";
@@ -330,7 +349,6 @@ namespace MedEnthLogsDesktop
             this.LogbookView.Size = new System.Drawing.Size(601, 453);
             this.LogbookView.TabIndex = 1;
             this.LogbookView.Text = "View Logbook";
-            this.LogbookView.UseVisualStyleBackColor = true;
             this.LogbookView.Click += new System.EventHandler(this.LogbookView_Click);
             this.LogbookView.Enter += new System.EventHandler(this.LogbookView_Enter);
             // 
@@ -342,6 +360,7 @@ namespace MedEnthLogsDesktop
             this.ViewLogbookInnerTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewLogbookInnerTabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ViewLogbookInnerTabControl.Location = new System.Drawing.Point(3, 3);
+            this.ViewLogbookInnerTabControl.Multiline = true;
             this.ViewLogbookInnerTabControl.Name = "ViewLogbookInnerTabControl";
             this.ViewLogbookInnerTabControl.SelectedIndex = 0;
             this.ViewLogbookInnerTabControl.Size = new System.Drawing.Size(595, 447);
@@ -362,6 +381,7 @@ namespace MedEnthLogsDesktop
             // 
             this.StandardLogView.AutoScroll = true;
             this.StandardLogView.AutoSize = true;
+            this.StandardLogView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.StandardLogView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StandardLogView.Location = new System.Drawing.Point(3, 3);
             this.StandardLogView.Margin = new System.Windows.Forms.Padding(5);
@@ -371,6 +391,7 @@ namespace MedEnthLogsDesktop
             // 
             // MapLogViewTab
             // 
+            this.MapLogViewTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.MapLogViewTab.Controls.Add(this.MapViewBrowser);
             this.MapLogViewTab.Location = new System.Drawing.Point(4, 29);
             this.MapLogViewTab.Name = "MapLogViewTab";
@@ -378,7 +399,6 @@ namespace MedEnthLogsDesktop
             this.MapLogViewTab.Size = new System.Drawing.Size(587, 414);
             this.MapLogViewTab.TabIndex = 1;
             this.MapLogViewTab.Text = "Map View";
-            this.MapLogViewTab.UseVisualStyleBackColor = true;
             // 
             // MapViewBrowser
             // 
@@ -393,16 +413,17 @@ namespace MedEnthLogsDesktop
             // 
             // GraphTab
             // 
+            this.GraphTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.GraphTab.Location = new System.Drawing.Point(4, 29);
             this.GraphTab.Name = "GraphTab";
             this.GraphTab.Padding = new System.Windows.Forms.Padding(3);
             this.GraphTab.Size = new System.Drawing.Size(587, 414);
             this.GraphTab.TabIndex = 2;
             this.GraphTab.Text = "Graph View";
-            this.GraphTab.UseVisualStyleBackColor = true;
             // 
             // ManageLogbookView
             // 
+            this.ManageLogbookView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ManageLogbookView.Controls.Add(this.ManageTabControl);
             this.ManageLogbookView.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.ManageLogbookView.Location = new System.Drawing.Point(4, 34);
@@ -411,7 +432,6 @@ namespace MedEnthLogsDesktop
             this.ManageLogbookView.Size = new System.Drawing.Size(601, 453);
             this.ManageLogbookView.TabIndex = 2;
             this.ManageLogbookView.Text = "Manage Logbook";
-            this.ManageLogbookView.UseVisualStyleBackColor = true;
             // 
             // ManageTabControl
             // 
@@ -429,16 +449,17 @@ namespace MedEnthLogsDesktop
             // 
             // EditLogView
             // 
+            this.EditLogView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.EditLogView.Location = new System.Drawing.Point(4, 29);
             this.EditLogView.Name = "EditLogView";
             this.EditLogView.Padding = new System.Windows.Forms.Padding(3);
             this.EditLogView.Size = new System.Drawing.Size(587, 414);
             this.EditLogView.TabIndex = 0;
             this.EditLogView.Text = "Edit Logs";
-            this.EditLogView.UseVisualStyleBackColor = true;
             // 
             // ImportView
             // 
+            this.ImportView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ImportView.Controls.Add(this.ImportButton);
             this.ImportView.Controls.Add(this.ImportBrowseButton);
             this.ImportView.Controls.Add(this.label1);
@@ -451,7 +472,6 @@ namespace MedEnthLogsDesktop
             this.ImportView.Size = new System.Drawing.Size(587, 414);
             this.ImportView.TabIndex = 1;
             this.ImportView.Text = "Import";
-            this.ImportView.UseVisualStyleBackColor = true;
             // 
             // ImportButton
             // 
@@ -511,6 +531,7 @@ namespace MedEnthLogsDesktop
             // 
             // ExportView
             // 
+            this.ExportView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ExportView.Controls.Add(this.ExportButton);
             this.ExportView.Controls.Add(this.ExportBrowseButton);
             this.ExportView.Controls.Add(this.label2);
@@ -522,7 +543,6 @@ namespace MedEnthLogsDesktop
             this.ExportView.Size = new System.Drawing.Size(587, 414);
             this.ExportView.TabIndex = 2;
             this.ExportView.Text = "Export";
-            this.ExportView.UseVisualStyleBackColor = true;
             // 
             // ExportButton
             // 
@@ -573,6 +593,7 @@ namespace MedEnthLogsDesktop
             // 
             // SyncView
             // 
+            this.SyncView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.SyncView.Controls.Add(this.label7);
             this.SyncView.Controls.Add(this.label6);
             this.SyncView.Controls.Add(this.SyncButton);
@@ -586,7 +607,6 @@ namespace MedEnthLogsDesktop
             this.SyncView.Size = new System.Drawing.Size(587, 414);
             this.SyncView.TabIndex = 3;
             this.SyncView.Text = "Sync";
-            this.SyncView.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -655,6 +675,7 @@ namespace MedEnthLogsDesktop
             // 
             // AboutView
             // 
+            this.AboutView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.AboutView.Controls.Add(this.AppInfo);
             this.AboutView.Location = new System.Drawing.Point(4, 34);
             this.AboutView.Name = "AboutView";
@@ -662,7 +683,6 @@ namespace MedEnthLogsDesktop
             this.AboutView.Size = new System.Drawing.Size(601, 453);
             this.AboutView.TabIndex = 3;
             this.AboutView.Text = "About";
-            this.AboutView.UseVisualStyleBackColor = true;
             // 
             // AppInfo
             // 
@@ -690,6 +710,7 @@ namespace MedEnthLogsDesktop
             // 
             // AppInfoTable
             // 
+            this.AppInfoTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.AppInfoTable.ColumnCount = 2;
             this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.34965F));
             this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.65035F));
@@ -845,6 +866,7 @@ namespace MedEnthLogsDesktop
             // 
             // LicenseTable
             // 
+            this.LicenseTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.LicenseTable.ColumnCount = 1;
             this.LicenseTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.LicenseTable.Controls.Add(this.GplTextBox, 0, 1);
@@ -884,6 +906,7 @@ namespace MedEnthLogsDesktop
             // 
             // ExternalLibTab
             // 
+            this.ExternalLibTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.ExternalLibTab.Controls.Add(this.ExtLibTable);
             this.ExternalLibTab.Location = new System.Drawing.Point(4, 29);
             this.ExternalLibTab.Name = "ExternalLibTab";
@@ -891,7 +914,6 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.Size = new System.Drawing.Size(587, 414);
             this.ExternalLibTab.TabIndex = 2;
             this.ExternalLibTab.Text = "External Libraries";
-            this.ExternalLibTab.UseVisualStyleBackColor = true;
             // 
             // ExtLibTable
             // 
@@ -946,26 +968,11 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // StartTableLayout
-            // 
-            this.StartTableLayout.ColumnCount = 1;
-            this.StartTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.StartTableLayout.Controls.Add(this.ChangableStartView, 0, 0);
-            this.StartTableLayout.Controls.Add(this.StartButton, 0, 1);
-            this.StartTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StartTableLayout.Location = new System.Drawing.Point(3, 3);
-            this.StartTableLayout.Name = "StartTableLayout";
-            this.StartTableLayout.RowCount = 2;
-            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.StartTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.StartTableLayout.Size = new System.Drawing.Size(595, 447);
-            this.StartTableLayout.TabIndex = 4;
-            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(609, 491);
             this.Controls.Add(this.MainTabControl);
             this.MinimumSize = new System.Drawing.Size(625, 525);
@@ -978,6 +985,7 @@ namespace MedEnthLogsDesktop
             this.HomeStatTable.ResumeLayout(false);
             this.HomeStatTable.PerformLayout();
             this.StartTab.ResumeLayout(false);
+            this.StartTableLayout.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
             this.ViewLogbookInnerTabControl.ResumeLayout(false);
             this.StandardViewTab.ResumeLayout(false);
@@ -1002,7 +1010,6 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
-            this.StartTableLayout.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

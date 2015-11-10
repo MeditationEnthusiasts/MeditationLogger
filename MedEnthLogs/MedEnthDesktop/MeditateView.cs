@@ -45,7 +45,7 @@ namespace MedEnthDesktop
         {
             DateTime time = DateTime.Now;
             this.BackColor = Color.FromArgb(
-                ( ( time.Hour * 4 ) + 134 ),
+                ( ( time.Hour * 2 ) + 134 ),
                 ( ( time.Minute * 2 ) + 134 ),
                 ( ( time.Second * 2 ) + 134 )
             );
