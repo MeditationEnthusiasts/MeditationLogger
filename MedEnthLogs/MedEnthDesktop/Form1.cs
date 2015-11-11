@@ -108,8 +108,6 @@ namespace MedEnthLogsDesktop
                 delegate ( string updateString )
                 {
                     this.meditateView.TimerLabel.Text = updateString;
-                    this.meditateView.UpdateBackground();
-                    this.StartTableLayout.BackColor = this.meditateView.BackColor;
                 };
 
             this.saveView = new SaveView();
@@ -435,8 +433,8 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         if ( this.optionView.EnableTimerCheckbox.Checked )
                         {
                             TimeSpan timeToGo = new TimeSpan(
-                                int.Parse( this.optionView.HourListBox.SelectedItem.ToString() ),
-                                int.Parse( this.optionView.MinuteListBox.SelectedItem.ToString() ),
+                                Convert.ToInt32( this.optionView.HourListBox.Value ),
+                                Convert.ToInt32( this.optionView.MinuteListBox.Value ),
                                 0
                             );
                             config.Length = timeToGo;

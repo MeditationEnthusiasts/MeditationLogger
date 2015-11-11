@@ -31,6 +31,11 @@ namespace MedEnthDesktop
     public partial class MeditateView : UserControl
     {
         /// <summary>
+        /// Used for random number generation.
+        /// </summary>
+        Random rng = new Random();
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public MeditateView()
@@ -39,15 +44,15 @@ namespace MedEnthDesktop
         }
 
         /// <summary>
-        /// Updates the background color based on the current time.
+        /// Updates the background color randomly.
         /// </summary>
-        public void UpdateBackground()
+        private void UpdateBackground()
         {
             DateTime time = DateTime.Now;
             this.BackColor = Color.FromArgb(
-                ( ( time.Hour * 2 ) + 134 ),
-                ( ( time.Minute * 2 ) + 134 ),
-                ( ( time.Second * 2 ) + 134 )
+                rng.Next( 175, 240 ),
+                rng.Next( 175, 240 ),
+                rng.Next( 175, 240 )
             );
         }
 

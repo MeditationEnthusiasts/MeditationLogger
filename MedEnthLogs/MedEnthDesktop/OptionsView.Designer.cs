@@ -48,8 +48,6 @@ namespace MedEnthDesktop
         {
             this.components = new System.ComponentModel.Container();
             this.EnableTimerCheckbox = new System.Windows.Forms.CheckBox();
-            this.HourListBox = new System.Windows.Forms.ListBox();
-            this.MinuteListBox = new System.Windows.Forms.ListBox();
             this.OptionsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.NoMusicRadioButton = new System.Windows.Forms.RadioButton();
             this.LoopMusicRadioButton = new System.Windows.Forms.RadioButton();
@@ -62,12 +60,16 @@ namespace MedEnthDesktop
             this.MusicLocationLabel = new System.Windows.Forms.Label();
             this.MusicLocationTextBox = new System.Windows.Forms.TextBox();
             this.TimerOptionsGroup = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.MusicOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.OptionDescriptionLabel = new System.Windows.Forms.Label();
+            this.OptionsViewTable = new System.Windows.Forms.TableLayoutPanel();
+            this.HourListBox = new System.Windows.Forms.NumericUpDown();
+            this.MinuteListBox = new System.Windows.Forms.NumericUpDown();
             this.MusicOptionsGroup.SuspendLayout();
             this.TimerOptionsGroup.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.OptionsViewTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HourListBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MinuteListBox)).BeginInit();
             this.SuspendLayout();
             // 
             // EnableTimerCheckbox
@@ -83,113 +85,6 @@ namespace MedEnthDesktop
         "out. \r\nLeave unchecked for unlimited time.");
             this.EnableTimerCheckbox.UseVisualStyleBackColor = true;
             this.EnableTimerCheckbox.CheckedChanged += new System.EventHandler(this.EnableTimerCheckbox_CheckedChanged);
-            // 
-            // HourListBox
-            // 
-            this.HourListBox.Enabled = false;
-            this.HourListBox.FormattingEnabled = true;
-            this.HourListBox.Items.AddRange(new object[] {
-            "00",
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24"});
-            this.HourListBox.Location = new System.Drawing.Point(7, 58);
-            this.HourListBox.Name = "HourListBox";
-            this.HourListBox.Size = new System.Drawing.Size(62, 30);
-            this.HourListBox.TabIndex = 1;
-            this.OptionsToolTip.SetToolTip(this.HourListBox, "Hours to meditate for.\r\n");
-            // 
-            // MinuteListBox
-            // 
-            this.MinuteListBox.Enabled = false;
-            this.MinuteListBox.FormattingEnabled = true;
-            this.MinuteListBox.Items.AddRange(new object[] {
-            "00",
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30",
-            "31",
-            "32",
-            "33",
-            "34",
-            "35",
-            "36",
-            "37",
-            "38",
-            "39",
-            "40",
-            "41",
-            "42",
-            "43",
-            "44",
-            "45",
-            "46",
-            "47",
-            "48",
-            "49",
-            "50",
-            "51",
-            "52",
-            "53",
-            "54",
-            "55",
-            "56",
-            "57",
-            "58",
-            "59"});
-            this.MinuteListBox.Location = new System.Drawing.Point(94, 58);
-            this.MinuteListBox.Name = "MinuteListBox";
-            this.MinuteListBox.Size = new System.Drawing.Size(62, 30);
-            this.MinuteListBox.TabIndex = 2;
-            this.OptionsToolTip.SetToolTip(this.MinuteListBox, "Minutes to meditate for.");
             // 
             // OptionsToolTip
             // 
@@ -254,7 +149,7 @@ namespace MedEnthDesktop
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 91);
+            this.label1.Location = new System.Drawing.Point(22, 91);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 18);
             this.label1.TabIndex = 4;
@@ -274,17 +169,17 @@ namespace MedEnthDesktop
             // 
             // MusicOptionsGroup
             // 
-            this.MusicOptionsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.MusicOptionsGroup.Controls.Add(this.MusicBrowseButton);
             this.MusicOptionsGroup.Controls.Add(this.MusicLocationLabel);
             this.MusicOptionsGroup.Controls.Add(this.MusicLocationTextBox);
             this.MusicOptionsGroup.Controls.Add(this.MusicPlayOnceRadioButton);
             this.MusicOptionsGroup.Controls.Add(this.LoopMusicRadioButton);
             this.MusicOptionsGroup.Controls.Add(this.NoMusicRadioButton);
-            this.MusicOptionsGroup.Location = new System.Drawing.Point(214, 10);
+            this.MusicOptionsGroup.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MusicOptionsGroup.Location = new System.Drawing.Point(259, 10);
             this.MusicOptionsGroup.Margin = new System.Windows.Forms.Padding(10);
             this.MusicOptionsGroup.Name = "MusicOptionsGroup";
-            this.MusicOptionsGroup.Size = new System.Drawing.Size(298, 226);
+            this.MusicOptionsGroup.Size = new System.Drawing.Size(337, 241);
             this.MusicOptionsGroup.TabIndex = 6;
             this.MusicOptionsGroup.TabStop = false;
             this.MusicOptionsGroup.Text = "Music Options";
@@ -323,28 +218,19 @@ namespace MedEnthDesktop
             // TimerOptionsGroup
             // 
             this.TimerOptionsGroup.Controls.Add(this.MinuteListBox);
+            this.TimerOptionsGroup.Controls.Add(this.HourListBox);
             this.TimerOptionsGroup.Controls.Add(this.EnableTimerCheckbox);
             this.TimerOptionsGroup.Controls.Add(this.label2);
-            this.TimerOptionsGroup.Controls.Add(this.HourListBox);
             this.TimerOptionsGroup.Controls.Add(this.label1);
             this.TimerOptionsGroup.Controls.Add(this.ColonLabel);
-            this.TimerOptionsGroup.Dock = System.Windows.Forms.DockStyle.Left;
+            this.TimerOptionsGroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TimerOptionsGroup.Location = new System.Drawing.Point(10, 10);
             this.TimerOptionsGroup.Margin = new System.Windows.Forms.Padding(10);
             this.TimerOptionsGroup.Name = "TimerOptionsGroup";
-            this.TimerOptionsGroup.Size = new System.Drawing.Size(184, 226);
+            this.TimerOptionsGroup.Size = new System.Drawing.Size(229, 241);
             this.TimerOptionsGroup.TabIndex = 7;
             this.TimerOptionsGroup.TabStop = false;
             this.TimerOptionsGroup.Text = "Timer Options";
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.TimerOptionsGroup);
-            this.flowLayoutPanel1.Controls.Add(this.MusicOptionsGroup);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(600, 250);
-            this.flowLayoutPanel1.TabIndex = 8;
             // 
             // MusicOpenDialog
             // 
@@ -354,29 +240,71 @@ namespace MedEnthDesktop
             // 
             this.OptionDescriptionLabel.AutoSize = true;
             this.OptionDescriptionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OptionDescriptionLabel.Location = new System.Drawing.Point(13, 260);
+            this.OptionDescriptionLabel.Location = new System.Drawing.Point(3, 261);
             this.OptionDescriptionLabel.Name = "OptionDescriptionLabel";
             this.OptionDescriptionLabel.Size = new System.Drawing.Size(171, 15);
             this.OptionDescriptionLabel.TabIndex = 9;
             this.OptionDescriptionLabel.Text = "These are what the options do";
             // 
+            // OptionsViewTable
+            // 
+            this.OptionsViewTable.ColumnCount = 2;
+            this.OptionsViewTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.25412F));
+            this.OptionsViewTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.74588F));
+            this.OptionsViewTable.Controls.Add(this.MusicOptionsGroup, 1, 0);
+            this.OptionsViewTable.Controls.Add(this.OptionDescriptionLabel, 0, 1);
+            this.OptionsViewTable.Controls.Add(this.TimerOptionsGroup, 0, 0);
+            this.OptionsViewTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OptionsViewTable.Location = new System.Drawing.Point(0, 0);
+            this.OptionsViewTable.Name = "OptionsViewTable";
+            this.OptionsViewTable.RowCount = 2;
+            this.OptionsViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.49746F));
+            this.OptionsViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.50254F));
+            this.OptionsViewTable.Size = new System.Drawing.Size(606, 394);
+            this.OptionsViewTable.TabIndex = 10;
+            // 
+            // HourListBox
+            // 
+            this.HourListBox.Location = new System.Drawing.Point(17, 60);
+            this.HourListBox.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.HourListBox.Name = "HourListBox";
+            this.HourListBox.Size = new System.Drawing.Size(50, 20);
+            this.HourListBox.TabIndex = 6;
+            // 
+            // MinuteListBox
+            // 
+            this.MinuteListBox.Location = new System.Drawing.Point(94, 60);
+            this.MinuteListBox.Maximum = new decimal(new int[] {
+            59,
+            0,
+            0,
+            0});
+            this.MinuteListBox.Name = "MinuteListBox";
+            this.MinuteListBox.Size = new System.Drawing.Size(50, 20);
+            this.MinuteListBox.TabIndex = 7;
+            // 
             // OptionsView
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.Controls.Add(this.OptionDescriptionLabel);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.OptionsViewTable);
             this.Name = "OptionsView";
-            this.Size = new System.Drawing.Size(606, 381);
+            this.Size = new System.Drawing.Size(606, 394);
             this.Load += new System.EventHandler(this.OptionsView_Load);
             this.Enter += new System.EventHandler(this.OptionsView_Enter);
             this.MusicOptionsGroup.ResumeLayout(false);
             this.MusicOptionsGroup.PerformLayout();
             this.TimerOptionsGroup.ResumeLayout(false);
             this.TimerOptionsGroup.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.OptionsViewTable.ResumeLayout(false);
+            this.OptionsViewTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HourListBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MinuteListBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -384,20 +312,20 @@ namespace MedEnthDesktop
         private System.Windows.Forms.ToolTip OptionsToolTip;
         public System.Windows.Forms.CheckBox EnableTimerCheckbox;
         private System.Windows.Forms.Label ColonLabel;
-        public System.Windows.Forms.ListBox MinuteListBox;
-        public System.Windows.Forms.ListBox HourListBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox MusicOptionsGroup;
         private System.Windows.Forms.Button MusicBrowseButton;
         private System.Windows.Forms.Label MusicLocationLabel;
         private System.Windows.Forms.GroupBox TimerOptionsGroup;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.OpenFileDialog MusicOpenDialog;
         private System.Windows.Forms.Label OptionDescriptionLabel;
         public System.Windows.Forms.RadioButton NoMusicRadioButton;
         public System.Windows.Forms.RadioButton LoopMusicRadioButton;
         public System.Windows.Forms.RadioButton MusicPlayOnceRadioButton;
         public System.Windows.Forms.TextBox MusicLocationTextBox;
+        private System.Windows.Forms.TableLayoutPanel OptionsViewTable;
+        public System.Windows.Forms.NumericUpDown MinuteListBox;
+        public System.Windows.Forms.NumericUpDown HourListBox;
     }
 }
