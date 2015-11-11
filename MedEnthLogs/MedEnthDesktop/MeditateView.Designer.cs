@@ -63,7 +63,6 @@ namespace MedEnthDesktop
             this.MeditateLabel.TabIndex = 0;
             this.MeditateLabel.Text = "Have Fun!";
             this.MeditateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.MeditateLabel.VisibleChanged += new System.EventHandler(this.MeditateLabel_VisibleChanged);
             // 
             // TimerLabel
             // 

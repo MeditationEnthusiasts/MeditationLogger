@@ -46,7 +46,7 @@ namespace MedEnthDesktop
         /// <summary>
         /// Updates the background color randomly.
         /// </summary>
-        private void UpdateBackground()
+        public void UpdateBackground()
         {
             DateTime time = DateTime.Now;
             this.BackColor = Color.FromArgb(
@@ -54,15 +54,6 @@ namespace MedEnthDesktop
                 rng.Next( 175, 240 ),
                 rng.Next( 175, 240 )
             );
-        }
-
-        private void MeditateLabel_VisibleChanged( object sender, EventArgs e )
-        {
-            // If we are now visible, update our initial time.
-            if ( this.Visible )
-            {
-                UpdateBackground();
-            }
         }
     }
 }

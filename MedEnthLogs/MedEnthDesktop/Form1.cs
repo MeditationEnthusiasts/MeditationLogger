@@ -459,11 +459,11 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
 
                         // Switch View.
                         this.optionView.Visible = false;
+                        this.meditateView.UpdateBackground();
                         this.meditateView.Visible = true;
+                        this.StartTableLayout.BackColor = this.meditateView.BackColor;
                         this.saveView.Visible = false;
                         this.StartButton.Text = "Finish";
-
-                        this.StartTableLayout.BackColor = this.meditateView.BackColor;
 
                         // Update State
                         this.currentState = StartState.Start;
