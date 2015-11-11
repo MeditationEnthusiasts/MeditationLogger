@@ -18,15 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MedEnthDesktop;
 using MedEnthDesktop.Properties;
@@ -63,6 +58,8 @@ namespace MedEnthLogsDesktop
         /// </summary>
         private Color originalColor;
 
+        private NAudioMusicManager timesUpSound;
+
         // ---- Views ----
 
         OptionsView optionView;
@@ -76,6 +73,13 @@ namespace MedEnthLogsDesktop
             this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
             this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
             this.VersionValueLabel.Text = Api.Version;
+
+            this.timesUpSound = new NAudioMusicManager();
+            this.timesUpSound.OnStop =
+                delegate ()
+                {
+                    this.timesUpSound.Stop();
+                };
 
             this.api = api;
             ReloadLogs();
@@ -100,6 +104,7 @@ namespace MedEnthLogsDesktop
                 {
                     if ( this.currentState == StartState.Start )
                     {
+                        this.timesUpSound.Play( "media/temple_bell.wav" );
                         GoToNextState();
                     }
                 };
@@ -379,7 +384,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
         {
             if ( this.logViews.Count == 0 )
             {
-
+                // No-op
             }
             else
             {
@@ -522,6 +527,8 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         this.saveView.TechniqueUsedTextbox.Text = string.Empty;
                         this.saveView.CommentsTextBox.Text = string.Empty;
                         this.StartButton.Text = "Start";
+
+                        this.timesUpSound.Stop();
 
                         // Update State.
                         this.currentState = StartState.Idle;

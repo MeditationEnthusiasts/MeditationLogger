@@ -914,7 +914,7 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.Padding = new System.Windows.Forms.Padding(3);
             this.ExternalLibTab.Size = new System.Drawing.Size(587, 414);
             this.ExternalLibTab.TabIndex = 2;
-            this.ExternalLibTab.Text = "External Libraries";
+            this.ExternalLibTab.Text = "Credits";
             // 
             // ExtLibTable
             // 
@@ -948,12 +948,12 @@ namespace MedEnthLogsDesktop
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 0);
+            this.label8.Location = new System.Drawing.Point(19, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(567, 58);
+            this.label8.Size = new System.Drawing.Size(543, 58);
             this.label8.TabIndex = 1;
-            this.label8.Text = "This project is made possible by several external libraries.  Below is a listing " +
-    "of all of them, and their corresponding license.";
+            this.label8.Text = "This project is made possible by several external libraries and sound effects.  B" +
+    "elow is a listing of all of them, and their corresponding license.";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ExportSaveDialog

@@ -63,6 +63,7 @@
 			</Component>
             <Component Id="Media" Guid="7506520D-A2B3-4946-806C-517CD528E83C" Directory="mediaFolder">
                 <File Id="MarkerIcon" Name="marker-icon.png" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\media\marker-icon.png"/>
+                <File Id="templeBellWave" Name="temple_bell.wav" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\media\temple_bell.wav"/>
             </Component>
             <Component Id="x86Components" Guid="F6E635FD-9F23-4F18-B980-B704A470910A" Directory="x86Folder">
                 <File Id="x86SqliteInteropDll" Name="SQLite.Interop.dll" DiskId="1" Source="..\MedEnthLogsCli\bin\Release\x86\SQLite.Interop.dll"/>
