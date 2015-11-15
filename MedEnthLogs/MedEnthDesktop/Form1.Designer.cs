@@ -120,6 +120,7 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.CheckForUpdatesButton = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
@@ -713,10 +714,9 @@ namespace MedEnthLogsDesktop
             // 
             this.AppInfoTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.AppInfoTable.ColumnCount = 2;
-            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.34965F));
-            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.65035F));
+            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.AppInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this.AppInfoTable.Controls.Add(this.VersionLabel, 0, 1);
-            this.AppInfoTable.Controls.Add(this.VersionValueLabel, 1, 1);
             this.AppInfoTable.Controls.Add(this.ReportABugValue, 1, 3);
             this.AppInfoTable.Controls.Add(this.BugLabel, 0, 3);
             this.AppInfoTable.Controls.Add(this.VisitSiteLabel, 0, 2);
@@ -726,18 +726,20 @@ namespace MedEnthLogsDesktop
             this.AppInfoTable.Controls.Add(this.ViewWikiValueLabel, 1, 4);
             this.AppInfoTable.Controls.Add(this.WikiLabel, 0, 4);
             this.AppInfoTable.Controls.Add(this.CopyrightValue, 1, 6);
+            this.AppInfoTable.Controls.Add(this.VersionValueLabel, 1, 1);
+            this.AppInfoTable.Controls.Add(this.CheckForUpdatesButton, 1, 7);
             this.AppInfoTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AppInfoTable.Location = new System.Drawing.Point(3, 3);
             this.AppInfoTable.Name = "AppInfoTable";
-            this.AppInfoTable.RowCount = 7;
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 59F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 86F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 97F));
-            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.AppInfoTable.RowCount = 8;
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.AppInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.AppInfoTable.Size = new System.Drawing.Size(581, 408);
             this.AppInfoTable.TabIndex = 0;
             this.AppInfoTable.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
@@ -745,7 +747,7 @@ namespace MedEnthLogsDesktop
             // VersionLabel
             // 
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(3, 38);
+            this.VersionLabel.Location = new System.Drawing.Point(3, 51);
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(67, 20);
             this.VersionLabel.TabIndex = 0;
@@ -754,7 +756,7 @@ namespace MedEnthLogsDesktop
             // VersionValueLabel
             // 
             this.VersionValueLabel.AutoSize = true;
-            this.VersionValueLabel.Location = new System.Drawing.Point(150, 38);
+            this.VersionValueLabel.Location = new System.Drawing.Point(148, 51);
             this.VersionValueLabel.Name = "VersionValueLabel";
             this.VersionValueLabel.Size = new System.Drawing.Size(44, 20);
             this.VersionValueLabel.TabIndex = 1;
@@ -763,7 +765,7 @@ namespace MedEnthLogsDesktop
             // ReportABugValue
             // 
             this.ReportABugValue.AutoSize = true;
-            this.ReportABugValue.Location = new System.Drawing.Point(150, 120);
+            this.ReportABugValue.Location = new System.Drawing.Point(148, 153);
             this.ReportABugValue.Name = "ReportABugValue";
             this.ReportABugValue.Size = new System.Drawing.Size(324, 20);
             this.ReportABugValue.TabIndex = 3;
@@ -775,7 +777,7 @@ namespace MedEnthLogsDesktop
             // 
             this.BugLabel.AutoSize = true;
             this.BugLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BugLabel.Location = new System.Drawing.Point(3, 120);
+            this.BugLabel.Location = new System.Drawing.Point(3, 153);
             this.BugLabel.Name = "BugLabel";
             this.BugLabel.Size = new System.Drawing.Size(106, 20);
             this.BugLabel.TabIndex = 2;
@@ -785,7 +787,7 @@ namespace MedEnthLogsDesktop
             // 
             this.VisitSiteLabel.AutoSize = true;
             this.VisitSiteLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.VisitSiteLabel.Location = new System.Drawing.Point(3, 65);
+            this.VisitSiteLabel.Location = new System.Drawing.Point(3, 102);
             this.VisitSiteLabel.Name = "VisitSiteLabel";
             this.VisitSiteLabel.Size = new System.Drawing.Size(75, 20);
             this.VisitSiteLabel.TabIndex = 6;
@@ -794,7 +796,7 @@ namespace MedEnthLogsDesktop
             // VistSiteLabel
             // 
             this.VistSiteLabel.AutoSize = true;
-            this.VistSiteLabel.Location = new System.Drawing.Point(150, 65);
+            this.VistSiteLabel.Location = new System.Drawing.Point(148, 102);
             this.VistSiteLabel.Name = "VistSiteLabel";
             this.VistSiteLabel.Size = new System.Drawing.Size(261, 20);
             this.VistSiteLabel.TabIndex = 7;
@@ -806,7 +808,7 @@ namespace MedEnthLogsDesktop
             // 
             this.ViewSourceLabel.AutoSize = true;
             this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 224);
+            this.ViewSourceLabel.Location = new System.Drawing.Point(3, 255);
             this.ViewSourceLabel.Name = "ViewSourceLabel";
             this.ViewSourceLabel.Size = new System.Drawing.Size(102, 20);
             this.ViewSourceLabel.TabIndex = 4;
@@ -815,7 +817,7 @@ namespace MedEnthLogsDesktop
             // ViewSourceValueLabel
             // 
             this.ViewSourceValueLabel.AutoSize = true;
-            this.ViewSourceValueLabel.Location = new System.Drawing.Point(150, 224);
+            this.ViewSourceValueLabel.Location = new System.Drawing.Point(148, 255);
             this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
             this.ViewSourceValueLabel.Size = new System.Drawing.Size(426, 40);
             this.ViewSourceValueLabel.TabIndex = 5;
@@ -826,7 +828,7 @@ namespace MedEnthLogsDesktop
             // ViewWikiValueLabel
             // 
             this.ViewWikiValueLabel.AutoSize = true;
-            this.ViewWikiValueLabel.Location = new System.Drawing.Point(150, 165);
+            this.ViewWikiValueLabel.Location = new System.Drawing.Point(148, 204);
             this.ViewWikiValueLabel.Name = "ViewWikiValueLabel";
             this.ViewWikiValueLabel.Size = new System.Drawing.Size(424, 40);
             this.ViewWikiValueLabel.TabIndex = 8;
@@ -838,7 +840,7 @@ namespace MedEnthLogsDesktop
             // WikiLabel
             // 
             this.WikiLabel.AutoSize = true;
-            this.WikiLabel.Location = new System.Drawing.Point(3, 165);
+            this.WikiLabel.Location = new System.Drawing.Point(3, 204);
             this.WikiLabel.Name = "WikiLabel";
             this.WikiLabel.Size = new System.Drawing.Size(80, 20);
             this.WikiLabel.TabIndex = 9;
@@ -848,7 +850,7 @@ namespace MedEnthLogsDesktop
             // 
             this.CopyrightValue.AutoSize = true;
             this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.CopyrightValue.Location = new System.Drawing.Point(150, 310);
+            this.CopyrightValue.Location = new System.Drawing.Point(148, 306);
             this.CopyrightValue.Name = "CopyrightValue";
             this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
             this.CopyrightValue.TabIndex = 10;
@@ -968,6 +970,17 @@ namespace MedEnthLogsDesktop
             // SyncOpenDialog
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
+            // 
+            // CheckForUpdatesButton
+            // 
+            this.CheckForUpdatesButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.CheckForUpdatesButton.Location = new System.Drawing.Point(407, 360);
+            this.CheckForUpdatesButton.Name = "CheckForUpdatesButton";
+            this.CheckForUpdatesButton.Size = new System.Drawing.Size(171, 45);
+            this.CheckForUpdatesButton.TabIndex = 11;
+            this.CheckForUpdatesButton.Text = "Check For Updates";
+            this.CheckForUpdatesButton.UseVisualStyleBackColor = true;
+            this.CheckForUpdatesButton.Click += new System.EventHandler(this.CheckForUpdatesButton_Click);
             // 
             // HomePage
             // 
@@ -1091,6 +1104,7 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Label LastSessionLabel;
         private System.Windows.Forms.Label LastSessionValueLabel;
         private System.Windows.Forms.TableLayoutPanel StartTableLayout;
+        private System.Windows.Forms.Button CheckForUpdatesButton;
     }
 }
 

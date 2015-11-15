@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 using MedEnthDesktop;
@@ -203,6 +204,9 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             return js;
         }
 
+        /// <summary>
+        /// Reloads the logs from memory and renders them to the UI.
+        /// </summary>
         private void ReloadLogs()
         {
             this.api.PopulateLogbook();
@@ -586,6 +590,77 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
         private void ViewWikiValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
             System.Diagnostics.Process.Start( "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logger:start" );
+        }
+
+        private void CheckForUpdatesButton_Click( object sender, EventArgs e )
+        {
+            try
+            {
+                if ( CheckForUpdate() )
+                {
+                    DialogResult result = MessageBox.Show(
+                        "There's a new version.  Open browser to download?",
+                        "An update is available.",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information
+                    );
+
+                    if ( result == DialogResult.Yes )
+                    {
+                        System.Diagnostics.Process.Start( "http://app.meditationenthusiasts.org/software/logger/latest/win32/" );
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Software is at the latest version.",
+                        "Already up to date.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+            }
+            catch ( Exception err )
+            {
+                MessageBox.Show(
+                    err.Message,
+                    "Error when checking for updates",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if there's an update to the app or not.
+        /// </summary>
+        /// <returns>True if there's an update, else false.</returns>
+        private bool CheckForUpdate()
+        {
+            WebRequest request = WebRequest.Create( "http://app.meditationenthusiasts.org/software/logger/latest/version.txt" );
+            request.Method = "GET";
+
+            using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse )
+            {
+                if ( response.StatusCode != HttpStatusCode.OK )
+                {
+                    throw new ApplicationException(
+                        "http request returned invalid status: " + response.StatusCode
+                    );
+                }
+
+                using ( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
+                {
+                    string version = reader.ReadToEnd();
+                    version = version.Trim();
+
+                    if ( version != Api.Version )
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
