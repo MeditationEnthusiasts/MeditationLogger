@@ -78,17 +78,14 @@ namespace MedEnthLogsDesktop
             this.ImportBrowseButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ImportFileLocation = new System.Windows.Forms.TextBox();
-            this.importLabel2 = new System.Windows.Forms.Label();
             this.ImportLabel1 = new System.Windows.Forms.Label();
             this.ExportView = new System.Windows.Forms.TabPage();
             this.ExportButton = new System.Windows.Forms.Button();
             this.ExportBrowseButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.ExportBrowseLabel = new System.Windows.Forms.Label();
             this.ExportLocationText = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.ExportDescriptionLabel = new System.Windows.Forms.Label();
             this.SyncView = new System.Windows.Forms.TabPage();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.SyncButton = new System.Windows.Forms.Button();
             this.SyncBrowseButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -99,7 +96,6 @@ namespace MedEnthLogsDesktop
             this.AppInfoTab = new System.Windows.Forms.TabPage();
             this.AppInfoTable = new System.Windows.Forms.TableLayoutPanel();
             this.VersionLabel = new System.Windows.Forms.Label();
-            this.VersionValueLabel = new System.Windows.Forms.Label();
             this.ReportABugValue = new System.Windows.Forms.LinkLabel();
             this.BugLabel = new System.Windows.Forms.Label();
             this.VisitSiteLabel = new System.Windows.Forms.Label();
@@ -109,6 +105,8 @@ namespace MedEnthLogsDesktop
             this.ViewWikiValueLabel = new System.Windows.Forms.LinkLabel();
             this.WikiLabel = new System.Windows.Forms.Label();
             this.CopyrightValue = new System.Windows.Forms.Label();
+            this.VersionValueLabel = new System.Windows.Forms.Label();
+            this.CheckForUpdatesButton = new System.Windows.Forms.Button();
             this.MedEnthLicense = new System.Windows.Forms.TabPage();
             this.LicenseTable = new System.Windows.Forms.TableLayoutPanel();
             this.GplTextBox = new System.Windows.Forms.TextBox();
@@ -120,7 +118,13 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.CheckForUpdatesButton = new System.Windows.Forms.Button();
+            this.ExportViewTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ExportViewFlowControl = new System.Windows.Forms.FlowLayoutPanel();
+            this.ExportBrowseTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.ImportTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
@@ -144,6 +148,12 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
+            this.ExportViewTable.SuspendLayout();
+            this.ExportBrowseTableLayout.SuspendLayout();
+            this.ImportTableLayout.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -462,12 +472,7 @@ namespace MedEnthLogsDesktop
             // ImportView
             // 
             this.ImportView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ImportView.Controls.Add(this.ImportButton);
-            this.ImportView.Controls.Add(this.ImportBrowseButton);
-            this.ImportView.Controls.Add(this.label1);
-            this.ImportView.Controls.Add(this.ImportFileLocation);
-            this.ImportView.Controls.Add(this.importLabel2);
-            this.ImportView.Controls.Add(this.ImportLabel1);
+            this.ImportView.Controls.Add(this.ImportTableLayout);
             this.ImportView.Location = new System.Drawing.Point(4, 29);
             this.ImportView.Name = "ImportView";
             this.ImportView.Padding = new System.Windows.Forms.Padding(3);
@@ -477,8 +482,9 @@ namespace MedEnthLogsDesktop
             // 
             // ImportButton
             // 
+            this.ImportButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ImportButton.Enabled = false;
-            this.ImportButton.Location = new System.Drawing.Point(143, 158);
+            this.ImportButton.Location = new System.Drawing.Point(169, 175);
             this.ImportButton.Name = "ImportButton";
             this.ImportButton.Size = new System.Drawing.Size(242, 56);
             this.ImportButton.TabIndex = 5;
@@ -488,7 +494,7 @@ namespace MedEnthLogsDesktop
             // 
             // ImportBrowseButton
             // 
-            this.ImportBrowseButton.Location = new System.Drawing.Point(412, 95);
+            this.ImportBrowseButton.Location = new System.Drawing.Point(433, 3);
             this.ImportBrowseButton.Name = "ImportBrowseButton";
             this.ImportBrowseButton.Size = new System.Drawing.Size(87, 26);
             this.ImportBrowseButton.TabIndex = 4;
@@ -498,8 +504,9 @@ namespace MedEnthLogsDesktop
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 98);
+            this.label1.Location = new System.Drawing.Point(36, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 20);
             this.label1.TabIndex = 3;
@@ -507,38 +514,29 @@ namespace MedEnthLogsDesktop
             // 
             // ImportFileLocation
             // 
-            this.ImportFileLocation.Location = new System.Drawing.Point(116, 95);
+            this.ImportFileLocation.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ImportFileLocation.Location = new System.Drawing.Point(146, 3);
             this.ImportFileLocation.Name = "ImportFileLocation";
-            this.ImportFileLocation.Size = new System.Drawing.Size(290, 26);
+            this.ImportFileLocation.Size = new System.Drawing.Size(281, 26);
             this.ImportFileLocation.TabIndex = 2;
             this.ImportFileLocation.TextChanged += new System.EventHandler(this.ImportFileLocation_TextChanged);
             // 
-            // importLabel2
-            // 
-            this.importLabel2.AutoSize = true;
-            this.importLabel2.Location = new System.Drawing.Point(6, 23);
-            this.importLabel2.Name = "importLabel2";
-            this.importLabel2.Size = new System.Drawing.Size(236, 20);
-            this.importLabel2.TabIndex = 1;
-            this.importLabel2.Text = "The imported file is not modified.";
-            // 
             // ImportLabel1
             // 
+            this.ImportLabel1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ImportLabel1.AutoSize = true;
-            this.ImportLabel1.Location = new System.Drawing.Point(6, 3);
+            this.ImportLabel1.Location = new System.Drawing.Point(10, 20);
+            this.ImportLabel1.Margin = new System.Windows.Forms.Padding(3, 20, 3, 0);
             this.ImportLabel1.Name = "ImportLabel1";
-            this.ImportLabel1.Size = new System.Drawing.Size(417, 20);
+            this.ImportLabel1.Size = new System.Drawing.Size(561, 40);
             this.ImportLabel1.TabIndex = 0;
-            this.ImportLabel1.Text = "Import logs from XML, JSON, or MLG files to the logbook. ";
+            this.ImportLabel1.Text = "Import logs from XML, JSON, or MLG files to the logbook.   The imported file is n" +
+    "ot modified.";
             // 
             // ExportView
             // 
             this.ExportView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ExportView.Controls.Add(this.ExportButton);
-            this.ExportView.Controls.Add(this.ExportBrowseButton);
-            this.ExportView.Controls.Add(this.label2);
-            this.ExportView.Controls.Add(this.ExportLocationText);
-            this.ExportView.Controls.Add(this.label4);
+            this.ExportView.Controls.Add(this.ExportViewTable);
             this.ExportView.Location = new System.Drawing.Point(4, 29);
             this.ExportView.Name = "ExportView";
             this.ExportView.Padding = new System.Windows.Forms.Padding(3);
@@ -548,8 +546,9 @@ namespace MedEnthLogsDesktop
             // 
             // ExportButton
             // 
+            this.ExportButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ExportButton.Enabled = false;
-            this.ExportButton.Location = new System.Drawing.Point(143, 158);
+            this.ExportButton.Location = new System.Drawing.Point(169, 175);
             this.ExportButton.Name = "ExportButton";
             this.ExportButton.Size = new System.Drawing.Size(242, 56);
             this.ExportButton.TabIndex = 11;
@@ -559,7 +558,7 @@ namespace MedEnthLogsDesktop
             // 
             // ExportBrowseButton
             // 
-            this.ExportBrowseButton.Location = new System.Drawing.Point(426, 95);
+            this.ExportBrowseButton.Location = new System.Drawing.Point(433, 3);
             this.ExportBrowseButton.Name = "ExportBrowseButton";
             this.ExportBrowseButton.Size = new System.Drawing.Size(87, 26);
             this.ExportBrowseButton.TabIndex = 10;
@@ -567,42 +566,40 @@ namespace MedEnthLogsDesktop
             this.ExportBrowseButton.UseVisualStyleBackColor = true;
             this.ExportBrowseButton.Click += new System.EventHandler(this.ExportBrowseButton_Click);
             // 
-            // label2
+            // ExportBrowseLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 98);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 20);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Export Location:";
+            this.ExportBrowseLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExportBrowseLabel.AutoSize = true;
+            this.ExportBrowseLabel.Location = new System.Drawing.Point(16, 0);
+            this.ExportBrowseLabel.Name = "ExportBrowseLabel";
+            this.ExportBrowseLabel.Size = new System.Drawing.Size(124, 20);
+            this.ExportBrowseLabel.TabIndex = 9;
+            this.ExportBrowseLabel.Text = "Export Location:";
             // 
             // ExportLocationText
             // 
-            this.ExportLocationText.Location = new System.Drawing.Point(130, 95);
+            this.ExportLocationText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ExportLocationText.Location = new System.Drawing.Point(146, 3);
             this.ExportLocationText.Name = "ExportLocationText";
-            this.ExportLocationText.Size = new System.Drawing.Size(290, 26);
+            this.ExportLocationText.Size = new System.Drawing.Size(281, 26);
             this.ExportLocationText.TabIndex = 8;
             this.ExportLocationText.TextChanged += new System.EventHandler(this.ExportLocationText_TextChanged);
             // 
-            // label4
+            // ExportDescriptionLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 3);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(417, 20);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Export logs to XML, JSON, or MLG files from the logbook. ";
+            this.ExportDescriptionLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.ExportDescriptionLabel.AutoSize = true;
+            this.ExportDescriptionLabel.Location = new System.Drawing.Point(82, 20);
+            this.ExportDescriptionLabel.Margin = new System.Windows.Forms.Padding(3, 20, 3, 0);
+            this.ExportDescriptionLabel.Name = "ExportDescriptionLabel";
+            this.ExportDescriptionLabel.Size = new System.Drawing.Size(417, 20);
+            this.ExportDescriptionLabel.TabIndex = 6;
+            this.ExportDescriptionLabel.Text = "Export logs to XML, JSON, or MLG files from the logbook. ";
             // 
             // SyncView
             // 
             this.SyncView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.SyncView.Controls.Add(this.label7);
-            this.SyncView.Controls.Add(this.label6);
-            this.SyncView.Controls.Add(this.SyncButton);
-            this.SyncView.Controls.Add(this.SyncBrowseButton);
-            this.SyncView.Controls.Add(this.label3);
-            this.SyncView.Controls.Add(this.SyncLocationText);
-            this.SyncView.Controls.Add(this.label5);
+            this.SyncView.Controls.Add(this.tableLayoutPanel1);
             this.SyncView.Location = new System.Drawing.Point(4, 29);
             this.SyncView.Name = "SyncView";
             this.SyncView.Padding = new System.Windows.Forms.Padding(3);
@@ -610,28 +607,11 @@ namespace MedEnthLogsDesktop
             this.SyncView.TabIndex = 3;
             this.SyncView.Text = "Sync";
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 43);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(317, 20);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "will be added to the logbook, and vice versa.";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 23);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(426, 20);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "All logs that exist in MLG file that do not exist in the logbook";
-            // 
             // SyncButton
             // 
+            this.SyncButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.SyncButton.Enabled = false;
-            this.SyncButton.Location = new System.Drawing.Point(143, 158);
+            this.SyncButton.Location = new System.Drawing.Point(169, 175);
             this.SyncButton.Name = "SyncButton";
             this.SyncButton.Size = new System.Drawing.Size(242, 56);
             this.SyncButton.TabIndex = 16;
@@ -641,7 +621,7 @@ namespace MedEnthLogsDesktop
             // 
             // SyncBrowseButton
             // 
-            this.SyncBrowseButton.Location = new System.Drawing.Point(465, 95);
+            this.SyncBrowseButton.Location = new System.Drawing.Point(433, 3);
             this.SyncBrowseButton.Name = "SyncBrowseButton";
             this.SyncBrowseButton.Size = new System.Drawing.Size(87, 26);
             this.SyncBrowseButton.TabIndex = 15;
@@ -651,29 +631,34 @@ namespace MedEnthLogsDesktop
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 98);
+            this.label3.Location = new System.Drawing.Point(48, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(157, 20);
+            this.label3.Size = new System.Drawing.Size(92, 40);
             this.label3.TabIndex = 14;
             this.label3.Text = "Other MLG Location:";
             // 
             // SyncLocationText
             // 
-            this.SyncLocationText.Location = new System.Drawing.Point(169, 95);
+            this.SyncLocationText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SyncLocationText.Location = new System.Drawing.Point(146, 3);
             this.SyncLocationText.Name = "SyncLocationText";
-            this.SyncLocationText.Size = new System.Drawing.Size(290, 26);
+            this.SyncLocationText.Size = new System.Drawing.Size(281, 26);
             this.SyncLocationText.TabIndex = 13;
             this.SyncLocationText.TextChanged += new System.EventHandler(this.SyncLocationText_TextChanged);
             // 
             // label5
             // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 3);
+            this.label5.Location = new System.Drawing.Point(8, 20);
+            this.label5.Margin = new System.Windows.Forms.Padding(3, 20, 3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(297, 20);
+            this.label5.Size = new System.Drawing.Size(565, 40);
             this.label5.TabIndex = 12;
-            this.label5.Text = "Syncs the logbook with another MLG file.";
+            this.label5.Text = "Syncs the logbook with another MLG file.  All logs that exist in the MLG file tha" +
+    "t do not exist in the logbook will be added to the logbook, and vice versa.";
             // 
             // AboutView
             // 
@@ -752,15 +737,6 @@ namespace MedEnthLogsDesktop
             this.VersionLabel.Size = new System.Drawing.Size(67, 20);
             this.VersionLabel.TabIndex = 0;
             this.VersionLabel.Text = "Version:";
-            // 
-            // VersionValueLabel
-            // 
-            this.VersionValueLabel.AutoSize = true;
-            this.VersionValueLabel.Location = new System.Drawing.Point(148, 51);
-            this.VersionValueLabel.Name = "VersionValueLabel";
-            this.VersionValueLabel.Size = new System.Drawing.Size(44, 20);
-            this.VersionValueLabel.TabIndex = 1;
-            this.VersionValueLabel.Text = "0.1.0";
             // 
             // ReportABugValue
             // 
@@ -855,6 +831,26 @@ namespace MedEnthLogsDesktop
             this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
             this.CopyrightValue.TabIndex = 10;
             this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
+            // 
+            // VersionValueLabel
+            // 
+            this.VersionValueLabel.AutoSize = true;
+            this.VersionValueLabel.Location = new System.Drawing.Point(148, 51);
+            this.VersionValueLabel.Name = "VersionValueLabel";
+            this.VersionValueLabel.Size = new System.Drawing.Size(44, 20);
+            this.VersionValueLabel.TabIndex = 1;
+            this.VersionValueLabel.Text = "0.1.0";
+            // 
+            // CheckForUpdatesButton
+            // 
+            this.CheckForUpdatesButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.CheckForUpdatesButton.Location = new System.Drawing.Point(407, 360);
+            this.CheckForUpdatesButton.Name = "CheckForUpdatesButton";
+            this.CheckForUpdatesButton.Size = new System.Drawing.Size(171, 45);
+            this.CheckForUpdatesButton.TabIndex = 11;
+            this.CheckForUpdatesButton.Text = "Check For Updates";
+            this.CheckForUpdatesButton.UseVisualStyleBackColor = true;
+            this.CheckForUpdatesButton.Click += new System.EventHandler(this.CheckForUpdatesButton_Click);
             // 
             // MedEnthLicense
             // 
@@ -971,16 +967,121 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // CheckForUpdatesButton
+            // ExportViewTable
             // 
-            this.CheckForUpdatesButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.CheckForUpdatesButton.Location = new System.Drawing.Point(407, 360);
-            this.CheckForUpdatesButton.Name = "CheckForUpdatesButton";
-            this.CheckForUpdatesButton.Size = new System.Drawing.Size(171, 45);
-            this.CheckForUpdatesButton.TabIndex = 11;
-            this.CheckForUpdatesButton.Text = "Check For Updates";
-            this.CheckForUpdatesButton.UseVisualStyleBackColor = true;
-            this.CheckForUpdatesButton.Click += new System.EventHandler(this.CheckForUpdatesButton_Click);
+            this.ExportViewTable.ColumnCount = 1;
+            this.ExportViewTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ExportViewTable.Controls.Add(this.ExportDescriptionLabel, 0, 0);
+            this.ExportViewTable.Controls.Add(this.ExportButton, 0, 2);
+            this.ExportViewTable.Controls.Add(this.ExportViewFlowControl, 0, 3);
+            this.ExportViewTable.Controls.Add(this.ExportBrowseTableLayout, 0, 1);
+            this.ExportViewTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportViewTable.Location = new System.Drawing.Point(3, 3);
+            this.ExportViewTable.Name = "ExportViewTable";
+            this.ExportViewTable.RowCount = 4;
+            this.ExportViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.28205F));
+            this.ExportViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.97693F));
+            this.ExportViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.74102F));
+            this.ExportViewTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.ExportViewTable.Size = new System.Drawing.Size(581, 408);
+            this.ExportViewTable.TabIndex = 12;
+            // 
+            // ExportViewFlowControl
+            // 
+            this.ExportViewFlowControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExportViewFlowControl.Location = new System.Drawing.Point(3, 360);
+            this.ExportViewFlowControl.Name = "ExportViewFlowControl";
+            this.ExportViewFlowControl.Size = new System.Drawing.Size(575, 45);
+            this.ExportViewFlowControl.TabIndex = 12;
+            // 
+            // ExportBrowseTableLayout
+            // 
+            this.ExportBrowseTableLayout.ColumnCount = 3;
+            this.ExportBrowseTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ExportBrowseTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ExportBrowseTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ExportBrowseTableLayout.Controls.Add(this.ExportBrowseButton, 2, 0);
+            this.ExportBrowseTableLayout.Controls.Add(this.ExportLocationText, 1, 0);
+            this.ExportBrowseTableLayout.Controls.Add(this.ExportBrowseLabel, 0, 0);
+            this.ExportBrowseTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportBrowseTableLayout.Location = new System.Drawing.Point(3, 122);
+            this.ExportBrowseTableLayout.Name = "ExportBrowseTableLayout";
+            this.ExportBrowseTableLayout.RowCount = 1;
+            this.ExportBrowseTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ExportBrowseTableLayout.Size = new System.Drawing.Size(575, 47);
+            this.ExportBrowseTableLayout.TabIndex = 13;
+            // 
+            // ImportTableLayout
+            // 
+            this.ImportTableLayout.ColumnCount = 1;
+            this.ImportTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ImportTableLayout.Controls.Add(this.ImportLabel1, 0, 0);
+            this.ImportTableLayout.Controls.Add(this.ImportButton, 0, 2);
+            this.ImportTableLayout.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            this.ImportTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImportTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.ImportTableLayout.Name = "ImportTableLayout";
+            this.ImportTableLayout.RowCount = 4;
+            this.ImportTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.25665F));
+            this.ImportTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.983F));
+            this.ImportTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.76035F));
+            this.ImportTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.ImportTableLayout.Size = new System.Drawing.Size(581, 408);
+            this.ImportTableLayout.TabIndex = 6;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ImportFileLocation, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ImportBrowseButton, 2, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 122);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(575, 47);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.SyncButton, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.28F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.98F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.74F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(581, 408);
+            this.tableLayoutPanel1.TabIndex = 19;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 3;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.SyncLocationText, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.SyncBrowseButton, 2, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 122);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(575, 47);
+            this.tableLayoutPanel3.TabIndex = 13;
             // 
             // HomePage
             // 
@@ -1009,11 +1110,8 @@ namespace MedEnthLogsDesktop
             this.ManageLogbookView.ResumeLayout(false);
             this.ManageTabControl.ResumeLayout(false);
             this.ImportView.ResumeLayout(false);
-            this.ImportView.PerformLayout();
             this.ExportView.ResumeLayout(false);
-            this.ExportView.PerformLayout();
             this.SyncView.ResumeLayout(false);
-            this.SyncView.PerformLayout();
             this.AboutView.ResumeLayout(false);
             this.AppInfo.ResumeLayout(false);
             this.AppInfoTab.ResumeLayout(false);
@@ -1025,6 +1123,18 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
+            this.ExportViewTable.ResumeLayout(false);
+            this.ExportViewTable.PerformLayout();
+            this.ExportBrowseTableLayout.ResumeLayout(false);
+            this.ExportBrowseTableLayout.PerformLayout();
+            this.ImportTableLayout.ResumeLayout(false);
+            this.ImportTableLayout.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1042,7 +1152,6 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.TabPage ExportView;
         private System.Windows.Forms.TabPage SyncView;
         private System.Windows.Forms.TabPage StartTab;
-        private System.Windows.Forms.Label importLabel2;
         private System.Windows.Forms.Label ImportLabel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ImportFileLocation;
@@ -1050,9 +1159,9 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Button ImportButton;
         private System.Windows.Forms.Button ExportButton;
         private System.Windows.Forms.Button ExportBrowseButton;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ExportBrowseLabel;
         private System.Windows.Forms.TextBox ExportLocationText;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label ExportDescriptionLabel;
         private System.Windows.Forms.SaveFileDialog ExportSaveDialog;
         private System.Windows.Forms.OpenFileDialog ImportOpenDialog;
         private System.Windows.Forms.Button SyncButton;
@@ -1060,8 +1169,6 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox SyncLocationText;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog SyncOpenDialog;
         private System.Windows.Forms.FlowLayoutPanel StandardLogView;
         private System.Windows.Forms.Button StartButton;
@@ -1105,6 +1212,13 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.Label LastSessionValueLabel;
         private System.Windows.Forms.TableLayoutPanel StartTableLayout;
         private System.Windows.Forms.Button CheckForUpdatesButton;
+        private System.Windows.Forms.TableLayoutPanel ExportViewTable;
+        private System.Windows.Forms.FlowLayoutPanel ExportViewFlowControl;
+        private System.Windows.Forms.TableLayoutPanel ExportBrowseTableLayout;
+        private System.Windows.Forms.TableLayoutPanel ImportTableLayout;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 
