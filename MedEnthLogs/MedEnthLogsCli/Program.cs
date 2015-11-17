@@ -45,7 +45,7 @@ namespace MedEnthLogsCli
                 }
                 else if ( ( args[0] == "--version" ) || ( args[0] == "-v" ) )
                 {
-                    Console.WriteLine( "Medition Logger Version: " + Api.Version );
+                    Console.WriteLine( "Medition Logger Version: " + Api.VersionString );
                 }
                 else if ( ( args[0] == "--license" ) || args[0] == "-l" )
                 {

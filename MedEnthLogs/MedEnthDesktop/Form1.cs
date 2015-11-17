@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using MedEnthDesktop;
 using MedEnthDesktop.Properties;
 using MedEnthLogsApi;
+using SethCS.Basic;
 
 namespace MedEnthLogsDesktop
 {
@@ -73,7 +74,7 @@ namespace MedEnthLogsDesktop
 
             this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
             this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
-            this.VersionValueLabel.Text = Api.Version;
+            this.VersionValueLabel.Text = Api.VersionString;
 
             this.timesUpSound = new NAudioMusicManager();
             this.timesUpSound.OnStop =
@@ -651,12 +652,18 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
 
                 using ( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
                 {
-                    string version = reader.ReadToEnd();
-                    version = version.Trim();
+                    string versionStr = reader.ReadToEnd();
+                    versionStr = versionStr.Trim();
 
-                    if ( version != Api.Version )
+                    SemanticVersion version;
+                    if ( SemanticVersion.TryParse( versionStr, out version ) )
                     {
-                        return true;
+                        // If version from the server if newer than this program's
+                        // return true.
+                        if ( version > Api.Version )
+                        {
+                            return true;
+                        }
                     }
                 }
             }

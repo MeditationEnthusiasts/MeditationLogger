@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using SethCS.Basic;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
@@ -69,7 +70,12 @@ namespace MedEnthLogsApi
         /// <summary>
         /// The version of the API.
         /// </summary>
-        public const string Version = "0.1.0";
+        public const string VersionString = "0.1.0";
+
+        /// <summary>
+        /// Sematic Version Class of the version string.
+        /// </summary>
+        public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );
 
         // -------- Constructor --------
 

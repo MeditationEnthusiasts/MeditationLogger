@@ -1,0 +1,3 @@
+[submodule "SethCS"]
+	path = SethCS
+	url = git@bitbucket.org:xforever1313/sethcs.git

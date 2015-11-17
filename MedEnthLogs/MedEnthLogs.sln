@@ -21,10 +21,15 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Win32Install", "Win32Instal
 		{8FD66191-747C-48B8-B27B-0E41E40A4C4E} = {8FD66191-747C-48B8-B27B-0E41E40A4C4E}
 	EndProjectSection
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\SethCS\SethCS\SethCS.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
 		MedEnthLogsApi\MedEnthLogsApi.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
+		..\SethCS\SethCS\SethCS.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		MedEnthLogsApi\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
+		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
 		MedEnthLogsApi\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
