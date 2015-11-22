@@ -272,6 +272,24 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             {
                 MessageBox.Show( "No Sync file selected." );
             }
+            else
+            {
+                try
+                {
+                    this.api.Sync( SyncLocationText.Text );
+                    ReloadLogs();
+                    this.SyncLocationText.Text = string.Empty;
+                }
+                catch ( Exception err )
+                {
+                    MessageBox.Show(
+                        err.Message,
+                        "Error when syncing to logbook.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
         }
 
         // -------- Import View --------

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using SQLite.Net;
 
 namespace MedEnthLogsApi
 {
@@ -42,6 +43,31 @@ namespace MedEnthLogsApi
         private List<ILog> logTableByStartTime;
 
         // -------- Constructor --------
+
+        /// <summary>
+        /// Creates a logbook from the given sqlite connection.
+        /// </summary>
+        /// <param name="sqlite">The connection to use.</param>
+        /// <returns>A logbook fromt he sqlite connection.</returns>
+        public static LogBook FromSqlite( SQLiteConnection sqlite )
+        {
+            if ( sqlite == null )
+            {
+                throw new ArgumentNullException(
+                    nameof( sqlite )
+                );
+            }
+
+            List<ILog> logs = new List<ILog>();
+
+            var query = sqlite.Table<Log>().Where( x => x.Id > 0 );
+            foreach ( Log q in query )
+            {
+                logs.Add( q );
+            }
+
+            return new LogBook( logs );
+        }
 
         /// <summary>
         /// Constructor.

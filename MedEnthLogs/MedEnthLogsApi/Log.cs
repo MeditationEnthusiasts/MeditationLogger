@@ -118,20 +118,39 @@ namespace MedEnthLogsApi
         public Log()
         {
             this.Id = -1;
-            this.EndTime = DateTime.MinValue;
+
+            // Fun fact!  DateTime.MinValue seems to return local time, not UTC time.
+            this.EndTime = DateTime.MinValue.ToUniversalTime();
 
             // Make start time ahead of end time, 
             // this will make the log in an invalid state, as the
             // start time is ahead of the end time which is not allowed.
-            this.StartTime = DateTime.MaxValue;
+            this.StartTime = DateTime.MaxValue.ToUniversalTime();
 
             this.Guid = Guid.NewGuid();
 
-            this.EditTime = DateTime.MinValue;
+            this.EditTime = DateTime.MinValue.ToUniversalTime();
             this.Comments = string.Empty;
             this.Technique = string.Empty;
             this.Latitude = null;
             this.Longitude = null;
+        }
+
+        /// <summary>
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="log">The log to copy from.</param>
+        public Log( ILog log )
+        {
+            this.Id = log.Id;
+            this.EndTime = log.EndTime;
+            this.StartTime = log.StartTime;
+            this.Guid = log.Guid;
+            this.EditTime = log.EditTime;
+            this.Comments = log.Comments;
+            this.Technique = log.Technique;
+            this.Latitude = log.Latitude;
+            this.Longitude = log.Longitude;
         }
 
         // -------- Properties --------
@@ -311,6 +330,59 @@ namespace MedEnthLogsApi
         public Log Clone()
         {
             return (Log) this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Syncs the two logs.  The one with the most recent EditTime
+        /// is what both logs become.
+        /// ID is not updated.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">When the GUIDs of the logs do not match.</exception>
+        /// <param name="log1">Reference to the first log to sync.</param>
+        /// <param name="log2">Reference to the second log to sync.</param>
+        public static void Sync( ref Log log1, ref Log log2 )
+        {
+            // Can only sync logs that match GUIDs
+            if ( log1.Guid != log2.Guid )
+            {
+                throw new InvalidOperationException(
+                    "Can only sync logs that have matching GUIDs"
+                );
+            }
+            // No-op if they already are equal.
+            else if ( log1.Equals( log2 ) )
+            {
+                return;
+            }
+
+            // If log1 is older than log2, make log1 become log2.
+            else if ( log1.EditTime < log2.EditTime )
+            {
+                log1.Comments = log2.Comments;
+                log1.Latitude = log2.Latitude;
+                log1.Longitude = log2.Longitude;
+                log1.StartTime = log2.StartTime;
+                log1.EndTime = log2.EndTime;
+                log1.EditTime = log2.EditTime;
+                log1.Technique = log2.Technique;
+            }
+            // If log2 is older than log1, make log2 become log1.
+            else if ( log1.EditTime > log2.EditTime )
+            {
+                log2.Comments = log1.Comments;
+                log2.Latitude = log1.Latitude;
+                log2.Longitude = log1.Longitude;
+                log2.StartTime = log1.StartTime;
+                log2.EndTime = log1.EndTime;
+                log2.EditTime = log1.EditTime;
+                log2.Technique = log1.Technique;
+            }
+
+            // Note we are not changing the ID.  This is on purpose
+            // so sqlite can still figure out where to put the log in.
+
+            // No-op if the edit times match.  We can't determine which is the most recent,
+            // so don't mess with them.
         }
     }
 }

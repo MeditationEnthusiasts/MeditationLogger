@@ -47,6 +47,11 @@ namespace MedEnthLogsApi
         internal const string SessionInProgressMessage = "Can not save a session that is currently in progress";
 
         /// <summary>
+        /// Error message that appears when the logbook is null when it shouldn't be.
+        /// </summary>
+        internal const string nullLogbook = "Logbook still null, try populating first before calling this function.";
+
+        /// <summary>
         /// Reference to a SQLite connection.
         /// </summary>
         private SQLiteConnection sqlite;
@@ -161,6 +166,49 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
+        /// Inserts the given log to the database.
+        /// This will not show up in the logbook, call
+        /// PopulateLogbook() to do that.
+        /// 
+        /// If the log's GUID already exists in the logbook,
+        /// it will be overwritten.
+        /// </summary>
+        /// <param name="log">The log to add.</param>
+        public void InsertLog( Log log )
+        {
+            if ( log == null )
+            {
+                throw new ArgumentNullException(
+                    nameof( log )
+                );
+            }
+            // If sqlite is not open, throw exeption.
+            else if ( this.sqlite == null )
+            {
+                throw new InvalidOperationException(
+                    DatabaseNotOpenMessage
+                );
+            }
+            else if ( this.LogBook == null )
+            {
+                throw new InvalidOperationException(
+                    nullLogbook
+                );
+            }
+
+            if ( this.LogBook.LogExists( log.Guid ) )
+            {
+                log.Id = this.LogBook.GetLog( log.Guid ).Id;
+                this.sqlite.InsertOrReplace( log );
+            }
+            else
+            {
+                this.sqlite.Insert( log );
+            }
+            this.sqlite.Commit();
+        }
+
+        /// <summary>
         /// Starts the session.
         /// This creates a log (and by extension, sets the edit time to now),
         /// and sets the start time to now as well.
@@ -179,7 +227,7 @@ namespace MedEnthLogsApi
                 if ( this.IsSessionInProgress == false )
                 {
                     this.currentLog = new Log();
-                    this.currentLog.StartTime = DateTime.Now.ToUniversalTime();
+                    this.currentLog.StartTime = DateTime.UtcNow;
                     this.currentLog.EditTime = this.currentLog.StartTime;
 
                     TimeSpan? length = config.Length;
@@ -227,7 +275,7 @@ namespace MedEnthLogsApi
             if ( this.IsSessionInProgress == true )
             {
                 this.timer.StopAndResetTimer();
-                this.currentLog.EndTime = DateTime.Now.ToUniversalTime();
+                this.currentLog.EndTime = DateTime.UtcNow;
                 this.currentLog.EditTime = currentLog.EndTime;
                 this.musicManager.Stop();
                 this.IsSessionInProgress = false;
@@ -276,13 +324,13 @@ namespace MedEnthLogsApi
             if ( technique != null )
             {
                 this.currentLog.Technique = technique;
-                this.currentLog.EditTime = DateTime.Now.ToUniversalTime();
+                this.currentLog.EditTime = DateTime.UtcNow;
             }
 
             if ( comments != null )
             {
                 this.currentLog.Comments = comments;
-                this.currentLog.EditTime = DateTime.Now.ToUniversalTime();
+                this.currentLog.EditTime = DateTime.UtcNow;
             }
 
             this.sqlite.Insert( this.currentLog );
@@ -302,15 +350,7 @@ namespace MedEnthLogsApi
                 );
             }
 
-            List<ILog> logs = new List<ILog>();
-
-            var query = this.sqlite.Table<Log>().Where( x => x.Id > 0 );
-            foreach( Log q in query )
-            {
-                logs.Add( q );
-            }
-
-            this.LogBook = new LogBook( logs );
+            this.LogBook = LogBook.FromSqlite( this.sqlite );
         }
 
         // ---- Import Functions ----
@@ -319,6 +359,9 @@ namespace MedEnthLogsApi
         /// Performs an Import.
         /// The type of Import (XML, JSON, MLG) depends on the
         /// file extension (case doesn't matter).
+        /// 
+        /// This does not repopulate the logbook automatically,
+        /// call "PopulateLogbook" after this function to do that.
         /// </summary>
         /// <param name="fileName">Where to import the file to.</param>
         public void Import( string fileName )
@@ -385,6 +428,31 @@ namespace MedEnthLogsApi
                         "fileName"
                     );
             }
+        }
+
+        /// <summary>
+        /// Syncs the current logbook with the external logbook.
+        /// This does not repopulate the logbook automatically,
+        /// call "PopulateLogbook" after this function to do that.
+        /// </summary>
+        /// <param name="externalLogbook">The external logbook to sync with.</param>
+        public void Sync( string externalLogbook )
+        {
+            // If sqlite is not open, throw exeption.
+            if ( this.sqlite == null )
+            {
+                throw new InvalidOperationException(
+                    DatabaseNotOpenMessage
+                );
+            }
+            else if ( this.LogBook == null )
+            {
+                throw new InvalidOperationException(
+                    nullLogbook
+                );
+            }
+
+            MlgSync.Sync( this.LogBook, this.sqlite, externalLogbook, platform );
         }
 
         /// <summary>

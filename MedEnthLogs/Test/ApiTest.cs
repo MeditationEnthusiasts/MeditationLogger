@@ -30,7 +30,7 @@ using Test.TestFiles;
 namespace TestCommon
 {
     /// <summary>
-    /// Tests the Log Class.
+    /// Tests the Api Class.
     /// </summary>
     [TestFixture]
     public class LogsApiTest
@@ -46,7 +46,7 @@ namespace TestCommon
 
         private MockMusicManager mockAudio;
 
-        private const string dbLocation = "test.db";
+        private const string dbLocation = "test.mlg";
 
         // -------- Setup/Teardown --------
 
@@ -71,6 +71,8 @@ namespace TestCommon
         [TearDown]
         public void TestTeardown()
         {
+            uut.Close();
+
             if ( File.Exists( dbLocation ) )
             {
                 File.Delete( dbLocation );
@@ -727,7 +729,235 @@ namespace TestCommon
             DoImportExportTest( fileName );
         }
 
+        // ---- MLG Sync ----
+
+        /// <summary>
+        /// Ensures that the MLG can sync with each other when
+        /// all EditTimes are different.
+        /// </summary>
+        [Test]
+        public void MlgSyncDoSync()
+        {
+            const string newDbLocation = "newTestMlg.mlg";
+
+            try
+            {
+                // Create an inital logbook.
+                DoSaveTest( 3, dbLocation );
+
+                LogBook oldBook = this.uut.LogBook;
+
+                DoSaveTest( 3, newDbLocation );
+
+                LogBook newBook = this.uut.LogBook;
+
+                uut.Open( newDbLocation );
+                uut.Sync( dbLocation );
+                uut.Close();
+
+                CheckSync( dbLocation, oldBook, newDbLocation, newBook );
+            }
+            finally
+            {
+                uut.Close();
+                File.Delete( newDbLocation );
+            }
+        }
+
+        /// <summary>
+        /// Tests to make sure sync works fine when both logbooks
+        /// have log with same GUIDs.
+        /// </summary>
+        [Test]
+        public void MlgSyncDifferentEdits()
+        {
+            DoSaveTest( 2, dbLocation );
+            LogBook localBook = uut.LogBook;
+
+            // External log 1 is older than the one in the local book.
+            Log extLog1 = new Log ( localBook.Logs[0] );
+            extLog1.Latitude = 100M;
+            extLog1.Longitude = 150M;
+            extLog1.Comments = "External Log 1";
+            extLog1.EditTime = DateTime.MinValue;
+
+            // External log 2 is newer than the one in the local book, it
+            // should replace the log in the original.
+            Log extLog2 = new Log( localBook.Logs[1] );
+            extLog2.Latitude = 25M;
+            extLog2.Longitude = 50M;
+            extLog2.Comments = "External Log 2";
+            extLog2.EditTime = DateTime.MaxValue;
+
+            // Create external mlg file.
+            const string extMlg = "external.mlg";
+
+            uut.Open( extMlg );
+            try
+            {
+                uut.InsertLog( extLog1 );
+                uut.InsertLog( extLog2 );
+
+                uut.PopulateLogbook();
+                LogBook extLogbook = uut.LogBook;
+
+                uut.Close();
+
+                uut.Open( dbLocation );
+                uut.PopulateLogbook();
+                uut.Sync( extMlg );
+                uut.Close();
+
+                // Now, ensure everything was synced correctly.
+                // Both the local and external logbooks should have 2
+                // entries.  The first one is the local's log1 (has newer edit time),
+                // and the second one should have the external's log2.
+
+                uut.Open( dbLocation );
+                uut.PopulateLogbook();
+                Assert.AreEqual( localBook.Logs[0], uut.LogBook.Logs[0] );
+                Assert.AreEqual( extLog2, uut.LogBook.Logs[1] );
+                uut.Close();
+
+                uut.Open( extMlg );
+                uut.PopulateLogbook();
+                Assert.AreEqual( localBook.Logs[0], uut.LogBook.Logs[0] );
+                Assert.AreEqual( extLog2, uut.LogBook.Logs[1] );
+                uut.Close();
+            }
+            finally
+            {
+                File.Delete( extMlg );
+            }
+        }
+
+        /// <summary>
+        /// Ensures the sync pre-checks work.
+        /// </summary>
+        [Test]
+        public void SyncCheckTest()
+        {
+            // Ensures something is thrown when we didn't open the database.
+            Assert.Throws<InvalidOperationException>(
+                delegate()
+                {
+                    uut.Sync( dbLocation );
+                },
+                Api.DatabaseNotOpenMessage
+            );
+
+            // Ensures something is thrown when we didn't populate the logbook.
+            try
+            {
+                uut.Open( dbLocation );
+                Assert.Throws<InvalidOperationException>(
+                    delegate ()
+                    {
+                        uut.Sync( dbLocation );
+                    },
+                    Api.nullLogbook
+                );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
+        /// <summary>
+        /// Ensures the insert function works correctly when adding a completely new log
+        /// and inserting an existing log.
+        /// </summary>
+        [Test]
+        public void AddNewLogTest()
+        {
+            Log log1 = new Log();
+            try
+            {
+                uut.Open( dbLocation );
+                uut.PopulateLogbook();
+                uut.InsertLog( log1 );
+                uut.PopulateLogbook();
+
+                Assert.AreEqual( 1, uut.LogBook.Logs.Count );
+                Assert.AreEqual( log1, uut.LogBook.Logs[0] );
+
+                // Now, just change a few things of the log, but not the ID.
+                // sqlite should update the log, and not add a new one.
+
+                Log newLog = new Log ( uut.LogBook.Logs[0] );
+                newLog.Comments = "New Log!";
+                newLog.Latitude = 1.0M;
+                newLog.Longitude = 2.0M;
+
+                uut.InsertLog( newLog );
+                uut.PopulateLogbook();
+                Assert.AreEqual( 1, uut.LogBook.Logs.Count );
+                Assert.AreEqual( newLog, uut.LogBook.Logs[0] );
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
+
         // -------- Test Helpers ---------
+
+        /// <summary>
+        /// Checks to see if the sync was successful.
+        /// </summary>
+        /// <param name="oldBookLocation">The old logbook .mlg location.</param>
+        /// <param name="oldBook">The old logbook object saved in memory.</param>
+        /// <param name="newBookLocation">The new logbook .mlg location.</param>
+        /// <param name="newBook">The new logbook object saved in memory.</param>
+        private void CheckSync( string oldBookLocation, LogBook oldBook, string newBookLocation, LogBook newBook )
+        {
+            try
+            {
+                foreach ( string mlgToCheck in new string [] { oldBookLocation, newBookLocation } )
+                {
+                    uut.Open( mlgToCheck );
+                    uut.PopulateLogbook();
+                    LogBook syncedLogbook = uut.LogBook;
+
+                    // First, ensure all logs in the old book exist.
+                    foreach ( Log oldLog in oldBook.Logs )
+                    {
+                        Assert.IsTrue( syncedLogbook.LogExists( oldLog.Guid ) );
+                        Assert.AreEqual( oldLog, syncedLogbook.GetLog( oldLog.Guid ) );
+                    }
+
+                    // Second, ensure all logs in the new book exist.
+                    foreach ( Log newLog in newBook.Logs )
+                    {
+                        Assert.IsTrue( syncedLogbook.LogExists( newLog.Guid ) );
+                        Assert.AreEqual( newLog, syncedLogbook.GetLog( newLog.Guid ) );
+                    }
+
+                    // Lastly, ensure all logs in the synced logbook did not magically appear;
+                    // they should have came from somewhere.
+                    foreach ( Log log in syncedLogbook.Logs )
+                    {
+                        if ( oldBook.LogExists( log.Guid ) )
+                        {
+                            Assert.AreEqual( log, syncedLogbook.GetLog( log.Guid ) );
+                        }
+                        else if ( newBook.LogExists( log.Guid ) )
+                        {
+                            Assert.AreEqual( log, syncedLogbook.GetLog( log.Guid ) );
+                        }
+                        else
+                        {
+                            Assert.Fail( "Could not find log in synced logbook." );
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                uut.Close();
+            }
+        }
 
         /// <summary>
         /// Does the import/export test for the given XML/JSON/CSV file.
@@ -934,9 +1164,10 @@ namespace TestCommon
         /// Does the save test for the number of entries.
         /// </summary>
         /// <param name="numberOfEntries">The number of entries to add.</param>
-        private void DoSaveTest( int numberOfEntries )
+        /// <param name="location">The location to save to.</param>
+        private void DoSaveTest( int numberOfEntries, string location = dbLocation )
         {
-            uut.Open( dbLocation );
+            uut.Open( location );
             try
             {
                 for ( int i = 0; i < numberOfEntries; ++i )

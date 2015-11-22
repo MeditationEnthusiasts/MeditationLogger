@@ -261,7 +261,114 @@ namespace TestCommon
             ValidationFailedTest( uut, Log.LongitudeSetNoLatitude );
         }
 
+        // ---- Sync Tests ----
+
+        /// <summary>
+        /// Ensures the santity checks of Log.Sync work correctly.
+        /// </summary>
+        [Test]
+        public void LogSyncExceptionCheckTest()
+        {
+            // Both new logs have different GUIDs.  We'll get an exception.
+            Log log1 = new Log();
+            Log log2 = new Log();
+
+            Assert.Throws<InvalidOperationException>(
+                delegate ()
+                {
+                    Log.Sync( ref log1, ref log2 );
+                }
+            );
+        }
+
+        /// <summary>
+        /// Ensures all is well if both logs are equal.
+        /// </summary>
+        [Test]
+        public void LogSyncBothEqual()
+        {
+            Log log1 = new Log();
+            Log log2 = log1.Clone();
+            log2.Id = log1.Id + 1;
+
+            Log.Sync( ref log1, ref log2 );
+
+            // Ensure both logs are the same, and their IDs didn't change.
+            Assert.AreEqual( log1, log2 );
+            Assert.AreEqual( log1.Id + 1, log2.Id );
+            Assert.AreEqual( log2.Id - 1, log1.Id );
+        }
+
+        /// <summary>
+        /// Ensures the sync works when log1 is older than log2 (log2 should take log 1's place).
+        /// </summary>
+        [Test]
+        public void LogSyncBothLog1Older()
+        {
+            Log log1 = new Log();
+            log1.EditTime = DateTime.MinValue;
+
+            Log log2 = log1.Clone();
+            log2.Id = log1.Id + 1;
+            FillWithData( ref log2 );
+
+            Log expectedLog = log2;
+
+            Log.Sync( ref log1, ref log2 );
+
+            // Ensure both logs are the same, and their IDs didn't change.
+            Assert.AreEqual( log1, log2 );
+            Assert.AreEqual( log1.Id + 1, log2.Id );
+            Assert.AreEqual( log2.Id - 1, log1.Id );
+
+            // Ensure log2 is the one both logs are set to.
+            Assert.AreEqual( expectedLog, log2 );
+            Assert.AreEqual( expectedLog, log1 );
+        }
+
+        /// <summary>
+        /// Ensures the sync works when log2 is older than log1 (log1 should take log 2's place).
+        /// </summary>
+        [Test]
+        public void LogSyncBothLog2Older()
+        {
+            Log log1 = new Log();
+            log1.EditTime = DateTime.MaxValue;
+
+            Log log2 = log1.Clone();
+            log2.Id = log1.Id + 1;
+            FillWithData( ref log2 );
+
+            Log expectedLog = log1;
+
+            Log.Sync( ref log1, ref log2 );
+
+            // Ensure both logs are the same, and their IDs didn't change.
+            Assert.AreEqual( log1, log2 );
+            Assert.AreEqual( log1.Id + 1, log2.Id );
+            Assert.AreEqual( log2.Id - 1, log1.Id );
+
+            // Ensure log2 is the one both logs are set to.
+            Assert.AreEqual( expectedLog, log2 );
+            Assert.AreEqual( expectedLog, log1 );
+        }
+
         // -------- Test Helpers --------
+
+        /// <summary>
+        /// Fills the given log with data.
+        /// </summary>
+        /// <param name="log">The log to fill.</param>
+        private void FillWithData( ref Log log )
+        {
+            log.Comments = "Some Comment.";
+            log.StartTime = DateTime.UtcNow;
+            log.EndTime = log.StartTime + new TimeSpan( 1, 0, 0 );
+            log.EditTime = DateTime.UtcNow;
+            log.Latitude = 1.0M;
+            log.Longitude = 2.0M;
+            log.Technique = "Some Technique";
+        }
 
         /// <summary>
         /// Ensures the two logs are the same.
