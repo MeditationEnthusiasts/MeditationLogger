@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{DEF30834-C81B-4BE5-B711-46715BE30B15}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MedEnthLogsApiMono</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ILocationDetector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ILog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IMusicManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ITimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonExporter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)License.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogBook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MedEnthLogsApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MlgExporter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MlgSync.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SessionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlExporter.cs" />
+  </ItemGroup>
+</Project>
