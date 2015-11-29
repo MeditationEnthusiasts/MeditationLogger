@@ -60,7 +60,7 @@ namespace MedEnthLogsDesktop
         /// </summary>
         private Color originalColor;
 
-        private NAudioMusicManager timesUpSound;
+        private IMusicManager timesUpSound;
 
         // ---- Views ----
 
@@ -68,7 +68,12 @@ namespace MedEnthLogsDesktop
         MeditateView meditateView;
         SaveView saveView;
 
-        public HomePage( MedEnthLogsApi.Api api )
+        /// <summary>
+        /// Costructor
+        /// </summary>
+        /// <param name="api">The API to use.</param>
+        /// <param name="timesUpMusicManager">The music manager to use when times up (just create it).</param>
+        public HomePage( MedEnthLogsApi.Api api, IMusicManager timesUpMusicManager )
         {
             InitializeComponent();
 
@@ -76,7 +81,7 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
             this.VersionValueLabel.Text = Api.VersionString;
 
-            this.timesUpSound = new NAudioMusicManager();
+            this.timesUpSound = timesUpMusicManager;
             this.timesUpSound.OnStop =
                 delegate ()
                 {

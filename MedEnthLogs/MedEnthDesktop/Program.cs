@@ -26,7 +26,7 @@ using MedEnthDesktop;
 
 namespace MedEnthLogsDesktop
 {
-    static class Program
+    static partial class Program
     {
         private static MedEnthLogsApi.Api api;
 
@@ -36,12 +36,8 @@ namespace MedEnthLogsDesktop
         [STAThread]
         static void Main()
         {
-            api = new MedEnthLogsApi.Api(
-                new Win32LocationDetector(),
-                new Win32Timer(),
-                new NAudioMusicManager(),
-                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
-            );
+            // Get Api() is in a partial class.  GetApi creates an API for the current platform.
+            api = GetApi();
 
             // Use the win32 sqlite.
             string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
@@ -56,7 +52,7 @@ namespace MedEnthLogsDesktop
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new HomePage( api ) );
+            Application.Run( new HomePage( api, GetMusicManager() ) );
 
             api.Close();
         }
