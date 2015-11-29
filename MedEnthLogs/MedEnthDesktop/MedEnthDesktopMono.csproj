@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs" />
-    <Compile Include="Form1.Designer.cs" />
+    <Compile Include="Form1.Designer.cs">
+      <LogicalName>Icon</LogicalName>
+    </Compile>
     <Compile Include="LogView.cs" />
     <Compile Include="LogView.Designer.cs" />
     <Compile Include="MeditateView.cs" />
@@ -82,11 +84,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="html\css\leaflet.css">
-      <LogicalName>leaflet_css</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="html\js\leaflet.js">
       <LogicalName>leaflet_js</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="media\mainlogo.ico" />
   </ItemGroup>
 </Project>

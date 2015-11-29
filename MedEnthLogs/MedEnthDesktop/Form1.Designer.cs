@@ -1103,7 +1103,9 @@ namespace MedEnthLogsDesktop
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(609, 491);
             this.Controls.Add(this.MainTabControl);
+            #if WINDOWS
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            #endif
             this.MinimumSize = new System.Drawing.Size(625, 525);
             this.Name = "HomePage";
             this.Text = "Logger";

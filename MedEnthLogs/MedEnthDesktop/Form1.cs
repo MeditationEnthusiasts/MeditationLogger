@@ -135,11 +135,11 @@ namespace MedEnthLogsDesktop
     <link type=""text/css"" rel=""stylesheet"" href=""" + exeDirectory + @"/html/css/leaflet.css""/>
     <title>Meditation Map</title>
     <style>
-    " + Resources.leaflet_css + @"
+    " + LeafletJS.CSS + @"
     </style>
     <!-- Plug in the map information -->
     <script type = ""text/javascript"">
-        " + Resources.leaflet_js + @"
+        " + LeafletJS.JavaScript + @"
 
         window.onload=function()
         {

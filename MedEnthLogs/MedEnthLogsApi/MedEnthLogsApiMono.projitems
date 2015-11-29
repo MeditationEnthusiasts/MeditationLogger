@@ -22,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MlgSync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SessionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XmlExporter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LeafletJS.cs" />
   </ItemGroup>
 </Project>

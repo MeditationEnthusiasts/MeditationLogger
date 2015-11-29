@@ -59,49 +59,5 @@ namespace MedEnthDesktop.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to /*
-        ///Copyright (c) 2010-2015, Vladimir Agafonkin
-        ///Copyright (c) 2010-2011, CloudMade
-        ///All rights reserved.
-        ///
-        ///Redistribution and use in source and binary forms, with or without modification, are
-        ///permitted provided that the following conditions are met:
-        ///
-        ///   1. Redistributions of source code must retain the above copyright notice, this list of
-        ///      conditions and the following disclaimer.
-        ///
-        ///   2. Redistributions in binary form must reproduce the above copyright notice, this list
-        ///      of conditions and  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string leaflet_css {
-            get {
-                return ResourceManager.GetString("leaflet_css", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to /*
-        /// Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
-        /// (c) 2010-2013, Vladimir Agafonkin
-        /// (c) 2010-2011, CloudMade
-        ///
-        ///
-        ///Copyright (c) 2010-2015, Vladimir Agafonkin
-        ///Copyright (c) 2010-2011, CloudMade
-        ///All rights reserved.
-        ///
-        ///Redistribution and use in source and binary forms, with or without modification, are
-        ///permitted provided that the following conditions are met:
-        ///
-        ///   1. Redistributions of source code must retain the above copyright notice, this list of
-        ///      c [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string leaflet_js {
-            get {
-                return ResourceManager.GetString("leaflet_js", resourceCulture);
-            }
-        }
     }
 }
