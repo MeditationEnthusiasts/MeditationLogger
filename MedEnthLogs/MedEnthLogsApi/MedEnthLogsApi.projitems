@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ILog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IMusicManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ITimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LeafletJS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)License.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogBook.cs" />
