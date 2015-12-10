@@ -53,7 +53,7 @@ namespace MedEnthLogsDesktop
         ///
         /// https://msdn.microsoft.com/en-us/library/aa457089.aspx
         /// </summary>
-        private static readonly string exeDirectory = Path.GetDirectoryName( Assembly.GetExecutingAssembly().GetName().CodeBase ).Replace( '\\', '/' );
+        private static readonly string exeDirectory = Path.GetDirectoryName( Application.ExecutablePath ).Replace( '\\', '/' );
 
         /// <summary>
         /// Original background color (for restoring).
@@ -111,7 +111,7 @@ namespace MedEnthLogsDesktop
                 {
                     if ( this.currentState == StartState.Start )
                     {
-                        this.timesUpSound.Play( "media/temple_bell.wav" );
+                        this.timesUpSound.Play( exeDirectory + "/media/temple_bell.wav" );
                         GoToNextState();
                     }
                 };
