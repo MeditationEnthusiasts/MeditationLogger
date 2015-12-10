@@ -73,6 +73,7 @@ namespace MedEnthLogsDesktop
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.ImportView = new System.Windows.Forms.TabPage();
             this.ImportTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.ImportLabel1 = new System.Windows.Forms.Label();
@@ -125,7 +126,10 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label2 = new System.Windows.Forms.Label();
+            this.TitleLabel = new System.Windows.Forms.Label();
+            this.HomePicture = new System.Windows.Forms.PictureBox();
+            this.AppInfoLabel = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
@@ -136,6 +140,7 @@ namespace MedEnthLogsDesktop
             this.ViewLogbookInnerTabControl.SuspendLayout();
             this.StandardViewTab.SuspendLayout();
             this.MapLogViewTab.SuspendLayout();
+            this.GraphTab.SuspendLayout();
             this.ManageLogbookView.SuspendLayout();
             this.ManageTabControl.SuspendLayout();
             this.EditLogView.SuspendLayout();
@@ -156,6 +161,7 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -192,6 +198,8 @@ namespace MedEnthLogsDesktop
             this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.68908F));
             this.HomeTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.31092F));
             this.HomeTableLayout.Controls.Add(this.HomeStatTable, 1, 1);
+            this.HomeTableLayout.Controls.Add(this.TitleLabel, 1, 0);
+            this.HomeTableLayout.Controls.Add(this.HomePicture, 0, 0);
             this.HomeTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HomeTableLayout.Location = new System.Drawing.Point(3, 3);
             this.HomeTableLayout.Name = "HomeTableLayout";
@@ -428,6 +436,7 @@ namespace MedEnthLogsDesktop
             // GraphTab
             // 
             this.GraphTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.GraphTab.Controls.Add(this.label4);
             this.GraphTab.Location = new System.Drawing.Point(4, 29);
             this.GraphTab.Name = "GraphTab";
             this.GraphTab.Padding = new System.Windows.Forms.Padding(3);
@@ -471,6 +480,19 @@ namespace MedEnthLogsDesktop
             this.EditLogView.Size = new System.Drawing.Size(587, 414);
             this.EditLogView.TabIndex = 0;
             this.EditLogView.Text = "Edit Logs";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(214, 212);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(141, 25);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Coming Soon";
             // 
             // ImportView
             // 
@@ -832,6 +854,7 @@ namespace MedEnthLogsDesktop
             this.AppInfoTable.Controls.Add(this.CopyrightValue, 1, 6);
             this.AppInfoTable.Controls.Add(this.VersionValueLabel, 1, 1);
             this.AppInfoTable.Controls.Add(this.CheckForUpdatesButton, 1, 7);
+            this.AppInfoTable.Controls.Add(this.AppInfoLabel, 1, 0);
             this.AppInfoTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AppInfoTable.Location = new System.Drawing.Point(3, 3);
             this.AppInfoTable.Name = "AppInfoTable";
@@ -850,115 +873,148 @@ namespace MedEnthLogsDesktop
             // 
             // VersionLabel
             // 
+            this.VersionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.VersionLabel.AutoSize = true;
             this.VersionLabel.Location = new System.Drawing.Point(3, 51);
             this.VersionLabel.Name = "VersionLabel";
-            this.VersionLabel.Size = new System.Drawing.Size(67, 20);
+            this.VersionLabel.Size = new System.Drawing.Size(67, 51);
             this.VersionLabel.TabIndex = 0;
             this.VersionLabel.Text = "Version:";
+            this.VersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ReportABugValue
             // 
+            this.ReportABugValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ReportABugValue.AutoSize = true;
             this.ReportABugValue.Location = new System.Drawing.Point(148, 153);
             this.ReportABugValue.Name = "ReportABugValue";
-            this.ReportABugValue.Size = new System.Drawing.Size(324, 20);
+            this.ReportABugValue.Size = new System.Drawing.Size(324, 51);
             this.ReportABugValue.TabIndex = 3;
             this.ReportABugValue.TabStop = true;
             this.ReportABugValue.Text = "https://dev.meditationenthusiasts.org/mantis/";
+            this.ReportABugValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ReportABugValue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportABugValue_LinkClicked);
             // 
             // BugLabel
             // 
+            this.BugLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.BugLabel.AutoSize = true;
             this.BugLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.BugLabel.Location = new System.Drawing.Point(3, 153);
             this.BugLabel.Name = "BugLabel";
-            this.BugLabel.Size = new System.Drawing.Size(106, 20);
+            this.BugLabel.Size = new System.Drawing.Size(106, 51);
             this.BugLabel.TabIndex = 2;
             this.BugLabel.Text = "Report a bug:";
+            this.BugLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // VisitSiteLabel
             // 
+            this.VisitSiteLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.VisitSiteLabel.AutoSize = true;
             this.VisitSiteLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.VisitSiteLabel.Location = new System.Drawing.Point(3, 102);
             this.VisitSiteLabel.Name = "VisitSiteLabel";
-            this.VisitSiteLabel.Size = new System.Drawing.Size(75, 20);
+            this.VisitSiteLabel.Size = new System.Drawing.Size(75, 51);
             this.VisitSiteLabel.TabIndex = 6;
             this.VisitSiteLabel.Text = "Visit Site:";
+            this.VisitSiteLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // VistSiteLabel
             // 
+            this.VistSiteLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.VistSiteLabel.AutoSize = true;
             this.VistSiteLabel.Location = new System.Drawing.Point(148, 102);
             this.VistSiteLabel.Name = "VistSiteLabel";
-            this.VistSiteLabel.Size = new System.Drawing.Size(261, 20);
+            this.VistSiteLabel.Size = new System.Drawing.Size(261, 51);
             this.VistSiteLabel.TabIndex = 7;
             this.VistSiteLabel.TabStop = true;
             this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
+            this.VistSiteLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.VistSiteLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VistSiteLabel_LinkClicked);
             // 
             // ViewSourceLabel
             // 
+            this.ViewSourceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ViewSourceLabel.AutoSize = true;
             this.ViewSourceLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ViewSourceLabel.Location = new System.Drawing.Point(3, 255);
             this.ViewSourceLabel.Name = "ViewSourceLabel";
-            this.ViewSourceLabel.Size = new System.Drawing.Size(102, 20);
+            this.ViewSourceLabel.Size = new System.Drawing.Size(102, 51);
             this.ViewSourceLabel.TabIndex = 4;
             this.ViewSourceLabel.Text = "View Source:";
+            this.ViewSourceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ViewSourceValueLabel
             // 
+            this.ViewSourceValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ViewSourceValueLabel.AutoSize = true;
             this.ViewSourceValueLabel.Location = new System.Drawing.Point(148, 255);
             this.ViewSourceValueLabel.Name = "ViewSourceValueLabel";
-            this.ViewSourceValueLabel.Size = new System.Drawing.Size(426, 40);
+            this.ViewSourceValueLabel.Size = new System.Drawing.Size(426, 51);
             this.ViewSourceValueLabel.TabIndex = 5;
             this.ViewSourceValueLabel.TabStop = true;
             this.ViewSourceValueLabel.Text = "https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src";
+            this.ViewSourceValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ViewSourceValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewSourceValueLabel_LinkClicked);
             // 
             // ViewWikiValueLabel
             // 
+            this.ViewWikiValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ViewWikiValueLabel.AutoSize = true;
             this.ViewWikiValueLabel.Location = new System.Drawing.Point(148, 204);
             this.ViewWikiValueLabel.Name = "ViewWikiValueLabel";
-            this.ViewWikiValueLabel.Size = new System.Drawing.Size(424, 40);
+            this.ViewWikiValueLabel.Size = new System.Drawing.Size(424, 51);
             this.ViewWikiValueLabel.TabIndex = 8;
             this.ViewWikiValueLabel.TabStop = true;
             this.ViewWikiValueLabel.Text = "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logg" +
     "er:start";
+            this.ViewWikiValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ViewWikiValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewWikiValueLabel_LinkClicked);
             // 
             // WikiLabel
             // 
+            this.WikiLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.WikiLabel.AutoSize = true;
             this.WikiLabel.Location = new System.Drawing.Point(3, 204);
             this.WikiLabel.Name = "WikiLabel";
-            this.WikiLabel.Size = new System.Drawing.Size(80, 20);
+            this.WikiLabel.Size = new System.Drawing.Size(80, 51);
             this.WikiLabel.TabIndex = 9;
             this.WikiLabel.Text = "View Wiki:";
+            this.WikiLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CopyrightValue
             // 
+            this.CopyrightValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.CopyrightValue.AutoSize = true;
             this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.CopyrightValue.Location = new System.Drawing.Point(148, 306);
             this.CopyrightValue.Name = "CopyrightValue";
-            this.CopyrightValue.Size = new System.Drawing.Size(254, 20);
+            this.CopyrightValue.Size = new System.Drawing.Size(254, 51);
             this.CopyrightValue.TabIndex = 10;
             this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
+            this.CopyrightValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // VersionValueLabel
             // 
+            this.VersionValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.VersionValueLabel.AutoSize = true;
             this.VersionValueLabel.Location = new System.Drawing.Point(148, 51);
             this.VersionValueLabel.Name = "VersionValueLabel";
-            this.VersionValueLabel.Size = new System.Drawing.Size(44, 20);
+            this.VersionValueLabel.Size = new System.Drawing.Size(44, 51);
             this.VersionValueLabel.TabIndex = 1;
             this.VersionValueLabel.Text = "0.1.0";
+            this.VersionValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CheckForUpdatesButton
             // 
@@ -1086,15 +1142,54 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // label2
+            // TitleLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(214, 212);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(141, 25);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Coming Soon";
+            this.TitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.TitleLabel.AutoSize = true;
+            this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleLabel.Location = new System.Drawing.Point(152, 0);
+            this.TitleLabel.Name = "TitleLabel";
+            this.TitleLabel.Size = new System.Drawing.Size(426, 128);
+            this.TitleLabel.TabIndex = 1;
+            this.TitleLabel.Text = "Meditation Logger";
+            this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // HomePicture
+            // 
+            this.HomePicture.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomePicture.Image = ((System.Drawing.Image)(resources.GetObject("HomePicture.Image")));
+            this.HomePicture.Location = new System.Drawing.Point(3, 3);
+            this.HomePicture.Name = "HomePicture";
+            this.HomePicture.Size = new System.Drawing.Size(129, 122);
+            this.HomePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.HomePicture.TabIndex = 2;
+            this.HomePicture.TabStop = false;
+            // 
+            // AppInfoLabel
+            // 
+            this.AppInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.AppInfoLabel.AutoSize = true;
+            this.AppInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppInfoLabel.Location = new System.Drawing.Point(148, 0);
+            this.AppInfoLabel.Name = "AppInfoLabel";
+            this.AppInfoLabel.Size = new System.Drawing.Size(334, 51);
+            this.AppInfoLabel.TabIndex = 12;
+            this.AppInfoLabel.Text = "Meditation Logger";
+            this.AppInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(223, 195);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(141, 25);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Coming Soon";
             // 
             // HomePage
             // 
@@ -1103,9 +1198,6 @@ namespace MedEnthLogsDesktop
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(609, 491);
             this.Controls.Add(this.MainTabControl);
-            #if WINDOWS
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            #endif
             this.MinimumSize = new System.Drawing.Size(625, 525);
             this.Name = "HomePage";
             this.Text = "Logger";
@@ -1113,6 +1205,7 @@ namespace MedEnthLogsDesktop
             this.MainTabControl.ResumeLayout(false);
             this.Home.ResumeLayout(false);
             this.HomeTableLayout.ResumeLayout(false);
+            this.HomeTableLayout.PerformLayout();
             this.HomeStatTable.ResumeLayout(false);
             this.HomeStatTable.PerformLayout();
             this.StartTab.ResumeLayout(false);
@@ -1122,6 +1215,8 @@ namespace MedEnthLogsDesktop
             this.StandardViewTab.ResumeLayout(false);
             this.StandardViewTab.PerformLayout();
             this.MapLogViewTab.ResumeLayout(false);
+            this.GraphTab.ResumeLayout(false);
+            this.GraphTab.PerformLayout();
             this.ManageLogbookView.ResumeLayout(false);
             this.ManageTabControl.ResumeLayout(false);
             this.EditLogView.ResumeLayout(false);
@@ -1152,6 +1247,7 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1237,6 +1333,10 @@ namespace MedEnthLogsDesktop
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label TitleLabel;
+        private System.Windows.Forms.PictureBox HomePicture;
+        private System.Windows.Forms.Label AppInfoLabel;
+        private System.Windows.Forms.Label label4;
     }
 }
 

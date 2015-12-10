@@ -188,6 +188,7 @@
   <ItemGroup>
     <Content Include="html\css\leaflet.css" />
     <Content Include="html\js\leaflet.js" />
+    <Content Include="media\homeLogo.png" />
     <Content Include="media\mainlogo.ico" />
     <Content Include="media\marker-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
