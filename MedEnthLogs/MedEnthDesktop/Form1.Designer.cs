@@ -59,6 +59,8 @@ namespace MedEnthLogsDesktop
             this.LongestSessionValueLabel = new System.Windows.Forms.Label();
             this.TotalSessionsValueLabel = new System.Windows.Forms.Label();
             this.LastSessionValueLabel = new System.Windows.Forms.Label();
+            this.TitleLabel = new System.Windows.Forms.Label();
+            this.HomePicture = new System.Windows.Forms.PictureBox();
             this.StartTab = new System.Windows.Forms.TabPage();
             this.StartTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.ChangableStartView = new System.Windows.Forms.Panel();
@@ -70,6 +72,7 @@ namespace MedEnthLogsDesktop
             this.MapLogViewTab = new System.Windows.Forms.TabPage();
             this.MapViewBrowser = new System.Windows.Forms.WebBrowser();
             this.GraphTab = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
             this.ManageLogbookView = new System.Windows.Forms.TabPage();
             this.ManageTabControl = new System.Windows.Forms.TabControl();
             this.EditLogView = new System.Windows.Forms.TabPage();
@@ -115,6 +118,7 @@ namespace MedEnthLogsDesktop
             this.CopyrightValue = new System.Windows.Forms.Label();
             this.VersionValueLabel = new System.Windows.Forms.Label();
             this.CheckForUpdatesButton = new System.Windows.Forms.Button();
+            this.AppInfoLabel = new System.Windows.Forms.Label();
             this.MedEnthLicense = new System.Windows.Forms.TabPage();
             this.LicenseTable = new System.Windows.Forms.TableLayoutPanel();
             this.GplTextBox = new System.Windows.Forms.TextBox();
@@ -126,14 +130,11 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.TitleLabel = new System.Windows.Forms.Label();
-            this.HomePicture = new System.Windows.Forms.PictureBox();
-            this.AppInfoLabel = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
             this.HomeStatTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).BeginInit();
             this.StartTab.SuspendLayout();
             this.StartTableLayout.SuspendLayout();
             this.LogbookView.SuspendLayout();
@@ -161,7 +162,6 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -313,6 +313,29 @@ namespace MedEnthLogsDesktop
             this.LastSessionValueLabel.TabIndex = 7;
             this.LastSessionValueLabel.Text = "Loading...";
             // 
+            // TitleLabel
+            // 
+            this.TitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.TitleLabel.AutoSize = true;
+            this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleLabel.Location = new System.Drawing.Point(152, 0);
+            this.TitleLabel.Name = "TitleLabel";
+            this.TitleLabel.Size = new System.Drawing.Size(426, 128);
+            this.TitleLabel.TabIndex = 1;
+            this.TitleLabel.Text = "Meditation Logger";
+            this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // HomePicture
+            // 
+            this.HomePicture.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomePicture.Image = ((System.Drawing.Image)(resources.GetObject("HomePicture.Image")));
+            this.HomePicture.Location = new System.Drawing.Point(3, 3);
+            this.HomePicture.Name = "HomePicture";
+            this.HomePicture.Size = new System.Drawing.Size(129, 122);
+            this.HomePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.HomePicture.TabIndex = 2;
+            this.HomePicture.TabStop = false;
+            // 
             // StartTab
             // 
             this.StartTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
@@ -443,6 +466,19 @@ namespace MedEnthLogsDesktop
             this.GraphTab.Size = new System.Drawing.Size(587, 414);
             this.GraphTab.TabIndex = 2;
             this.GraphTab.Text = "Graph View";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(223, 195);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(141, 25);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Coming Soon";
             // 
             // ManageLogbookView
             // 
@@ -1027,6 +1063,19 @@ namespace MedEnthLogsDesktop
             this.CheckForUpdatesButton.UseVisualStyleBackColor = true;
             this.CheckForUpdatesButton.Click += new System.EventHandler(this.CheckForUpdatesButton_Click);
             // 
+            // AppInfoLabel
+            // 
+            this.AppInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.AppInfoLabel.AutoSize = true;
+            this.AppInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppInfoLabel.Location = new System.Drawing.Point(148, 0);
+            this.AppInfoLabel.Name = "AppInfoLabel";
+            this.AppInfoLabel.Size = new System.Drawing.Size(334, 51);
+            this.AppInfoLabel.TabIndex = 12;
+            this.AppInfoLabel.Text = "Meditation Logger";
+            this.AppInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MedEnthLicense
             // 
             this.MedEnthLicense.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -1131,65 +1180,16 @@ namespace MedEnthLogsDesktop
             // 
             // ExportSaveDialog
             // 
-            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            this.ExportSaveDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|*.json";
             this.ExportSaveDialog.InitialDirectory = "ExportedLog.mlg";
             // 
             // ImportOpenDialog
             // 
-            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|.json";
+            this.ImportOpenDialog.Filter = "MLG Files|*.mlg|XML Files|*.xml|JSON Files|*.json";
             // 
             // SyncOpenDialog
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
-            // 
-            // TitleLabel
-            // 
-            this.TitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.TitleLabel.AutoSize = true;
-            this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleLabel.Location = new System.Drawing.Point(152, 0);
-            this.TitleLabel.Name = "TitleLabel";
-            this.TitleLabel.Size = new System.Drawing.Size(426, 128);
-            this.TitleLabel.TabIndex = 1;
-            this.TitleLabel.Text = "Meditation Logger";
-            this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // HomePicture
-            // 
-            this.HomePicture.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HomePicture.Image = ((System.Drawing.Image)(resources.GetObject("HomePicture.Image")));
-            this.HomePicture.Location = new System.Drawing.Point(3, 3);
-            this.HomePicture.Name = "HomePicture";
-            this.HomePicture.Size = new System.Drawing.Size(129, 122);
-            this.HomePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.HomePicture.TabIndex = 2;
-            this.HomePicture.TabStop = false;
-            // 
-            // AppInfoLabel
-            // 
-            this.AppInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.AppInfoLabel.AutoSize = true;
-            this.AppInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AppInfoLabel.Location = new System.Drawing.Point(148, 0);
-            this.AppInfoLabel.Name = "AppInfoLabel";
-            this.AppInfoLabel.Size = new System.Drawing.Size(334, 51);
-            this.AppInfoLabel.TabIndex = 12;
-            this.AppInfoLabel.Text = "Meditation Logger";
-            this.AppInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(223, 195);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(141, 25);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Coming Soon";
             // 
             // HomePage
             // 
@@ -1208,6 +1208,7 @@ namespace MedEnthLogsDesktop
             this.HomeTableLayout.PerformLayout();
             this.HomeStatTable.ResumeLayout(false);
             this.HomeStatTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).EndInit();
             this.StartTab.ResumeLayout(false);
             this.StartTableLayout.ResumeLayout(false);
             this.LogbookView.ResumeLayout(false);
@@ -1247,7 +1248,6 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.HomePicture)).EndInit();
             this.ResumeLayout(false);
 
         }
