@@ -28,7 +28,7 @@ using MedEnthLogsDesktop;
 
 namespace MedEnthLogsCli
 {
-    class Program
+    public static partial class Program
     {
         /// <summary>
         /// The executable name.
@@ -60,15 +60,18 @@ namespace MedEnthLogsCli
             {
                 if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = new Api( 
-                        new Win32LocationDetector(),
-                        new Win32Timer(),
-                        new NAudioMusicManager(),
-                        new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
-                    );
+                    Api api = GetApi();
                     try
                     {
-                        api.Open( "test.db" );
+                        string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+                        dbLocation = Path.Combine( dbLocation, "MeditationLoggerDesktop" );
+
+                        if ( Directory.Exists( dbLocation ) == false )
+                        {
+                            Directory.CreateDirectory( dbLocation );
+                        }
+                        
+                        api.Open( Path.Combine( dbLocation, "logbook.mlg" )  );
                         api.PopulateLogbook();
                         switch ( args[0] )
                         {
@@ -81,6 +84,7 @@ namespace MedEnthLogsCli
                                 break;
 
                             case "sync":
+                                api.Sync( args[1] );
                                 break;
 
                             default:
