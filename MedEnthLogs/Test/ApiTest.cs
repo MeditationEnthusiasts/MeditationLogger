@@ -33,7 +33,7 @@ namespace TestCommon
     /// Tests the Api Class.
     /// </summary>
     [TestFixture]
-    public class LogsApiTest
+    public partial class LogsApiTest
     {
         // -------- Fields --------
 
@@ -60,12 +60,7 @@ namespace TestCommon
 
             this.mockTimer = new MockTimer();
             this.mockAudio = new MockMusicManager();
-            uut = new Api(
-                new Win32LocationDetector(),
-                this.mockTimer,
-                this.mockAudio,
-                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
-            );
+            uut = GetApi();
         }
 
         [TearDown]
@@ -483,7 +478,7 @@ namespace TestCommon
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
@@ -519,7 +514,7 @@ namespace TestCommon
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
@@ -562,8 +557,8 @@ namespace TestCommon
         [Test]
         public void XmlImportBadLogbookTest()
         {
-            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogBook.xml" );
-            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogName.xml" );
+            DoBadImportTest<XmlException>( Path.Combine( projectDir, "TestFiles", "BadLogBook.xml" ) );
+            DoBadImportTest<XmlException>( Path.Combine( projectDir, "TestFiles", "BadLogBook.xml" )  );
         }
 
         /// <summary>
@@ -574,9 +569,9 @@ namespace TestCommon
         [Test]
         public void XmlImportNoStartTime()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.xml" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingStartTime.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingEndTime.xml" ) ) ;
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "BadLogStartEnd.xml" ) );
         }
 
         /// <summary>
@@ -586,10 +581,10 @@ namespace TestCommon
         [Test]
         public void XmlImportBadMissingLat()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.xml" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLat.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLong.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLat.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLong.xml" ) );
         }
 
         /// <summary>
@@ -599,7 +594,7 @@ namespace TestCommon
         [Test]
         public void XmlImportNoLogs()
         {
-            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.xml" );
+            DoGoodImportTest( 0, Path.Combine( projectDir, "TestFiles", "NoLogs.xml" ) );
         }
 
         /// <summary>
@@ -609,7 +604,7 @@ namespace TestCommon
         [Test]
         public void XmlImportJustStartAndEnd()
         {
-            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.xml" );
+            DoGoodImportTest( 5, Path.Combine( projectDir, "TestFiles", "JustStartAndEnd.xml" ) );
         }
 
         /// <summary>
@@ -620,7 +615,7 @@ namespace TestCommon
         [Test]
         public void XmlImportBadLatLong()
         {
-            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.xml" );
+            DoGoodImportTest( 1, Path.Combine( projectDir, "TestFiles", "InvalidLatLong.xml" ) );
             Assert.IsNull( uut.LogBook.Logs[0].Latitude );
             Assert.IsNull( uut.LogBook.Logs[0].Longitude );
         }
@@ -650,11 +645,11 @@ namespace TestCommon
         [Test]
         public void JsonImportMalformedJsonTest()
         {
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonNoClosingArray.json" );
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingComma.json" );
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingCommaOnProperty.json" );
-            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraComma.json" );
-            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraCommaOnProperty.json" );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonNoClosingArray.json" ) );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonMissingComma.json" ) );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonMissingCommaOnProperty.json" ) );
+            DoGoodImportTest( 7, Path.Combine( projectDir, "TestFiles", "MalformedJsonExtraComma.json" ) );
+            DoGoodImportTest( 7, Path.Combine( projectDir, "TestFiles", "MalformedJsonExtraCommaOnProperty.json" ) );
         }
 
         /// <summary>
@@ -665,9 +660,9 @@ namespace TestCommon
         [Test]
         public void JsonImportNoStartTime()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.json" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingStartTime.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingEndTime.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "BadLogStartEnd.json" ) );
         }
         
         /// <summary>
@@ -677,10 +672,10 @@ namespace TestCommon
         [Test]
         public void JsonImportBadMissingLat()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.json" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLat.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLong.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLat.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLong.json" ) );
         }
     
         /// <summary>
@@ -690,7 +685,7 @@ namespace TestCommon
         [Test]
         public void JsonImportNoLogs()
         {
-            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.json" );
+            DoGoodImportTest( 0, Path.Combine( projectDir, "TestFiles", "NoLogs.json" ) );
         }
 
         /// <summary>
@@ -700,7 +695,7 @@ namespace TestCommon
         [Test]
         public void JsonImportJustStartAndEnd()
         {
-            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.json" );
+            DoGoodImportTest( 5, Path.Combine( projectDir, "TestFiles", "JustStartAndEnd.json" ) );
         }
         
         /// <summary>
@@ -711,7 +706,7 @@ namespace TestCommon
         [Test]
         public void JsonImportBadLatLong()
         {
-            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.json" );
+            DoGoodImportTest( 1, Path.Combine( projectDir, "TestFiles", "InvalidLatLong.json" ) );
             Assert.IsNull( uut.LogBook.Logs[0].Latitude );
             Assert.IsNull( uut.LogBook.Logs[0].Longitude );
         }
