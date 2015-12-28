@@ -96,7 +96,7 @@ namespace TestCommon
         {
             // Ensure it doesn't validate if the start time is
             // later than the end time.
-            uut.currentLog.StartTime = DateTime.MaxValue;
+            uut.currentLog.StartTime = Log.MaxTime;
             uut.currentLog.EndTime = DateTime.MinValue;
 
             CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
@@ -110,7 +110,7 @@ namespace TestCommon
 
             // Ensure everything validates if start time is less than end time.
             uut.currentLog.StartTime = DateTime.Now;
-            uut.currentLog.EndTime = DateTime.MaxValue;
+            uut.currentLog.EndTime = Log.MaxTime;
             CheckValidationPassed();
             uut.ResetCurrentLog();
         }
@@ -782,7 +782,7 @@ namespace TestCommon
             extLog2.Latitude = 25M;
             extLog2.Longitude = 50M;
             extLog2.Comments = "External Log 2";
-            extLog2.EditTime = DateTime.MaxValue;
+            extLog2.EditTime = Log.MaxTime;
 
             // Create external mlg file.
             const string extMlg = "external.mlg";

@@ -52,7 +52,7 @@ namespace TestCommon
         public void TestDuration()
         {
             DateTime start = DateTime.MinValue;
-            DateTime end = DateTime.MaxValue;
+            DateTime end = Log.MaxTime;
 
             uut.StartTime = start;
             uut.EndTime = end;
@@ -333,7 +333,7 @@ namespace TestCommon
         public void LogSyncBothLog2Older()
         {
             Log log1 = new Log();
-            log1.EditTime = DateTime.MaxValue;
+            log1.EditTime = Log.MaxTime;
 
             Log log2 = log1.Clone();
             log2.Id = log1.Id + 1;
