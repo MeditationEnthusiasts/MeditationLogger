@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using MedEnthDesktop;
 using MedEnthLogsApi;
 using MedEnthLogsDesktop;
+using SethCS.IO;
 
 namespace MedEnthLogsCli
 {
@@ -37,6 +38,9 @@ namespace MedEnthLogsCli
 
         static int Main( string[] args )
         {
+            int? i = ConsoleHelpers.GetInt();
+            Console.Write( i );
+
             if ( args.Length == 1 )
             {
                 if ( ( args[0] == "--help" ) || ( args[0] == "-h" ) || ( args[0] == "/?" ) )
