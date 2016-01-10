@@ -41,7 +41,7 @@ namespace Test
         [SetUp]
         public void TestSetup()
         {
-            this.apiTestCore = new ApiTestCore( Platform, LocationDetector, ProjectDir );
+            this.apiTestCore = new ApiTestCore( Platform, LocationDetector, TestCoreDir );
             this.apiTestCore.Startup();
         }
 

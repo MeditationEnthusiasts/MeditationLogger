@@ -36,7 +36,7 @@ namespace Test
         /// <summary>
         /// Where the TestCore project is located relative to the .dll.
         /// </summary>
-        public const string ProjectDir = @"..\..\";
+        public const string TestCoreDir = @"..\..\..\TestCore";
 
         /// <summary>
         /// The location detector to use.
@@ -44,4 +44,3 @@ namespace Test
         public static readonly ILocationDetector LocationDetector = new Win32LocationDetector();
     }
 }
-
