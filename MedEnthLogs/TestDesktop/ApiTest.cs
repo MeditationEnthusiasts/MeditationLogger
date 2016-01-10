@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using TestCore;
 
-namespace Test
+namespace TestDesktop
 {
     /// <summary>
     /// Tests the Api Class.

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsWin10", "MedEnth
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsDesktop", "MedEnthDesktop\MedEnthLogsDesktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{BC011879-54BF-481F-BC61-35190927ADDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDesktop", "TestDesktop\TestDesktop.csproj", "{BC011879-54BF-481F-BC61-35190927ADDE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4C5C9A21-33F1-4742-8776-8E7F6CF28635} = {4C5C9A21-33F1-4742-8776-8E7F6CF28635}
 	EndProjectSection

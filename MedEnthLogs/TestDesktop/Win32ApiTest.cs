@@ -21,7 +21,7 @@ using MedEnthLogsDesktop;
 using SQLite.Net.Interop;
 using TestCore.Mocks;
 
-namespace Test
+namespace TestDesktop
 {
     /// <summary>
     /// This class is platform-specific for Win32 Desktop.
