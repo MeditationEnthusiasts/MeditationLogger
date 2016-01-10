@@ -25,6 +25,7 @@ using SQLite.Net;
 using SQLite.Net.Interop;
 
 [assembly: InternalsVisibleTo( "Test" )]
+[assembly: InternalsVisibleTo( "TestCoreDesktop" )]
 [assembly: InternalsVisibleTo( "MedEnthLogsTestMono" )]
 namespace MedEnthLogsApi
 {

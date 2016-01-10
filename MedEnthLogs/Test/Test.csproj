@@ -48,8 +48,8 @@
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -100,9 +100,7 @@
     <Compile Include="ApiTest.cs" />
     <Compile Include="LogBookTest.cs" />
     <Compile Include="LogTest.cs" />
-    <Compile Include="Mocks\MockMusicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mocks\MockTimer.cs" />
     <Compile Include="NAudioMusicManagerTest.cs" />
     <Compile Include="Win32ApiTest.cs" />
   </ItemGroup>
@@ -110,6 +108,10 @@
     <ProjectReference Include="..\MedEnthDesktop\MedEnthLogsDesktop.csproj">
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
       <Name>MedEnthLogsDesktop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCoreDesktop\TestCoreDesktop.csproj">
+      <Project>{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}</Project>
+      <Name>TestCoreDesktop</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +147,7 @@
     <Content Include="TestFiles\BadLogName.xml" />
     <Content Include="TestFiles\BadLogBook.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

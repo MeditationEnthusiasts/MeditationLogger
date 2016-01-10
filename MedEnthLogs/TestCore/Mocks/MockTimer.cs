@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MedEnthLogsApi;
 
-namespace Test.TestFiles
+namespace TestCore.Mocks
 {
     public class MockTimer : ITimer
     {

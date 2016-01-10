@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using MedEnthLogsApi;
 
-namespace Test.Mocks
+namespace TestCore.Mocks
 {
     public class MockMusicManager : IMusicManager
     {

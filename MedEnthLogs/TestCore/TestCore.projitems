@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TestCore</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ApiTestCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockMusicManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockTimer.cs" />
+  </ItemGroup>
+</Project>
