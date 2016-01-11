@@ -16,12 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-using MedEnthLogsApi;
 using NUnit.Framework;
-using System.Collections.Generic;
+using TestCore;
 
-namespace TestCommon
+namespace TestDesktop
 {
     /// <summary>
     /// Tests the Log Class.
@@ -31,38 +29,14 @@ namespace TestCommon
     {
         // -------- Fields --------
 
-        Log log1;
-        Log log2;
-        Log log3;
-        Log log4;
-        double expectedTotalTime;
+        private LogBookTestCore testCore;
 
         // -------- Setup / Teardown --------
 
         [SetUp]
         public void TestSetup()
         {
-            log1 = new Log();
-            log1.StartTime = new DateTime( 2015, 1, 1, 0, 0, 0 );
-            log1.EndTime = log1.StartTime + new TimeSpan( 1, 0, 0 );
-
-            log2 = new Log();
-            log2.StartTime = new DateTime( 2015, 1, 2, 0, 0, 0 );
-            log2.EndTime = log2.StartTime + new TimeSpan( 2, 0, 0 );
-
-            log3 = new Log();
-            log3.StartTime = new DateTime( 2015, 1, 3, 0, 0, 0 );
-            log3.EndTime = log3.StartTime + new TimeSpan( 3, 0, 0 );
-
-            // Make log4 the most recent, and have the longest session.
-            log4 = new Log();
-            log4.StartTime = new DateTime( 2015, 1, 4, 0, 0, 0 );
-            log4.EndTime = log4.StartTime + new TimeSpan( 4, 0, 0 );
-
-            expectedTotalTime = log1.Duration.TotalMinutes +
-                                log2.Duration.TotalMinutes +
-                                log3.Duration.TotalMinutes +
-                                log4.Duration.TotalMinutes;
+            this.testCore = new LogBookTestCore();
         }
 
         // -------- Tests --------
@@ -73,15 +47,7 @@ namespace TestCommon
         [Test]
         public void ReadonlyListTest()
         {
-            LogBook uut = new LogBook( new List<ILog>() );
-
-            // Expect Exception.
-            Assert.Catch<NotSupportedException>(
-                delegate()
-                {
-                    uut.Logs.Add( new Log() );
-                }
-            );
+            this.testCore.DoReadonlyListTest();
         }
 
         /// <summary>
@@ -91,26 +57,7 @@ namespace TestCommon
         [Test]
         public void OrderTest()
         {
-            // Random order
-            List <ILog> logs = new List<ILog> { log2, log4, log1, log3 };
-
-            LogBook uut = new LogBook( logs );
-
-            // Ensure most recent is index 0.
-            Assert.AreEqual( log4, uut.Logs[0] );
-            Assert.AreEqual( log3, uut.Logs[1] );
-            Assert.AreEqual( log2, uut.Logs[2] );
-            Assert.AreEqual( log1, uut.Logs[3] );
-
-            // Ensure all logs exist.
-            Assert.IsTrue( uut.LogExists( log1.Guid ) );
-            Assert.IsTrue( uut.LogExists( log2.Guid ) );
-            Assert.IsTrue( uut.LogExists( log3.Guid ) );
-            Assert.IsTrue( uut.LogExists( log4.Guid ) );
-
-            // Ensure the total time and longest time are what they should be.
-            Assert.AreEqual( this.expectedTotalTime, uut.TotalTime, 1.0 );
-            Assert.AreEqual( log4.Duration.TotalMinutes, uut.LongestTime, 0.1 );
+            this.testCore.DoOrderTest();
         }
 
         /// <summary>
@@ -120,19 +67,7 @@ namespace TestCommon
         [Test]
         public void ConflictingGuidTest()
         {
-            // Make conflict.
-            log2.Guid = log1.Guid;
-
-            List<ILog> logs = new List<ILog> { log1, log2 };
-
-            LogBook uut = new LogBook( logs );
-
-            // Only one log should be added.
-            Assert.AreEqual( 1, uut.Logs.Count );
-            Assert.AreEqual( log2, uut.Logs[0] );
-
-            // Ensure log exists.
-            Assert.IsTrue( uut.LogExists( log2.Guid ) );
+            this.testCore.DoConflictingGuidTest();
         }
 
         /// <summary>
@@ -141,13 +76,7 @@ namespace TestCommon
         [Test]
         public void LogExistsTest()
         {
-            // Do not add log 2
-            List<ILog> logs = new List<ILog> { log1 };
-
-            LogBook uut = new LogBook( logs );
-
-            Assert.IsTrue( uut.LogExists( log1.Guid ) );
-            Assert.IsFalse( uut.LogExists( log2.Guid ) );
+            this.testCore.DoLogExistsTest();
         }
 
         /// <summary>
@@ -156,25 +85,7 @@ namespace TestCommon
         [Test]
         public void GetLogTest()
         {
-            // Do not add log 2
-            List<ILog> logs = new List<ILog> { log1 };
-
-            LogBook uut = new LogBook( logs );
-
-            // Ensure when we get log 1, the logs match
-            // and the reference is the same.
-            Log log1Clone = uut.GetLog( log1.Guid ) as Log;
-            Assert.AreEqual( log1, log1Clone );
-            Assert.AreSame( log1, log1Clone );
-
-            // Ensure key not found exception is thrown
-            // if a log doesn't exist.
-            Assert.Catch<KeyNotFoundException>(
-                delegate ()
-                {
-                    uut.GetLog( log2.Guid );
-                }
-            );
+            this.testCore.DoGetLogTest();
         }
     }
 }
