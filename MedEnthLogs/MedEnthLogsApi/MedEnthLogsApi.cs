@@ -84,6 +84,11 @@ namespace MedEnthLogsApi
         /// </summary>
         public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );
 
+        /// <summary>
+        /// The name of the logbook located in AppData.
+        /// </summary>
+        public const string LogbookFileName = "logbook.mlg";
+
         // -------- Constructor --------
 
         /// <summary>

@@ -491,7 +491,7 @@ namespace TestCore
         /// </summary>
         public void DoPopulateLogBookMultipleTimes()
         {
-            DoSaveTest( 10 );
+            DoSaveTest( this.uut, 10 );
         }
 
         // ---- Xml Tests ----
@@ -505,7 +505,7 @@ namespace TestCore
         {
             const string fileName = "XmlSchemaTest1.xml";
 
-            DoSaveTest( 5 );
+            DoSaveTest( this.uut, 5 );
 
             uut.Export( fileName );
             try
@@ -753,11 +753,11 @@ namespace TestCore
             try
             {
                 // Create an inital logbook.
-                DoSaveTest( 3, dbLocation );
+                DoSaveTest( this.uut, 3, dbLocation );
 
                 LogBook oldBook = this.uut.LogBook;
 
-                DoSaveTest( 3, newDbLocation );
+                DoSaveTest( this.uut, 3, newDbLocation );
 
                 LogBook newBook = this.uut.LogBook;
 
@@ -780,7 +780,7 @@ namespace TestCore
         /// </summary>
         public void DoMlgSyncDifferentEdits()
         {
-            DoSaveTest( 2, dbLocation );
+            DoSaveTest( this.uut, 2, dbLocation );
             LogBook localBook = uut.LogBook;
 
             // External log 1 is older than the one in the local book.
@@ -977,7 +977,7 @@ namespace TestCore
             const string newDb = "test2.db";
             DoSaveTest();
             DoSaveTest();
-            DoSaveTest( 5 );
+            DoSaveTest( this.uut, 5 );
 
             uut.Export( fileName );
 
@@ -996,32 +996,42 @@ namespace TestCore
                 uut.PopulateLogbook();
                 LogBook newBook = uut.LogBook;
 
-                // Ensure we are not the same logbook reference.
-                Assert.AreNotSame( oldBook, newBook );
-
-                // Now, iterate through the logs.  Compared to the old logbook,
-                // Everything should be the same EXCEPT for GUID and edit time,
-                // which should be newer (assuming our computer didnt time travel).
-                Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
-
-                for ( int i = 0; i < oldBook.Logs.Count; ++i )
-                {
-                    Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
-                    Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
-                    Assert.AreEqual( oldBook.Logs[i].Latitude, newBook.Logs[i].Latitude );
-                    Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
-                    Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
-                    Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
-                    Assert.AreNotEqual( newBook.Logs[i].Guid, oldBook.Logs[i].Guid );
-                    Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
-                    Assert.AreNotEqual( newBook.Logs[i].Guid, new Guid() ); // Ensure the new GUID is not 0.
-                }
+                AreLogbooksEqual( oldBook, newBook );
             }
             finally
             {
                 uut.Close();
                 File.Delete( newDb );
                 File.Delete( fileName );
+            }
+        }
+
+        /// <summary>
+        /// Checks to make sure the two given logbooks contain the same logs.
+        /// </summary>
+        /// <param name="oldBook">The older logbook to check.</param>
+        /// <param name="newBook">The newer logbook to check.</param>
+        public static void AreLogbooksEqual( LogBook oldBook, LogBook newBook )
+        {
+            // Ensure we are not the same logbook.
+            Assert.AreNotSame( oldBook, newBook );
+
+            // Now, iterate through the logs.  Compared to the old logbook,
+            // Everything should be the same EXCEPT for GUID and edit time,
+            // which should be newer (assuming our computer didnt time travel).
+            Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
+
+            for ( int i = 0; i < oldBook.Logs.Count; ++i )
+            {
+                Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
+                Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
+                Assert.AreEqual( oldBook.Logs[i].Latitude, newBook.Logs[i].Latitude );
+                Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
+                Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
+                Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
+                Assert.AreNotEqual( newBook.Logs[i].Guid, oldBook.Logs[i].Guid );
+                Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
+                Assert.AreNotEqual( newBook.Logs[i].Guid, new Guid() ); // Ensure the new GUID is not 0.
             }
         }
 
@@ -1174,44 +1184,51 @@ namespace TestCore
         /// </summary>
         /// <param name="numberOfEntries">The number of entries to add.</param>
         /// <param name="location">The location to save to.</param>
-        private void DoSaveTest( int numberOfEntries, string location = dbLocation )
+        /// <returns>Logbook of the database after saving the data.</returns>
+        public static LogBook DoSaveTest( Api api, int numberOfEntries, string location = dbLocation )
         {
-            uut.Open( location );
+            LogBook logBook = null;
+
+            api.Open( location );
             try
             {
                 for ( int i = 0; i < numberOfEntries; ++i )
                 {
-                    uut.StartSession( new SessionConfig() );
-                    uut.StopSession();
+                    api.StartSession( new SessionConfig() );
+                    api.StopSession();
 
                     string technique = "SomeTechnique" + i;
                     string comments = "Some Comment" + i;
                     decimal latitude = i;
                     decimal longitude = i;
-                    uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
+                    api.ValidateAndSaveSession( technique, comments, latitude, longitude );
 
-                    uut.PopulateLogbook();
+                    api.PopulateLogbook();
 
                     // Most recent logs are in index 0.
-                    Assert.AreEqual( uut.CurrentLog, uut.LogBook.Logs[0] );
-                    Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
+                    Assert.AreEqual( api.CurrentLog, api.LogBook.Logs[0] );
+                    Assert.AreNotSame( api.CurrentLog, api.LogBook.Logs[0] );
 
                     Assert.AreEqual(
                         technique,
-                        uut.LogBook.Logs[0].Technique
+                        api.LogBook.Logs[0].Technique
                     );
                     Assert.AreEqual(
                         comments,
-                        uut.LogBook.Logs[0].Comments
+                        api.LogBook.Logs[0].Comments
                     );
 
-                    uut.ResetCurrentLog();
+                    api.ResetCurrentLog();
+
+                    logBook = api.LogBook;
                 }
             }
             finally
             {
-                uut.Close();
+                api.Close();
             }
+
+            return logBook;
         }
 
         /// <summary>

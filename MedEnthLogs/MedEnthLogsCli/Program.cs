@@ -38,9 +38,6 @@ namespace MedEnthLogsCli
 
         static int Main( string[] args )
         {
-            int? i = ConsoleHelpers.GetInt();
-            Console.Write( i );
-
             if ( args.Length == 1 )
             {
                 if ( ( args[0] == "--help" ) || ( args[0] == "-h" ) || ( args[0] == "/?" ) )
@@ -67,15 +64,14 @@ namespace MedEnthLogsCli
                     Api api = GetApi();
                     try
                     {
-                        string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-                        dbLocation = Path.Combine( dbLocation, "MeditationLoggerDesktop" );
+                        string dbLocation = Constants.DatabaseFolderLocation;
 
                         if ( Directory.Exists( dbLocation ) == false )
                         {
                             Directory.CreateDirectory( dbLocation );
                         }
                         
-                        api.Open( Path.Combine( dbLocation, "logbook.mlg" )  );
+                        api.Open( Path.Combine( dbLocation, Api.LogbookFileName )  );
                         api.PopulateLogbook();
                         switch ( args[0] )
                         {
