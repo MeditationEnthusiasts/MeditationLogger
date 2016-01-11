@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ApiTestCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogBookTestCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogTestCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockMusicManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockTimer.cs" />
   </ItemGroup>

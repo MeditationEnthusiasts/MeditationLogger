@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,9 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-using MedEnthLogsApi;
 using NUnit.Framework;
+using TestCore;
 
 namespace TestCommon
 {
@@ -30,17 +29,14 @@ namespace TestCommon
     {
         // -------- Fields --------
 
-        /// <summary>
-        /// Unit under test.
-        /// </summary>
-        Log uut;
+        private LogTestCore testCore;
 
         // -------- Setup/Teardown --------
 
         [SetUp]
         public void TestSetup()
         {
-            uut = new Log();
+            testCore = new LogTestCore();
         }
 
         // -------- Test Functions --------
@@ -51,15 +47,7 @@ namespace TestCommon
         [Test]
         public void TestDuration()
         {
-            DateTime start = DateTime.MinValue;
-            DateTime end = Log.MaxTime;
-
-            uut.StartTime = start;
-            uut.EndTime = end;
-
-            TimeSpan expected = end - start;
-
-            Assert.AreEqual( expected, uut.Duration );
+            this.testCore.DoTestDuration();
         }
 
         /// <summary>
@@ -68,9 +56,7 @@ namespace TestCommon
         [Test]
         public void TestGetHashCode()
         {
-            // Ensures that the hash code of the log is the same as the hashcode
-            // of the guid.  Two logs in a logbook can not have the same guid.
-            Assert.AreEqual( uut.Guid.GetHashCode(), uut.GetHashCode() );
+            this.testCore.DoTestGetHashCode();
         }
 
         /// <summary>
@@ -80,17 +66,7 @@ namespace TestCommon
         [Test]
         public void CommentsTest()
         {
-            // Expect Exception.
-            Assert.Catch<ArgumentNullException>(
-                delegate ()
-                {
-                    uut.Comments = null;
-                }
-            );
-
-            string expectedComments = "Did stuff";
-            uut.Comments = expectedComments;
-            Assert.AreEqual( expectedComments, uut.Comments );
+            this.testCore.DoCommentsTest();
         }
 
         /// <summary>
@@ -100,17 +76,7 @@ namespace TestCommon
         [Test]
         public void TechniqueTest()
         {
-            // Expect Exception.
-            Assert.Catch<ArgumentNullException>(
-                delegate ()
-                {
-                    uut.Technique = null;
-                }
-            );
-
-            string expectedLocation = "My Room";
-            uut.Technique = expectedLocation;
-            Assert.AreEqual( expectedLocation, uut.Technique );
+            this.testCore.DoTechniqueTest();
         }
 
         /// <summary>
@@ -119,72 +85,7 @@ namespace TestCommon
         [Test]
         public void EqualsTest()
         {
-            Log other = new Log();
-
-            // Ensure when we create a new log, the GUIDs do not match.
-            // Operator == doesn't care if guids match or not.
-            Assert.AreNotEqual( uut.Guid, other.Guid );
-
-            // Ensure uut and other match.
-            CheckLogsEqual( uut, other );
-
-            // Ensure changing the ID does not cause the equality to fail
-            other.Id = uut.Id + 10;
-            CheckLogsEqual( uut, other );
-
-            // Now, start changing everything, and we should assert false.
-
-            // Change Start Time.
-            other.StartTime = DateTime.Now;
-            CheckLogsNotEqual( uut, other );
-            other.StartTime = uut.StartTime;
-
-            // Change End Time.
-            other.EndTime = DateTime.Now;
-            CheckLogsNotEqual( uut, other );
-            other.EndTime = uut.EndTime;
-
-            // Change Edit Time.
-            other.EditTime = DateTime.Now;
-            CheckLogsNotEqual( uut, other );
-            other.EditTime = uut.EditTime;
-
-            // Change Comments.
-            other.Comments = "Hello world!";
-            CheckLogsNotEqual( uut, other );
-            other.Comments = uut.Comments;
-
-            // Change Technique.
-            other.Technique = "My Room";
-            CheckLogsNotEqual( uut, other );
-            other.Technique = uut.Technique;
-
-            // Change Latitude, with one being null.
-            other.Latitude = 10.0M;
-            uut.Latitude = null;
-            CheckLogsNotEqual( uut, other );
-            CheckLogsNotEqual( other, uut );
-            // Check Latitude again, with both being not-null.
-            uut.Latitude = 11.0M;
-            CheckLogsNotEqual( uut, other );
-            CheckLogsNotEqual( other, uut );
-            other.Latitude = null;
-            uut.Latitude = null;
-
-            // Change Longitude, with one being null.
-            other.Longitude = 10.0M;
-            uut.Longitude = null;
-            CheckLogsNotEqual( uut, other );
-            CheckLogsNotEqual( other, uut );
-            // Check Longitude again, with both being not-null.
-            uut.Longitude = 11.0M;
-            CheckLogsNotEqual( uut, other );
-            CheckLogsNotEqual( other, uut );
-            other.Longitude = null;
-            uut.Longitude = null;
-
-            // Check passing in nulls.
-            Assert.IsFalse( uut.Equals( null ) );
+            this.testCore.DoEqualsTest();
         }
 
         /// <summary>
@@ -194,71 +95,19 @@ namespace TestCommon
         [Test]
         public void CloneTest()
         {
-            Log clone = uut.Clone();
-            Assert.AreNotSame( clone, uut );
-            Assert.AreEqual( clone, uut );
+            this.testCore.DoCloneTest();
         }
 
         [Test]
         public void ValidationPassTest()
         {
-            // Reset.
-            uut = new Log();
-
-            // Start time == End Time should pass.
-            uut.EditTime = DateTime.Now;
-            uut.StartTime = DateTime.Now;
-            uut.EndTime = uut.StartTime;
-            ValidationPassedTest( uut );
-
-            // Start time < End Time should pass.
-            uut.EndTime = uut.StartTime + new TimeSpan( 0, 0, 1 );
-            ValidationPassedTest( uut );
-
-            // Reset.
-            uut = new Log();
-            // Set the times so the thing validates.
-            uut.EditTime = DateTime.Now;
-            uut.StartTime = DateTime.Now;
-            uut.EndTime = DateTime.Now;
-
-            // Null lat/long should pass.
-            uut.Latitude = null;
-            uut.Longitude = null;
-            ValidationPassedTest( uut );
-
-            // Lat/Lon with values should pass.
-            uut.Latitude = 1.0M;
-            uut.Longitude = 1.0M;
-            ValidationPassedTest( uut );
+            this.testCore.DoValidationPassTest();
         }
 
         [Test]
         public void ValidationFailTest()
         {
-            // A default log should fail throw.
-            ValidationFailedTest( uut, Log.EndTimeLessThanStartTimeMessage );
-
-            // Reset.
-            uut = new Log();
-
-            // Start time > End Time should pass.
-            uut.StartTime = DateTime.Now;
-            uut.EndTime = uut.StartTime - new TimeSpan( 0, 0, 1 );
-            ValidationFailedTest( uut, Log.EndTimeLessThanStartTimeMessage );
-
-            // Reset.
-            uut = new Log();
-
-            // Having one null and one not should fail.
-            uut.Latitude = null;
-            uut.Longitude = 10.0M;
-            ValidationFailedTest( uut, Log.LatitudeSetNoLongitude );
-
-            // Lat/Lon with values should pass.
-            uut.Latitude = 1.0M;
-            uut.Longitude = null;
-            ValidationFailedTest( uut, Log.LongitudeSetNoLatitude );
+            this.testCore.DoValidationFailTest();
         }
 
         // ---- Sync Tests ----
@@ -269,16 +118,7 @@ namespace TestCommon
         [Test]
         public void LogSyncExceptionCheckTest()
         {
-            // Both new logs have different GUIDs.  We'll get an exception.
-            Log log1 = new Log();
-            Log log2 = new Log();
-
-            Assert.Throws<InvalidOperationException>(
-                delegate ()
-                {
-                    Log.Sync( ref log1, ref log2 );
-                }
-            );
+            this.testCore.DoLogSyncExceptionCheckTest();
         }
 
         /// <summary>
@@ -287,16 +127,7 @@ namespace TestCommon
         [Test]
         public void LogSyncBothEqual()
         {
-            Log log1 = new Log();
-            Log log2 = log1.Clone();
-            log2.Id = log1.Id + 1;
-
-            Log.Sync( ref log1, ref log2 );
-
-            // Ensure both logs are the same, and their IDs didn't change.
-            Assert.AreEqual( log1, log2 );
-            Assert.AreEqual( log1.Id + 1, log2.Id );
-            Assert.AreEqual( log2.Id - 1, log1.Id );
+            this.testCore.DoLogSyncBothEqual();
         }
 
         /// <summary>
@@ -305,25 +136,7 @@ namespace TestCommon
         [Test]
         public void LogSyncBothLog1Older()
         {
-            Log log1 = new Log();
-            log1.EditTime = DateTime.MinValue;
-
-            Log log2 = log1.Clone();
-            log2.Id = log1.Id + 1;
-            FillWithData( ref log2 );
-
-            Log expectedLog = log2;
-
-            Log.Sync( ref log1, ref log2 );
-
-            // Ensure both logs are the same, and their IDs didn't change.
-            Assert.AreEqual( log1, log2 );
-            Assert.AreEqual( log1.Id + 1, log2.Id );
-            Assert.AreEqual( log2.Id - 1, log1.Id );
-
-            // Ensure log2 is the one both logs are set to.
-            Assert.AreEqual( expectedLog, log2 );
-            Assert.AreEqual( expectedLog, log1 );
+            this.testCore.DoLogSyncBothLog1Older();
         }
 
         /// <summary>
@@ -332,96 +145,7 @@ namespace TestCommon
         [Test]
         public void LogSyncBothLog2Older()
         {
-            Log log1 = new Log();
-            log1.EditTime = Log.MaxTime;
-
-            Log log2 = log1.Clone();
-            log2.Id = log1.Id + 1;
-            FillWithData( ref log2 );
-
-            Log expectedLog = log1;
-
-            Log.Sync( ref log1, ref log2 );
-
-            // Ensure both logs are the same, and their IDs didn't change.
-            Assert.AreEqual( log1, log2 );
-            Assert.AreEqual( log1.Id + 1, log2.Id );
-            Assert.AreEqual( log2.Id - 1, log1.Id );
-
-            // Ensure log2 is the one both logs are set to.
-            Assert.AreEqual( expectedLog, log2 );
-            Assert.AreEqual( expectedLog, log1 );
-        }
-
-        // -------- Test Helpers --------
-
-        /// <summary>
-        /// Fills the given log with data.
-        /// </summary>
-        /// <param name="log">The log to fill.</param>
-        private void FillWithData( ref Log log )
-        {
-            log.Comments = "Some Comment.";
-            log.StartTime = DateTime.UtcNow;
-            log.EndTime = log.StartTime + new TimeSpan( 1, 0, 0 );
-            log.EditTime = DateTime.UtcNow;
-            log.Latitude = 1.0M;
-            log.Longitude = 2.0M;
-            log.Technique = "Some Technique";
-        }
-
-        /// <summary>
-        /// Ensures the two logs are the same.
-        /// </summary>
-        /// <param name="log1">The first log to compare.</param>
-        /// <param name="log2">The second log to compare.</param>
-        private void CheckLogsEqual( Log log1, Log log2 )
-        {
-            Assert.IsTrue( log1.Equals( log2 ) );
-            Assert.IsTrue( log2.Equals( log1 ) );
-        }
-
-        /// <summary>
-        /// Ensures the two logs are the NOT the same.
-        /// </summary>
-        /// <param name="log1">The first log to compare.</param>
-        /// <param name="log2">The second log to compare.</param>
-        private void CheckLogsNotEqual( Log log1, Log log2 )
-        {
-            Assert.IsFalse( log1.Equals( log2 ) );
-            Assert.IsFalse( log2.Equals( log1 ) );
-        }
-
-        /// <summary>
-        /// Ensures the given log passes validation.
-        /// </summary>
-        /// <param name="log">The log to check.</param>
-        private void ValidationPassedTest( Log log )
-        {
-            // A default log should not throw.
-            Assert.DoesNotThrow(
-                delegate ()
-                {
-                    log.Validate();
-                }
-            );
-        }
-
-        /// <summary>
-        /// Ensures the given log fails validation.
-        /// </summary>
-        /// <param name="log">The log to check.</param>
-        /// <param name="errMessage">The error message to see.</param>
-        private void ValidationFailedTest( Log log, string errMessage )
-        {
-            // A default log should not throw.
-            Assert.Throws<LogValidationException>(
-                delegate ()
-                {
-                    log.Validate();
-                },
-                errMessage
-            );
+            this.testCore.DoLogSyncBothLog2Older();
         }
     }
 }

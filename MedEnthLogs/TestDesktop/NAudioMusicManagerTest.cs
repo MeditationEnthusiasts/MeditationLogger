@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -40,12 +40,12 @@ namespace Test
         /// <summary>
         /// Public domain mp3 from http://publicsounds.org/
         /// </summary>
-        const string mp3FileLocation = @"..\..\TestFiles\thunder.mp3";
+        const string mp3FileLocation = @"..\..\..\TestCore\TestFiles\thunder.mp3";
 
         /// <summary>
         /// Public domain wav (converted from mp3) from http://publicsounds.org/
         /// </summary>
-        const string wavFileLocation = @"..\..\TestFiles\thunder.wav";
+        const string wavFileLocation = @"..\..\..\TestCore\TestFiles\thunder.wav";
 
 
         // -------- Setup/Teardown --------
@@ -89,7 +89,7 @@ namespace Test
             Assert.Throws<PlatformNotSupportedException>(
                 delegate ()
                 {
-                    this.uut.Validate( @"..\..\TestFiles\MissingLat.xml" );
+                    this.uut.Validate( @"..\..\..\TestCore\TestFiles\MissingLat.xml" );
                 }
             );
         }
