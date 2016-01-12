@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1035,9 +1035,9 @@ namespace MedEnthLogsDesktop
             this.CopyrightValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.CopyrightValue.Location = new System.Drawing.Point(148, 306);
             this.CopyrightValue.Name = "CopyrightValue";
-            this.CopyrightValue.Size = new System.Drawing.Size(254, 51);
+            this.CopyrightValue.Size = new System.Drawing.Size(295, 51);
             this.CopyrightValue.TabIndex = 10;
-            this.CopyrightValue.Text = "Copyright (C) 2015  Seth Hendrick.";
+            this.CopyrightValue.Text = "Copyright (C) 2015-2016  Seth Hendrick.";
             this.CopyrightValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // VersionValueLabel
