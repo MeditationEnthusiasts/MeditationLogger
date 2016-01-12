@@ -144,6 +144,34 @@ namespace TestDesktop
             DoImportExportTest( "cliTest.mlg" );
         }
 
+        /// <summary>
+        /// Does the sync test via the cli.
+        /// </summary>
+        [Test]
+        public void CliSyncTest()
+        {
+            // First, create 3 entries in the database.
+            LogBook originalLogbook = ApiTestCore.DoSaveTest( this.api, 3, this.logbookLocation );
+
+            string logbook2Location = "logbook2.mlg";
+            try
+            {
+                // Then, create 3 entries in a random logbook.
+                LogBook newLogbook = ApiTestCore.DoSaveTest( this.api, 3, logbook2Location );
+
+                // Call the process and do a sync.
+                int exitCode = LaunchProcess( "sync " + logbook2Location );
+                Assert.AreEqual( 0, exitCode );
+
+                // Check the sync.
+                ApiTestCore.CheckSync( this.api, this.logbookLocation, originalLogbook, logbook2Location, newLogbook );
+            }
+            finally
+            {
+                File.Delete( logbook2Location );
+            }
+        }
+
         // -------- Test Helpers ---------
 
         /// <summary>

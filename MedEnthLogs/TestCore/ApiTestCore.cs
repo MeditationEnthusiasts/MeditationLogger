@@ -765,7 +765,7 @@ namespace TestCore
                 uut.Sync( dbLocation );
                 uut.Close();
 
-                CheckSync( dbLocation, oldBook, newDbLocation, newBook );
+                CheckSync( this.uut, dbLocation, oldBook, newDbLocation, newBook );
             }
             finally
             {
@@ -915,19 +915,20 @@ namespace TestCore
         /// <summary>
         /// Checks to see if the sync was successful.
         /// </summary>
+        /// <param name="api">The api to use.</param>
         /// <param name="oldBookLocation">The old logbook .mlg location.</param>
         /// <param name="oldBook">The old logbook object saved in memory.</param>
         /// <param name="newBookLocation">The new logbook .mlg location.</param>
         /// <param name="newBook">The new logbook object saved in memory.</param>
-        private void CheckSync( string oldBookLocation, LogBook oldBook, string newBookLocation, LogBook newBook )
+        public static void CheckSync( Api api, string oldBookLocation, LogBook oldBook, string newBookLocation, LogBook newBook )
         {
             try
             {
                 foreach ( string mlgToCheck in new string[] { oldBookLocation, newBookLocation } )
                 {
-                    uut.Open( mlgToCheck );
-                    uut.PopulateLogbook();
-                    LogBook syncedLogbook = uut.LogBook;
+                    api.Open( mlgToCheck );
+                    api.PopulateLogbook();
+                    LogBook syncedLogbook = api.LogBook;
 
                     // First, ensure all logs in the old book exist.
                     foreach ( Log oldLog in oldBook.Logs )
@@ -964,7 +965,7 @@ namespace TestCore
             }
             finally
             {
-                uut.Close();
+                api.Close();
             }
         }
 
