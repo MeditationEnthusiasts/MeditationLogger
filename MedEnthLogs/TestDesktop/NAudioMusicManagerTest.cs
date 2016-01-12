@@ -76,9 +76,29 @@ namespace Test
             );
         }
 
+        /// <summary>
+        /// Ensures passing in garbage data results in an exception.
+        /// </summary>
         [Test]
         public void ValidateFailureTest()
         {
+            // Null will fail.
+            Assert.Throws<ArgumentException>(
+                delegate ()
+                {
+                    this.uut.Validate( null );
+                }
+            );
+
+            // Empty string will fail.
+            Assert.Throws<ArgumentException>(
+                delegate ()
+                {
+                    this.uut.Validate( "" );
+                }
+            );
+
+            // Fail for file that doesn't exist.
             Assert.Throws<FileNotFoundException>(
                 delegate ()
                 {
@@ -86,6 +106,7 @@ namespace Test
                 }
             );
 
+            // Fail for file that exists but is not supported.
             Assert.Throws<PlatformNotSupportedException>(
                 delegate ()
                 {
