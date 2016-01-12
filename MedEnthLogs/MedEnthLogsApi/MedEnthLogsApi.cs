@@ -77,7 +77,7 @@ namespace MedEnthLogsApi
         /// <summary>
         /// The version of the API.
         /// </summary>
-        public const string VersionString = "0.1.0";
+        public const string VersionString = "0.2.0";
 
         /// <summary>
         /// Sematic Version Class of the version string.
