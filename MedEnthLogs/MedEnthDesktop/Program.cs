@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ namespace MedEnthLogsDesktop
 {
     static partial class Program
     {
+        // -------- Fields ---------
+
         private static MedEnthLogsApi.Api api;
 
         /// <summary>
@@ -39,16 +41,13 @@ namespace MedEnthLogsDesktop
             // Get Api() is in a partial class.  GetApi creates an API for the current platform.
             api = GetApi();
 
-            // Use the win32 sqlite.
-            string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-            dbLocation = Path.Combine( dbLocation, "MeditationLoggerDesktop" );
-
-            if ( Directory.Exists( dbLocation ) == false )
+            // Create the folder if it doesn't exist.
+            if ( Directory.Exists( Constants.DatabaseFolderLocation ) == false )
             {
-                Directory.CreateDirectory( dbLocation );
+                Directory.CreateDirectory( Constants.DatabaseFolderLocation );
             }
 
-            api.Open( Path.Combine( dbLocation, "logbook.mlg" ) );
+            api.Open( Path.Combine( Constants.DatabaseFolderLocation, MedEnthLogsApi.Api.LogbookFileName ) );
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );

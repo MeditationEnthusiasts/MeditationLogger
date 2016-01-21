@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,23 +17,23 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using MedEnthLogsApi;
-using MedEnthLogsDesktop;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Test.Mocks;
-using Test.TestFiles;
+using SQLite.Net.Interop;
+using TestCore.Mocks;
 
-namespace TestCommon
+namespace TestCore
 {
     /// <summary>
-    /// Tests the Api Class.
+    /// Test for the the API class.
     /// </summary>
-    [TestFixture]
-    public class LogsApiTest
+    public partial class ApiTestCore
     {
         // -------- Fields --------
 
@@ -46,12 +46,35 @@ namespace TestCommon
 
         private MockMusicManager mockAudio;
 
+        private readonly ILocationDetector locationDetector;
+
+        private readonly ISQLitePlatform sqlitePlatform;
+
         private const string dbLocation = "test.mlg";
 
-        // -------- Setup/Teardown --------
+        private readonly string projectDir;
 
-        [SetUp]
-        public void TestSetup()
+        // -------- Constructor ---------
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="platform">The SQLite platform to use.</param>
+        /// <param name="locationDetector">The location detector to use.</param>
+        /// <param name="projectDir">Relative path where the TestCore project is located to the .dll</param>
+        public ApiTestCore( ISQLitePlatform platform, ILocationDetector locationDetector, string projectDir )
+        {
+            this.sqlitePlatform = platform;
+            this.locationDetector = locationDetector;
+            this.projectDir = projectDir;
+        }
+
+        // -------- Setup / Teardown --------
+
+        /// <summary>
+        /// Should be run during the TestSetup stage.
+        /// </summary>
+        public void Startup()
         {
             if ( File.Exists( dbLocation ) )
             {
@@ -60,18 +83,15 @@ namespace TestCommon
 
             this.mockTimer = new MockTimer();
             this.mockAudio = new MockMusicManager();
-            uut = new Api(
-                new Win32LocationDetector(),
-                this.mockTimer,
-                this.mockAudio,
-                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
-            );
+            this.uut = new Api( this.locationDetector, this.mockTimer, this.mockAudio, this.sqlitePlatform );
         }
 
-        [TearDown]
-        public void TestTeardown()
+        /// <summary>
+        /// Should be run during the TestTeardown stage.
+        /// </summary>
+        public void Reset()
         {
-            uut.Close();
+            this.uut.Close();
 
             if ( File.Exists( dbLocation ) )
             {
@@ -84,8 +104,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the ResetCurrent function works.
         /// </summary>
-        [Test]
-        public void ResetCurrentTest()
+        public void DoResetCurrentTest()
         {
             uut.ResetCurrentLog();
 
@@ -96,12 +115,11 @@ namespace TestCommon
         /// <summary>
         /// Ensures the ValidateStagged method works.
         /// </summary>
-        [Test]
-        public void ValidateTest()
+        public void DoValidateTest()
         {
             // Ensure it doesn't validate if the start time is
             // later than the end time.
-            uut.currentLog.StartTime = DateTime.MaxValue;
+            uut.currentLog.StartTime = Log.MaxTime;
             uut.currentLog.EndTime = DateTime.MinValue;
 
             CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
@@ -115,7 +133,7 @@ namespace TestCommon
 
             // Ensure everything validates if start time is less than end time.
             uut.currentLog.StartTime = DateTime.Now;
-            uut.currentLog.EndTime = DateTime.MaxValue;
+            uut.currentLog.EndTime = Log.MaxTime;
             CheckValidationPassed();
             uut.ResetCurrentLog();
         }
@@ -123,8 +141,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the behavior is correct when StartSession is called.
         /// </summary>
-        [Test]
-        public void StartTest()
+        public void DoStartTest()
         {
             uut.StartSession( new SessionConfig() );
             Assert.IsTrue( mockTimer.IsRunning );
@@ -164,8 +181,11 @@ namespace TestCommon
             );
         }
 
-        [Test]
-        public void StartStopWithLoopingMusic()
+        /// <summary>
+        /// Ensures that if we start and stop with looping
+        /// music the behavior is correct.
+        /// </summary>
+        public void DoStartStopWithLoopingMusic()
         {
             SessionConfig config = new SessionConfig();
             config.PlayMusic = true;
@@ -186,8 +206,11 @@ namespace TestCommon
             Assert.AreEqual( null, mockTimer.Time );
         }
 
-        [Test]
-        public void StartWithNoMusic()
+        /// <summary>
+        /// Ensures calling start with no music
+        /// behaves correctly.
+        /// </summary>
+        public void DoStartWithNoMusic()
         {
             SessionConfig config = new SessionConfig();
             config.PlayMusic = false;
@@ -202,8 +225,11 @@ namespace TestCommon
             Assert.AreEqual( config.Length, mockTimer.Time );
         }
 
-        [Test]
-        public void StartStopWithInvalidMusicConfig()
+        /// <summary>
+        /// Ensures trying to start or stop a session results
+        /// in an error if the music config is invalid.
+        /// </summary>
+        public void DoStartStopWithInvalidMusicConfig()
         {
             SessionConfig config = new SessionConfig();
             config.PlayMusic = true;
@@ -228,8 +254,11 @@ namespace TestCommon
             Assert.AreEqual( new Log(), uut.CurrentLog );
         }
 
-        [Test]
-        public void StartStopWithPlayOnceMusic()
+        /// <summary>
+        /// Ensures starting/stopping a sesstion with "Play Once"
+        /// checked works correctly.
+        /// </summary>
+        public void DoStartStopWithPlayOnceMusic()
         {
             SessionConfig config = new SessionConfig();
             config.PlayMusic = true;
@@ -256,8 +285,11 @@ namespace TestCommon
             Assert.AreEqual( null, mockTimer.Time );
         }
 
-        [Test]
-        public void StartStopWithPlayOnceNullLength()
+        /// <summary>
+        /// Ensures that if a session is started/stoped with the
+        /// length set to null, the behavior is correct.
+        /// </summary>
+        public void DoStartStopWithPlayOnceNullLength()
         {
             SessionConfig config = new SessionConfig();
             config.PlayMusic = true;
@@ -287,8 +319,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures calling stop before start results in a no-op
         /// </summary>
-        [Test]
-        public void StopTestBeforeStart()
+        public void DoStopTestBeforeStart()
         {
             Log oldLog = uut.currentLog.Clone();
 
@@ -307,8 +338,10 @@ namespace TestCommon
             Assert.IsFalse( mockTimer.IsRunning );
         }
 
-        [Test]
-        public void StopTest()
+        /// <summary>
+        /// Ensures that the session stops correctly.
+        /// </summary>
+        public void DoStopTest()
         {
             // First, start the session.
             uut.StartSession( new SessionConfig() );
@@ -335,12 +368,13 @@ namespace TestCommon
             Assert.IsFalse( uut.IsSessionInProgress );
         }
 
+        // ---- Save Tests ----
+
         /// <summary>
         /// Ensures calling save with no database open
         /// results in an exception.
         /// </summary>
-        [Test]
-        public void SaveWithNoDatabase()
+        public void DoSaveWithNoDatabase()
         {
             Assert.Catch<InvalidOperationException>(
                 delegate ()
@@ -355,8 +389,7 @@ namespace TestCommon
         /// Ensures calling save without calling start
         /// results in an exception.
         /// </summary>
-        [Test]
-        public void SaveWithNotStarting()
+        public void DoSaveWithNotStarting()
         {
             // First, open the database.
             try
@@ -373,10 +406,9 @@ namespace TestCommon
         }
 
         /// <summary>
-        /// Tries to save to the database.
+        /// Tries to save to the database the default log values.
         /// </summary>
-        [Test]
-        public void SaveLogDefaults()
+        public void DoSaveWithDefaultLogs()
         {
             DoSaveTest();
         }
@@ -384,8 +416,7 @@ namespace TestCommon
         /// <summary>
         /// Tries to save to the database with comments.
         /// </summary>
-        [Test]
-        public void SaveLogOnlyComments()
+        public void DoSaveLogOnlyComments()
         {
             DoSaveTest( null, "This is a comment" );
         }
@@ -393,8 +424,7 @@ namespace TestCommon
         /// <summary>
         /// Tries to save to the database with technique
         /// </summary>
-        [Test]
-        public void SaveLogOnlyTechnique()
+        public void DoSaveLogOnlyTechnique()
         {
             DoSaveTest( "SomeTechnqiue" );
         }
@@ -402,17 +432,15 @@ namespace TestCommon
         /// <summary>
         /// Tries to save to the database with only location.
         /// </summary>
-        [Test]
-        public void SaveLongOnlyLocation()
+        public void DoSaveLongOnlyLocation()
         {
             DoSaveTest( null, null, 10.0M, 11.0M );
         }
 
         /// <summary>
-        /// Tries to save to the database.
+        /// Tries to save to the database with a technique and a comment.
         /// </summary>
-        [Test]
-        public void SaveLogWithCommentsAndTechnique()
+        public void DoSaveLogWithCommentsAndTechnique()
         {
             DoSaveTest( "SomeTechnqiue", "This is a comment" );
         }
@@ -420,8 +448,7 @@ namespace TestCommon
         /// <summary>
         /// Tries to save to the database with everything.
         /// </summary>
-        [Test]
-        public void SaveLogEverything()
+        public void DoSaveLogEverything()
         {
             DoSaveTest( "SomeTechnique", "This is a comment", 10.0M, 11.0M );
         }
@@ -429,8 +456,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the save fails when only latitiude is passed in.
         /// </summary>
-        [Test]
-        public void SaveLogWithOnlyLatitude()
+        public void DoSaveLogWithOnlyLatitude()
         {
             DoSaveTestOneLocation( 10.0M, null );
         }
@@ -438,18 +464,18 @@ namespace TestCommon
         /// <summary>
         /// Ensures the save fails when only longitude is passed in.
         /// </summary>
-        [Test]
-        public void SaveLogWithOnlyLongitude()
+        public void DoSaveLogWithOnlyLongitude()
         {
             DoSaveTestOneLocation( null, 10.0M );
         }
+
+        // ---- Populate Logbook Tests ----
 
         /// <summary>
         /// Ensures calling PopulateLogbook with no database
         /// opened results in an exception.
         /// </summary>
-        [Test]
-        public void PopulateLogBookWithNoDatabase()
+        public void DoPopulateLogBookWithNoDatabase()
         {
             Assert.Catch<InvalidOperationException>(
                 delegate ()
@@ -460,30 +486,31 @@ namespace TestCommon
             );
         }
 
-        [Test]
-        public void PopulateLogBookMultipleTimes()
+        /// <summary>
+        /// Does the save test 10 times.
+        /// </summary>
+        public void DoPopulateLogBookMultipleTimes()
         {
-            DoSaveTest( 10 );
+            DoSaveTest( this.uut, 10 );
         }
 
         // ---- Xml Tests ----
-        
+
         // -- XML Schema Tests --
 
         /// <summary>
         /// Tests the XML schema with all values.
         /// </summary>
-        [Test]
-        public void XmlSchemaTest()
+        public void DoXmlSchemaTest()
         {
             const string fileName = "XmlSchemaTest1.xml";
 
-            DoSaveTest( 5 );
+            DoSaveTest( this.uut, 5 );
 
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
@@ -507,8 +534,7 @@ namespace TestCommon
         /// <summary>
         /// Tests the XML schema with optional values.
         /// </summary>
-        [Test]
-        public void XmlSchemaTestNoValues()
+        public void DoXmlSchemaTestNoValues()
         {
             const string fileName = "XmlSchemaTest2.xml";
 
@@ -519,7 +545,7 @@ namespace TestCommon
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( @"..\..\..\MedEnthLogsApi\schemas\LogXmlSchema.xsd" );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
@@ -546,8 +572,7 @@ namespace TestCommon
         /// Ensures the exporting and importing of
         /// logs via XML works.
         /// </summary>
-        [Test]
-        public void XmlExportImportTest()
+        public void DoXmlExportImportTest()
         {
             const string fileName = "XmlImportExport.xml";
             DoImportExportTest( fileName );
@@ -559,11 +584,10 @@ namespace TestCommon
         /// Ensures importing an XML file without the LogBook or Log tag results in a failure,
         /// AND the database is not updated.
         /// </summary>
-        [Test]
         public void XmlImportBadLogbookTest()
         {
-            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogBook.xml" );
-            DoBadImportTest<XmlException>( @"..\..\TestFiles\BadLogName.xml" );
+            DoBadImportTest<XmlException>( Path.Combine( projectDir, "TestFiles", "BadLogBook.xml" ) );
+            DoBadImportTest<XmlException>( Path.Combine( projectDir, "TestFiles", "BadLogBook.xml" ) );
         }
 
         /// <summary>
@@ -571,45 +595,41 @@ namespace TestCommon
         /// AND the database is not updated.  Also ensures having StartTime > EndTime results
         /// in a failure.
         /// </summary>
-        [Test]
-        public void XmlImportNoStartTime()
+        public void DoXmlImportNoStartTime()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.xml" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingStartTime.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingEndTime.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "BadLogStartEnd.xml" ) );
         }
 
         /// <summary>
         /// Ensures having a missing latitude while having a longitude
         /// (or vice vera) results in a failure.
         /// </summary>
-        [Test]
-        public void XmlImportBadMissingLat()
+        public void DoXmlImportBadMissingLat()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.xml" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.xml" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLat.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLong.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLat.xml" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLong.xml" ) );
         }
 
         /// <summary>
         /// Ensures importing an XML file with no logs results
         /// in no error.  Nothing is added.
         /// </summary>
-        [Test]
-        public void XmlImportNoLogs()
+        public void DoXmlImportNoLogs()
         {
-            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.xml" );
+            DoGoodImportTest( 0, Path.Combine( projectDir, "TestFiles", "NoLogs.xml" ) );
         }
 
         /// <summary>
         /// Ensures importing an XML file with just start time
         /// and end time is valid.
         /// </summary>
-        [Test]
-        public void XmlImportJustStartAndEnd()
+        public void DoXmlImportJustStartAndEnd()
         {
-            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.xml" );
+            DoGoodImportTest( 5, Path.Combine( projectDir, "TestFiles", "JustStartAndEnd.xml" ) );
         }
 
         /// <summary>
@@ -617,10 +637,9 @@ namespace TestCommon
         /// set to not numbers results in no error, but both
         /// having null values.
         /// </summary>
-        [Test]
-        public void XmlImportBadLatLong()
+        public void DoXmlImportBadLatLong()
         {
-            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.xml" );
+            DoGoodImportTest( 1, Path.Combine( projectDir, "TestFiles", "InvalidLatLong.xml" ) );
             Assert.IsNull( uut.LogBook.Logs[0].Latitude );
             Assert.IsNull( uut.LogBook.Logs[0].Longitude );
         }
@@ -633,8 +652,7 @@ namespace TestCommon
         /// Ensures the exporting and importing of
         /// logs via XML works.
         /// </summary>
-        [Test]
-        public void JsonExportImportTest()
+        public void DoJsonExportImportTest()
         {
             const string fileName = "JsonImportExport.json";
             DoImportExportTest( fileName );
@@ -647,14 +665,13 @@ namespace TestCommon
         /// and the database is not updated.
         /// There are also cases where malformed json are okay.  Those should pass.
         /// </summary>
-        [Test]
-        public void JsonImportMalformedJsonTest()
+        public void DoJsonImportMalformedJsonTest()
         {
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonNoClosingArray.json" );
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingComma.json" );
-            DoBadImportTest<JsonReaderException>( @"..\..\TestFiles\MalformedJsonMissingCommaOnProperty.json" );
-            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraComma.json" );
-            DoGoodImportTest( 7, @"..\..\TestFiles\MalformedJsonExtraCommaOnProperty.json" );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonNoClosingArray.json" ) );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonMissingComma.json" ) );
+            DoBadImportTest<JsonReaderException>( Path.Combine( projectDir, "TestFiles", "MalformedJsonMissingCommaOnProperty.json" ) );
+            DoGoodImportTest( 7, Path.Combine( projectDir, "TestFiles", "MalformedJsonExtraComma.json" ) );
+            DoGoodImportTest( 7, Path.Combine( projectDir, "TestFiles", "MalformedJsonExtraCommaOnProperty.json" ) );
         }
 
         /// <summary>
@@ -662,56 +679,51 @@ namespace TestCommon
         /// AND the database is not updated.  Also ensures having StartTime > EndTime results
         /// in a failure.
         /// </summary>
-        [Test]
-        public void JsonImportNoStartTime()
+        public void DoJsonImportNoStartTime()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingStartTime.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingEndTime.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\BadLogStartEnd.json" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingStartTime.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingEndTime.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "BadLogStartEnd.json" ) );
         }
-        
+
         /// <summary>
         /// Ensures having a missing latitude while having a longitude
         /// (or vice vera) results in a failure.
         /// </summary>
-        [Test]
-        public void JsonImportBadMissingLat()
+        public void DoJsonImportBadMissingLat()
         {
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLat.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\MissingLong.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLat.json" );
-            DoBadImportTest<LogValidationException>( @"..\..\TestFiles\InvalidLong.json" );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLat.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "MissingLong.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLat.json" ) );
+            DoBadImportTest<LogValidationException>( Path.Combine( projectDir, "TestFiles", "InvalidLong.json" ) );
         }
-    
+
         /// <summary>
         /// Ensures importing a Json file with no logs results
         /// in no error.  Nothing is added.
         /// </summary>
-        [Test]
-        public void JsonImportNoLogs()
+        public void DoJsonImportNoLogs()
         {
-            DoGoodImportTest( 0, @"..\..\TestFiles\NoLogs.json" );
+            DoGoodImportTest( 0, Path.Combine( projectDir, "TestFiles", "NoLogs.json" ) );
         }
 
         /// <summary>
         /// Ensures importing a Json file with just start time
         /// and end time is valid.
         /// </summary>
-        [Test]
-        public void JsonImportJustStartAndEnd()
+        public void DoJsonImportJustStartAndEnd()
         {
-            DoGoodImportTest( 5, @"..\..\TestFiles\JustStartAndEnd.json" );
+            DoGoodImportTest( 5, Path.Combine( projectDir, "TestFiles", "JustStartAndEnd.json" ) );
         }
-        
+
         /// <summary>
         /// Ensures importing an XML file with lat and long
         /// set to not numbers results in no error, but both
         /// having null values.
         /// </summary>
-        [Test]
-        public void JsonImportBadLatLong()
+        public void DoJsonImportBadLatLong()
         {
-            DoGoodImportTest( 1, @"..\..\TestFiles\InvalidLatLong.json" );
+            DoGoodImportTest( 1, Path.Combine( projectDir, "TestFiles", "InvalidLatLong.json" ) );
             Assert.IsNull( uut.LogBook.Logs[0].Latitude );
             Assert.IsNull( uut.LogBook.Logs[0].Longitude );
         }
@@ -722,8 +734,7 @@ namespace TestCommon
         /// Ensures the exporting and importing of
         /// logs via MLG works.
         /// </summary>
-        [Test]
-        public void MlgExportImportTest()
+        public void DoMlgExportImportTest()
         {
             const string fileName = "MlgImportExport.mlg";
             DoImportExportTest( fileName );
@@ -735,19 +746,18 @@ namespace TestCommon
         /// Ensures that the MLG can sync with each other when
         /// all EditTimes are different.
         /// </summary>
-        [Test]
-        public void MlgSyncDoSync()
+        public void DoMlgSyncDoSync()
         {
             const string newDbLocation = "newTestMlg.mlg";
 
             try
             {
                 // Create an inital logbook.
-                DoSaveTest( 3, dbLocation );
+                DoSaveTest( this.uut, 3, dbLocation );
 
                 LogBook oldBook = this.uut.LogBook;
 
-                DoSaveTest( 3, newDbLocation );
+                DoSaveTest( this.uut, 3, newDbLocation );
 
                 LogBook newBook = this.uut.LogBook;
 
@@ -755,7 +765,7 @@ namespace TestCommon
                 uut.Sync( dbLocation );
                 uut.Close();
 
-                CheckSync( dbLocation, oldBook, newDbLocation, newBook );
+                CheckSync( this.uut, dbLocation, oldBook, newDbLocation, newBook );
             }
             finally
             {
@@ -768,14 +778,13 @@ namespace TestCommon
         /// Tests to make sure sync works fine when both logbooks
         /// have log with same GUIDs.
         /// </summary>
-        [Test]
-        public void MlgSyncDifferentEdits()
+        public void DoMlgSyncDifferentEdits()
         {
-            DoSaveTest( 2, dbLocation );
+            DoSaveTest( this.uut, 2, dbLocation );
             LogBook localBook = uut.LogBook;
 
             // External log 1 is older than the one in the local book.
-            Log extLog1 = new Log ( localBook.Logs[0] );
+            Log extLog1 = new Log( localBook.Logs[0] );
             extLog1.Latitude = 100M;
             extLog1.Longitude = 150M;
             extLog1.Comments = "External Log 1";
@@ -787,7 +796,7 @@ namespace TestCommon
             extLog2.Latitude = 25M;
             extLog2.Longitude = 50M;
             extLog2.Comments = "External Log 2";
-            extLog2.EditTime = DateTime.MaxValue;
+            extLog2.EditTime = Log.MaxTime;
 
             // Create external mlg file.
             const string extMlg = "external.mlg";
@@ -834,12 +843,11 @@ namespace TestCommon
         /// <summary>
         /// Ensures the sync pre-checks work.
         /// </summary>
-        [Test]
-        public void SyncCheckTest()
+        public void DoSyncCheckTest()
         {
             // Ensures something is thrown when we didn't open the database.
             Assert.Throws<InvalidOperationException>(
-                delegate()
+                delegate ()
                 {
                     uut.Sync( dbLocation );
                 },
@@ -864,12 +872,13 @@ namespace TestCommon
             }
         }
 
+        // -- Modifying database tests --
+
         /// <summary>
         /// Ensures the insert function works correctly when adding a completely new log
         /// and inserting an existing log.
         /// </summary>
-        [Test]
-        public void AddNewLogTest()
+        public void DoAddNewLogTest()
         {
             Log log1 = new Log();
             try
@@ -885,7 +894,7 @@ namespace TestCommon
                 // Now, just change a few things of the log, but not the ID.
                 // sqlite should update the log, and not add a new one.
 
-                Log newLog = new Log ( uut.LogBook.Logs[0] );
+                Log newLog = new Log( uut.LogBook.Logs[0] );
                 newLog.Comments = "New Log!";
                 newLog.Latitude = 1.0M;
                 newLog.Longitude = 2.0M;
@@ -906,19 +915,20 @@ namespace TestCommon
         /// <summary>
         /// Checks to see if the sync was successful.
         /// </summary>
+        /// <param name="api">The api to use.</param>
         /// <param name="oldBookLocation">The old logbook .mlg location.</param>
         /// <param name="oldBook">The old logbook object saved in memory.</param>
         /// <param name="newBookLocation">The new logbook .mlg location.</param>
         /// <param name="newBook">The new logbook object saved in memory.</param>
-        private void CheckSync( string oldBookLocation, LogBook oldBook, string newBookLocation, LogBook newBook )
+        public static void CheckSync( Api api, string oldBookLocation, LogBook oldBook, string newBookLocation, LogBook newBook )
         {
             try
             {
-                foreach ( string mlgToCheck in new string [] { oldBookLocation, newBookLocation } )
+                foreach ( string mlgToCheck in new string[] { oldBookLocation, newBookLocation } )
                 {
-                    uut.Open( mlgToCheck );
-                    uut.PopulateLogbook();
-                    LogBook syncedLogbook = uut.LogBook;
+                    api.Open( mlgToCheck );
+                    api.PopulateLogbook();
+                    LogBook syncedLogbook = api.LogBook;
 
                     // First, ensure all logs in the old book exist.
                     foreach ( Log oldLog in oldBook.Logs )
@@ -955,7 +965,7 @@ namespace TestCommon
             }
             finally
             {
-                uut.Close();
+                api.Close();
             }
         }
 
@@ -968,7 +978,7 @@ namespace TestCommon
             const string newDb = "test2.db";
             DoSaveTest();
             DoSaveTest();
-            DoSaveTest( 5 );
+            DoSaveTest( this.uut, 5 );
 
             uut.Export( fileName );
 
@@ -987,32 +997,42 @@ namespace TestCommon
                 uut.PopulateLogbook();
                 LogBook newBook = uut.LogBook;
 
-                // Ensure we are not the same logbook reference.
-                Assert.AreNotSame( oldBook, newBook );
-
-                // Now, iterate through the logs.  Compared to the old logbook,
-                // Everything should be the same EXCEPT for GUID and edit time,
-                // which should be newer (assuming our computer didnt time travel).
-                Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
-
-                for ( int i = 0; i < oldBook.Logs.Count; ++i )
-                {
-                    Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
-                    Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
-                    Assert.AreEqual( oldBook.Logs[i].Latitude, newBook.Logs[i].Latitude );
-                    Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
-                    Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
-                    Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
-                    Assert.AreNotEqual( newBook.Logs[i].Guid, oldBook.Logs[i].Guid );
-                    Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
-                    Assert.AreNotEqual( newBook.Logs[i].Guid, new Guid() ); // Ensure the new GUID is not 0.
-                }
+                AreLogbooksEqual( oldBook, newBook );
             }
             finally
             {
                 uut.Close();
                 File.Delete( newDb );
                 File.Delete( fileName );
+            }
+        }
+
+        /// <summary>
+        /// Checks to make sure the two given logbooks contain the same logs.
+        /// </summary>
+        /// <param name="oldBook">The older logbook to check.</param>
+        /// <param name="newBook">The newer logbook to check.</param>
+        public static void AreLogbooksEqual( LogBook oldBook, LogBook newBook )
+        {
+            // Ensure we are not the same logbook.
+            Assert.AreNotSame( oldBook, newBook );
+
+            // Now, iterate through the logs.  Compared to the old logbook,
+            // Everything should be the same EXCEPT for GUID and edit time,
+            // which should be newer (assuming our computer didnt time travel).
+            Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
+
+            for ( int i = 0; i < oldBook.Logs.Count; ++i )
+            {
+                Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
+                Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
+                Assert.AreEqual( oldBook.Logs[i].Latitude, newBook.Logs[i].Latitude );
+                Assert.AreEqual( oldBook.Logs[i].Longitude, newBook.Logs[i].Longitude );
+                Assert.AreEqual( oldBook.Logs[i].Technique, newBook.Logs[i].Technique );
+                Assert.AreEqual( oldBook.Logs[i].Comments, newBook.Logs[i].Comments );
+                Assert.AreNotEqual( newBook.Logs[i].Guid, oldBook.Logs[i].Guid );
+                Assert.GreaterOrEqual( newBook.Logs[i].EditTime, oldBook.Logs[i].EditTime );
+                Assert.AreNotEqual( newBook.Logs[i].Guid, new Guid() ); // Ensure the new GUID is not 0.
             }
         }
 
@@ -1165,44 +1185,51 @@ namespace TestCommon
         /// </summary>
         /// <param name="numberOfEntries">The number of entries to add.</param>
         /// <param name="location">The location to save to.</param>
-        private void DoSaveTest( int numberOfEntries, string location = dbLocation )
+        /// <returns>Logbook of the database after saving the data.</returns>
+        public static LogBook DoSaveTest( Api api, int numberOfEntries, string location = dbLocation )
         {
-            uut.Open( location );
+            LogBook logBook = null;
+
+            api.Open( location );
             try
             {
                 for ( int i = 0; i < numberOfEntries; ++i )
                 {
-                    uut.StartSession( new SessionConfig() );
-                    uut.StopSession();
+                    api.StartSession( new SessionConfig() );
+                    api.StopSession();
 
                     string technique = "SomeTechnique" + i;
                     string comments = "Some Comment" + i;
                     decimal latitude = i;
                     decimal longitude = i;
-                    uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
+                    api.ValidateAndSaveSession( technique, comments, latitude, longitude );
 
-                    uut.PopulateLogbook();
+                    api.PopulateLogbook();
 
                     // Most recent logs are in index 0.
-                    Assert.AreEqual( uut.CurrentLog, uut.LogBook.Logs[0] );
-                    Assert.AreNotSame( uut.CurrentLog, uut.LogBook.Logs[0] );
+                    Assert.AreEqual( api.CurrentLog, api.LogBook.Logs[0] );
+                    Assert.AreNotSame( api.CurrentLog, api.LogBook.Logs[0] );
 
                     Assert.AreEqual(
                         technique,
-                        uut.LogBook.Logs[0].Technique
+                        api.LogBook.Logs[0].Technique
                     );
                     Assert.AreEqual(
                         comments,
-                        uut.LogBook.Logs[0].Comments
+                        api.LogBook.Logs[0].Comments
                     );
 
-                    uut.ResetCurrentLog();
+                    api.ResetCurrentLog();
+
+                    logBook = api.LogBook;
                 }
             }
             finally
             {
-                uut.Close();
+                api.Close();
             }
+
+            return logBook;
         }
 
         /// <summary>

@@ -27,6 +27,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -45,8 +48,8 @@
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -95,52 +98,32 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ApiTest.cs" />
+    <Compile Include="CliTests.cs" />
     <Compile Include="LogBookTest.cs" />
     <Compile Include="LogTest.cs" />
-    <Compile Include="Mocks\MockMusicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mocks\MockTimer.cs" />
     <Compile Include="NAudioMusicManagerTest.cs" />
+    <Compile Include="Win32ApiTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MedEnthDesktop\MedEnthLogsDesktop.csproj">
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
       <Name>MedEnthLogsDesktop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MedEnthLogsCli\MedEnthLogsCli.csproj">
+      <Project>{8fd66191-747c-48b8-b27b-0e41e40a4c4e}</Project>
+      <Name>MedEnthLogsCli</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCoreDesktop\TestCoreDesktop.csproj">
+      <Project>{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}</Project>
+      <Name>TestCoreDesktop</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="TestFiles\BadLogStartEnd.json" />
-    <None Include="TestFiles\InvalidLat.json" />
-    <None Include="TestFiles\InvalidLatLong.json" />
-    <None Include="TestFiles\InvalidLong.json" />
-    <None Include="TestFiles\JustStartAndEnd.json" />
-    <None Include="TestFiles\MalformedJsonExtraComma.json" />
-    <None Include="TestFiles\MalformedJsonExtraCommaOnProperty.json" />
-    <None Include="TestFiles\MalformedJsonMissingComma.json" />
-    <None Include="TestFiles\MalformedJsonMissingCommaOnProperty.json" />
-    <None Include="TestFiles\MissingEndTime.json" />
-    <None Include="TestFiles\MissingLat.json" />
-    <None Include="TestFiles\MissingLong.json" />
-    <None Include="TestFiles\MissingStartTime.json" />
-    <None Include="TestFiles\NoLogs.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\InvalidLatLong.xml" />
-    <Content Include="TestFiles\InvalidLong.xml" />
-    <Content Include="TestFiles\InvalidLat.xml" />
-    <None Include="TestFiles\MalformedJsonNoClosingArray.json" />
-    <Content Include="TestFiles\MissingLong.xml" />
-    <Content Include="TestFiles\MissingLat.xml" />
-    <Content Include="TestFiles\BadLogStartEnd.xml" />
-    <Content Include="TestFiles\JustStartAndEnd.xml" />
-    <Content Include="TestFiles\NoLogs.xml" />
-    <Content Include="TestFiles\MissingEndTime.xml" />
-    <Content Include="TestFiles\MissingStartTime.xml" />
-    <Content Include="TestFiles\BadLogName.xml" />
-    <Content Include="TestFiles\BadLogBook.xml" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

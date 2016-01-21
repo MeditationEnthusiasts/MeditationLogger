@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -40,12 +40,12 @@ namespace Test
         /// <summary>
         /// Public domain mp3 from http://publicsounds.org/
         /// </summary>
-        const string mp3FileLocation = @"..\..\TestFiles\thunder.mp3";
+        const string mp3FileLocation = @"..\..\..\TestCore\TestFiles\thunder.mp3";
 
         /// <summary>
         /// Public domain wav (converted from mp3) from http://publicsounds.org/
         /// </summary>
-        const string wavFileLocation = @"..\..\TestFiles\thunder.wav";
+        const string wavFileLocation = @"..\..\..\TestCore\TestFiles\thunder.wav";
 
 
         // -------- Setup/Teardown --------
@@ -76,9 +76,29 @@ namespace Test
             );
         }
 
+        /// <summary>
+        /// Ensures passing in garbage data results in an exception.
+        /// </summary>
         [Test]
         public void ValidateFailureTest()
         {
+            // Null will fail.
+            Assert.Throws<ArgumentException>(
+                delegate ()
+                {
+                    this.uut.Validate( null );
+                }
+            );
+
+            // Empty string will fail.
+            Assert.Throws<ArgumentException>(
+                delegate ()
+                {
+                    this.uut.Validate( "" );
+                }
+            );
+
+            // Fail for file that doesn't exist.
             Assert.Throws<FileNotFoundException>(
                 delegate ()
                 {
@@ -86,10 +106,11 @@ namespace Test
                 }
             );
 
+            // Fail for file that exists but is not supported.
             Assert.Throws<PlatformNotSupportedException>(
                 delegate ()
                 {
-                    this.uut.Validate( @"..\..\TestFiles\MissingLat.xml" );
+                    this.uut.Validate( @"..\..\..\TestCore\TestFiles\MissingLat.xml" );
                 }
             );
         }

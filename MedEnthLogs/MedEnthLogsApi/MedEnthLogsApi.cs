@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ using SQLite.Net;
 using SQLite.Net.Interop;
 
 [assembly: InternalsVisibleTo( "Test" )]
+[assembly: InternalsVisibleTo( "TestCoreDesktop" )]
+[assembly: InternalsVisibleTo( "MedEnthLogsTestMono" )]
 namespace MedEnthLogsApi
 {
     /// <summary>
@@ -75,12 +77,17 @@ namespace MedEnthLogsApi
         /// <summary>
         /// The version of the API.
         /// </summary>
-        public const string VersionString = "0.1.0";
+        public const string VersionString = "0.2.0";
 
         /// <summary>
         /// Sematic Version Class of the version string.
         /// </summary>
         public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );
+
+        /// <summary>
+        /// The name of the logbook located in AppData.
+        /// </summary>
+        public const string LogbookFileName = "logbook.mlg";
 
         // -------- Constructor --------
 

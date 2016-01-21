@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,17 +17,13 @@
 //
 
 using System;
+using System.Collections.Generic;
 using MedEnthLogsApi;
 using NUnit.Framework;
-using System.Collections.Generic;
 
-namespace TestCommon
+namespace TestCore
 {
-    /// <summary>
-    /// Tests the Log Class.
-    /// </summary>
-    [TestFixture]
-    public class LogBookTest
+    public class LogBookTestCore
     {
         // -------- Fields --------
 
@@ -37,10 +33,12 @@ namespace TestCommon
         Log log4;
         double expectedTotalTime;
 
-        // -------- Setup / Teardown --------
+        // -------- Constructor --------
 
-        [SetUp]
-        public void TestSetup()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LogBookTestCore()
         {
             log1 = new Log();
             log1.StartTime = new DateTime( 2015, 1, 1, 0, 0, 0 );
@@ -70,14 +68,13 @@ namespace TestCommon
         /// <summary>
         /// Ensures the log list is readonly.
         /// </summary>
-        [Test]
-        public void ReadonlyListTest()
+        public void DoReadonlyListTest()
         {
             LogBook uut = new LogBook( new List<ILog>() );
 
             // Expect Exception.
             Assert.Catch<NotSupportedException>(
-                delegate()
+                delegate ()
                 {
                     uut.Logs.Add( new Log() );
                 }
@@ -88,11 +85,10 @@ namespace TestCommon
         /// Ensures things get added in the correct order.
         /// Index 0 should be the newest log.
         /// </summary>
-        [Test]
-        public void OrderTest()
+        public void DoOrderTest()
         {
             // Random order
-            List <ILog> logs = new List<ILog> { log2, log4, log1, log3 };
+            List<ILog> logs = new List<ILog> { log2, log4, log1, log3 };
 
             LogBook uut = new LogBook( logs );
 
@@ -117,8 +113,7 @@ namespace TestCommon
         /// Ensures a conflicting guid results in the
         /// last one in the list gets saved.
         /// </summary>
-        [Test]
-        public void ConflictingGuidTest()
+        public void DoConflictingGuidTest()
         {
             // Make conflict.
             log2.Guid = log1.Guid;
@@ -138,8 +133,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the LogExists function works as expected.
         /// </summary>
-        [Test]
-        public void LogExistsTest()
+        public void DoLogExistsTest()
         {
             // Do not add log 2
             List<ILog> logs = new List<ILog> { log1 };
@@ -153,8 +147,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the GetLog function works as expected.
         /// </summary>
-        [Test]
-        public void GetLogTest()
+        public void DoGetLogTest()
         {
             // Do not add log 2
             List<ILog> logs = new List<ILog> { log1 };

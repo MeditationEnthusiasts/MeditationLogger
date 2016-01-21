@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -109,6 +109,15 @@ namespace MedEnthLogsApi
         /// The string for Latitude when importing/exporting.
         /// </summary>
         public const string LongitudeString = "Longitude";
+        
+        /// <summary>
+        /// The maximum time we support.
+        /// Mainly here for unit testing purposes.
+        /// The MaxTime is able to fit in a sqlite database.  .Net's DateTime.MaxValue doesn't always.
+        /// On Linux, sqlite seems to insert it as 0.
+        /// Another example is here: http://stackoverflow.com/questions/6127123/net-datetime-maxvalue-is-different-once-it-is-stored-in-database
+        /// </summary>
+        public static readonly DateTime MaxTime = new DateTime( 5000, 1, 1, 0, 0, 0 ).ToUniversalTime(); // Year 5000 is good enough.
 
         // -------- Constructor -------
 
@@ -124,8 +133,8 @@ namespace MedEnthLogsApi
 
             // Make start time ahead of end time, 
             // this will make the log in an invalid state, as the
-            // start time is ahead of the end time which is not allowed.
-            this.StartTime = DateTime.MaxValue.ToUniversalTime();
+            // start time is ahead of the end time which is not allowed.            
+            this.StartTime = MaxTime;
 
             this.Guid = Guid.NewGuid();
 
@@ -265,13 +274,13 @@ namespace MedEnthLogsApi
             }
 
             return
-                ( this.EditTime == other.EditTime ) &&
-                ( this.EndTime == other.EndTime ) &&
-                ( this.StartTime == other.StartTime ) &&
-                ( this.Technique == other.Technique ) &&
-                ( this.Comments == other.Comments ) &&
-                ( this.Latitude == other.Latitude ) &&
-                ( this.Longitude == other.Longitude );
+                ( this.EditTime.Equals( other.EditTime ) ) &&
+                ( this.EndTime.Equals( other.EndTime ) ) &&
+                ( this.StartTime.Equals( other.StartTime ) ) &&
+                ( this.Technique.Equals( other.Technique ) ) &&
+                ( this.Comments.Equals( other.Comments ) ) &&
+                ( this.Latitude.Equals( other.Latitude ) ) &&
+                ( this.Longitude.Equals( other.Longitude ) );
         }
 
         public override string ToString()

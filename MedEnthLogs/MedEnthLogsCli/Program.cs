@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,10 +25,11 @@ using System.Threading.Tasks;
 using MedEnthDesktop;
 using MedEnthLogsApi;
 using MedEnthLogsDesktop;
+using SethCS.IO;
 
 namespace MedEnthLogsCli
 {
-    class Program
+    public static partial class Program
     {
         /// <summary>
         /// The executable name.
@@ -60,15 +61,17 @@ namespace MedEnthLogsCli
             {
                 if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = new Api( 
-                        new Win32LocationDetector(),
-                        new Win32Timer(),
-                        new NAudioMusicManager(),
-                        new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
-                    );
+                    Api api = GetApi();
                     try
                     {
-                        api.Open( "test.db" );
+                        string dbLocation = Constants.DatabaseFolderLocation;
+
+                        if ( Directory.Exists( dbLocation ) == false )
+                        {
+                            Directory.CreateDirectory( dbLocation );
+                        }
+                        
+                        api.Open( Path.Combine( dbLocation, Api.LogbookFileName )  );
                         api.PopulateLogbook();
                         switch ( args[0] )
                         {
@@ -81,6 +84,7 @@ namespace MedEnthLogsCli
                                 break;
 
                             case "sync":
+                                api.Sync( args[1] );
                                 break;
 
                             default:

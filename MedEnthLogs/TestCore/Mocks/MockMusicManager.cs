@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using MedEnthLogsApi;
 
-namespace Test.Mocks
+namespace TestCore.Mocks
 {
     public class MockMusicManager : IMusicManager
     {

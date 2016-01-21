@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,39 +20,36 @@ using System;
 using MedEnthLogsApi;
 using NUnit.Framework;
 
-namespace TestCommon
+namespace TestCore
 {
-    /// <summary>
-    /// Tests the Log Class.
-    /// </summary>
-    [TestFixture]
-    public class LogTest
+    public class LogTestCore
     {
         // -------- Fields --------
 
         /// <summary>
         /// Unit under test.
         /// </summary>
-        Log uut;
+        private Log uut;
 
-        // -------- Setup/Teardown --------
+        // --------- Constructor --------
 
-        [SetUp]
-        public void TestSetup()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LogTestCore()
         {
-            uut = new Log();
+            this.uut = new Log();
         }
 
-        // -------- Test Functions --------
+        // -------- Tests --------
 
         /// <summary>
         /// Ensures that the duration property is the end time minus the start time.
         /// </summary>
-        [Test]
-        public void TestDuration()
+        public void DoTestDuration()
         {
             DateTime start = DateTime.MinValue;
-            DateTime end = DateTime.MaxValue;
+            DateTime end = Log.MaxTime;
 
             uut.StartTime = start;
             uut.EndTime = end;
@@ -65,8 +62,7 @@ namespace TestCommon
         /// <summary>
         /// Tests the GetHashCode function.
         /// </summary>
-        [Test]
-        public void TestGetHashCode()
+        public void DoTestGetHashCode()
         {
             // Ensures that the hash code of the log is the same as the hashcode
             // of the guid.  Two logs in a logbook can not have the same guid.
@@ -77,8 +73,7 @@ namespace TestCommon
         /// Ensures we can't set the comments to null,
         /// and what we set is what we get.
         /// </summary>
-        [Test]
-        public void CommentsTest()
+        public void DoCommentsTest()
         {
             // Expect Exception.
             Assert.Catch<ArgumentNullException>(
@@ -97,8 +92,7 @@ namespace TestCommon
         /// Ensures we can't set the technique to null,
         /// and what we set is what we get.
         /// </summary>
-        [Test]
-        public void TechniqueTest()
+        public void DoTechniqueTest()
         {
             // Expect Exception.
             Assert.Catch<ArgumentNullException>(
@@ -116,8 +110,7 @@ namespace TestCommon
         /// <summary>
         /// Tests the Log's equal function, operator==, and operator!=
         /// </summary>
-        [Test]
-        public void EqualsTest()
+        public void DoEqualsTest()
         {
             Log other = new Log();
 
@@ -191,16 +184,14 @@ namespace TestCommon
         /// Ensures the clone method creates a new instance,
         /// but all properties match.
         /// </summary>
-        [Test]
-        public void CloneTest()
+        public void DoCloneTest()
         {
             Log clone = uut.Clone();
             Assert.AreNotSame( clone, uut );
             Assert.AreEqual( clone, uut );
         }
 
-        [Test]
-        public void ValidationPassTest()
+        public void DoValidationPassTest()
         {
             // Reset.
             uut = new Log();
@@ -233,8 +224,7 @@ namespace TestCommon
             ValidationPassedTest( uut );
         }
 
-        [Test]
-        public void ValidationFailTest()
+        public void DoValidationFailTest()
         {
             // A default log should fail throw.
             ValidationFailedTest( uut, Log.EndTimeLessThanStartTimeMessage );
@@ -266,8 +256,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the santity checks of Log.Sync work correctly.
         /// </summary>
-        [Test]
-        public void LogSyncExceptionCheckTest()
+        public void DoLogSyncExceptionCheckTest()
         {
             // Both new logs have different GUIDs.  We'll get an exception.
             Log log1 = new Log();
@@ -284,8 +273,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures all is well if both logs are equal.
         /// </summary>
-        [Test]
-        public void LogSyncBothEqual()
+        public void DoLogSyncBothEqual()
         {
             Log log1 = new Log();
             Log log2 = log1.Clone();
@@ -302,8 +290,7 @@ namespace TestCommon
         /// <summary>
         /// Ensures the sync works when log1 is older than log2 (log2 should take log 1's place).
         /// </summary>
-        [Test]
-        public void LogSyncBothLog1Older()
+        public void DoLogSyncBothLog1Older()
         {
             Log log1 = new Log();
             log1.EditTime = DateTime.MinValue;
@@ -329,11 +316,10 @@ namespace TestCommon
         /// <summary>
         /// Ensures the sync works when log2 is older than log1 (log1 should take log 2's place).
         /// </summary>
-        [Test]
-        public void LogSyncBothLog2Older()
+        public void DoLogSyncBothLog2Older()
         {
             Log log1 = new Log();
-            log1.EditTime = DateTime.MaxValue;
+            log1.EditTime = Log.MaxTime;
 
             Log log2 = log1.Clone();
             log2.Id = log1.Id + 1;

@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -171,10 +171,17 @@ namespace MedEnthDesktop
         /// <param name="audioFile">The audio file to validate.</param>
         public void Validate( string audioFile )
         {
-            // Fail if it doesn't exist.
-            if ( File.Exists( audioFile ) == false )
+            // Throw if null or empty.
+            if ( string.IsNullOrEmpty( audioFile ) )
             {
-                throw new FileNotFoundException( audioFile );
+                throw new ArgumentException(
+                    "Audio file can not be empty."
+                );
+            }
+            // Fail if it doesn't exist.
+            else if ( File.Exists( audioFile ) == false )
+            {
+                throw new FileNotFoundException( "Could not open audio file: " + audioFile );
             }
             // Fail if we dont support the file type.
             else if ( this.SupportedFormats.Contains( Path.GetExtension( audioFile ).ToLower() ) == false )

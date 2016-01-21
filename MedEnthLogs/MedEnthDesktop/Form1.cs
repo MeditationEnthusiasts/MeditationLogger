@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015  Seth Hendrick.
+// Copyright (C) 2015-2016  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -465,9 +465,26 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         SessionConfig config = new SessionConfig();
                         if ( this.optionView.EnableTimerCheckbox.Checked )
                         {
+                            int minutes = Convert.ToInt32( this.optionView.MinuteListBox.Value );
+                            int hours = Convert.ToInt32( this.optionView.HourListBox.Value );
+
+                            // Do not start the session if we are in a non-guided timed session and our timer is set to 00:00.
+                            if ( ( minutes <= 0 ) && ( hours <= 0 ) && ( this.optionView.MusicPlayOnceRadioButton.Checked == false ) )
+                            {
+                                MessageBox.Show(
+                                    "Timer must be longer than 00:00",
+                                    "Error when starting.",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation
+                                );
+
+                                // Do not go to next state.
+                                break;
+                            }
+
                             TimeSpan timeToGo = new TimeSpan(
-                                Convert.ToInt32( this.optionView.HourListBox.Value ),
-                                Convert.ToInt32( this.optionView.MinuteListBox.Value ),
+                                hours,
+                                minutes,
                                 0
                             );
                             config.Length = timeToGo;

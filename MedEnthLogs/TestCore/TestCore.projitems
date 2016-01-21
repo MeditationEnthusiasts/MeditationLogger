@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TestCore</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ApiTestCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogBookTestCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogTestCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockMusicManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockTimer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\BadLogBook.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\BadLogName.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\BadLogStartEnd.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLat.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLatLong.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLong.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\JustStartAndEnd.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\MissingEndTime.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\MissingLat.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\MissingLong.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\MissingStartTime.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\NoLogs.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\thunder.mp3" />
+    <Content Include="$(MSBuildThisFileDirectory)TestFiles\thunder.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\BadLogStartEnd.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLat.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLatLong.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\InvalidLong.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\JustStartAndEnd.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MalformedJsonExtraComma.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MalformedJsonExtraCommaOnProperty.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MalformedJsonMissingComma.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MalformedJsonMissingCommaOnProperty.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MalformedJsonNoClosingArray.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MissingEndTime.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MissingLat.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MissingLong.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\MissingStartTime.json" />
+    <None Include="$(MSBuildThisFileDirectory)TestFiles\NoLogs.json" />
+  </ItemGroup>
+</Project>
