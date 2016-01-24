@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MedEnthDesktop;
 using MedEnthDesktop.Properties;
@@ -42,10 +43,16 @@ namespace MedEnthLogsDesktop
 
         // ------- Fields --------
 
-        MedEnthLogsApi.Api api;
+        /// <summary>
+        /// Reference to the API.
+        /// </summary>
+        private MedEnthLogsApi.Api api;
 
         List<LogView> logViews;
 
+        /// <summary>
+        /// Current state of the start panel.
+        /// </summary>
         StartState currentState;
 
         /// <summary>
@@ -61,6 +68,11 @@ namespace MedEnthLogsDesktop
         private Color originalColor;
 
         private IMusicManager timesUpSound;
+
+        /// <summary>
+        /// Whether or not the buttons should be enabled.
+        /// </summary>
+        private bool shouldButtonsBeEnabled;
 
         // ---- Views ----
 
@@ -83,9 +95,13 @@ namespace MedEnthLogsDesktop
         {
             InitializeComponent();
 
+            this.shouldButtonsBeEnabled = true;
+
             this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
             this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
             this.VersionValueLabel.Text = Api.VersionString;
+
+            this.logViews = new List<LogView>();
 
             this.timesUpSound = timesUpMusicManager;
             this.timesUpSound.OnStop =
@@ -95,7 +111,6 @@ namespace MedEnthLogsDesktop
                 };
 
             this.api = api;
-            ReloadLogs();
             this.currentState = StartState.Idle;
 
             // Setup Option View
@@ -137,22 +152,43 @@ namespace MedEnthLogsDesktop
             this.ExportProgressBar.Minimum = 0;
             this.exportProgressBarDelegate = delegate( int step, int totalSteps )
             {
-                this.ExportProgressBar.Maximum = totalSteps;
-                this.ExportProgressBar.Value = step;
+                if ( this.InvokeRequired )
+                {
+                    this.BeginInvoke( this.exportProgressBarDelegate, step, totalSteps );
+                }
+                else
+                {
+                    this.ExportProgressBar.Maximum = totalSteps;
+                    this.ExportProgressBar.Value = step;
+                }
             };
 
             this.ImportProgressBar.Minimum = 0;
             this.importProgressBarDelegate = delegate( int step, int totalSteps )
             {
-                this.ImportProgressBar.Maximum = totalSteps;
-                this.ImportProgressBar.Value = step;
+                if ( this.InvokeRequired )
+                {
+                    this.BeginInvoke( this.importProgressBarDelegate, step, totalSteps );
+                }
+                else
+                {
+                    this.ImportProgressBar.Maximum = totalSteps;
+                    this.ImportProgressBar.Value = step;
+                }
             };
 
             this.SyncProgressBar.Minimum = 0;
-            this.syncProgressBarDelegate = delegate ( int step, int totalSteps )
+            this.syncProgressBarDelegate = delegate( int step, int totalSteps )
             {
-                this.SyncProgressBar.Maximum = totalSteps;
-                this.SyncProgressBar.Value = step;
+                if ( this.InvokeRequired )
+                {
+                    this.BeginInvoke( this.syncProgressBarDelegate, step, totalSteps );
+                }
+                else
+                {
+                    this.SyncProgressBar.Maximum = totalSteps;
+                    this.SyncProgressBar.Value = step;
+                }
             };
         }
 
@@ -239,52 +275,91 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
         }
 
         /// <summary>
+        /// Reloads the logs from memory in a different thread.
+        /// </summary>
+        /// <returns></returns>
+        private Task ReloadLogsAsync()
+        {
+            return Task.Run(
+                delegate()
+                {
+                    ReloadLogs();
+                }
+            );
+        }
+
+        /// <summary>
         /// Reloads the logs from memory and renders them to the UI.
         /// </summary>
         private void ReloadLogs()
         {
+            UpdateUiForReloadingLogs();
             this.api.PopulateLogbook();
-            this.logViews = new List<LogView>();
-            foreach ( ILog log in this.api.LogBook.Logs )
-            {
-                this.logViews.Add(
-                    new LogView( log )
-                );
-            }
+            UpdateUiAfterLoadingLogs();
+        }
 
-            this.MapViewBrowser.DocumentText = mapHtmlStart + GetPositionHtml() + mapHtmlEnd;
-            this.TotalMinutesValueLabel.Text = this.api.LogBook.TotalTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
-            this.LongestSessionValueLabel.Text = this.api.LogBook.LongestTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
-            this.TotalSessionsValueLabel.Text = this.api.LogBook.Logs.Count.ToString() + " Sessions.";
-            if ( this.api.LogBook.Logs.Count == 0 )
+        /// <summary>
+        /// Updates the UI prior to reloading logs.
+        /// </summary>
+        private void UpdateUiForReloadingLogs()
+        {
+            if ( this.InvokeRequired )
             {
-                this.LastSessionValueLabel.Text = "Nothing yet.";
+                this.BeginInvoke( new Action( this.UpdateUiForReloadingLogs ) );
             }
             else
             {
-                this.LastSessionValueLabel.Text = this.api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
+                this.logViews.Clear();
+                this.TotalMinutesValueLabel.Text = "Loading...";
+                this.LongestSessionValueLabel.Text = "Loading...";
+                this.TotalSessionsValueLabel.Text = "Loading...";
+                this.LastSessionValueLabel.Text = "Loading...";
             }
         }
 
-        private void Form1_Load( object sender, EventArgs e )
+        /// <summary>
+        /// Updates the UI after reloading logs.
+        /// </summary>
+        private void UpdateUiAfterLoadingLogs()
         {
+            if ( this.InvokeRequired )
+            {
+                this.BeginInvoke( new Action( this.UpdateUiAfterLoadingLogs ) );
+            }
+            else
+            {
+                this.logViews = new List<LogView>();
+                foreach ( ILog log in this.api.LogBook.Logs )
+                {
+                    this.logViews.Add(
+                        new LogView( log )
+                    );
+                }
+                this.MapViewBrowser.DocumentText = mapHtmlStart + GetPositionHtml() + mapHtmlEnd;
+                this.TotalMinutesValueLabel.Text = this.api.LogBook.TotalTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
+                this.LongestSessionValueLabel.Text = this.api.LogBook.LongestTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
+                this.TotalSessionsValueLabel.Text = this.api.LogBook.Logs.Count.ToString() + " Sessions.";
+                if ( this.api.LogBook.Logs.Count == 0 )
+                {
+                    this.LastSessionValueLabel.Text = "Nothing yet.";
+                }
+                else
+                {
+                    this.LastSessionValueLabel.Text = this.api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
+                }
+            }
+        }
+
+        private async void Form1_Load( object sender, EventArgs e )
+        {
+            await ReloadLogsAsync();
         }
 
         // -------- Sync View --------
 
         private void SyncLocationText_TextChanged( object sender, EventArgs e )
         {
-            if (
-                string.IsNullOrEmpty( SyncLocationText.Text ) ||
-                string.IsNullOrWhiteSpace( SyncLocationText.Text )
-            )
-            {
-                SyncButton.Enabled = false;
-            }
-            else
-            {
-                SyncButton.Enabled = true;
-            }
+            EnableSyncButton();
         }
 
         private void SyncBrowseButton_Click( object sender, EventArgs e )
@@ -296,7 +371,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private void SyncButton_Click( object sender, EventArgs e )
+        private async void SyncButton_Click( object sender, EventArgs e )
         {
             if (
                 string.IsNullOrEmpty( SyncLocationText.Text ) ||
@@ -307,10 +382,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
+                this.EnableButtons( false );
                 try
                 {
-                    this.api.Sync( SyncLocationText.Text, this.syncProgressBarDelegate );
-                    ReloadLogs();
+                    await DoSync();
                     this.SyncLocationText.Text = string.Empty;
                     this.SyncProgressBar.Value = this.SyncProgressBar.Maximum;
                 }
@@ -322,25 +397,28 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
+                    this.SyncProgressBar.Value = this.SyncProgressBar.Minimum;
                 }
+                this.EnableButtons( true );
             }
+        }
+
+        private Task DoSync()
+        {
+            return Task.Run(
+                delegate ()
+                {
+                    this.api.Sync( SyncLocationText.Text, this.syncProgressBarDelegate );
+                    ReloadLogs();
+                }
+            );
         }
 
         // -------- Import View --------
 
         private void ImportFileLocation_TextChanged( object sender, EventArgs e )
         {
-            if (
-                string.IsNullOrEmpty( ImportFileLocation.Text ) ||
-                string.IsNullOrWhiteSpace( ImportFileLocation.Text )
-            )
-            {
-                ImportButton.Enabled = false;
-            }
-            else
-            {
-                ImportButton.Enabled = true;
-            }
+            EnableImportButton();
         }
 
         private void ImportBrowseButton_Click( object sender, EventArgs e )
@@ -352,7 +430,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private void ImportButton_Click( object sender, EventArgs e )
+        private async void ImportButton_Click( object sender, EventArgs e )
         {
             if (
                 string.IsNullOrEmpty( ImportFileLocation.Text ) ||
@@ -363,12 +441,12 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
+                this.EnableButtons( false );
                 try
                 {
-                    this.api.Import( ImportFileLocation.Text, importProgressBarDelegate );
-                    ReloadLogs();
-                    this.ImportFileLocation.Text = string.Empty;
+                    await DoImport();
                     this.ImportProgressBar.Value = this.ImportProgressBar.Maximum;
+                    this.ImportFileLocation.Text = string.Empty;
                 }
                 catch ( Exception err )
                 {
@@ -378,25 +456,32 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
+                    this.ImportProgressBar.Value = this.ImportProgressBar.Minimum;
                 }
+                this.EnableButtons( true );
             }
+        }
+
+        /// <summary>
+        /// Does the import.
+        /// </summary>
+        /// <returns></returns>
+        private Task DoImport()
+        {
+            return Task.Run(
+                delegate ()
+                {
+                    this.api.Import( ImportFileLocation.Text, importProgressBarDelegate );
+                    ReloadLogs();
+                }
+            );
         }
 
         // -------- Export View --------
 
         private void ExportLocationText_TextChanged( object sender, EventArgs e )
         {
-            if (
-                string.IsNullOrEmpty( ExportLocationText.Text ) ||
-                string.IsNullOrWhiteSpace( ExportLocationText.Text )
-            )
-            {
-                ExportButton.Enabled = false;
-            }
-            else
-            {
-                ExportButton.Enabled = true;
-            }
+            EnableExportButton();
         }
 
         private void ExportBrowseButton_Click( object sender, EventArgs e )
@@ -408,7 +493,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private void ExportButton_Click( object sender, EventArgs e )
+        private async void ExportButton_Click( object sender, EventArgs e )
         {
             if (
                 string.IsNullOrEmpty( ExportLocationText.Text ) ||
@@ -419,22 +504,39 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
+                this.EnableButtons( false );
                 try
                 {
-                    this.api.Export( ExportLocationText.Text, this.exportProgressBarDelegate );
-                    this.ExportLocationText.Text = string.Empty;
+                    await DoExport();
                     this.ExportProgressBar.Value = this.ExportProgressBar.Maximum;
+                    this.ExportLocationText.Text = string.Empty;
                 }
                 catch ( Exception err )
                 {
-                    MessageBox.Show( 
+                    MessageBox.Show(
                         err.Message,
                         "Error exporting logbook.",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
+                    this.ExportProgressBar.Value = this.ExportProgressBar.Minimum;
                 }
+                this.EnableButtons( true );
             }
+        }
+
+        /// <summary>
+        /// Does the export in a background thread.
+        /// </summary>
+        /// <returns>The task to await on.</returns>
+        private Task DoExport()
+        {
+            return Task.Run(
+                delegate ()
+                {
+                    this.api.Export( ExportLocationText.Text, this.exportProgressBarDelegate );
+                }
+            );
         }
 
         // -------- View Logbook Tab --------
@@ -480,12 +582,12 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private void StartButton_Click( object sender, EventArgs e )
+        private async void StartButton_Click( object sender, EventArgs e )
         {
             GoToNextState();
         }
 
-        private void GoToNextState()
+        private async void GoToNextState()
         {
             try
             {
@@ -588,13 +690,17 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                             }
                         }
 
-                        this.api.ValidateAndSaveSession(
-                            this.saveView.TechniqueUsedTextbox.Text,
-                            this.saveView.CommentsTextBox.Text,
-                            latitude,
-                            longitude
-                        );
-                        ReloadLogs();
+                        try
+                        {
+                            this.StartButton.Text = "Saving...";
+                            this.EnableButtons( false );
+                            await DoSave( this.saveView.TechniqueUsedTextbox.Text, this.saveView.CommentsTextBox.Text, latitude, longitude );
+                        }
+                        finally
+                        {
+                            this.StartButton.Text = "Save";
+                            this.EnableButtons( true );
+                        }
 
                         // Switch View
                         this.saveView.Visible = false;
@@ -625,11 +731,33 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         break;
                     case StartState.End:
                         errorStr = errorStr + "saving the session.";
-                        this.currentState = StartState.Idle;
                         break;
                 }
                 MessageBox.Show( err.Message, errorStr, MessageBoxButtons.OK, MessageBoxIcon.Error );
             }
+        }
+
+        /// <summary>
+        /// Saves the current log from the information on the save view.
+        /// </summary>
+        /// <param name="technique">Technique used.</param>
+        /// <param name="comments">Comments addded.</param>
+        /// <param name="latitude">The latitude to save.</param>
+        /// <param name="longitude">The longitude to save.</param>
+        private Task DoSave( string technique, string comments, decimal? latitude, decimal? longitude )
+        {
+            return Task.Run(
+                delegate ()
+                {
+                    this.api.ValidateAndSaveSession(
+                        technique,
+                        comments,
+                        latitude,
+                        longitude
+                    );
+                    ReloadLogs();
+                }
+            );
         }
 
         private void LogbookView_Click( object sender, EventArgs e )
@@ -664,11 +792,14 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             System.Diagnostics.Process.Start( "https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start" );
         }
 
-        private void CheckForUpdatesButton_Click( object sender, EventArgs e )
+        private async void CheckForUpdatesButton_Click( object sender, EventArgs e )
         {
+            this.CheckForUpdatesButton.Enabled = false;
+            string originalUpdateString = this.CheckForUpdatesButton.Text;
+            this.CheckForUpdatesButton.Text = "Checking...";
             try
             {
-                if ( CheckForUpdate() )
+                if ( await CheckForUpdate() )
                 {
                     DialogResult result = MessageBox.Show(
                         "There's a new version.  Open browser to download?",
@@ -701,6 +832,9 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                     MessageBoxIcon.Error
                 );
             }
+
+            this.CheckForUpdatesButton.Text = originalUpdateString;
+            this.CheckForUpdatesButton.Enabled = true;
         }
 
         // -------- Helper Functions --------
@@ -709,38 +843,117 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
         /// Checks to see if there's an update to the app or not.
         /// </summary>
         /// <returns>True if there's an update, else false.</returns>
-        private bool CheckForUpdate()
+        private Task<bool> CheckForUpdate()
         {
-            WebRequest request = WebRequest.Create( "http://app.meditationenthusiasts.org/software/logger/latest/version.txt" );
-            request.Method = "GET";
-
-            using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse )
-            {
-                if ( response.StatusCode != HttpStatusCode.OK )
+            return Task.Run(
+                delegate ()
                 {
-                    throw new ApplicationException(
-                        "http request returned invalid status: " + response.StatusCode
-                    );
-                }
+                    WebRequest request = WebRequest.Create( "http://app.meditationenthusiasts.org/software/logger/latest/version.txt" );
+                    request.Method = "GET";
 
-                using ( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
-                {
-                    string versionStr = reader.ReadToEnd();
-                    versionStr = versionStr.Trim();
-
-                    SemanticVersion version;
-                    if ( SemanticVersion.TryParse( versionStr, out version ) )
+                    using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse )
                     {
-                        // If version from the server if newer than this program's
-                        // return true.
-                        if ( version > Api.Version )
+                        if ( response.StatusCode != HttpStatusCode.OK )
                         {
-                            return true;
+                            throw new ApplicationException(
+                                "http request returned invalid status: " + response.StatusCode
+                            );
+                        }
+
+                        using ( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
+                        {
+                            string versionStr = reader.ReadToEnd();
+                            versionStr = versionStr.Trim();
+
+                            SemanticVersion version;
+                            if ( SemanticVersion.TryParse( versionStr, out version ) )
+                            {
+                                // If version from the server if newer than this program's
+                                // return true.
+                                if ( version > Api.Version )
+                                {
+                                    return true;
+                                }
+                            }
                         }
                     }
+                    return false;
                 }
+            );
+        }
+
+        /// <summary>
+        /// Enables all the buttons.
+        /// </summary>
+        /// <param name="enable">Whether or not to enable the buttons.</param>
+        private void EnableButtons( bool enable )
+        {
+            if ( this.InvokeRequired )
+            {
+                this.BeginInvoke( new Action<bool>( EnableButtons ), enable );
             }
-            return false;
+            else
+            {
+                this.shouldButtonsBeEnabled = enable;
+                EnableImportButton();
+                EnableExportButton();
+                EnableSyncButton();
+                this.StartButton.Enabled = enable;
+            }
+        }
+
+        /// <summary>
+        /// Enables the import button if it should be enabled.
+        /// </summary>
+        private void EnableImportButton()
+        {
+            if (
+                string.IsNullOrEmpty( ImportFileLocation.Text ) ||
+                string.IsNullOrWhiteSpace( ImportFileLocation.Text )
+            )
+            {
+                ImportButton.Enabled = false;
+            }
+            else
+            {
+                ImportButton.Enabled = true && this.shouldButtonsBeEnabled;
+            }
+        }
+
+        /// <summary>
+        /// Enables the export button if it should be enabled.
+        /// </summary>
+        private void EnableExportButton()
+        {
+            if (
+                string.IsNullOrEmpty( ExportLocationText.Text ) ||
+                string.IsNullOrWhiteSpace( ExportLocationText.Text )
+            )
+            {
+                ExportButton.Enabled = false;
+            }
+            else
+            {
+                ExportButton.Enabled = true && this.shouldButtonsBeEnabled;
+            }
+        }
+
+        /// <summary>
+        /// Enables the sync button if it should be enabled.
+        /// </summary>
+        private void EnableSyncButton()
+        {
+            if (
+                string.IsNullOrEmpty( SyncLocationText.Text ) ||
+                string.IsNullOrWhiteSpace( SyncLocationText.Text )
+            )
+            {
+                SyncButton.Enabled = false;
+            }
+            else
+            {
+                SyncButton.Enabled = true && shouldButtonsBeEnabled;
+            }
         }
     }
 }

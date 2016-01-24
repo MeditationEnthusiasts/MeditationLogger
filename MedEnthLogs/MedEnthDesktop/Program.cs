@@ -51,8 +51,15 @@ namespace MedEnthLogsDesktop
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new HomePage( api, GetMusicManager() ) );
 
+            try
+            {
+                Application.Run( new HomePage( api, GetMusicManager() ) );
+            }
+            catch ( Exception e )
+            {
+                MessageBox.Show( e.Message, "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error );
+            }
             api.Close();
         }
     }
