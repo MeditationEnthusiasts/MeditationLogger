@@ -35,7 +35,12 @@ namespace MedEnthLogsApi
         /// <param name="outFile">The stream to read the XML from.</param>
         /// <param name="logBook">The logbook to import to.</param>
         /// <param name="sqlite">The sqlite connection to import the logs to.</param>
-        public static void ImportFromXml( Stream outFile, LogBook logBook, SQLiteConnection sqlite )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ImportFromXml( Stream outFile, LogBook logBook, SQLiteConnection sqlite, Action<int, int> onStep = null )
         {
             XmlDocument doc = new XmlDocument();
             doc.Load( outFile );
@@ -50,8 +55,10 @@ namespace MedEnthLogsApi
                 );
             }
 
-            foreach ( XmlNode node in rootNode.ChildNodes )
+            for( int i = 0; i < rootNode.ChildNodes.Count; ++i )
             {
+                XmlNode node = rootNode.ChildNodes[i];
+
                 if ( node.Name != "log" )
                 {
                     throw new XmlException(
@@ -111,10 +118,10 @@ namespace MedEnthLogsApi
 
                 // We ignore GUID and Edit time in the file,
                 // and create them here.
-                Guid guid = Guid.NewGuid(); 
+                Guid guid = Guid.NewGuid();
 
                 // Keep looking until we have a unique guid.
-                while ( logBook.LogExists( guid ) || ( logs.Find( i => i.Guid == guid ) != null ) )
+                while ( logBook.LogExists( guid ) || ( logs.Find( l => l.Guid == guid ) != null ) )
                 {
                     guid = Guid.NewGuid();
                 }
@@ -126,6 +133,11 @@ namespace MedEnthLogsApi
 
                 // Add to list.
                 logs.Add( log );
+
+                if ( onStep != null )
+                {
+                    onStep( i + 1, rootNode.ChildNodes.Count );
+                }
             }
 
             // Last thing to do is add the new logs to the database.
@@ -145,7 +157,12 @@ namespace MedEnthLogsApi
         /// </summary>
         /// <param name="outFile">The stream which outputs the file.</param>
         /// <param name="logbook">The logbook to export from.</param>
-        public static void ExportToXml( Stream outFile, LogBook logbook )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ExportToXml( Stream outFile, LogBook logbook, Action<int, int> onStep = null )
         {
             XmlDocument doc = new XmlDocument();
 
@@ -158,7 +175,7 @@ namespace MedEnthLogsApi
 
             XmlNode logbookNode = doc.CreateNode( XmlNodeType.Element, "logbook", xmlNameSpace );
 
-            foreach ( Log log in logbook.Logs )
+            for ( int i = 0; i < logbook.Logs.Count; ++i )
             {
                 XmlNode logNode = doc.CreateNode( XmlNodeType.Element, "log", xmlNameSpace );
 
@@ -167,60 +184,65 @@ namespace MedEnthLogsApi
                 // Add Guid
                 {
                     XmlAttribute guid = doc.CreateAttribute( Log.GuidString );
-                    guid.Value = log.Guid.ToString();
+                    guid.Value = logbook.Logs[i].Guid.ToString();
                     logNode.Attributes.Append( guid );
                 }
 
                 // Add Edit Time.
                 {
                     XmlAttribute editTime = doc.CreateAttribute( Log.EditTimeString );
-                    editTime.Value = log.EditTime.ToString( "o" );
+                    editTime.Value = logbook.Logs[i].EditTime.ToString( "o" );
                     logNode.Attributes.Append( editTime );
                 }
 
                 // Add Start Time.
                 {
                     XmlAttribute startTime = doc.CreateAttribute( Log.StartTimeString );
-                    startTime.Value = log.StartTime.ToString( "o" );
+                    startTime.Value = logbook.Logs[i].StartTime.ToString( "o" );
                     logNode.Attributes.Append( startTime );
                 }
 
                 // Add End time.
                 {
                     XmlAttribute endTime = doc.CreateAttribute( Log.EndTimeString );
-                    endTime.Value = log.EndTime.ToString( "o" );
+                    endTime.Value = logbook.Logs[i].EndTime.ToString( "o" );
                     logNode.Attributes.Append( endTime );
                 }
 
                 // Add technique.
                 {
                     XmlAttribute technique = doc.CreateAttribute( Log.TechniqueString );
-                    technique.Value = log.Technique;
+                    technique.Value = logbook.Logs[i].Technique;
                     logNode.Attributes.Append( technique );
                 }
 
                 // Add Comments
                 {
                     XmlAttribute comments = doc.CreateAttribute( Log.CommentsString );
-                    comments.Value = log.Comments;
+                    comments.Value = logbook.Logs[i].Comments;
                     logNode.Attributes.Append( comments );
                 }
 
                 // Add Latitude
                 {
                     XmlAttribute lat = doc.CreateAttribute( Log.LatitudeString );
-                    lat.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
+                    lat.Value = logbook.Logs[i].Latitude.HasValue ? logbook.Logs[i].Latitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lat );
                 }
 
                 // Add Longitude.
                 {
                     XmlAttribute lon = doc.CreateAttribute( Log.LongitudeString );
-                    lon.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
+                    lon.Value = logbook.Logs[i].Longitude.HasValue ? logbook.Logs[i].Longitude.ToString() : string.Empty;
                     logNode.Attributes.Append( lon );
                 }
 
                 logbookNode.AppendChild( logNode );
+
+                if ( onStep != null )
+                {
+                    onStep( i + 1, logbook.Logs.Count );
+                }
             }
 
             doc.InsertAfter( logbookNode, dec );

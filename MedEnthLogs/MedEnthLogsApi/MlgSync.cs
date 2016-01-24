@@ -33,7 +33,12 @@ namespace MedEnthLogsApi
         /// <param name="sqlite">The sqlite connection with the means to save the logbook.</param>
         /// <param name="mlgToSync">The external MLG file that we want to sync with.</param>
         /// <param name="platform">Platform we are using.</param>
-        public static void Sync( LogBook logBook, SQLiteConnection sqlite, string mlgToSync, ISQLitePlatform platform )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void Sync( LogBook logBook, SQLiteConnection sqlite, string mlgToSync, ISQLitePlatform platform, Action<int, int> onStep = null )
         {
             // Checks:
             // 1. Make sure the file exists.
@@ -61,6 +66,9 @@ namespace MedEnthLogsApi
                 // Next, create an external logbook.
                 LogBook externalBook = LogBook.FromSqlite( externalConnection );
 
+                int totalSteps = externalBook.Logs.Count + logBook.Logs.Count;
+                int step = 1;
+
                 // Now, iterate through the local logbook and see if the given log
                 // exists in external logbook.  If it does not, add it to the external database.
                 // If it does, sync both logs and save them to both databases.
@@ -80,6 +88,11 @@ namespace MedEnthLogsApi
                     {
                         externalConnection.Insert( log );
                     }
+
+                    if ( onStep != null )
+                    {
+                        onStep( step++, totalSteps );
+                    }
                 }
 
                 // Next, iterate through all the logs in the external book.
@@ -90,6 +103,11 @@ namespace MedEnthLogsApi
                     if ( logBook.LogExists( externalLog.Guid ) == false )
                     {
                         sqlite.Insert( externalLog );
+                    }
+
+                    if ( onStep != null )
+                    {
+                        onStep( step++, totalSteps );
                     }
                 }
 

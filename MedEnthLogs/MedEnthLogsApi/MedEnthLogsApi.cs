@@ -371,7 +371,12 @@ namespace MedEnthLogsApi
         /// call "PopulateLogbook" after this function to do that.
         /// </summary>
         /// <param name="fileName">Where to import the file to.</param>
-        public void Import( string fileName )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public void Import( string fileName, Action<int, int> onStep = null )
         {
             string[] splitString = fileName.Split( '.' );
             switch ( splitString[splitString.Length - 1].ToLower() )
@@ -379,18 +384,18 @@ namespace MedEnthLogsApi
                 case "xml":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
-                        XmlExporter.ImportFromXml( outFile, this.LogBook, this.sqlite );
+                        XmlExporter.ImportFromXml( outFile, this.LogBook, this.sqlite, onStep );
                     }
                     break;
 
                 case "json":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
-                        JsonExporter.ImportFromJson( outFile, this.LogBook, this.sqlite );
+                        JsonExporter.ImportFromJson( outFile, this.LogBook, this.sqlite, onStep );
                     }
                     break;
                 case "mlg":
-                    MlgExporter.ImportMlg( fileName, this.LogBook, this.platform, this.sqlite );
+                    MlgExporter.ImportMlg( fileName, this.LogBook, this.platform, this.sqlite, onStep );
                     break;
                 default:
                     throw new ArgumentException(
@@ -408,7 +413,12 @@ namespace MedEnthLogsApi
         /// file extension (case doesn't matter).
         /// </summary>
         /// <param name="fileName">Where to export the file to.</param>
-        public void Export( string fileName )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public void Export( string fileName, Action<int, int> onStep = null )
         {
             string[] splitString = fileName.Split( '.' );
             switch ( splitString[splitString.Length - 1].ToLower() )
@@ -416,18 +426,18 @@ namespace MedEnthLogsApi
                 case "xml":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
-                        XmlExporter.ExportToXml( outFile, this.LogBook );
+                        XmlExporter.ExportToXml( outFile, this.LogBook, onStep );
                     }
                     break;
 
                 case "json":
                     using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
-                        JsonExporter.ExportJson( outFile, this.LogBook );
+                        JsonExporter.ExportJson( outFile, this.LogBook, onStep );
                     }
                     break;
                 case "mlg":
-                    MlgExporter.ExportMlg( fileName, this.LogBook, this.platform );
+                    MlgExporter.ExportMlg( fileName, this.LogBook, this.platform, onStep );
                     break;
                 default:
                     throw new ArgumentException(
@@ -443,7 +453,12 @@ namespace MedEnthLogsApi
         /// call "PopulateLogbook" after this function to do that.
         /// </summary>
         /// <param name="externalLogbook">The external logbook to sync with.</param>
-        public void Sync( string externalLogbook )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public void Sync( string externalLogbook, Action<int, int> onStep = null )
         {
             // If sqlite is not open, throw exeption.
             if ( this.sqlite == null )
@@ -459,7 +474,7 @@ namespace MedEnthLogsApi
                 );
             }
 
-            MlgSync.Sync( this.LogBook, this.sqlite, externalLogbook, platform );
+            MlgSync.Sync( this.LogBook, this.sqlite, externalLogbook, platform, onStep );
         }
 
         /// <summary>

@@ -68,6 +68,12 @@ namespace MedEnthLogsDesktop
         MeditateView meditateView;
         SaveView saveView;
 
+        // ---- Delegates ----
+
+        private Action<int, int> exportProgressBarDelegate;
+        private Action<int, int> importProgressBarDelegate;
+        private Action<int, int> syncProgressBarDelegate;
+
         /// <summary>
         /// Costructor
         /// </summary>
@@ -126,6 +132,28 @@ namespace MedEnthLogsDesktop
             this.saveView.Visible = false;
             this.saveView.Dock = DockStyle.Fill;
             ChangableStartView.Controls.Add( this.saveView );
+
+            // Add progress bar controls:
+            this.ExportProgressBar.Minimum = 0;
+            this.exportProgressBarDelegate = delegate( int step, int totalSteps )
+            {
+                this.ExportProgressBar.Maximum = totalSteps;
+                this.ExportProgressBar.Value = step;
+            };
+
+            this.ImportProgressBar.Minimum = 0;
+            this.importProgressBarDelegate = delegate( int step, int totalSteps )
+            {
+                this.ImportProgressBar.Maximum = totalSteps;
+                this.ImportProgressBar.Value = step;
+            };
+
+            this.SyncProgressBar.Minimum = 0;
+            this.syncProgressBarDelegate = delegate ( int step, int totalSteps )
+            {
+                this.SyncProgressBar.Maximum = totalSteps;
+                this.SyncProgressBar.Value = step;
+            };
         }
 
         readonly string mapHtmlStart = @"
@@ -281,9 +309,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             {
                 try
                 {
-                    this.api.Sync( SyncLocationText.Text );
+                    this.api.Sync( SyncLocationText.Text, this.syncProgressBarDelegate );
                     ReloadLogs();
                     this.SyncLocationText.Text = string.Empty;
+                    this.SyncProgressBar.Value = this.SyncProgressBar.Maximum;
                 }
                 catch ( Exception err )
                 {
@@ -336,9 +365,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             {
                 try
                 {
-                    this.api.Import( ImportFileLocation.Text );
+                    this.api.Import( ImportFileLocation.Text, importProgressBarDelegate );
                     ReloadLogs();
                     this.ImportFileLocation.Text = string.Empty;
+                    this.ImportProgressBar.Value = this.ImportProgressBar.Maximum;
                 }
                 catch ( Exception err )
                 {
@@ -391,8 +421,9 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             {
                 try
                 {
-                    this.api.Export( ExportLocationText.Text );
+                    this.api.Export( ExportLocationText.Text, this.exportProgressBarDelegate );
                     this.ExportLocationText.Text = string.Empty;
+                    this.ExportProgressBar.Value = this.ExportProgressBar.Maximum;
                 }
                 catch ( Exception err )
                 {
@@ -671,6 +702,8 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                 );
             }
         }
+
+        // -------- Helper Functions --------
 
         /// <summary>
         /// Checks to see if there's an update to the app or not.

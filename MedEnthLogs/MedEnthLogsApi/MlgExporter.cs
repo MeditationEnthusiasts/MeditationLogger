@@ -34,14 +34,23 @@ namespace MedEnthLogsApi
         /// <param name="outFile">Where to export the mlg to.</param>
         /// <param name="logBook">The logbook to export.</param>
         /// <param name="platform">The sqlite platform to use.</param>
-        public static void ExportMlg( string outFile, LogBook logBook, ISQLitePlatform platform )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ExportMlg( string outFile, LogBook logBook, ISQLitePlatform platform, Action<int, int> onStep = null )
         {
             using ( SQLiteConnection sqlite = new SQLiteConnection( platform, outFile, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite ) )
             {
                 sqlite.CreateTable<Log>();
-                foreach ( Log log in logBook.Logs )
+                for( int i = 0; i < logBook.Logs.Count; ++i )
                 {
-                    sqlite.Insert( log );
+                    sqlite.Insert( logBook.Logs[i] );
+                    if ( onStep != null )
+                    {
+                        onStep( i + 1, logBook.Logs.Count );
+                    }
                 }
                 sqlite.Commit();
                 sqlite.Close();
@@ -55,13 +64,20 @@ namespace MedEnthLogsApi
         /// <param name="logBook">The logbook to check for duplicates.</param>
         /// <param name="platform">The sqlite platform to use.</param>
         /// <param name="logSqlite">The sqlite connection to import the logs to.</param>
-        public static void ImportMlg( string inFile, LogBook logBook, ISQLitePlatform platform, SQLiteConnection logSqlite )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ImportMlg( string inFile, LogBook logBook, ISQLitePlatform platform, SQLiteConnection logSqlite, Action<int, int> onStep = null )
         {
             List<Log> logs = new List<Log>();
 
             using ( SQLiteConnection sqlite = new SQLiteConnection( platform, inFile, SQLiteOpenFlags.ReadOnly ) )
             {
                 var query = sqlite.Table<Log>().Where( x => x.Id > 0 );
+
+                int step = 1;
                 foreach ( Log q in query )
                 {
                     Log log = q;
@@ -80,6 +96,11 @@ namespace MedEnthLogsApi
                     log.EditTime = DateTime.Now;
                     log.Validate();
                     logs.Add( log );
+
+                    if ( onStep != null )
+                    {
+                        onStep( step++, query.Count() );
+                    }
                 }
                 sqlite.Close();
             }

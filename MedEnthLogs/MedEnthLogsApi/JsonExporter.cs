@@ -31,24 +31,34 @@ namespace MedEnthLogsApi
         /// </summary>
         /// <param name="outFile">Where to write the json to.</param>
         /// <param name="logBook">The logbook to convert to json.</param>
-        public static void ExportJson( Stream outFile, LogBook logBook )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ExportJson( Stream outFile, LogBook logBook, Action<int, int> onStep = null )
         {
             using ( StreamWriter writer = new StreamWriter( outFile ) )
             {
                 JArray array = new JArray();
-                foreach ( Log log in logBook.Logs )
+                for( int i = 0; i < logBook.Logs.Count; ++i )
                 {
                     JObject o = new JObject();
-                    o[Log.GuidString] = log.Guid.ToString();
-                    o[Log.EditTimeString] = log.EditTime.ToString( "o" );
-                    o[Log.StartTimeString] = log.StartTime.ToString( "o" );
-                    o[Log.EndTimeString] = log.EndTime.ToString( "o" );
-                    o[Log.TechniqueString] = log.Technique;
-                    o[Log.CommentsString] = log.Comments;
-                    o[Log.LatitudeString] = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
-                    o[Log.LongitudeString] = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
+                    o[Log.GuidString] = logBook.Logs[i].Guid.ToString();
+                    o[Log.EditTimeString] = logBook.Logs[i].EditTime.ToString( "o" );
+                    o[Log.StartTimeString] = logBook.Logs[i].StartTime.ToString( "o" );
+                    o[Log.EndTimeString] = logBook.Logs[i].EndTime.ToString( "o" );
+                    o[Log.TechniqueString] = logBook.Logs[i].Technique;
+                    o[Log.CommentsString] = logBook.Logs[i].Comments;
+                    o[Log.LatitudeString] = logBook.Logs[i].Latitude.HasValue ? logBook.Logs[i].Latitude.ToString() : string.Empty;
+                    o[Log.LongitudeString] = logBook.Logs[i].Longitude.HasValue ? logBook.Logs[i].Longitude.ToString() : string.Empty;
 
                     array.Add( o );
+
+                    if ( onStep != null )
+                    {
+                        onStep( i + 1, logBook.Logs.Count );
+                    }
                 }
                 writer.WriteLine( array.ToString() );
             }
@@ -61,7 +71,12 @@ namespace MedEnthLogsApi
         /// <param name="outFile">The stream to read from.</param>
         /// <param name="logBook">The logbook to import to.</param>
         /// <param name="sqlite">The sqlite connection to import the logs to.</param>
-        public static void ImportFromJson( Stream outFile, LogBook logBook, SQLiteConnection sqlite )
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        public static void ImportFromJson( Stream outFile, LogBook logBook, SQLiteConnection sqlite, Action<int, int> onStep = null )
         {
             List<Log> logs = new List<Log>();
 
@@ -69,6 +84,9 @@ namespace MedEnthLogsApi
             {
                 string json = reader.ReadToEnd();
                 JArray array = JArray.Parse( json );
+
+                int size = array.Count;
+                int step = 1;
                 foreach ( JObject o in array.Children() )
                 {
                     Log log = new Log();
@@ -145,6 +163,12 @@ namespace MedEnthLogsApi
 
                     log.Validate();
                     logs.Add( log );
+
+                    if ( onStep != null )
+                    {
+                        onStep( step++, size );
+                    }
+
                 } // End foreach
             } // End using
 
