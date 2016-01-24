@@ -29,7 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCoreDesktop", "TestCore
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\SethCS\SethCS\SethCS.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
 		TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
 		MedEnthLogsApi\MedEnthLogsApi.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
