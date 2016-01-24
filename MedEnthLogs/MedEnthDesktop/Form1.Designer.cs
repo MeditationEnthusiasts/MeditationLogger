@@ -926,10 +926,10 @@ namespace MedEnthLogsDesktop
             this.ReportABugValue.AutoSize = true;
             this.ReportABugValue.Location = new System.Drawing.Point(148, 153);
             this.ReportABugValue.Name = "ReportABugValue";
-            this.ReportABugValue.Size = new System.Drawing.Size(324, 51);
+            this.ReportABugValue.Size = new System.Drawing.Size(390, 51);
             this.ReportABugValue.TabIndex = 3;
             this.ReportABugValue.TabStop = true;
-            this.ReportABugValue.Text = "https://dev.meditationenthusiasts.org/mantis/";
+            this.ReportABugValue.Text = "https://meditationenthusiasts.org/development/mantis/";
             this.ReportABugValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ReportABugValue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportABugValue_LinkClicked);
             // 
@@ -966,10 +966,10 @@ namespace MedEnthLogsDesktop
             this.VistSiteLabel.AutoSize = true;
             this.VistSiteLabel.Location = new System.Drawing.Point(148, 102);
             this.VistSiteLabel.Name = "VistSiteLabel";
-            this.VistSiteLabel.Size = new System.Drawing.Size(261, 51);
+            this.VistSiteLabel.Size = new System.Drawing.Size(269, 51);
             this.VistSiteLabel.TabIndex = 7;
             this.VistSiteLabel.TabStop = true;
-            this.VistSiteLabel.Text = "http://www.meditationenthusiats.org";
+            this.VistSiteLabel.Text = "https://www.meditationenthusiats.org";
             this.VistSiteLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.VistSiteLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VistSiteLabel_LinkClicked);
             // 
@@ -1007,11 +1007,11 @@ namespace MedEnthLogsDesktop
             this.ViewWikiValueLabel.AutoSize = true;
             this.ViewWikiValueLabel.Location = new System.Drawing.Point(148, 204);
             this.ViewWikiValueLabel.Name = "ViewWikiValueLabel";
-            this.ViewWikiValueLabel.Size = new System.Drawing.Size(424, 51);
+            this.ViewWikiValueLabel.Size = new System.Drawing.Size(429, 51);
             this.ViewWikiValueLabel.TabIndex = 8;
             this.ViewWikiValueLabel.TabStop = true;
-            this.ViewWikiValueLabel.Text = "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logg" +
-    "er:start";
+            this.ViewWikiValueLabel.Text = "https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditat" +
+    "ion_logger:start";
             this.ViewWikiValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ViewWikiValueLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewWikiValueLabel_LinkClicked);
             // 

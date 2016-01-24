@@ -610,12 +610,12 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
 
         private void VistSiteLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
-            System.Diagnostics.Process.Start( "http://meditationenthusiasts.org" );
+            System.Diagnostics.Process.Start( "https://meditationenthusiasts.org" );
         }
 
         private void ReportABugValue_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
-            System.Diagnostics.Process.Start( "https://dev.meditationenthusiasts.org/mantis/" );
+            System.Diagnostics.Process.Start( "https://meditationenthusiasts.org/development/mantis/" );
         }
 
         private void ViewSourceValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
@@ -630,7 +630,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
 
         private void ViewWikiValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
-            System.Diagnostics.Process.Start( "https://dev.meditationenthusiasts.org/dokuwiki/doku.php?id=mantis:meditation_logger:start" );
+            System.Diagnostics.Process.Start( "https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start" );
         }
 
         private void CheckForUpdatesButton_Click( object sender, EventArgs e )
