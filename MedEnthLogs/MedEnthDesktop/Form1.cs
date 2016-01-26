@@ -200,6 +200,16 @@ namespace MedEnthLogsDesktop
     <title>Meditation Map</title>
     <style>
     " + LeafletJS.CSS + @"
+
+        // Use to make the map full screen.
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 98%;
+            width: 99%;
+        }
     </style>
     <!-- Plug in the map information -->
     <script type = ""text/javascript"">
@@ -241,7 +251,7 @@ namespace MedEnthLogsDesktop
     </script>
 </head>
 <body>
-    <div class=""center"" id=""map"" style=""height:350px;""/>
+    <div class=""center"" id=""map""/>
 </body>
 </html>";
 

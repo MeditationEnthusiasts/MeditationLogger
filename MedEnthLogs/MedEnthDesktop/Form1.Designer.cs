@@ -85,6 +85,9 @@ namespace MedEnthLogsDesktop
             this.label1 = new System.Windows.Forms.Label();
             this.ImportFileLocation = new System.Windows.Forms.TextBox();
             this.ImportBrowseButton = new System.Windows.Forms.Button();
+            this.ImportProgressTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ImportProgressLabel = new System.Windows.Forms.Label();
+            this.ImportProgressBar = new System.Windows.Forms.ProgressBar();
             this.ExportView = new System.Windows.Forms.TabPage();
             this.ExportViewTable = new System.Windows.Forms.TableLayoutPanel();
             this.ExportDescriptionLabel = new System.Windows.Forms.Label();
@@ -93,6 +96,9 @@ namespace MedEnthLogsDesktop
             this.ExportBrowseButton = new System.Windows.Forms.Button();
             this.ExportLocationText = new System.Windows.Forms.TextBox();
             this.ExportBrowseLabel = new System.Windows.Forms.Label();
+            this.ExportProgressTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ExportProgressLabel = new System.Windows.Forms.Label();
+            this.ExportProgressBar = new System.Windows.Forms.ProgressBar();
             this.SyncView = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -101,6 +107,9 @@ namespace MedEnthLogsDesktop
             this.label3 = new System.Windows.Forms.Label();
             this.SyncLocationText = new System.Windows.Forms.TextBox();
             this.SyncBrowseButton = new System.Windows.Forms.Button();
+            this.SyncProgressTable = new System.Windows.Forms.TableLayoutPanel();
+            this.SyncProgressLabel = new System.Windows.Forms.Label();
+            this.SyncProgressBar = new System.Windows.Forms.ProgressBar();
             this.AboutView = new System.Windows.Forms.TabPage();
             this.AppInfo = new System.Windows.Forms.TabControl();
             this.AppInfoTab = new System.Windows.Forms.TabPage();
@@ -129,15 +138,6 @@ namespace MedEnthLogsDesktop
             this.ExportSaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.ImportOpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SyncOpenDialog = new System.Windows.Forms.OpenFileDialog();
-            this.ImportProgressTable = new System.Windows.Forms.TableLayoutPanel();
-            this.ImportProgressLabel = new System.Windows.Forms.Label();
-            this.ImportProgressBar = new System.Windows.Forms.ProgressBar();
-            this.ExportProgressTable = new System.Windows.Forms.TableLayoutPanel();
-            this.ExportProgressLabel = new System.Windows.Forms.Label();
-            this.ExportProgressBar = new System.Windows.Forms.ProgressBar();
-            this.SyncProgressTable = new System.Windows.Forms.TableLayoutPanel();
-            this.SyncProgressLabel = new System.Windows.Forms.Label();
-            this.SyncProgressBar = new System.Windows.Forms.ProgressBar();
             this.MainTabControl.SuspendLayout();
             this.Home.SuspendLayout();
             this.HomeTableLayout.SuspendLayout();
@@ -156,12 +156,15 @@ namespace MedEnthLogsDesktop
             this.ImportView.SuspendLayout();
             this.ImportTableLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.ImportProgressTable.SuspendLayout();
             this.ExportView.SuspendLayout();
             this.ExportViewTable.SuspendLayout();
             this.ExportBrowseTableLayout.SuspendLayout();
+            this.ExportProgressTable.SuspendLayout();
             this.SyncView.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.SyncProgressTable.SuspendLayout();
             this.AboutView.SuspendLayout();
             this.AppInfo.SuspendLayout();
             this.AppInfoTab.SuspendLayout();
@@ -170,9 +173,6 @@ namespace MedEnthLogsDesktop
             this.LicenseTable.SuspendLayout();
             this.ExternalLibTab.SuspendLayout();
             this.ExtLibTable.SuspendLayout();
-            this.ImportProgressTable.SuspendLayout();
-            this.ExportProgressTable.SuspendLayout();
-            this.SyncProgressTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -459,7 +459,9 @@ namespace MedEnthLogsDesktop
             // MapViewBrowser
             // 
             this.MapViewBrowser.AllowWebBrowserDrop = false;
-            this.MapViewBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MapViewBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.MapViewBrowser.Location = new System.Drawing.Point(3, 3);
             this.MapViewBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.MapViewBrowser.Name = "MapViewBrowser";
@@ -641,6 +643,40 @@ namespace MedEnthLogsDesktop
             this.ImportBrowseButton.UseVisualStyleBackColor = true;
             this.ImportBrowseButton.Click += new System.EventHandler(this.ImportBrowseButton_Click);
             // 
+            // ImportProgressTable
+            // 
+            this.ImportProgressTable.ColumnCount = 2;
+            this.ImportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.ImportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ImportProgressTable.Controls.Add(this.ImportProgressLabel, 0, 0);
+            this.ImportProgressTable.Controls.Add(this.ImportProgressBar, 1, 0);
+            this.ImportProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImportProgressTable.Location = new System.Drawing.Point(3, 360);
+            this.ImportProgressTable.Name = "ImportProgressTable";
+            this.ImportProgressTable.RowCount = 1;
+            this.ImportProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ImportProgressTable.Size = new System.Drawing.Size(575, 45);
+            this.ImportProgressTable.TabIndex = 6;
+            // 
+            // ImportProgressLabel
+            // 
+            this.ImportProgressLabel.AutoSize = true;
+            this.ImportProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImportProgressLabel.Location = new System.Drawing.Point(3, 0);
+            this.ImportProgressLabel.Name = "ImportProgressLabel";
+            this.ImportProgressLabel.Size = new System.Drawing.Size(94, 45);
+            this.ImportProgressLabel.TabIndex = 0;
+            this.ImportProgressLabel.Text = "Progress:";
+            this.ImportProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ImportProgressBar
+            // 
+            this.ImportProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImportProgressBar.Location = new System.Drawing.Point(103, 3);
+            this.ImportProgressBar.Name = "ImportProgressBar";
+            this.ImportProgressBar.Size = new System.Drawing.Size(469, 39);
+            this.ImportProgressBar.TabIndex = 1;
+            // 
             // ExportView
             // 
             this.ExportView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -739,6 +775,40 @@ namespace MedEnthLogsDesktop
             this.ExportBrowseLabel.Size = new System.Drawing.Size(124, 20);
             this.ExportBrowseLabel.TabIndex = 9;
             this.ExportBrowseLabel.Text = "Export Location:";
+            // 
+            // ExportProgressTable
+            // 
+            this.ExportProgressTable.ColumnCount = 2;
+            this.ExportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.ExportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ExportProgressTable.Controls.Add(this.ExportProgressLabel, 0, 0);
+            this.ExportProgressTable.Controls.Add(this.ExportProgressBar, 1, 0);
+            this.ExportProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportProgressTable.Location = new System.Drawing.Point(3, 360);
+            this.ExportProgressTable.Name = "ExportProgressTable";
+            this.ExportProgressTable.RowCount = 1;
+            this.ExportProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ExportProgressTable.Size = new System.Drawing.Size(575, 45);
+            this.ExportProgressTable.TabIndex = 14;
+            // 
+            // ExportProgressLabel
+            // 
+            this.ExportProgressLabel.AutoSize = true;
+            this.ExportProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportProgressLabel.Location = new System.Drawing.Point(3, 0);
+            this.ExportProgressLabel.Name = "ExportProgressLabel";
+            this.ExportProgressLabel.Size = new System.Drawing.Size(94, 45);
+            this.ExportProgressLabel.TabIndex = 0;
+            this.ExportProgressLabel.Text = "Progress:";
+            this.ExportProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ExportProgressBar
+            // 
+            this.ExportProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportProgressBar.Location = new System.Drawing.Point(103, 3);
+            this.ExportProgressBar.Name = "ExportProgressBar";
+            this.ExportProgressBar.Size = new System.Drawing.Size(469, 39);
+            this.ExportProgressBar.TabIndex = 1;
             // 
             // SyncView
             // 
@@ -839,6 +909,40 @@ namespace MedEnthLogsDesktop
             this.SyncBrowseButton.Text = "browse...";
             this.SyncBrowseButton.UseVisualStyleBackColor = true;
             this.SyncBrowseButton.Click += new System.EventHandler(this.SyncBrowseButton_Click);
+            // 
+            // SyncProgressTable
+            // 
+            this.SyncProgressTable.ColumnCount = 2;
+            this.SyncProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.SyncProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.SyncProgressTable.Controls.Add(this.SyncProgressLabel, 0, 0);
+            this.SyncProgressTable.Controls.Add(this.SyncProgressBar, 1, 0);
+            this.SyncProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SyncProgressTable.Location = new System.Drawing.Point(3, 360);
+            this.SyncProgressTable.Name = "SyncProgressTable";
+            this.SyncProgressTable.RowCount = 1;
+            this.SyncProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.SyncProgressTable.Size = new System.Drawing.Size(575, 45);
+            this.SyncProgressTable.TabIndex = 17;
+            // 
+            // SyncProgressLabel
+            // 
+            this.SyncProgressLabel.AutoSize = true;
+            this.SyncProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SyncProgressLabel.Location = new System.Drawing.Point(3, 0);
+            this.SyncProgressLabel.Name = "SyncProgressLabel";
+            this.SyncProgressLabel.Size = new System.Drawing.Size(94, 45);
+            this.SyncProgressLabel.TabIndex = 0;
+            this.SyncProgressLabel.Text = "Progress:";
+            this.SyncProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // SyncProgressBar
+            // 
+            this.SyncProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SyncProgressBar.Location = new System.Drawing.Point(103, 3);
+            this.SyncProgressBar.Name = "SyncProgressBar";
+            this.SyncProgressBar.Size = new System.Drawing.Size(469, 39);
+            this.SyncProgressBar.TabIndex = 1;
             // 
             // AboutView
             // 
@@ -1194,108 +1298,6 @@ namespace MedEnthLogsDesktop
             // 
             this.SyncOpenDialog.Filter = "MLG Files|*.mlg";
             // 
-            // ImportProgressTable
-            // 
-            this.ImportProgressTable.ColumnCount = 2;
-            this.ImportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.ImportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ImportProgressTable.Controls.Add(this.ImportProgressLabel, 0, 0);
-            this.ImportProgressTable.Controls.Add(this.ImportProgressBar, 1, 0);
-            this.ImportProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ImportProgressTable.Location = new System.Drawing.Point(3, 360);
-            this.ImportProgressTable.Name = "ImportProgressTable";
-            this.ImportProgressTable.RowCount = 1;
-            this.ImportProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ImportProgressTable.Size = new System.Drawing.Size(575, 45);
-            this.ImportProgressTable.TabIndex = 6;
-            // 
-            // ImportProgressLabel
-            // 
-            this.ImportProgressLabel.AutoSize = true;
-            this.ImportProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ImportProgressLabel.Location = new System.Drawing.Point(3, 0);
-            this.ImportProgressLabel.Name = "ImportProgressLabel";
-            this.ImportProgressLabel.Size = new System.Drawing.Size(94, 45);
-            this.ImportProgressLabel.TabIndex = 0;
-            this.ImportProgressLabel.Text = "Progress:";
-            this.ImportProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ImportProgressBar
-            // 
-            this.ImportProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ImportProgressBar.Location = new System.Drawing.Point(103, 3);
-            this.ImportProgressBar.Name = "ImportProgressBar";
-            this.ImportProgressBar.Size = new System.Drawing.Size(469, 39);
-            this.ImportProgressBar.TabIndex = 1;
-            // 
-            // ExportProgressTable
-            // 
-            this.ExportProgressTable.ColumnCount = 2;
-            this.ExportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.ExportProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExportProgressTable.Controls.Add(this.ExportProgressLabel, 0, 0);
-            this.ExportProgressTable.Controls.Add(this.ExportProgressBar, 1, 0);
-            this.ExportProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportProgressTable.Location = new System.Drawing.Point(3, 360);
-            this.ExportProgressTable.Name = "ExportProgressTable";
-            this.ExportProgressTable.RowCount = 1;
-            this.ExportProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExportProgressTable.Size = new System.Drawing.Size(575, 45);
-            this.ExportProgressTable.TabIndex = 14;
-            // 
-            // ExportProgressLabel
-            // 
-            this.ExportProgressLabel.AutoSize = true;
-            this.ExportProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportProgressLabel.Location = new System.Drawing.Point(3, 0);
-            this.ExportProgressLabel.Name = "ExportProgressLabel";
-            this.ExportProgressLabel.Size = new System.Drawing.Size(94, 45);
-            this.ExportProgressLabel.TabIndex = 0;
-            this.ExportProgressLabel.Text = "Progress:";
-            this.ExportProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ExportProgressBar
-            // 
-            this.ExportProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportProgressBar.Location = new System.Drawing.Point(103, 3);
-            this.ExportProgressBar.Name = "ExportProgressBar";
-            this.ExportProgressBar.Size = new System.Drawing.Size(469, 39);
-            this.ExportProgressBar.TabIndex = 1;
-            // 
-            // SyncProgressTable
-            // 
-            this.SyncProgressTable.ColumnCount = 2;
-            this.SyncProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.SyncProgressTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SyncProgressTable.Controls.Add(this.SyncProgressLabel, 0, 0);
-            this.SyncProgressTable.Controls.Add(this.SyncProgressBar, 1, 0);
-            this.SyncProgressTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SyncProgressTable.Location = new System.Drawing.Point(3, 360);
-            this.SyncProgressTable.Name = "SyncProgressTable";
-            this.SyncProgressTable.RowCount = 1;
-            this.SyncProgressTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SyncProgressTable.Size = new System.Drawing.Size(575, 45);
-            this.SyncProgressTable.TabIndex = 17;
-            // 
-            // SyncProgressLabel
-            // 
-            this.SyncProgressLabel.AutoSize = true;
-            this.SyncProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SyncProgressLabel.Location = new System.Drawing.Point(3, 0);
-            this.SyncProgressLabel.Name = "SyncProgressLabel";
-            this.SyncProgressLabel.Size = new System.Drawing.Size(94, 45);
-            this.SyncProgressLabel.TabIndex = 0;
-            this.SyncProgressLabel.Text = "Progress:";
-            this.SyncProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // SyncProgressBar
-            // 
-            this.SyncProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SyncProgressBar.Location = new System.Drawing.Point(103, 3);
-            this.SyncProgressBar.Name = "SyncProgressBar";
-            this.SyncProgressBar.Size = new System.Drawing.Size(469, 39);
-            this.SyncProgressBar.TabIndex = 1;
-            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1332,16 +1334,22 @@ namespace MedEnthLogsDesktop
             this.ImportTableLayout.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.ImportProgressTable.ResumeLayout(false);
+            this.ImportProgressTable.PerformLayout();
             this.ExportView.ResumeLayout(false);
             this.ExportViewTable.ResumeLayout(false);
             this.ExportViewTable.PerformLayout();
             this.ExportBrowseTableLayout.ResumeLayout(false);
             this.ExportBrowseTableLayout.PerformLayout();
+            this.ExportProgressTable.ResumeLayout(false);
+            this.ExportProgressTable.PerformLayout();
             this.SyncView.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.SyncProgressTable.ResumeLayout(false);
+            this.SyncProgressTable.PerformLayout();
             this.AboutView.ResumeLayout(false);
             this.AppInfo.ResumeLayout(false);
             this.AppInfoTab.ResumeLayout(false);
@@ -1353,12 +1361,6 @@ namespace MedEnthLogsDesktop
             this.ExternalLibTab.ResumeLayout(false);
             this.ExtLibTable.ResumeLayout(false);
             this.ExtLibTable.PerformLayout();
-            this.ImportProgressTable.ResumeLayout(false);
-            this.ImportProgressTable.PerformLayout();
-            this.ExportProgressTable.ResumeLayout(false);
-            this.ExportProgressTable.PerformLayout();
-            this.SyncProgressTable.ResumeLayout(false);
-            this.SyncProgressTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
