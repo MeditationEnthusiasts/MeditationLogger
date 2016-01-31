@@ -70,9 +70,9 @@ namespace MedEnthLogsDesktop
         private IMusicManager timesUpSound;
 
         /// <summary>
-        /// Whether or not the buttons should be enabled.
+        /// Whether or not there's a task in progress or not.
         /// </summary>
-        private bool shouldButtonsBeEnabled;
+        private bool isNoTaskInProgress;
 
         // ---- Views ----
 
@@ -95,7 +95,7 @@ namespace MedEnthLogsDesktop
         {
             InitializeComponent();
 
-            this.shouldButtonsBeEnabled = true;
+            this.isNoTaskInProgress = true;
 
             this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
             this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
@@ -381,9 +381,38 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
+        private void SyncLocationText_KeyPress( object sender, KeyPressEventArgs e )
+        {
+            if ( e.KeyChar == (char)Keys.Enter )
+            {
+                if (
+                    string.IsNullOrEmpty( SyncLocationText.Text ) ||
+                    string.IsNullOrWhiteSpace( SyncLocationText.Text )
+                )
+                {
+                    // No-op if text field is empty.
+                    return;
+                }
+                HandleSyncEvent();
+            }
+        }
+
         private async void SyncButton_Click( object sender, EventArgs e )
         {
-            if (
+            HandleSyncEvent();
+        }
+
+        /// <summary>
+        /// Handles an event when the user triggers a sync.
+        /// </summary>
+        private async void HandleSyncEvent()
+        {
+            // No-op if things things are being written to.
+            if ( isNoTaskInProgress == false )
+            {
+                return;
+            }
+            else if (
                 string.IsNullOrEmpty( SyncLocationText.Text ) ||
                 string.IsNullOrWhiteSpace( SyncLocationText.Text )
             )
@@ -393,22 +422,35 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             else
             {
                 this.EnableButtons( false );
+                this.SyncButton.Text = "Syncing...";
                 try
                 {
                     await DoSync();
-                    this.SyncLocationText.Text = string.Empty;
                     this.SyncProgressBar.Value = this.SyncProgressBar.Maximum;
+
+                    // Show success.
+                    MessageBox.Show(
+                        "Logbook Synced Successfully!",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Asterisk
+                    );
+
+                    this.SyncLocationText.Text = string.Empty;
                 }
                 catch ( Exception err )
                 {
+                    // Show failure.
                     MessageBox.Show(
                         err.Message,
                         "Error when syncing to logbook.",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
-                    this.SyncProgressBar.Value = this.SyncProgressBar.Minimum;
                 }
+
+                this.SyncProgressBar.Value = this.SyncProgressBar.Minimum;
+                this.SyncButton.Text = "Sync";
                 this.EnableButtons( true );
             }
         }
@@ -440,9 +482,39 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
+        private void ImportFileLocation_KeyPress( object sender, KeyPressEventArgs e )
+        {
+            if ( e.KeyChar == ( char ) Keys.Enter )
+            {
+                if (
+                    string.IsNullOrEmpty( ImportFileLocation.Text ) ||
+                    string.IsNullOrWhiteSpace( ImportFileLocation.Text )
+                )
+                {
+                    // No-Op if there's nothing in the text field.
+                    return;
+                }
+
+                HandleImportEvent();
+            }
+        }
+
         private async void ImportButton_Click( object sender, EventArgs e )
         {
-            if (
+            HandleImportEvent();
+        }
+
+        /// <summary>
+        /// Handles an event when the user triggers an import.
+        /// </summary>
+        private async void HandleImportEvent()
+        {
+            // No-op if things things are being written to.
+            if ( isNoTaskInProgress == false )
+            {
+                return;
+            }
+            else if (
                 string.IsNullOrEmpty( ImportFileLocation.Text ) ||
                 string.IsNullOrWhiteSpace( ImportFileLocation.Text )
             )
@@ -452,10 +524,19 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             else
             {
                 this.EnableButtons( false );
+                this.ImportButton.Text = "Importing...";
                 try
                 {
                     await DoImport();
                     this.ImportProgressBar.Value = this.ImportProgressBar.Maximum;
+
+                    MessageBox.Show(
+                        "File imported to logbook successfully!",
+                        "Success.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Asterisk
+                    );
+
                     this.ImportFileLocation.Text = string.Empty;
                 }
                 catch ( Exception err )
@@ -466,8 +547,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
-                    this.ImportProgressBar.Value = this.ImportProgressBar.Minimum;
                 }
+
+                this.ImportProgressBar.Value = this.ImportProgressBar.Minimum;
+                this.ImportButton.Text = "Import";
                 this.EnableButtons( true );
             }
         }
@@ -494,6 +577,23 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             EnableExportButton();
         }
 
+        private void ExportLocationText_KeyPress( object sender, KeyPressEventArgs e )
+        {
+            if ( e.KeyChar == (char) Keys.Return )
+            {
+                if (
+                     string.IsNullOrEmpty( ExportLocationText.Text ) ||
+                     string.IsNullOrWhiteSpace( ExportLocationText.Text )
+                )
+                {
+                    // No-op if there's nothing in the export text field.
+                    return;
+                }
+
+                HandleExportEvent();
+            }
+        }
+
         private void ExportBrowseButton_Click( object sender, EventArgs e )
         {
             DialogResult saveResult = ExportSaveDialog.ShowDialog();
@@ -505,9 +605,22 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
 
         private async void ExportButton_Click( object sender, EventArgs e )
         {
-            if (
-                string.IsNullOrEmpty( ExportLocationText.Text ) ||
-                string.IsNullOrWhiteSpace( ExportLocationText.Text )
+            HandleExportEvent();
+        }
+
+        /// <summary>
+        /// Handles the user triggers an event that causes an export.
+        /// </summary>
+        private async void HandleExportEvent()
+        {
+            // No-op if things things are being written to.
+            if ( isNoTaskInProgress == false )
+            {
+                return;
+            }
+            else if (
+                 string.IsNullOrEmpty( ExportLocationText.Text ) ||
+                 string.IsNullOrWhiteSpace( ExportLocationText.Text )
             )
             {
                 MessageBox.Show( "No export file selected" );
@@ -515,10 +628,19 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             else
             {
                 this.EnableButtons( false );
+                this.ExportButton.Text = "Exporting...";
                 try
                 {
                     await DoExport();
                     this.ExportProgressBar.Value = this.ExportProgressBar.Maximum;
+
+                    MessageBox.Show(
+                        "Logbook exported to file successfully!",
+                        "Success.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Asterisk
+                    );
+
                     this.ExportLocationText.Text = string.Empty;
                 }
                 catch ( Exception err )
@@ -531,6 +653,9 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                     );
                     this.ExportProgressBar.Value = this.ExportProgressBar.Minimum;
                 }
+
+                this.ExportProgressBar.Value = this.ExportProgressBar.Minimum;
+                this.ExportButton.Text = "Export";
                 this.EnableButtons( true );
             }
         }
@@ -904,7 +1029,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
-                this.shouldButtonsBeEnabled = enable;
+                this.isNoTaskInProgress = enable;
                 EnableImportButton();
                 EnableExportButton();
                 EnableSyncButton();
@@ -926,7 +1051,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
-                ImportButton.Enabled = true && this.shouldButtonsBeEnabled;
+                ImportButton.Enabled = true && this.isNoTaskInProgress;
             }
         }
 
@@ -944,7 +1069,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
-                ExportButton.Enabled = true && this.shouldButtonsBeEnabled;
+                ExportButton.Enabled = true && this.isNoTaskInProgress;
             }
         }
 
@@ -962,7 +1087,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
             else
             {
-                SyncButton.Enabled = true && shouldButtonsBeEnabled;
+                SyncButton.Enabled = true && isNoTaskInProgress;
             }
         }
     }

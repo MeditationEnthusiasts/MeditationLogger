@@ -632,6 +632,7 @@ namespace MedEnthLogsDesktop
             this.ImportFileLocation.Size = new System.Drawing.Size(281, 26);
             this.ImportFileLocation.TabIndex = 2;
             this.ImportFileLocation.TextChanged += new System.EventHandler(this.ImportFileLocation_TextChanged);
+            this.ImportFileLocation.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ImportFileLocation_KeyPress);
             // 
             // ImportBrowseButton
             // 
@@ -765,6 +766,7 @@ namespace MedEnthLogsDesktop
             this.ExportLocationText.Size = new System.Drawing.Size(281, 26);
             this.ExportLocationText.TabIndex = 8;
             this.ExportLocationText.TextChanged += new System.EventHandler(this.ExportLocationText_TextChanged);
+            this.ExportLocationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ExportLocationText_KeyPress);
             // 
             // ExportBrowseLabel
             // 
@@ -899,6 +901,7 @@ namespace MedEnthLogsDesktop
             this.SyncLocationText.Size = new System.Drawing.Size(281, 26);
             this.SyncLocationText.TabIndex = 13;
             this.SyncLocationText.TextChanged += new System.EventHandler(this.SyncLocationText_TextChanged);
+            this.SyncLocationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SyncLocationText_KeyPress);
             // 
             // SyncBrowseButton
             // 
