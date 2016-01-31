@@ -1,5 +1,5 @@
 [bugtraq]
-	url = https://dev.meditationenthusiasts.org/mantis/view.php?id=%BUGID%
+	url = https://meditationenthusiasts.org/development/mantis/view.php?id=%BUGID%
 	label = Issue ID:
 	append = false
 	number = true
