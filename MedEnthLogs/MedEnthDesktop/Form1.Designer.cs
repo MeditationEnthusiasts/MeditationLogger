@@ -356,7 +356,7 @@ namespace MedEnthLogsDesktop
             this.StartTab.Padding = new System.Windows.Forms.Padding(3);
             this.StartTab.Size = new System.Drawing.Size(601, 453);
             this.StartTab.TabIndex = 4;
-            this.StartTab.Text = "Start";
+            this.StartTab.Text = "Meditate!";
             this.StartTab.Enter += new System.EventHandler(this.StartTab_Enter);
             // 
             // StartTableLayout
