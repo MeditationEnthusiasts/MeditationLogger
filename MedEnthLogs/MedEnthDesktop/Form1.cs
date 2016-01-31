@@ -845,6 +845,10 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         this.saveView.CommentsTextBox.Text = string.Empty;
                         this.StartButton.Text = "Start";
 
+                        // Issue 26:  Set the location checkbox back to unchecked after saving.
+                        // (location should be opt-in not opt-out).
+                        this.saveView.UseLocationCheckbox.Checked = false;
+
                         this.timesUpSound.Stop();
 
                         // Update State.
