@@ -36,6 +36,30 @@ namespace MedEnthLogsCli
         /// </summary>
         const string exeName = "MedEnthLogsCli.exe";
 
+        /// <summary>
+        /// Opens and returns the API.
+        /// </summary>
+        /// <returns></returns>
+        static Api OpenApi()
+        {
+            Api api = GetApi();
+            string dbLocation = Constants.DatabaseFolderLocation;
+
+            if ( Directory.Exists( dbLocation ) == false )
+            {
+                Directory.CreateDirectory( dbLocation );
+            }
+
+            api.Open( Path.Combine( dbLocation, Api.LogbookFileName ) );
+
+            return api;
+        }
+
+        /// <summary>
+        /// Main Function
+        /// </summary>
+        /// <param name="args">Command line arguments.</param>
+        /// <returns>0 for success, else failure.</returns>
         static int Main( string[] args )
         {
             if ( args.Length == 1 )
@@ -56,23 +80,21 @@ namespace MedEnthLogsCli
                 {
                     Console.WriteLine( MedEnthLogsApi.License.ExternalLicenses );
                 }
+                else if ( args[0] == "meditate" )
+                {
+                    return DoSession();
+                }
             }
             else if ( args.Length == 2 )
             {
                 if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = GetApi();
+                    Api api = null;
                     try
                     {
-                        string dbLocation = Constants.DatabaseFolderLocation;
-
-                        if ( Directory.Exists( dbLocation ) == false )
-                        {
-                            Directory.CreateDirectory( dbLocation );
-                        }
-                        
-                        api.Open( Path.Combine( dbLocation, Api.LogbookFileName )  );
+                        api = OpenApi();
                         api.PopulateLogbook();
+
                         switch ( args[0] )
                         {
                             case "import":
@@ -99,7 +121,7 @@ namespace MedEnthLogsCli
                     }
                     finally
                     {
-                        api.Close();
+                        api?.Close();
                     }
                 }
                 else
@@ -115,6 +137,9 @@ namespace MedEnthLogsCli
             return 0;
         }
 
+        /// <summary>
+        /// Prints the help to the command line.
+        /// </summary>
         static void PrintHelp()
         {
             Console.WriteLine( "Command Line Interface for Meditation Logger." );
@@ -127,9 +152,87 @@ namespace MedEnthLogsCli
             Console.WriteLine( "import fileName\t\tImport the given file name to the logbook." );
             Console.WriteLine( "export fileName\t\tExport the logbook to the given filename." );
             Console.WriteLine( "sync fileName.mlg\tSync the logbook with the given .mlg file" );
+            Console.WriteLine( "meditate\t\tStart a simple meditation session." );
             Console.WriteLine();
             Console.WriteLine( "Note, the filename extension determines how files are imported or exported." );
             Console.WriteLine( ".xml, .json, and .mlg are valid filetypes." );
+        }
+
+        /// <summary>
+        /// Do a simple meditation session.
+        /// </summary>
+        static int DoSession()
+        {
+            Api api = null;
+            try
+            {
+                api = OpenApi();
+
+                // Setup
+                SessionConfig config = new SessionConfig();
+                config.PlayMusic = false;
+                config.LoopMusic = false;
+                config.Length = null;
+                config.AudioFile = string.Empty;
+
+                api.timer.OnUpdate = delegate( string time ) { }; // No-op.
+
+                api.timer.OnComplete = delegate() { }; // No-op.
+
+                // Wait for the user to press enter to start the session.
+                Console.Write( "Press Enter To Begin..." );
+                Console.Out.Flush();
+                Console.ReadLine();
+                api.StartSession( config );
+
+                // Stop the session when the user tells us to.
+                Console.WriteLine();
+                Console.Write( "Happy Meditating! Press Enter when complete..." );
+                Console.Out.Flush();
+                Console.ReadLine();
+                api.StopSession();
+
+                Console.WriteLine();
+                Console.WriteLine( "Mintues Meditated: " + api.CurrentLog.Duration.TotalMinutes );
+                Console.WriteLine();
+
+                // Get information from the user.
+                Console.Write( "Enter Technique: " );
+                Console.Out.Flush();
+                string technique = Console.ReadLine();
+
+                Console.Write( "Enter Comments: " );
+                Console.Out.Flush();
+                string comments = Console.ReadLine().Replace( "  ", Environment.NewLine );
+
+                // Save the location.
+                int? choice = ConsoleHelpers.ShowListPrompt( new List<string> { "No", "Yes" }, true, "Save Location (Enter Number):" );
+
+                decimal? lat = null;
+                decimal? lon = null;
+                if ( choice.HasValue && ( choice.Value == 1 ) )
+                {
+                    api.LocationDetector.RefreshPosition();
+                    lat = api.LocationDetector.Latitude;
+                    lon = api.LocationDetector.Longitude;
+                }
+                api.ValidateAndSaveSession( technique, comments, lat, lon );
+
+                Console.WriteLine();
+                Console.WriteLine( "Session Saved, see you next time!" );
+                Console.Out.Flush();
+            }
+            catch ( Exception err )
+            {
+                Console.WriteLine( err.Message );
+                return 1;
+            }
+            finally
+            {
+                api?.Close();
+            }
+
+            return 0;
         }
     }
 }

@@ -172,6 +172,26 @@ namespace TestDesktop
             }
         }
 
+        // ---- Meditate Tests ----
+        
+        /// <summary>
+        /// Tests to make sure we can save a session with nothing extra saved.
+        /// </summary>
+        [Test]
+        public void CliMeditateTestNoCommentsOrTechnique()
+        {
+            DoMeditateProcessTest( string.Empty, string.Empty, false );
+        }
+
+        /// <summary>
+        /// Tests to make sure we can save a session with everything in it.
+        /// </summary>
+        [Test]
+        public void CliMeditateTestWithCommentsAndTechnique()
+        {
+            DoMeditateProcessTest( "A Technique", "A comment" + Environment.NewLine + "with new lines", true );
+        }
+
         // -------- Test Helpers ---------
 
         /// <summary>
@@ -212,14 +232,59 @@ namespace TestDesktop
         }
 
         /// <summary>
+        /// Does the meditation process test.
+        /// </summary>
+        /// <param name="expectedTechnique">The technique we expect.</param>
+        /// <param name="expectedComments">The comments we expect.</param>
+        /// <param name="expectLocation">Whether or not we want to save the location</param>
+        private void DoMeditateProcessTest( string expectedTechnique, string expectedComments, bool expectLocation )
+        {
+            string standardInput =
+                Environment.NewLine + // Enter to start.
+                Environment.NewLine + // Enter to end.
+                expectedTechnique + Environment.NewLine + // Add expected technique
+                expectedComments.Replace( Environment.NewLine, "  " ) + Environment.NewLine + // Add comments.
+                ( expectLocation ? "1" : "0" ) + Environment.NewLine;
+
+            Assert.AreEqual( 0, LaunchProcess( "meditate", standardInput ) );
+
+            // Open the logbook and make sure everything works.
+            try
+            {
+                this.api.Open( this.logbookLocation );
+                this.api.PopulateLogbook();
+
+                Assert.AreEqual( expectedTechnique, this.api.LogBook.Logs[0].Technique );
+                Assert.AreEqual( expectedComments, this.api.LogBook.Logs[0].Comments );
+                if ( expectLocation )
+                {
+                    Assert.IsNotNull( this.api.LogBook.Logs[0].Latitude );
+                    Assert.IsNotNull( this.api.LogBook.Logs[0].Longitude );
+                }
+                else
+                {
+                    Assert.IsNull( this.api.LogBook.Logs[0].Latitude );
+                    Assert.IsNull( this.api.LogBook.Logs[0].Longitude );
+                }
+            }
+            finally
+            {
+                this.api.Close();
+            }
+        }
+
+        /// <summary>
         /// Launches the CLI process.
         /// </summary>
         /// <param name="arguments">The arguments to pass into the program.</param>
+        /// <param name="standardInput">The input to send to the process.</param>
         /// <returns>The exit code of the process.</returns>
-        private int LaunchProcess( string arguments )
+        private int LaunchProcess( string arguments, string standardInput = null )
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.Arguments = arguments;
+            startInfo.RedirectStandardInput = ( standardInput != null );
+            startInfo.UseShellExecute = false;
 
             // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
             startInfo.FileName = "MedEnthLogsCli.exe";
@@ -227,6 +292,13 @@ namespace TestDesktop
             int exitCode = -1;
             using ( Process process = Process.Start( startInfo ) )
             {
+                if ( standardInput != null )
+                {
+                    using( StreamWriter writer = process.StandardInput )
+                    {
+                        writer.Write( standardInput );
+                    }
+                }
                 process.WaitForExit();
                 exitCode = process.ExitCode;
             }

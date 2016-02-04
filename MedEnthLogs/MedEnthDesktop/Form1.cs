@@ -269,12 +269,15 @@ namespace MedEnthLogsDesktop
                     continue;
                 }
 
+                // Replace new lines with spaces so the javascript doesn't get broken.
+                string commentString = log.Comments.Replace( "\n", @"  " );
+
                 js += @"
 var markerHTML" + log.Id + @" = '<div class = ""left"" style=""overflow: auto; color: black; "">' + 
                                 '<p><strong>" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>' + 
                                 '<p><strong>Duration:</strong> " + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" minutes</p>' + 
                                 '<p><strong>Technique:</strong> " + log.Technique + @"</p>' +
-                                '<p><strong>Comments:</strong> " + log.Comments + @"</p>';
+                                '<p><strong>Comments:</strong> " + commentString + @"</p>';
 
                 var newPopup" + log.Id + @" = L.popup({maxwidth:500}).setContent(markerHTML" + log.Id + @");
 var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude + @"]).setIcon(icon).addTo(map).bindPopup(newPopup" + log.Id + @");
