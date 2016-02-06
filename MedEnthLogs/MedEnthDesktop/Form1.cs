@@ -400,7 +400,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private async void SyncButton_Click( object sender, EventArgs e )
+        private void SyncButton_Click( object sender, EventArgs e )
         {
             HandleSyncEvent();
         }
@@ -502,7 +502,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private async void ImportButton_Click( object sender, EventArgs e )
+        private void ImportButton_Click( object sender, EventArgs e )
         {
             HandleImportEvent();
         }
@@ -606,7 +606,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private async void ExportButton_Click( object sender, EventArgs e )
+        private void ExportButton_Click( object sender, EventArgs e )
         {
             HandleExportEvent();
         }
@@ -720,7 +720,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
             }
         }
 
-        private async void StartButton_Click( object sender, EventArgs e )
+        private void StartButton_Click( object sender, EventArgs e )
         {
             GoToNextState();
         }
