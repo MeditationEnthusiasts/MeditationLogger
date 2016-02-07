@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="7FDF9164-BFA6-40B4-BECF-05B8D0E37E9D" Name="Meditation Logger" Language="1033" Version="0.2.0" Manufacturer="Meditation Enthusiasts" UpgradeCode="3816E4DB-68AA-4A70-B755-C35A0DCC9946">
+	<Product Id="B7EF0A93-A43B-4B10-A779-B18D8A9C0238" Name="Meditation Logger" Language="1033" Version="0.2.0" Manufacturer="Meditation Enthusiasts" UpgradeCode="3816E4DB-68AA-4A70-B755-C35A0DCC9946">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
         <!-- UI Stuff -->
