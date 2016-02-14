@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MedEnthDesktop;
+using MedEnthDesktop.Server;
 using MedEnthLogsApi;
 using MedEnthLogsDesktop;
 using SethCS.IO;
@@ -84,6 +85,15 @@ namespace MedEnthLogsCli
                 {
                     return DoSession();
                 }
+                else if ( args[0] == "launch_server" )
+                {
+                    int returnCode = LaunchServer( HttpServer.DefaultPort );
+                    if ( returnCode == 9 )
+                    {
+                        PrintAdminMessage( HttpServer.DefaultPort );
+                    }
+                    return returnCode;
+                }
             }
             else if ( args.Length == 2 )
             {
@@ -123,6 +133,16 @@ namespace MedEnthLogsCli
                     {
                         api?.Close();
                     }
+                }
+                else if ( args[0] == "launch_server" )
+                {
+                    Int16 port = Int16.Parse( args[1] );
+                    int code = LaunchServer( port );
+                    if ( code == 9 )
+                    {
+                        PrintAdminMessage( port );
+                    }
+                    return code;
                 }
                 else
                 {
@@ -233,6 +253,58 @@ namespace MedEnthLogsCli
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Launches the server on the given port.
+        /// </summary>
+        /// <param name="port">Port to listen on.  Defaulted to 80</param>
+        /// <returns></returns>
+        static int LaunchServer( Int16 port )
+        {
+            try
+            {
+                using (
+                    HttpServer server = new HttpServer(
+                        port,
+                        delegate ( string message )
+                        {
+                            Console.WriteLine( message );
+                        }
+                    )
+                )
+                {
+                    server.Start();
+                    Console.WriteLine( "Happy Meditating! Press Enter when complete..." );
+                    Console.Out.Flush();
+                    Console.ReadLine();
+                }
+            }
+            catch ( Exception err )
+            {
+                if ( err.Message == "Access is denied" )
+                {
+                    return 9;
+                }
+                else
+                {
+                    Console.WriteLine( err.Message );
+                    return 3;
+                }
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Prompts the user permission to get Admin Access to launch the server.
+        /// </summary>
+        static void PrintAdminMessage( int port )
+        {
+            Console.WriteLine( "Admin is needed to launch the server." );
+            Console.WriteLine( "Please relaunch the process as admin (right click->Run As Administrator)" );
+            Console.WriteLine( "Or, run the following command in an admin command prompt:" );
+            Console.WriteLine( "netsh http add urlacl url=\"http://*:{0}/\" user=everyone", port );
         }
     }
 }
