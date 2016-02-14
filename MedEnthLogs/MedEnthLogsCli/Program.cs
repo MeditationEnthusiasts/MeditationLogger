@@ -19,13 +19,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MedEnthDesktop;
 using MedEnthDesktop.Server;
 using MedEnthLogsApi;
-using MedEnthLogsDesktop;
 using SethCS.IO;
 
 namespace MedEnthLogsCli
@@ -88,7 +84,7 @@ namespace MedEnthLogsCli
                 else if ( args[0] == "launch_server" )
                 {
                     int returnCode = LaunchServer( HttpServer.DefaultPort );
-                    if ( returnCode == 9 )
+                    if ( returnCode == ErrorCodes.AdminNeeded )
                     {
                         PrintAdminMessage( HttpServer.DefaultPort );
                     }
@@ -121,13 +117,13 @@ namespace MedEnthLogsCli
 
                             default:
                                 PrintHelp();
-                                return 0;
+                                return ErrorCodes.Success;
                         }
                     }
                     catch ( Exception err )
                     {
                         Console.WriteLine( err.Message );
-                        return 1;
+                        return ErrorCodes.ApiError;
                     }
                     finally
                     {
@@ -136,13 +132,21 @@ namespace MedEnthLogsCli
                 }
                 else if ( args[0] == "launch_server" )
                 {
-                    Int16 port = Int16.Parse( args[1] );
-                    int code = LaunchServer( port );
-                    if ( code == 9 )
+                    short port;
+                    if ( short.TryParse( args[1], out port ) )
                     {
-                        PrintAdminMessage( port );
+                        int code = LaunchServer( port );
+                        if ( code == ErrorCodes.AdminNeeded )
+                        {
+                            PrintAdminMessage( port );
+                        }
+                        return code;
                     }
-                    return code;
+                    else
+                    {
+                        Console.WriteLine( args[1] + " is not an interger." );
+                        return ErrorCodes.UserError;
+                    }
                 }
                 else
                 {
@@ -154,7 +158,7 @@ namespace MedEnthLogsCli
                 PrintHelp();
             }
 
-            return 0;
+            return ErrorCodes.Success;
         }
 
         /// <summary>
@@ -245,14 +249,14 @@ namespace MedEnthLogsCli
             catch ( Exception err )
             {
                 Console.WriteLine( err.Message );
-                return 1;
+                return ErrorCodes.ApiError;
             }
             finally
             {
                 api?.Close();
             }
 
-            return 0;
+            return ErrorCodes.Success;
         }
 
         /// <summary>
@@ -260,7 +264,7 @@ namespace MedEnthLogsCli
         /// </summary>
         /// <param name="port">Port to listen on.  Defaulted to 80</param>
         /// <returns></returns>
-        static int LaunchServer( Int16 port )
+        static int LaunchServer( short port )
         {
             try
             {
@@ -284,16 +288,16 @@ namespace MedEnthLogsCli
             {
                 if ( err.Message == "Access is denied" )
                 {
-                    return 9;
+                    return ErrorCodes.AdminNeeded;
                 }
                 else
                 {
                     Console.WriteLine( err.Message );
-                    return 3;
+                    return ErrorCodes.HttpError;
                 }
             }
 
-            return 0;
+            return ErrorCodes.Success;
         }
 
         /// <summary>
