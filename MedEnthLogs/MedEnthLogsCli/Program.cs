@@ -266,10 +266,18 @@ namespace MedEnthLogsCli
         /// <returns></returns>
         static int LaunchServer( short port )
         {
+            Api api = null;
             try
             {
+                Console.WriteLine( "Opening Database..." );
+                api = OpenApi();
+                api.PopulateLogbook();
+                Console.WriteLine( "Opening Database...Done!" );
+                Console.WriteLine();
+
                 using (
                     HttpServer server = new HttpServer(
+                        api,
                         port,
                         delegate ( string message )
                         {
@@ -295,6 +303,10 @@ namespace MedEnthLogsCli
                     Console.WriteLine( err.Message );
                     return ErrorCodes.HttpError;
                 }
+            }
+            finally
+            {
+                api?.Close();
             }
 
             return ErrorCodes.Success;

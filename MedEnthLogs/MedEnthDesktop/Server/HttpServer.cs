@@ -23,6 +23,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MedEnthLogsApi;
 
 namespace MedEnthDesktop.Server
 {
@@ -33,7 +34,7 @@ namespace MedEnthDesktop.Server
         /// <summary>
         /// Default port to listen on.
         /// </summary>
-        public const Int16 DefaultPort = 80;
+        public const short DefaultPort = 80;
 
         /// <summary>
         /// Reference to http listener.
@@ -52,14 +53,22 @@ namespace MedEnthDesktop.Server
         private Thread listeningThread;
 
         /// <summary>
+        /// The api to use.
+        /// </summary>
+        private Api api;
+
+        /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="api">The API to use.</param>
         /// <param name="port">The port to lisen on.</param>
         /// <param name="consoleOutFunction">
         /// Function to print out console information to.
         /// Set to null for no action.
         /// </param>
-        public HttpServer( Int16 port = DefaultPort, Action<string> consoleOutFunction = null )
+        /// <exception cref="PlatformNotSupportedException">This platform doesn't support an HTTP Server.</exception>
+        /// <exception cref="ArgumentException">Api is not open.</exception>
+        public HttpServer( Api api, short port = DefaultPort, Action<string> consoleOutFunction = null )
         {
             if ( HttpListener.IsSupported == false )
             {
@@ -67,12 +76,19 @@ namespace MedEnthDesktop.Server
                     "This platform does not support HTTP Listeners..."
                 );
             }
-
+            if ( api.IsOpen == false )
+            {
+                throw new ArgumentException(
+                    "Api is not open. Please open it before calling this constructor...",
+                    nameof( api )
+                );
+            }
             if ( consoleOutFunction == null )
             {
                 this.cout = delegate ( string s ) { };
             }
 
+            this.api = api;
             this.cout = consoleOutFunction;
             this.listener = new HttpListener();
 
@@ -81,7 +97,7 @@ namespace MedEnthDesktop.Server
             this.listeningThread = new Thread(
                 delegate()
                 {
-                    HandleRequest( this.listener, cout );
+                    HandleRequest( this.api, this.listener, cout );
                 }
             );
         }
@@ -141,9 +157,10 @@ namespace MedEnthDesktop.Server
         /// <summary>
         /// Handles the request.
         /// </summary>
-        /// <param name="result">Async Result Object.</param>
+        /// <param name="api">The api to use.</param>
+        /// <param name="listener">Http Listener Object.</param>
         /// <param name="consoleOutFunction">The function used to print to the console.</param>
-        private static void HandleRequest( HttpListener listener, Action<string> consoleOutFunction )
+        private static void HandleRequest( Api api, HttpListener listener, Action<string> consoleOutFunction )
         {
             while ( listener.IsListening )
             {
@@ -176,9 +193,13 @@ namespace MedEnthDesktop.Server
                     // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
 
                     string responseString = string.Empty;
-                    if ( request.RawUrl == "/" )
+                    if ( ( request.RawUrl == "/" ) || ( request.RawUrl == "/index.html" ) )
                     {
-                        responseString = GetHomePageHtml();
+                        responseString = GetHomePageHtml( api );
+                    }
+                    else if ( request.RawUrl == "/about.html" )
+                    {
+                        responseString = GetAboutPage();
                     }
                     else
                     {
@@ -201,23 +222,121 @@ namespace MedEnthDesktop.Server
             }
         }
 
+        // ---- HTML Functions ----
+
+        /// <summary>
+        /// Gets the header of the html file.
+        /// </summary>
+        /// <param name="title">The title to name the page.</param>
+        /// <param name="backgroundColor">The background color of the page.</param>
+        /// <returns>The HTML header.</returns>
+        private static string GetHeader( string title, string backgroundColor )
+        {
+            return
+                @"
+<!doctype html>
+<head>
+    <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
+    <title>" + title + @"</title>
+    <style>
+        body
+        {
+            background-color:" + backgroundColor + @"
+        }
+    </style>
+</head>
+<body>
+";
+        }
+
+        /// <summary>
+        /// Gets the footer of the html file.
+        /// </summary>
+        /// <returns>The HTML footer.</returns>
+        private static string GetFooter()
+        {
+            return
+@"
+</body>
+</html>
+";
+        }
+
         /// <summary>
         /// Get the home page's html to display.
         /// </summary>
         /// <returns>HTML for the home page in a string.</returns>
-        private static string GetHomePageHtml()
+        private static string GetHomePageHtml( Api api )
         {
+            string latestSesssionString = string.Empty;
+            if ( api.LogBook.Logs.Count == 0 )
+            {
+                latestSesssionString = "Nothing yet.";
+            }
+            else
+            {
+                latestSesssionString = api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
+            }
+
             return
-            @"
-                <!doctype html>
-                <head>
-                    <title>Meditation Enthusiasts</title>
-                </head>
-                <body>
-                    <h1>Home Page</h1>
-                </body>
-                </html>
-            ";
+                GetHeader( "Meditation Enthusiasts Logger", "#ffaaaa" ) +
+@"
+    <h1>Meditation Logger</h1>
+    <table>
+        <tr>
+            <td><strong>Total Minutes:</strong></td>
+            <td>" + api.LogBook.TotalTime.ToString( "N2" ) + @"</td>
+        </tr>
+        <tr>
+            <td><strong>Longest Session:</strong></td>
+            <td>" + api.LogBook.LongestTime.ToString( "N2" ) + @"</td>
+        </tr>
+        <tr>
+            <td><strong>Total Sessions:</strong></td>
+            <td>" + api.LogBook.Logs.Count + @"</td>
+        </tr>
+        <tr>
+            <td><strong>Last Session:</strong></td>
+            <td>" + latestSesssionString + @"</td>
+        </tr>
+    </table>
+" +
+                GetFooter();
+        }
+
+        /// <summary>
+        /// Gets the about page.
+        /// </summary>
+        /// <returns>HTML for the about page.</returns>
+        private static string GetAboutPage()
+        {
+            return GetHeader( "About Meditation Logger", "#00ffff" ) + @"
+
+    <h1>Meditation Logger</h1>
+    <table>
+        <tr>
+            <td><strong>Version:</strong></td>
+            <td>" + Api.VersionString + @"</td>
+        </tr>
+        <tr>
+            <td><strong>Visit Site:</strong></td>
+            <td><a href=""https://meditationenthusiasts.org"" target=""_blank"">https://meditationenthusiasts.org</a></td>
+        </tr>
+        <tr>
+            <td><strong>Report a Bug:</strong></td>
+            <td><a href=""https://meditationenthusiasts.org/development/mantis/"" target=""_blank"">https://meditationenthusiasts.org/development/mantis/</a></td>
+        </tr>
+        <tr>
+            <td><strong>View Wiki:</strong></td>
+            <td><a href=""https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start"" target=""_blank"">https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start</a></td>
+        </tr>
+        <tr>
+            <td><strong>View Source:</strong></td>
+            <td><a href=""https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src"" target=""_blank"">https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src</a></td>
+        </tr>
+    </table>
+"
+            + GetFooter();
         }
 
         /// <summary>
@@ -227,16 +346,16 @@ namespace MedEnthDesktop.Server
         private static string Get404Html()
         {
             return
-            @"
-                <!doctype html>
-                <head>
-                    <title>Meditation Enthusiasts</title>
-                </head>
-                <body>
-                    <h1>404 Not Found</h1>
-                </body>
-                </html>
-            ";
+@"
+    <!doctype html>
+    <head>
+        <title>Meditation Enthusiasts</title>
+    </head>
+    <body>
+        <h1>404 Not Found</h1>
+    </body>
+    </html>
+";
         }
     }
 }

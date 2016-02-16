@@ -133,6 +133,18 @@ namespace MedEnthLogsApi
         public ITimer timer { get; private set; }
 
         /// <summary>
+        /// Whether or not the sqlite connection is open.
+        /// </summary>
+        public bool IsOpen
+        {
+            get
+            {
+                // If sqlite is not null, then we are open.
+                return this.sqlite != null;
+            }
+        }
+
+        /// <summary>
         /// The current log being written to.
         /// Readonly property.
         /// </summary>
