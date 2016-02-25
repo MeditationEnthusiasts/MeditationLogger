@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Meditation Enthusiasts Logger</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link type="text/css" rel="stylesheet" href="css/MeditationLogger.css" media="screen" />
+    <style>
+        body
+        {
+            background-color: #ffaaaa;
+        }
+    </style>
+</head>
+<body>
+    <div id="navBar">
+        <div id="current">Home</div>
+        <a href="meditate.html"><div class="navBarPiece">Meditate!</div></a>
+        <a href="logbook.html"><div class="navBarPiece">View Logbook</div></a>
+        <a href="map.html"><div class="navBarPiece">View Map</div></a>
+        <a href="about.html"><div class="navBarPiece">About</div></a>
+    </div>
+    <div id="main">
+        <h1>Remote Meditation Logger</h1>
+        <h2>Overview:</h2>
+        <table cellspacing="0" cellpadding="4px" border="2px">
+            <tr>
+                <td><strong>Total Minutes:</strong></td>
+                <td>{%TotalMinutes%}</td>
+            </tr>
+            <tr>
+                <td><strong>Longest Session:</strong></td>
+                <td>{%LongestSession%}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Sessions:</strong></td>
+                <td>{%TotalSessions%}</td>
+            </tr>
+            <tr>
+                <td><strong>Last Session:</strong></td>
+                <td>{%LatestSession%}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

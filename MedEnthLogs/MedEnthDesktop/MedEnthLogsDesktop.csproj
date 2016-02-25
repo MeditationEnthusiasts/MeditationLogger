@@ -189,7 +189,16 @@
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="html\about.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\css\leaflet.css" />
+    <Content Include="html\css\MeditationLogger.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\js\leaflet.js" />
     <Content Include="media\homeLogo.png" />
     <Content Include="media\mainlogo.ico" />

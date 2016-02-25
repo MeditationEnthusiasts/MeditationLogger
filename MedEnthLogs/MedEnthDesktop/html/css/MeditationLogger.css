@@ -1,0 +1,66 @@
+﻿/* Nav Bar Stuff */
+
+#navBar
+{
+    float: left;
+    clear: both;
+    font-size: 120%;
+    margin-left: 3em;
+    min-width: 1000px;
+    margin-bottom: 2em;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    font-weight: bold;
+    background-color: #000033;
+}
+
+.navBarPiece
+{
+    background-color: #000033;
+    float:left;
+    padding: 1em;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    color: white;
+    font-size: 107%;
+}
+
+.navBarPiece:hover
+{
+    background-color: blue;
+}
+
+#current
+{
+    color: black;
+    background: red;
+    float:left;
+    padding: 1em;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    font-size: 107%;
+}
+
+#main
+{
+    background-color: white;
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-bottom: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 2em;
+    max-width: 1100px;
+    font-size: 120%;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    line-height: 2em;
+    float: left;
+    clear: both;
+    min-width: 800px;
+}

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -201,15 +202,40 @@ namespace MedEnthDesktop.Server
                     {
                         responseString = GetAboutPage();
                     }
+                    else if ( request.RawUrl == "/css/MeditationLogger.css" )
+                    {
+                        responseString = GetCss();
+                    }
+                    else if ( request.RawUrl == "/export/logbook.xml" )
+                    {
+                        XmlExporter.ExportToXml( response.OutputStream, api.LogBook );
+                    }
+                    else if (request.RawUrl == "/export/logbook.json")
+                    {
+                        JsonExporter.ExportJson( response.OutputStream, api.LogBook );
+                    }
                     else
                     {
                         responseString = Get404Html();
                         response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
                     }
 
-                    byte[] buffer = Encoding.UTF8.GetBytes( responseString );
+                    // Only send response if our string is not empty
+                    // (Possible for ExportToXml or ExportJson got called and didn't
+                    // add the response string).
+                    if ( responseString.Length > 0 )
+                    {
+                        byte[] buffer = Encoding.UTF8.GetBytes( responseString );
+                        response.ContentLength64 = buffer.Length;
+                        response.OutputStream.Write( buffer, 0, buffer.Length );
+                    }
+                }
+                catch ( Exception e )
+                {
+                    byte[] buffer = Encoding.UTF8.GetBytes( GetErrorHtml( e ) );
                     response.ContentLength64 = buffer.Length;
                     response.OutputStream.Write( buffer, 0, buffer.Length );
+                    response.StatusCode = Convert.ToInt32( HttpStatusCode.InternalServerError );
                 }
                 finally
                 {
@@ -225,41 +251,48 @@ namespace MedEnthDesktop.Server
         // ---- HTML Functions ----
 
         /// <summary>
-        /// Gets the header of the html file.
+        /// Gets the internal server error html.
         /// </summary>
-        /// <param name="title">The title to name the page.</param>
-        /// <param name="backgroundColor">The background color of the page.</param>
-        /// <returns>The HTML header.</returns>
-        private static string GetHeader( string title, string backgroundColor )
+        /// <param name="e">Exception caught.</param>
+        /// <returns>The internal server error html.</returns>
+        private static string GetErrorHtml( Exception e )
         {
-            return
-                @"
-<!doctype html>
+            string html =
+@"<!DOCTYPE html>
+<html>
 <head>
-    <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
-    <title>" + title + @"</title>
-    <style>
-        body
-        {
-            background-color:" + backgroundColor + @"
-        }
-    </style>
+    <title>Meditation Enthusiasts Logger</title>
+    <meta http-equiv=""content - type"" content=""text / html; charset = utf - 8"" />
 </head>
 <body>
+    <h1>500: Internal System Error</h1>
+    <h2>Error:</h2>
 ";
-        }
+            using ( StringReader reader = new StringReader( e.Message ) )
+            {
+                string line;
+                while ( ( line = reader.ReadLine() ) != null )
+                {
+                    html += "<p>" + line + "</p>" + Environment.NewLine;
+                }
+            }
 
-        /// <summary>
-        /// Gets the footer of the html file.
-        /// </summary>
-        /// <returns>The HTML footer.</returns>
-        private static string GetFooter()
-        {
-            return
-@"
+            html += "<h2>Stack Trace:</h2>" + Environment.NewLine;
+
+            using ( StringReader reader = new StringReader( e.StackTrace ) )
+            {
+                string line;
+                while ( ( line = reader.ReadLine() ) != null )
+                {
+                    html += "<p>" + line + "</p>" + Environment.NewLine;
+                }
+            }
+
+            html += @"
 </body>
 </html>
 ";
+            return html;
         }
 
         /// <summary>
@@ -268,6 +301,17 @@ namespace MedEnthDesktop.Server
         /// <returns>HTML for the home page in a string.</returns>
         private static string GetHomePageHtml( Api api )
         {
+            string indexHtmlPath = Path.Combine( "html", "index.html" );
+            string html = string.Empty;
+            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            html = html.Replace( "{%TotalMinutes%}", api.LogBook.TotalTime.ToString( "N2" ) );
+            html = html.Replace( "{%LongestSession%}", api.LogBook.LongestTime.ToString( "N2" ) );
+            html = html.Replace( "{%TotalSessions%}", api.LogBook.Logs.Count.ToString() );
+
             string latestSesssionString = string.Empty;
             if ( api.LogBook.Logs.Count == 0 )
             {
@@ -278,65 +322,27 @@ namespace MedEnthDesktop.Server
                 latestSesssionString = api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
             }
 
-            return
-                GetHeader( "Meditation Enthusiasts Logger", "#ffaaaa" ) +
-@"
-    <h1>Meditation Logger</h1>
-    <table>
-        <tr>
-            <td><strong>Total Minutes:</strong></td>
-            <td>" + api.LogBook.TotalTime.ToString( "N2" ) + @"</td>
-        </tr>
-        <tr>
-            <td><strong>Longest Session:</strong></td>
-            <td>" + api.LogBook.LongestTime.ToString( "N2" ) + @"</td>
-        </tr>
-        <tr>
-            <td><strong>Total Sessions:</strong></td>
-            <td>" + api.LogBook.Logs.Count + @"</td>
-        </tr>
-        <tr>
-            <td><strong>Last Session:</strong></td>
-            <td>" + latestSesssionString + @"</td>
-        </tr>
-    </table>
-" +
-                GetFooter();
+            html = html.Replace( "{%LatestSession%}", latestSesssionString );
+
+            return html;
         }
 
         /// <summary>
-        /// Gets the about page.
+        /// Gets the about page HTML.
         /// </summary>
-        /// <returns>HTML for the about page.</returns>
+        /// <returns>The HTML for the about page.</returns>
         private static string GetAboutPage()
         {
-            return GetHeader( "About Meditation Logger", "#00ffff" ) + @"
+            string indexHtmlPath = Path.Combine( "html", "about.html" );
+            string html = string.Empty;
+            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
 
-    <h1>Meditation Logger</h1>
-    <table>
-        <tr>
-            <td><strong>Version:</strong></td>
-            <td>" + Api.VersionString + @"</td>
-        </tr>
-        <tr>
-            <td><strong>Visit Site:</strong></td>
-            <td><a href=""https://meditationenthusiasts.org"" target=""_blank"">https://meditationenthusiasts.org</a></td>
-        </tr>
-        <tr>
-            <td><strong>Report a Bug:</strong></td>
-            <td><a href=""https://meditationenthusiasts.org/development/mantis/"" target=""_blank"">https://meditationenthusiasts.org/development/mantis/</a></td>
-        </tr>
-        <tr>
-            <td><strong>View Wiki:</strong></td>
-            <td><a href=""https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start"" target=""_blank"">https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start</a></td>
-        </tr>
-        <tr>
-            <td><strong>View Source:</strong></td>
-            <td><a href=""https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src"" target=""_blank"">https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src</a></td>
-        </tr>
-    </table>
-"
-            + GetFooter();
+            html = html.Replace( "{%VersionString%}", Api.VersionString );
+
+            return html;
         }
 
         /// <summary>
@@ -347,15 +353,39 @@ namespace MedEnthDesktop.Server
         {
             return
 @"
-    <!doctype html>
-    <head>
-        <title>Meditation Enthusiasts</title>
-    </head>
-    <body>
+<!doctype html>
+<head>
+    <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
+    <title>Meditation Logger.  Not Found.</title>
+    <style>
+        body
+        {
+            background-color:ffffff
+        }
+    </style>
+</head>
+<body>
+
         <h1>404 Not Found</h1>
-    </body>
-    </html>
+
+</body>
+</html>
 ";
+        }
+
+        /// <summary>
+        /// Gets the CSS file.
+        /// </summary>
+        /// <returns>The CSS string.</returns>
+        private static string GetCss()
+        {
+            string indexHtmlPath = Path.Combine( "html", "css", "MeditationLogger.css" );
+            string css = string.Empty;
+            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            {
+                css = inFile.ReadToEnd();
+            }
+            return css;
         }
     }
 }
