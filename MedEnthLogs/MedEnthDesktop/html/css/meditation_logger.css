@@ -16,7 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* Nav Bar Stuff */
+/* -------- Nav Bar Stuff -------- */
 
 #navBar
 {
@@ -24,24 +24,22 @@
     clear: both;
     font-size: 120%;
     margin-left: 3em;
-    min-width: 1000px;
+    min-width: 750px;
     margin-bottom: 2em;
     border: 5px;
     border-color: black;
     border-style: solid;
     font-weight: bold;
-    background-color: #000033;
+    background-color: white;
 }
 
 .navBarPiece
 {
-    background-color: #000033;
     float:left;
     padding: 1em;
     border: 5px;
     border-color: black;
     border-style: solid;
-    color: white;
     font-size: 107%;
 }
 
@@ -50,16 +48,42 @@
     background-color: blue;
 }
 
+/* ---- Nav Bar Pieces ----*/
+
 #current
 {
     color: black;
-    background: red;
-    float:left;
-    padding: 1em;
-    border: 5px;
-    border-color: black;
-    border-style: solid;
-    font-size: 107%;
+    background: white;
+}
+
+#homeButton
+{
+    background-color: #FFaaaa;
+}
+
+#meditateButton
+{
+    background-color: #FFE0C0;
+}
+
+#logbookButton
+{
+    background-color: #FFFFC0;
+}
+
+#mapButton
+{
+    background-color: #E0ff88;
+}
+
+#exportButton
+{
+    background-color: #C0FFC0;
+}
+
+#aboutButton
+{
+    background-color: #C0FFFF
 }
 
 #main
@@ -80,5 +104,5 @@
     line-height: 2em;
     float: left;
     clear: both;
-    min-width: 800px;
+    min-width: 750px;
 }

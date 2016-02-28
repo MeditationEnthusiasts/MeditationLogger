@@ -1,0 +1,85 @@
+﻿<!--
+ Meditation Logger.
+ Copyright (C) 2015-2016  Seth Hendrick.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meditation Enthusiasts Logger</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link type="text/css" rel="stylesheet" href="css/meditation_logger.css" media="screen" />
+    <style>
+        {%leaflet_css%}
+
+        body
+        {
+            background-color: #E0ff88;
+        }
+
+    </style>
+    <script type="text/javascript">
+        {%leaflet_js%}
+
+        window.onload=function()
+        {
+            // Create Map
+            var map = L.map( 'map' ).setView([51.505, -0.09], 13);
+
+            // Pull from the OSM API
+            var osmURL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+            // In order to use open street map, we need to attribute to it.
+            var osmAttrib = 'Map Data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+            // Create the OSM layer.
+            var osm = new L.TileLayer( osmURL, { minZoom: 0, maxZoom: 18, attribution: osmAttrib});
+
+            // Set the map to start at RIT at zoom level 3.
+            map.setView(new L.LatLng(43.085, -77.678419), 3);
+
+            // Add the osm layer to the map
+            map.addLayer(osm);
+
+            // Create the icon.
+            var icon = L.icon({
+                iconUrl: "media/marker-icon.png",
+                iconSize: [25, 41],
+                iconAnchor:[12.5, 41],
+                popupAnchor:[0, -30]
+            });
+
+            // Insert the data.
+            {%leaflet_data%}
+        }
+    </script>
+</head>
+<body>
+    <div id="navBar">
+        <a href="index.html"><div class="navBarPiece" id="homeButton">Home</div></a>
+        <a href="meditate.html"><div class="navBarPiece" id="meditateButton">Meditate!</div></a>
+        <a href="logbook.html"><div class="navBarPiece" id="logbookButton">View Logbook</div></a>
+        <div class="navBarPiece" id="current">View Map</div>
+        <a href="export.html"><div class="navBarPiece" id="exportButton">Export</div></a>
+        <a href="about.html"><div class="navBarPiece" id="aboutButton">About</div></a>
+</div>
+    <div id="main">
+        <noscript><p>Javascript is required... Sorry :(</p></noscript>
+        <div class="center" id="map" style="height:500px; width:1000px">
+        </div>
+    </div>
+</body>
+</html>

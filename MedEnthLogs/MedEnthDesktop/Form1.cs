@@ -229,7 +229,7 @@ namespace MedEnthLogsDesktop
             // Create the OSM layer.
             var osm = new L.TileLayer( osmURL, { minZoom: 0, maxZoom: 18, attribution: osmAttrib});
 
-            // Set the map to start at RIT at zoom level 15.
+            // Set the map to start at RIT at zoom level 3.
             map.setView(new L.LatLng(43.085, -77.678419), 3);
 
             // Add the osm layer to the map
@@ -254,38 +254,6 @@ namespace MedEnthLogsDesktop
     <div class=""center"" id=""map""/>
 </body>
 </html>";
-
-        /// <summary>
-        /// Gets the html of all the log's locations.
-        /// </summary>
-        /// <returns></returns>
-        private string GetPositionHtml()
-        {
-            string js = string.Empty;
-            foreach ( ILog log in this.api.LogBook.Logs )
-            {
-                if ( ( log.Latitude == null ) || ( log.Longitude == null ) )
-                {
-                    continue;
-                }
-
-                // Replace new lines with spaces so the javascript doesn't get broken.
-                string commentString = log.Comments.Replace( "\n", @"  " );
-
-                js += @"
-var markerHTML" + log.Id + @" = '<div class = ""left"" style=""overflow: auto; color: black; "">' + 
-                                '<p><strong>" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>' + 
-                                '<p><strong>Duration:</strong> " + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" minutes</p>' + 
-                                '<p><strong>Technique:</strong> " + log.Technique + @"</p>' +
-                                '<p><strong>Comments:</strong> " + commentString + @"</p>';
-
-                var newPopup" + log.Id + @" = L.popup({maxwidth:500}).setContent(markerHTML" + log.Id + @");
-var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude + @"]).setIcon(icon).addTo(map).bindPopup(newPopup" + log.Id + @");
-";
-            }
-
-            return js;
-        }
 
         /// <summary>
         /// Reloads the logs from memory in a different thread.
@@ -348,7 +316,7 @@ var newMarker" + log.Id + @" = L.marker([" + log.Latitude + ", " + log.Longitude
                         new LogView( log )
                     );
                 }
-                this.MapViewBrowser.DocumentText = mapHtmlStart + GetPositionHtml() + mapHtmlEnd;
+                this.MapViewBrowser.DocumentText = mapHtmlStart + LeafletJS.GetMarkerHtml( this.api ) + mapHtmlEnd;
                 this.TotalMinutesValueLabel.Text = this.api.LogBook.TotalTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
                 this.LongestSessionValueLabel.Text = this.api.LogBook.LongestTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
                 this.TotalSessionsValueLabel.Text = this.api.LogBook.Logs.Count.ToString() + " Sessions.";

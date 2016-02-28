@@ -193,13 +193,19 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="html\css\leaflet.css" />
-    <Content Include="html\css\MeditationLogger.css">
+    <Content Include="html\css\meditation_logger.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="html\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="html\export.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\js\leaflet.js" />
+    <Content Include="html\map.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="media\homeLogo.png" />
     <Content Include="media\mainlogo.ico" />
     <Content Include="media\marker-icon.png">

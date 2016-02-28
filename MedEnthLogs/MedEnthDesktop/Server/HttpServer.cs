@@ -194,23 +194,36 @@ namespace MedEnthDesktop.Server
                     // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
 
                     string responseString = string.Empty;
-                    if ( ( request.RawUrl == "/" ) || ( request.RawUrl == "/index.html" ) )
+                    string url = request.RawUrl.ToLower();
+                    if ( ( url == "/" ) || ( url == "/index.html" ) )
                     {
                         responseString = GetHomePageHtml( api );
                     }
-                    else if ( request.RawUrl == "/about.html" )
+                    else if ( url == "/about.html" )
                     {
                         responseString = GetAboutPage();
                     }
-                    else if ( request.RawUrl == "/css/MeditationLogger.css" )
+                    else if ( url == "/css/meditation_logger.css" )
                     {
                         responseString = GetCss();
                     }
-                    else if ( request.RawUrl == "/export/logbook.xml" )
+                    else if ( url == "/map.html" )
+                    {
+                        responseString = GetMapHtml( api );
+                    }
+                    else if ( url == "/media/marker-icon.png" )
+                    {
+                        GetMarkerImage( response.OutputStream );
+                    }
+                    else if ( url == "/export.html" )
+                    {
+                        responseString = GetExportPage();
+                    }
+                    else if ( url == "/export/logbook.xml" )
                     {
                         XmlExporter.ExportToXml( response.OutputStream, api.LogBook );
                     }
-                    else if (request.RawUrl == "/export/logbook.json")
+                    else if ( url == "/export/logbook.json" )
                     {
                         JsonExporter.ExportJson( response.OutputStream, api.LogBook );
                     }
@@ -221,7 +234,7 @@ namespace MedEnthDesktop.Server
                     }
 
                     // Only send response if our string is not empty
-                    // (Possible for ExportToXml or ExportJson got called and didn't
+                    // (Possible for an image, ExportToXml or ExportJson got called and didn't
                     // add the response string).
                     if ( responseString.Length > 0 )
                     {
@@ -262,7 +275,7 @@ namespace MedEnthDesktop.Server
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    <meta http-equiv=""content - type"" content=""text / html; charset = utf - 8"" />
+    <meta http-equiv=""content-type"" content=""text/html; charset = utf-8"" />
 </head>
 <body>
     <h1>500: Internal System Error</h1>
@@ -328,6 +341,62 @@ namespace MedEnthDesktop.Server
         }
 
         /// <summary>
+        /// Gets the map view HTML.
+        /// </summary>
+        /// <param name="api">The API object.</param>
+        /// <returns>The html of the map page.</returns>
+        private static string GetMapHtml( Api api )
+        {
+            string mapPath = Path.Combine( "html", "map.html" );
+            string html = string.Empty;
+            using ( StreamReader inFile = new StreamReader( mapPath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            html = html.Replace( "{%leaflet_css%}", LeafletJS.CSS );
+            html = html.Replace( "{%leaflet_js%}", LeafletJS.JavaScript );
+            html = html.Replace( "{%leaflet_data%}", LeafletJS.GetMarkerHtml( api ) );
+
+            return html;
+        }
+
+        /// <summary>
+        /// Gets the text of the marker image.
+        /// </summary>
+        /// <param name="stream">The http response stream to write the image to.</param>
+        private static void GetMarkerImage( Stream stream )
+        {
+            string markerPath = Path.Combine( "media", "marker-icon.png" );
+            using ( FileStream inFile = new FileStream( markerPath, FileMode.Open, FileAccess.Read ) )
+            {
+                using ( BinaryReader br = new BinaryReader( inFile ) )
+                {
+                    while ( br.BaseStream.Position < br.BaseStream.Length )
+                    {
+                        stream.WriteByte( br.ReadByte() );
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the export page HTML.
+        /// </summary>
+        /// <returns>The HTML for the export page.</returns>
+        private static string GetExportPage()
+        {
+            string exportPath = Path.Combine( "html", "export.html" );
+            string html = string.Empty;
+            using ( StreamReader inFile = new StreamReader( exportPath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            return html;
+        }
+
+        /// <summary>
         /// Gets the about page HTML.
         /// </summary>
         /// <returns>The HTML for the about page.</returns>
@@ -379,7 +448,7 @@ namespace MedEnthDesktop.Server
         /// <returns>The CSS string.</returns>
         private static string GetCss()
         {
-            string indexHtmlPath = Path.Combine( "html", "css", "MeditationLogger.css" );
+            string indexHtmlPath = Path.Combine( "html", "css", "meditation_logger.css" );
             string css = string.Empty;
             using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
             {
