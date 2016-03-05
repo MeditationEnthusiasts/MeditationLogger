@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -199,6 +200,10 @@ namespace MedEnthDesktop.Server
                     {
                         responseString = GetHomePageHtml( api );
                     }
+                    else if ( url == "/logbook.html" )
+                    {
+                        responseString = GetLogbookHtml( api );
+                    }
                     else if ( url == "/about.html" )
                     {
                         responseString = GetAboutPage();
@@ -311,6 +316,7 @@ namespace MedEnthDesktop.Server
         /// <summary>
         /// Get the home page's html to display.
         /// </summary>
+        /// <param name="api">Reference to an API object.</param>
         /// <returns>HTML for the home page in a string.</returns>
         private static string GetHomePageHtml( Api api )
         {
@@ -336,6 +342,61 @@ namespace MedEnthDesktop.Server
             }
 
             html = html.Replace( "{%LatestSession%}", latestSesssionString );
+
+            return html;
+        }
+
+        /// <summary>
+        /// Gets the logbook page's html to display.
+        /// </summary>
+        /// <param name="api">Reference to an API object.</param>
+        /// <returns>HTML for the home page in a string.</returns>
+        private static string GetLogbookHtml( Api api )
+        {
+            string mapPath = Path.Combine( "html", "logbook.html" );
+            string html = string.Empty;
+            using ( StreamReader inFile = new StreamReader( mapPath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            string logHtml = string.Empty;
+            if ( api.LogBook.Logs.Count == 0 )
+            {
+                logHtml = "<p>No Sessions Yet.</p>";
+            }
+            else
+            {
+                foreach ( ILog log in api.LogBook.Logs )
+                {
+                    logHtml +=
+@"
+        <div class=""logbookEntry"">
+            <p><strong>" + log.StartTime.ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>
+            <table cellspacing=""0"" cellpadding=""5px"">
+                <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>" + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" minutes</td>
+                </tr>
+                <tr>
+                    <td><strong>Technique:</strong></td>
+                    <td>" + log.Technique + @"</td>
+                </tr>
+                <tr>
+                    <td><strong>Comments:</strong></td>
+                </tr>
+            </table>
+            <div>
+                <blockquote>
+                    " + log.Comments + @"
+                </blockquote>
+            </div>
+        </div>
+";
+                }
+            }
+
+            html = html.Replace( "{%LogbookTable%}", logHtml );
 
             return html;
         }

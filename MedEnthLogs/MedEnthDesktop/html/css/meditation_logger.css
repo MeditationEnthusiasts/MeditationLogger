@@ -16,6 +16,16 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* ------- Logbook Stuff -------- */
+.logbookEntry
+{
+    border:3px;
+    border-color: black;
+    border-style: solid;
+    margin: 5px;
+    padding: 10px;
+}
+
 /* -------- Nav Bar Stuff -------- */
 
 #navBar
