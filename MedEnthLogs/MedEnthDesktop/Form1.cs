@@ -34,13 +34,6 @@ namespace MedEnthLogsDesktop
 {
     public partial class HomePage : Form
     {
-        enum StartState
-        {
-            Idle,    // No activity is happeneing.
-            Start,   // The activity has started.
-            End      // The activity has ended, but not been saved yet.
-        }
-
         // ------- Fields --------
 
         /// <summary>
@@ -49,11 +42,6 @@ namespace MedEnthLogsDesktop
         private MedEnthLogsApi.Api api;
 
         List<LogView> logViews;
-
-        /// <summary>
-        /// Current state of the start panel.
-        /// </summary>
-        StartState currentState;
 
         /// <summary>
         /// Where the execution direcotry is.
@@ -111,7 +99,6 @@ namespace MedEnthLogsDesktop
                 };
 
             this.api = api;
-            this.currentState = StartState.Idle;
 
             // Setup Option View
             this.optionView = new OptionsView();
@@ -130,7 +117,7 @@ namespace MedEnthLogsDesktop
             this.api.timer.OnComplete =
                 delegate ()
                 {
-                    if ( this.currentState == StartState.Start )
+                    if ( this.api.CurrentState == Api.ApiState.Started )
                     {
                         this.timesUpSound.Play( exeDirectory + "/media/temple_bell.wav" );
                         GoToNextState();
@@ -668,19 +655,19 @@ namespace MedEnthLogsDesktop
 
         private void StartTab_Enter( object sender, EventArgs e )
         {
-            switch ( this.currentState )
+            switch ( this.api.CurrentState )
             {
-                case StartState.Idle:
+                case Api.ApiState.Idle:
                     this.optionView.Visible = true;
                     this.meditateView.Visible = false;
                     this.saveView.Visible = false;
                     break;
-                case StartState.Start:
+                case Api.ApiState.Started:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = true;
                     this.saveView.Visible = false;
                     break;
-                case StartState.End:
+                case Api.ApiState.Stopped:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = false;
                     this.saveView.Visible = true;
@@ -697,9 +684,9 @@ namespace MedEnthLogsDesktop
         {
             try
             {
-                switch ( this.currentState )
+                switch ( this.api.CurrentState )
                 {
-                    case StartState.Idle:
+                    case Api.ApiState.Idle:
                         // API calls
                         SessionConfig config = new SessionConfig();
                         if ( this.optionView.EnableTimerCheckbox.Checked )
@@ -748,11 +735,9 @@ namespace MedEnthLogsDesktop
                         this.StartTableLayout.BackColor = this.meditateView.BackColor;
                         this.saveView.Visible = false;
                         this.StartButton.Text = "Finish";
-
-                        // Update State
-                        this.currentState = StartState.Start;
                         break;
-                    case StartState.Start:
+
+                    case Api.ApiState.Started:
                         // API Calls
                         this.api.StopSession();
 
@@ -765,11 +750,9 @@ namespace MedEnthLogsDesktop
                         this.StartButton.Text = "Save";
 
                         this.StartTableLayout.BackColor = originalColor;
-
-                        // Update State
-                        this.currentState = StartState.End;
                         break;
-                    case StartState.End:
+
+                    case Api.ApiState.Stopped:
                         // API Calls
                         decimal? latitude = null;
                         decimal? longitude = null;
@@ -790,8 +773,6 @@ namespace MedEnthLogsDesktop
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error
                                 );
-
-                                // Do not change states.
                                 break;
                             }
                         }
@@ -821,25 +802,21 @@ namespace MedEnthLogsDesktop
                         this.saveView.UseLocationCheckbox.Checked = false;
 
                         this.timesUpSound.Stop();
-
-                        // Update State.
-                        this.currentState = StartState.Idle;
                         break;
                 }
             }
             catch ( Exception err )
             {
                 string errorStr = "Error when ";
-                switch ( this.currentState )
+                switch ( this.api.CurrentState )
                 {
-                    case StartState.Idle:
+                    case Api.ApiState.Idle:
                         errorStr = errorStr + "starting the session.";
                         break;
-                    case StartState.Start:
+                    case Api.ApiState.Started:
                         errorStr = errorStr + "ending the session.";
-                        this.currentState = StartState.End;
                         break;
-                    case StartState.End:
+                    case Api.ApiState.Stopped:
                         errorStr = errorStr + "saving the session.";
                         break;
                 }

@@ -34,6 +34,28 @@ namespace MedEnthLogsApi
     /// </summary>
     public class Api
     {
+        /// <summary>
+        /// The current state of the API.  Whether a session is in progress or not.
+        /// </summary>
+        public enum ApiState
+        {
+            /// <summary>
+            /// No session is happening.  This can happen when the app first starts up or
+            /// a user just saved a session.
+            /// </summary>
+            Idle,
+
+            /// <summary>
+            /// The session has started.
+            /// </summary>
+            Started,
+
+            /// <summary>
+            /// The session has ended, but has not been saved yet.
+            /// </summary>
+            Stopped
+        }
+
         // -------- Fields --------
 
         /// <summary>
@@ -106,21 +128,20 @@ namespace MedEnthLogsApi
             this.LocationDetector = locationDetector;
             this.timer = timer;
             this.musicManager = musicManager;
-            ResetCurrentLog();
+            ResetStates();
         }
 
         // -------- Properties --------
 
         /// <summary>
+        /// The current state of the API.  Whether a session is currently in progress or not.
+        /// </summary>
+        public ApiState CurrentState { get; private set; }
+
+        /// <summary>
         /// Reference to the Logbook used.
         /// </summary>
         public LogBook LogBook { get; private set; }
-
-        /// <summary>
-        /// Whether or not a session is in Progress.
-        /// That is, start has been called, but stop has not.
-        /// </summary>
-        public bool IsSessionInProgress { get; private set; }
 
         /// <summary>
         /// Class that detects the location.
@@ -177,11 +198,12 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
-        /// Resets the current log to default values.
+        /// Resets this class to the idle state.
         /// </summary>
-        public void ResetCurrentLog()
+        public void ResetStates()
         {
             this.currentLog = new Log();
+            this.CurrentState = ApiState.Idle;
         }
 
         /// <summary>
@@ -243,7 +265,7 @@ namespace MedEnthLogsApi
 
             try
             {
-                if ( this.IsSessionInProgress == false )
+                if ( this.CurrentState == ApiState.Idle )
                 {
                     this.currentLog = new Log();
                     this.currentLog.StartTime = DateTime.UtcNow;
@@ -259,7 +281,10 @@ namespace MedEnthLogsApi
                             this.musicManager.OnStop =
                                 delegate ()
                                 {
-                                    if ( this.IsSessionInProgress )
+                                    // If our state is still in the started state, and we want
+                                    // to loop the music, stop the current music in progress, then
+                                    // restart it.
+                                    if ( this.CurrentState == ApiState.Started )
                                     {
                                         this.musicManager.Stop();
                                         this.musicManager.Play( config.AudioFile );
@@ -275,7 +300,7 @@ namespace MedEnthLogsApi
                     }
                     this.timer.StartTimer( length );
 
-                    this.IsSessionInProgress = true;
+                    this.CurrentState = ApiState.Started;
                 }
             }
             catch ( Exception )
@@ -287,24 +312,24 @@ namespace MedEnthLogsApi
 
         /// <summary>
         /// Stops the session.
-        /// No-op if not started.
+        /// No-op if current state is not started.
         /// </summary>
         public void StopSession()
         {
-            if ( this.IsSessionInProgress == true )
+            if ( this.CurrentState == ApiState.Started )
             {
                 this.timer.StopAndResetTimer();
                 this.currentLog.EndTime = DateTime.UtcNow;
                 this.currentLog.EditTime = currentLog.EndTime;
                 this.musicManager.Stop();
-                this.IsSessionInProgress = false;
+                this.CurrentState = ApiState.Stopped;
             }
         }
 
         /// <summary>
         /// Validates and saves the CurrentSession to the database.
         /// 
-        /// Throws InvalidOperationException if a session is in progress or database is not opened.
+        /// Throws InvalidOperationException if the current state is not "stopped" or database is not opened.
         /// 
         /// Throws LogValidationException if the CurrentLog is not valid.
         /// 
@@ -326,7 +351,7 @@ namespace MedEnthLogsApi
                 );
             }
             // If a session is in progress, throw.
-            else if ( IsSessionInProgress )
+            else if ( this.CurrentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException(
                     SessionInProgressMessage
@@ -354,6 +379,8 @@ namespace MedEnthLogsApi
 
             this.sqlite.Insert( this.currentLog );
             this.sqlite.Commit();
+
+            this.CurrentState = ApiState.Idle;
         }
 
         /// <summary>

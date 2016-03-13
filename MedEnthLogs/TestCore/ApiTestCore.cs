@@ -106,7 +106,7 @@ namespace TestCore
         /// </summary>
         public void DoResetCurrentTest()
         {
-            uut.ResetCurrentLog();
+            uut.ResetStates();
 
             // Ensure stagged log is the equivalent of 
             Assert.AreEqual( new Log(), uut.CurrentLog );
@@ -123,19 +123,19 @@ namespace TestCore
             uut.currentLog.EndTime = DateTime.MinValue;
 
             CheckValidationFailed( Log.EndTimeLessThanStartTimeMessage );
-            uut.ResetCurrentLog();
+            uut.ResetStates();
 
             // Ensure everything validates if start time and end time.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = uut.CurrentLog.StartTime;
             CheckValidationPassed();
-            uut.ResetCurrentLog();
+            uut.ResetStates();
 
             // Ensure everything validates if start time is less than end time.
             uut.currentLog.StartTime = DateTime.Now;
             uut.currentLog.EndTime = Log.MaxTime;
             CheckValidationPassed();
-            uut.ResetCurrentLog();
+            uut.ResetStates();
         }
 
         /// <summary>
@@ -143,7 +143,12 @@ namespace TestCore
         /// </summary>
         public void DoStartTest()
         {
-            uut.StartSession( new SessionConfig() );
+            // Ensure we start in the idle state.
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
+
+            // ---- Start Session ----
+
+            this.uut.StartSession( new SessionConfig() );
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.IsFalse( mockAudio.IsPlaying ); // Default setting passed in, should not be playing.
 
@@ -155,10 +160,14 @@ namespace TestCore
 
             // Ensure start time and edit time match the creation time.
             Assert.AreEqual( uut.CurrentLog.EditTime, uut.CurrentLog.StartTime );
-            Assert.IsTrue( uut.IsSessionInProgress );
+
+            // Should be in the started time.
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
 
             // Validation should fail, as we haven't stopped a session yet.
             CheckValidationFailed();
+
+            // ---- Start when started ----
 
             // Calling start again should result in a no-op
             DateTime oldTime = uut.CurrentLog.EditTime;
@@ -168,9 +177,11 @@ namespace TestCore
             Assert.AreEqual( oldTime, uut.CurrentLog.StartTime );
             Assert.AreEqual( oldTime, uut.CurrentLog.EditTime );
 
-            // In progress should still be true
-            Assert.IsTrue( uut.IsSessionInProgress );
+            // Should still be in the started state.
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
             Assert.IsTrue( mockTimer.IsRunning );
+
+            // ---- Attempt to save when we're not stopped ----
 
             // Lastly, ensure if we call save, we get an exception.
             Assert.Catch<InvalidOperationException>(
@@ -193,14 +204,18 @@ namespace TestCore
             config.Length = new TimeSpan( 0, 1, 0 );
             config.AudioFile = "test.mp3";
 
-            uut.StartSession( config );
-            Assert.IsTrue( uut.IsSessionInProgress );
+            // Start idle
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
+
+            // Start the session.
+            this.uut.StartSession( config );
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure our state is started.
             Assert.IsTrue( mockAudio.IsPlaying );
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.AreEqual( config.Length, mockTimer.Time );
 
             uut.StopSession();
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure our state is stopped.
             Assert.IsFalse( mockAudio.IsPlaying );
             Assert.IsFalse( mockTimer.IsRunning );
             Assert.AreEqual( null, mockTimer.Time );
@@ -218,8 +233,11 @@ namespace TestCore
             config.Length = new TimeSpan( 0, 1, 0 );
             config.AudioFile = "test.mp3";
 
-            uut.StartSession( config );
-            Assert.IsTrue( uut.IsSessionInProgress );
+            // Start idle
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
+
+            this.uut.StartSession( config );
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure our state is started.
             Assert.IsFalse( mockAudio.IsPlaying ); // Play music is false, this should be false.
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.AreEqual( config.Length, mockTimer.Time );
@@ -247,7 +265,7 @@ namespace TestCore
             );
 
             // Ensure that we are not running, and the log was reset.
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
             Assert.IsFalse( mockAudio.IsPlaying );
             Assert.IsFalse( mockTimer.IsRunning );
             Assert.AreEqual( null, mockTimer.Time );
@@ -268,8 +286,10 @@ namespace TestCore
 
             this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
 
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
+
             uut.StartSession( config );
-            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
             Assert.IsTrue( mockAudio.IsPlaying );
             Assert.IsTrue( mockTimer.IsRunning );
 
@@ -279,7 +299,7 @@ namespace TestCore
             Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
 
             uut.StopSession();
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
             Assert.IsFalse( mockAudio.IsPlaying );
             Assert.IsFalse( mockTimer.IsRunning );
             Assert.AreEqual( null, mockTimer.Time );
@@ -299,8 +319,10 @@ namespace TestCore
 
             this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
 
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
+
             uut.StartSession( config );
-            Assert.IsTrue( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
             Assert.IsTrue( mockAudio.IsPlaying );
             Assert.IsTrue( mockTimer.IsRunning );
 
@@ -310,7 +332,7 @@ namespace TestCore
             Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
 
             uut.StopSession();
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
             Assert.IsFalse( mockAudio.IsPlaying );
             Assert.IsFalse( mockTimer.IsRunning );
             Assert.AreEqual( null, mockTimer.Time );
@@ -323,8 +345,8 @@ namespace TestCore
         {
             Log oldLog = uut.currentLog.Clone();
 
-            // Sanity check, ensure we are not in progress.
-            Assert.IsFalse( uut.IsSessionInProgress );
+            // Sanity check, ensure we are idle
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
             Assert.IsFalse( mockTimer.IsRunning );
 
             uut.StopSession();
@@ -334,7 +356,7 @@ namespace TestCore
             Assert.AreNotSame( oldLog, uut.currentLog );
 
             // Ensure we are still not in progress.
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Still in Idle.
             Assert.IsFalse( mockTimer.IsRunning );
         }
 
@@ -343,8 +365,11 @@ namespace TestCore
         /// </summary>
         public void DoStopTest()
         {
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
+
             // First, start the session.
             uut.StartSession( new SessionConfig() );
+            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure we are started.
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.IsFalse( mockAudio.IsPlaying ); // Default config, should not be playing.
 
@@ -365,7 +390,7 @@ namespace TestCore
             Assert.GreaterOrEqual( uut.CurrentLog.EditTime, oldEditTime );
 
             // Ensure the session is no longer in progress.
-            Assert.IsFalse( uut.IsSessionInProgress );
+            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are stopped.
         }
 
         // ---- Save Tests ----
@@ -376,6 +401,9 @@ namespace TestCore
         /// </summary>
         public void DoSaveWithNoDatabase()
         {
+            // Start idle.
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
+
             Assert.Catch<InvalidOperationException>(
                 delegate ()
                 {
@@ -383,6 +411,9 @@ namespace TestCore
                 },
                 Api.DatabaseNotOpenMessage
             );
+
+            // Ensure we are still idle.
+            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
         }
 
         /// <summary>
@@ -1156,9 +1187,13 @@ namespace TestCore
             uut.Open( dbLocation );
             try
             {
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start idle.
                 uut.StartSession( new SessionConfig() );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Should be started.
                 uut.StopSession();
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Should be stopped.
                 uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Should be idle again.
 
                 uut.PopulateLogbook();
 
@@ -1195,14 +1230,18 @@ namespace TestCore
             {
                 for ( int i = 0; i < numberOfEntries; ++i )
                 {
+                    Assert.AreEqual( Api.ApiState.Idle, api.CurrentState ); // Start idle.
                     api.StartSession( new SessionConfig() );
+                    Assert.AreEqual( Api.ApiState.Started, api.CurrentState ); // Now started
                     api.StopSession();
+                    Assert.AreEqual( Api.ApiState.Stopped, api.CurrentState ); // Now Stopped
 
                     string technique = "SomeTechnique" + i;
                     string comments = "Some Comment" + i;
                     decimal latitude = i;
                     decimal longitude = i;
                     api.ValidateAndSaveSession( technique, comments, latitude, longitude );
+                    Assert.AreEqual( Api.ApiState.Idle, api.CurrentState ); // Should be idle after saving.
 
                     api.PopulateLogbook();
 
@@ -1219,7 +1258,7 @@ namespace TestCore
                         api.LogBook.Logs[0].Comments
                     );
 
-                    api.ResetCurrentLog();
+                    api.ResetStates();
 
                     logBook = api.LogBook;
                 }
@@ -1243,8 +1282,11 @@ namespace TestCore
             uut.Open( dbLocation );
             try
             {
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start idle.
                 uut.StartSession( new SessionConfig() );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure we are started.
                 uut.StopSession();
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are stopped.
 
                 Assert.Catch<LogValidationException>(
                     delegate ()
@@ -1256,6 +1298,7 @@ namespace TestCore
                 // Ensure it wasnt saved.
                 uut.PopulateLogbook();
                 Assert.AreEqual( 0, uut.LogBook.Logs.Count );
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are still stopped (never saved).
             }
             finally
             {
