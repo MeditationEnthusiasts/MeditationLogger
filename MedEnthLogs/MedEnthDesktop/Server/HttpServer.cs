@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using MedEnthLogsApi;
 
 namespace MedEnthDesktop.Server
@@ -204,6 +206,11 @@ namespace MedEnthDesktop.Server
                     {
                         responseString = GetLogbookHtml( api );
                     }
+                    else if ( url == "/meditate.html" )
+                    {
+                        bool isPost = request.HttpMethod == "POST"; // Whether or not this is a post request or not.
+                        responseString = HandleMeditateRequest( api, request );
+                    }
                     else if ( url == "/about.html" )
                     {
                         responseString = GetAboutPage();
@@ -261,7 +268,7 @@ namespace MedEnthDesktop.Server
                 }
 
                 consoleOutFunction(
-                    "Request from: " + request.UserHostName + " " + request.UserHostAddress + " " + request.RawUrl + " (" + response.StatusCode + ")"
+                    request.HttpMethod + " from: " + request.UserHostName + " " + request.UserHostAddress + " " + request.RawUrl + " (" + response.StatusCode + ")"
                 );
             }
         }
@@ -347,10 +354,179 @@ namespace MedEnthDesktop.Server
         }
 
         /// <summary>
+        /// Gets the meditation page's html based on the current state.
+        /// </summary>
+        /// <param name="api">Reference to an API object.</param>
+        /// <param name="request">The http request brought to handle</param>
+        /// <returns>HTML for the meditation page in a string.</returns>
+        private static string HandleMeditateRequest( Api api, HttpListenerRequest request )
+        {
+            string errorString = string.Empty;
+            if ( request.HttpMethod == "POST" )
+            {
+                errorString = HandleMeditatePostRequest( api, request );
+            }
+
+            string html = string.Empty;
+            switch ( api.CurrentState )
+            {
+                case Api.ApiState.Idle:
+                    html = GetIdleStateHtml();
+                    break;
+
+                case Api.ApiState.Started:
+                    html = GetStartedStateHtml( api );
+                    break;
+
+                case Api.ApiState.Stopped:
+                    html = GetEndedStateHtml( api, errorString );
+                    break;
+            }
+
+            return html;
+        }
+
+        /// <summary>
+        /// Handles a post request by changing the API state.
+        /// </summary>
+        /// <param name="api">Reference to an API object.</param>
+        /// <param name="request">The request to handle.</param>
+        /// <returns>An error string.  string.Empty for no error.</returns>
+        private static string HandleMeditatePostRequest( Api api, HttpListenerRequest request )
+        {
+            switch ( api.CurrentState )
+            {
+                case Api.ApiState.Idle:
+                    // If we are idle, start the session.
+                    // For webserver sessions, we don't play music nor do we set a length.
+                    SessionConfig config = new SessionConfig();
+                    config.PlayMusic = false;
+                    config.Length = null;
+
+                    api.StartSession( config );
+                    break;
+
+                case Api.ApiState.Started:
+                    // If we are started, end the session.
+                    api.StopSession();
+                    break;
+
+                case Api.ApiState.Stopped:
+                    NameValueCollection queryString;
+                    using ( StreamReader reader = new StreamReader( request.InputStream ) )
+                    {
+                        queryString = HttpUtility.ParseQueryString( reader.ReadToEnd() );
+                    }
+
+                    string technique = queryString.Get( "technique" );
+                    string latStr = queryString.Get( "lat" );
+                    string longStr = queryString.Get( "lon" );
+                    string comments = queryString.Get( "comments" );
+
+                    decimal? lat = null;
+                    decimal? lon = null;
+
+                    decimal parsedLat;
+                    if ( decimal.TryParse( latStr, out parsedLat ) )
+                    {
+                        lat = parsedLat;
+                    }
+
+                    decimal parsedLon;
+                    if ( decimal.TryParse( longStr, out parsedLon ) )
+                    {
+                        lon = parsedLon;
+                    }
+
+                    // If we are stopped, save the session based on the information from the post request.
+
+                    try
+                    {
+                        api.ValidateAndSaveSession( technique, comments, lat, lon );
+                        api.PopulateLogbook();
+                    }
+                    catch ( LogValidationException err )
+                    {
+                        return err.Message;
+                    }
+                    break;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the idle state HTML.
+        /// </summary>
+        /// <returns>The idle state html for the meditate page.</returns>
+        private static string GetIdleStateHtml()
+        {
+            string html = string.Empty;
+            string idleHtml = Path.Combine( "html", "start.html" );
+            using ( StreamReader inFile = new StreamReader( idleHtml ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            return html;
+        }
+
+        /// <summary>
+        /// Gets the started state HTML.
+        /// </summary>
+        /// <param name="api">Reference to the API object.</param>
+        /// <returns>The started state html for the meditate page.</returns>
+        private static string GetStartedStateHtml( Api api )
+        {
+            string html = string.Empty;
+            string startHtml = Path.Combine( "html", "meditate.html" );
+            using ( StreamReader inFile = new StreamReader( startHtml ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            // In case the user navigates from the page or the browser crashes,
+            // get the diff between now and when we started the session.
+            // Make the total seconds of that diff the starting time on the webpage
+            // we send back.
+            TimeSpan diff = DateTime.UtcNow - api.CurrentLog.StartTime;
+            html = html.Replace( "{%startingSeconds%}", diff.TotalSeconds.ToString() );
+            return html;
+        }
+
+        /// <summary>
+        /// Gets the ended state HTML.
+        /// </summary>
+        /// <param name="api">Reference to the API object.</param>
+        /// <param name="errorString">The error string to display (if any).</param>
+        /// <returns>The ended state html for the meditate page.</returns>
+        private static string GetEndedStateHtml( Api api, string errorString )
+        {
+            string html = string.Empty;
+            string endHtml = Path.Combine( "html", "end.html" );
+            using ( StreamReader inFile = new StreamReader( endHtml ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            // Insert the total minutes meditated to the html.
+            if ( string.IsNullOrEmpty( errorString ) )
+            {
+                html = html.Replace( "{%ErrorString%}", string.Empty );
+            }
+            else
+            {
+                html = html.Replace( "{%ErrorString%}", "Error: " + errorString );
+            }
+            html = html.Replace( "{%minutesMeditated%}", api.CurrentLog.Duration.TotalMinutes.ToString( "N2" ) );
+            return html;
+        }
+
+        /// <summary>
         /// Gets the logbook page's html to display.
         /// </summary>
         /// <param name="api">Reference to an API object.</param>
-        /// <returns>HTML for the home page in a string.</returns>
+        /// <returns>HTML for the logbook page in a string.</returns>
         private static string GetLogbookHtml( Api api )
         {
             string mapPath = Path.Combine( "html", "logbook.html" );
@@ -372,7 +548,7 @@ namespace MedEnthDesktop.Server
                     logHtml +=
 @"
         <div class=""logbookEntry"">
-            <p><strong>" + log.StartTime.ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>
+            <p><strong>" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>
             <table cellspacing=""0"" cellpadding=""5px"">
                 <tr>
                     <td><strong>Duration:</strong></td>

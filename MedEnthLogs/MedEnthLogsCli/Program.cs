@@ -49,6 +49,9 @@ namespace MedEnthLogsCli
 
             api.Open( Path.Combine( dbLocation, Api.LogbookFileName ) );
 
+            api.timer.OnUpdate = delegate ( string time ) { }; // No-op.
+            api.timer.OnComplete = delegate () { }; // No-op.
+
             return api;
         }
 
@@ -198,10 +201,6 @@ namespace MedEnthLogsCli
                 config.LoopMusic = false;
                 config.Length = null;
                 config.AudioFile = string.Empty;
-
-                api.timer.OnUpdate = delegate( string time ) { }; // No-op.
-
-                api.timer.OnComplete = delegate() { }; // No-op.
 
                 // Wait for the user to press enter to start the session.
                 Console.Write( "Press Enter To Begin..." );
