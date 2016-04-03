@@ -191,12 +191,12 @@ namespace MedEnthDesktop.Server
                 HttpListenerRequest request = context.Request;
                 HttpListenerResponse response = context.Response;
 
+                string responseString = string.Empty;
+
                 try
                 {
                     // Construct Response.
                     // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
-
-                    string responseString = string.Empty;
                     string url = request.RawUrl.ToLower();
                     if ( ( url == "/" ) || ( url == "/index.html" ) )
                     {
@@ -223,6 +223,14 @@ namespace MedEnthDesktop.Server
                     {
                         responseString = GetMapHtml( api );
                     }
+                    else if ( url == "/js/leaflet.js" )
+                    {
+                        responseString = GetLeafletJs();
+                    }
+                    else if ( url == "/css/leaflet.css" )
+                    {
+                        responseString = GetLeafletCss();
+                    }
                     else if ( url == "/media/marker-icon.png" )
                     {
                         GetMarkerImage( response.OutputStream );
@@ -244,26 +252,38 @@ namespace MedEnthDesktop.Server
                         responseString = Get404Html();
                         response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
                     }
-
-                    // Only send response if our string is not empty
-                    // (Possible for an image, ExportToXml or ExportJson got called and didn't
-                    // add the response string).
-                    if ( responseString.Length > 0 )
-                    {
-                        byte[] buffer = Encoding.UTF8.GetBytes( responseString );
-                        response.ContentLength64 = buffer.Length;
-                        response.OutputStream.Write( buffer, 0, buffer.Length );
-                    }
                 }
                 catch ( Exception e )
                 {
-                    byte[] buffer = Encoding.UTF8.GetBytes( GetErrorHtml( e ) );
-                    response.ContentLength64 = buffer.Length;
-                    response.OutputStream.Write( buffer, 0, buffer.Length );
+                    responseString = GetErrorHtml( e );
                     response.StatusCode = Convert.ToInt32( HttpStatusCode.InternalServerError );
+
+                    consoleOutFunction( "**********" );
+                    consoleOutFunction( "Caught Exception when determining response: " + e.Message );
+                    consoleOutFunction( e.StackTrace );
+                    consoleOutFunction( "**********" );
                 }
                 finally
                 {
+                    try
+                    {
+                        // Only send response if our string is not empty
+                        // (Possible for an image, ExportToXml or ExportJson got called and didn't
+                        // add the response string).
+                        if ( responseString.Length > 0 )
+                        {
+                            byte[] buffer = Encoding.UTF8.GetBytes( responseString );
+                            response.ContentLength64 = buffer.Length;
+                            response.OutputStream.Write( buffer, 0, buffer.Length );
+                        }
+                    }
+                    catch ( Exception e )
+                    {
+                        consoleOutFunction( "**********" );
+                        consoleOutFunction( "Caught Exception when writing response: " + e.Message );
+                        consoleOutFunction( e.StackTrace );
+                        consoleOutFunction( "**********" );
+                    }
                     response.OutputStream.Close();
                 }
 
@@ -591,11 +611,41 @@ namespace MedEnthDesktop.Server
                 html = inFile.ReadToEnd();
             }
 
-            html = html.Replace( "{%leaflet_css%}", LeafletJS.CSS );
-            html = html.Replace( "{%leaflet_js%}", LeafletJS.JavaScript );
             html = html.Replace( "{%leaflet_data%}", LeafletJS.GetMarkerHtml( api ) );
 
             return html;
+        }
+
+        /// <summary>
+        /// Gets the Javascript for Leaflet.js.
+        /// </summary>
+        /// <returns>The javascript for leaflet.js.</returns>
+        private static string GetLeafletJs()
+        {
+            string path = Path.Combine( "html", "js", "leaflet.js" );
+            string js = string.Empty;
+            using ( StreamReader inFile = new StreamReader( path ) )
+            {
+                js = inFile.ReadToEnd();
+            }
+
+            return js;
+        }
+
+        /// <summary>
+        /// Gets the CSS for Leaflet.js.
+        /// </summary>
+        /// <returns>The CSS for leaflet.js.</returns>
+        private static string GetLeafletCss()
+        {
+            string path = Path.Combine( "html", "css", "leaflet.css" );
+            string css = string.Empty;
+            using ( StreamReader inFile = new StreamReader( path ) )
+            {
+                css = inFile.ReadToEnd();
+            }
+
+            return css;
         }
 
         /// <summary>

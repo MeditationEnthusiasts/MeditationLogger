@@ -183,11 +183,10 @@ namespace MedEnthLogsDesktop
 <!doctype html>
 <head>
     <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
-    <link type=""text/css"" rel=""stylesheet"" href=""" + exeDirectory + @"/html/css/leaflet.css""/>
+    <link type=""text/css"" rel=""stylesheet"" href=""file:///" + exeDirectory + @"/html/css/leaflet.css""/>
+    <script src=""file:///" + exeDirectory + @"/html/js/leaflet.js""></script>
     <title>Meditation Map</title>
     <style>
-    " + LeafletJS.CSS + @"
-
         // Use to make the map full screen.
         body {
             padding: 0;
@@ -200,8 +199,6 @@ namespace MedEnthLogsDesktop
     </style>
     <!-- Plug in the map information -->
     <script type = ""text/javascript"">
-        " + LeafletJS.JavaScript + @"
-
         window.onload=function()
         {
             // Create Map

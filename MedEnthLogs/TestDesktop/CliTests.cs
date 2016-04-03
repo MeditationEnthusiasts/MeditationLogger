@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using MedEnthDesktop;
 using MedEnthLogsApi;
 using NUnit.Framework;
@@ -35,6 +36,16 @@ namespace TestDesktop
     public class CliTests
     {
         // -------- Fields --------
+
+        /// <summary>
+        /// The port the HTTP Server listens on.
+        /// </summary>
+        private const int port = 10013;
+
+        /// <summary>
+        /// The URL to send requests to.
+        /// </summary>
+        private static readonly string url = "http://localhost:" + port;
 
         /// <summary>
         /// If a logbook already exists, we don't want to accidently nuke it.
@@ -86,6 +97,7 @@ namespace TestDesktop
             }
 
         }
+
         [SetUp]
         public void TestSetup()
         {
@@ -190,6 +202,60 @@ namespace TestDesktop
         public void CliMeditateTestWithCommentsAndTechnique()
         {
             DoMeditateProcessTest( "A Technique", "A comment" + Environment.NewLine + "with new lines", true );
+        }
+
+        // ---- HTTP Server Tests ----
+
+        /// <summary>
+        /// Ensures all the pages can get got successfully with a GET request.
+        /// </summary>
+        [Test]
+        public void GetRequestTest()
+        {
+            List<string> pages = new List<string> {
+                "/",
+                "/index.html",
+                "/logbook.html",
+                "/meditate.html",
+                "/about.html",
+                "/js/leaflet.js",
+                "/css/leaflet.css",
+                "/css/meditation_logger.css",
+                "/map.html",
+                "/media/marker-icon.png",
+                "/export.html",
+                "/export/logbook.xml",
+                "/export/logbook.json"
+            };
+
+            using ( ServerLauncher server = new ServerLauncher( port ) )
+            {
+                foreach ( string page in pages )
+                {
+                    HttpWebRequest request = WebRequest.CreateHttp( url + page );
+                    request.Method = "GET";
+
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
+                }
+
+                // Ensure a bad page results in a 404.
+                {
+                    HttpWebRequest request = WebRequest.CreateHttp( url + "/derp.html" );
+                    request.Method = "GET";
+
+                    try
+                    {
+                        request.GetResponse();
+                    }
+                    catch ( WebException err )
+                    {
+                        HttpWebResponse response = ( HttpWebResponse ) err.Response;
+                        Assert.AreEqual( HttpStatusCode.NotFound, response.StatusCode );
+                    }
+                }
+            }
         }
 
         // -------- Test Helpers ---------
@@ -304,6 +370,58 @@ namespace TestDesktop
             }
 
             return exitCode;
+        }
+
+        // -------- Helper Classes --------
+
+        /// <summary>
+        /// Class that Starts/Stops the server.
+        /// </summary>
+        private class ServerLauncher : IDisposable
+        {
+            // -------- Fields --------
+
+            /// <summary>
+            /// The server process.
+            /// </summary>
+            private Process serverProcess;
+
+            // -------- Fields --------
+
+            /// <summary>
+            /// Constructor.  Launches the server.
+            /// </summary>
+            public ServerLauncher( int port )
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.Arguments = "launch_server " + port;
+                startInfo.RedirectStandardInput = true;
+                startInfo.UseShellExecute = false;
+
+                // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
+                startInfo.FileName = "MedEnthLogsCli.exe";
+
+                this.serverProcess = Process.Start( startInfo );
+            }
+
+            // -------- Functions --------
+
+            /// <summary>
+            /// Dispose.  Closes the server.
+            /// </summary>
+            public void Dispose()
+            {
+                if ( this.serverProcess != null )
+                {
+                    using ( StreamWriter writer = this.serverProcess.StandardInput )
+                    {
+                        writer.Write( Environment.NewLine );
+                    }
+
+                    this.serverProcess.WaitForExit();
+                    Assert.AreEqual( 0, this.serverProcess.ExitCode );
+                }
+            }
         }
     }
 }

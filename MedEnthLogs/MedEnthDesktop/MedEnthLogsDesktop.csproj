@@ -193,7 +193,9 @@
     <Content Include="html\about.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\css\leaflet.css" />
+    <Content Include="html\css\leaflet.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\css\meditation_logger.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -206,7 +208,9 @@
     <Content Include="html\export.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\js\leaflet.js" />
+    <Content Include="html\js\leaflet.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\logbook.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
