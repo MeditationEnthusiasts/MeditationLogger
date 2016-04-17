@@ -41,6 +41,43 @@
     <None Include="Properties\Resources.resx" />
     <None Include="Properties\Settings.settings" />
     <None Include="packages.config" />
+    <None Include="media\marker-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\about.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\end.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\export.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\logbook.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\map.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\meditate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\start.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\css\leaflet.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\css\meditation_logger.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="html\js\leaflet.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <LogicalName>leaflet_js</LogicalName>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs" />
@@ -63,6 +100,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="LinuxProgram.cs" />
     <Compile Include="LinuxLocationDetector.cs" />
+    <Compile Include="Server\HttpServer.cs" />
+    <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
@@ -80,13 +119,14 @@
       <HintPath>..\packages\SQLite.Net-PCL.3.1.1\lib\net40\SQLite.Net.Platform.Generic.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="html\js\leaflet.js">
-      <LogicalName>leaflet_js</LogicalName>
+    <EmbeddedResource Include="media\mainlogo.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="media\mainlogo.ico" />
   </ItemGroup>
 </Project>

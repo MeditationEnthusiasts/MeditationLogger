@@ -9,8 +9,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\SethCS\Set
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsCliMono", "MedEnthLogsCli\MedEnthLogsCliMono.csproj", "{54461C1F-9E77-43A5-BC40-F574B2C36F73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsTestMono", "Test\MedEnthLogsTestMono.csproj", "{6FD2DF9B-99C1-44BF-BC7C-B3B0AF0C5804}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,10 +19,6 @@ Global
 		{54461C1F-9E77-43A5-BC40-F574B2C36F73}.Debug|x86.Build.0 = Debug|x86
 		{54461C1F-9E77-43A5-BC40-F574B2C36F73}.Release|x86.ActiveCfg = Release|x86
 		{54461C1F-9E77-43A5-BC40-F574B2C36F73}.Release|x86.Build.0 = Release|x86
-		{6FD2DF9B-99C1-44BF-BC7C-B3B0AF0C5804}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6FD2DF9B-99C1-44BF-BC7C-B3B0AF0C5804}.Debug|x86.Build.0 = Debug|Any CPU
-		{6FD2DF9B-99C1-44BF-BC7C-B3B0AF0C5804}.Release|x86.ActiveCfg = Release|Any CPU
-		{6FD2DF9B-99C1-44BF-BC7C-B3B0AF0C5804}.Release|x86.Build.0 = Release|Any CPU
 		{807F6E54-4092-4532-96D2-9E2AC20FD3C1}.Debug|x86.ActiveCfg = Debug|x86
 		{807F6E54-4092-4532-96D2-9E2AC20FD3C1}.Debug|x86.Build.0 = Debug|x86
 		{807F6E54-4092-4532-96D2-9E2AC20FD3C1}.Release|x86.ActiveCfg = Release|x86

@@ -23,5 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)SessionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XmlExporter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LeafletJS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorCodes.cs" />
   </ItemGroup>
 </Project>
