@@ -42,15 +42,19 @@ namespace MedEnthLogsCli
             Api api = GetApi();
             string dbLocation = Constants.DatabaseFolderLocation;
 
-            if ( Directory.Exists( dbLocation ) == false )
+            if( Directory.Exists( dbLocation ) == false )
             {
                 Directory.CreateDirectory( dbLocation );
             }
 
             api.Open( Path.Combine( dbLocation, Api.LogbookFileName ) );
 
-            api.timer.OnUpdate = delegate ( string time ) { }; // No-op.
-            api.timer.OnComplete = delegate () { }; // No-op.
+            api.timer.OnUpdate = delegate ( string time )
+            {
+            }; // No-op.
+            api.timer.OnComplete = delegate ()
+            {
+            }; // No-op.
 
             return api;
         }
@@ -62,41 +66,41 @@ namespace MedEnthLogsCli
         /// <returns>0 for success, else failure.</returns>
         static int Main( string[] args )
         {
-            if ( args.Length == 1 )
+            if( args.Length == 1 )
             {
-                if ( ( args[0] == "--help" ) || ( args[0] == "-h" ) || ( args[0] == "/?" ) )
+                if( ( args[0] == "--help" ) || ( args[0] == "-h" ) || ( args[0] == "/?" ) )
                 {
                     PrintHelp();
                 }
-                else if ( ( args[0] == "--version" ) || ( args[0] == "-v" ) )
+                else if( ( args[0] == "--version" ) || ( args[0] == "-v" ) )
                 {
                     Console.WriteLine( "Medition Logger Version: " + Api.VersionString );
                 }
-                else if ( ( args[0] == "--license" ) || args[0] == "-l" )
+                else if( ( args[0] == "--license" ) || args[0] == "-l" )
                 {
                     Console.WriteLine( MedEnthLogsApi.License.MedEnthLicense );
                 }
-                else if ( ( args[0] == "--external" ) || args[0] == "-e" )
+                else if( ( args[0] == "--external" ) || args[0] == "-e" )
                 {
                     Console.WriteLine( MedEnthLogsApi.License.ExternalLicenses );
                 }
-                else if ( args[0] == "meditate" )
+                else if( args[0] == "meditate" )
                 {
                     return DoSession();
                 }
-                else if ( args[0] == "launch_server" )
+                else if( args[0] == "launch_server" )
                 {
                     int returnCode = LaunchServer( HttpServer.DefaultPort );
-                    if ( returnCode == ErrorCodes.AdminNeeded )
+                    if( returnCode == ErrorCodes.AdminNeeded )
                     {
                         PrintAdminMessage( HttpServer.DefaultPort );
                     }
                     return returnCode;
                 }
             }
-            else if ( args.Length == 2 )
+            else if( args.Length == 2 )
             {
-                if ( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
+                if( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
                     Api api = null;
                     try
@@ -104,7 +108,7 @@ namespace MedEnthLogsCli
                         api = OpenApi();
                         api.PopulateLogbook();
 
-                        switch ( args[0] )
+                        switch( args[0] )
                         {
                             case "import":
                                 api.Import( args[1] );
@@ -123,7 +127,7 @@ namespace MedEnthLogsCli
                                 return ErrorCodes.Success;
                         }
                     }
-                    catch ( Exception err )
+                    catch( Exception err )
                     {
                         Console.WriteLine( err.Message );
                         return ErrorCodes.ApiError;
@@ -133,13 +137,13 @@ namespace MedEnthLogsCli
                         api?.Close();
                     }
                 }
-                else if ( args[0] == "launch_server" )
+                else if( args[0] == "launch_server" )
                 {
                     short port;
-                    if ( short.TryParse( args[1], out port ) )
+                    if( short.TryParse( args[1], out port ) )
                     {
                         int code = LaunchServer( port );
-                        if ( code == ErrorCodes.AdminNeeded )
+                        if( code == ErrorCodes.AdminNeeded )
                         {
                             PrintAdminMessage( port );
                         }
@@ -233,7 +237,7 @@ namespace MedEnthLogsCli
 
                 decimal? lat = null;
                 decimal? lon = null;
-                if ( choice.HasValue && ( choice.Value == 1 ) )
+                if( choice.HasValue && ( choice.Value == 1 ) )
                 {
                     api.LocationDetector.RefreshPosition();
                     lat = api.LocationDetector.Latitude;
@@ -245,7 +249,7 @@ namespace MedEnthLogsCli
                 Console.WriteLine( "Session Saved, see you next time!" );
                 Console.Out.Flush();
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
                 Console.WriteLine( err.Message );
                 return ErrorCodes.ApiError;
@@ -274,26 +278,26 @@ namespace MedEnthLogsCli
                 Console.WriteLine( "Opening Database...Done!" );
                 Console.WriteLine();
 
-                using (
-                    HttpServer server = new HttpServer(
-                        api,
-                        port,
-                        delegate ( string message )
-                        {
-                            Console.WriteLine( message );
-                        }
-                    )
-                )
+                using(
+                    HttpServer server = 
+                        new HttpServer(
+                            api,
+                            port,
+                            delegate ( string message )
+                            {
+                                Console.WriteLine( message );
+                            }
+                        ) )
                 {
                     server.Start();
-                    Console.WriteLine( "Happy Meditating! Press Enter when complete..." );
+                    Console.WriteLine( "Happy Meditating! Post to /quit.html to quit..." );
                     Console.Out.Flush();
-                    Console.ReadLine();
+                    server.WaitForQuitEvent();
                 }
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
-                if ( err.Message == "Access is denied" )
+                if( err.Message == "Access is denied" )
                 {
                     return ErrorCodes.AdminNeeded;
                 }

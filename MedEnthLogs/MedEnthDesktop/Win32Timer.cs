@@ -17,7 +17,7 @@
 //
 
 using System;
-using System.Windows.Forms;
+using System.Timers;
 using MedEnthLogsApi;
 
 namespace MedEnthDesktop
@@ -69,7 +69,7 @@ namespace MedEnthDesktop
             this.IsRunning = false;
 
             this.timer.Interval = 1000; // 1 second
-            this.timer.Tick += Timer_Tick;
+            this.timer.Elapsed += Timer_Tick;
         }
 
         // -------- Properties --------
@@ -87,7 +87,7 @@ namespace MedEnthDesktop
             }
             set
             {
-                if ( value == null )
+                if( value == null )
                 {
                     throw new ArgumentNullException( "OnUpdate can not be null" );
                 }
@@ -106,7 +106,7 @@ namespace MedEnthDesktop
             }
             set
             {
-                if ( value == null )
+                if( value == null )
                 {
                     throw new ArgumentNullException( "OnComplete can not be null" );
                 }
@@ -128,14 +128,14 @@ namespace MedEnthDesktop
         /// <param name="countDownTime">How long to time for.  Null for count up.</param>
         public void StartTimer( TimeSpan? countDownTime )
         {
-            if ( ( OnUpdate == null ) || ( OnComplete == null ) )
+            if( ( OnUpdate == null ) || ( OnComplete == null ) )
             {
                 throw new InvalidOperationException(
                     "OnUpdate and OnComplete must contain values before starting the timer."
                 );
             }
 
-            if ( this.IsRunning == false )
+            if( this.IsRunning == false )
             {
                 this.currentTime = countDownTime ?? TimeSpan.Zero;
                 OnUpdate( this.currentTime.ToString( "c" ) );
@@ -150,7 +150,7 @@ namespace MedEnthDesktop
         /// </summary>
         public void StopAndResetTimer()
         {
-            if ( this.IsRunning )
+            if( this.IsRunning )
             {
                 this.timer.Stop();
                 this.currentTime = new TimeSpan( 0, 0, 0 );
@@ -166,7 +166,7 @@ namespace MedEnthDesktop
         /// <param name="e"></param>
         private void Timer_Tick( object sender, EventArgs e )
         {
-            if ( countUp )
+            if( countUp )
             {
                 this.currentTime = this.currentTime.Add( increment );
             }
@@ -177,7 +177,7 @@ namespace MedEnthDesktop
 
             OnUpdate( this.currentTime.ToString( "c" ) );
 
-            if ( this.currentTime <= TimeSpan.Zero )
+            if( this.currentTime <= TimeSpan.Zero )
             {
                 OnComplete();
             }

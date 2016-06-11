@@ -61,6 +61,8 @@ namespace MedEnthDesktop.Server
         /// </summary>
         private Api api;
 
+        private readonly ManualResetEvent quitEvent;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -74,22 +76,24 @@ namespace MedEnthDesktop.Server
         /// <exception cref="ArgumentException">Api is not open.</exception>
         public HttpServer( Api api, short port = DefaultPort, Action<string> consoleOutFunction = null )
         {
-            if ( HttpListener.IsSupported == false )
+            if( HttpListener.IsSupported == false )
             {
                 throw new PlatformNotSupportedException(
                     "This platform does not support HTTP Listeners..."
                 );
             }
-            if ( api.IsOpen == false )
+            if( api.IsOpen == false )
             {
                 throw new ArgumentException(
                     "Api is not open. Please open it before calling this constructor...",
                     nameof( api )
                 );
             }
-            if ( consoleOutFunction == null )
+            if( consoleOutFunction == null )
             {
-                this.cout = delegate ( string s ) { };
+                this.cout = delegate ( string s )
+                {
+                };
             }
 
             this.api = api;
@@ -101,9 +105,12 @@ namespace MedEnthDesktop.Server
             this.listeningThread = new Thread(
                 delegate()
                 {
-                    HandleRequest( this.api, this.listener, cout );
+                    HandleRequest( this.api, this.listener, this, cout );
                 }
             );
+
+            this.quitEvent = new ManualResetEvent( false );
+            this.IsListening = false;
         }
 
         // -------- Properties --------
@@ -111,13 +118,7 @@ namespace MedEnthDesktop.Server
         /// <summary>
         /// Whether or not we are listening.
         /// </summary>
-        public bool IsListening
-        {
-            get
-            {
-                return this.listener.IsListening;
-            }
-        }
+        public bool IsListening{ get; private set; }
 
         // -------- Functions --------
 
@@ -128,10 +129,11 @@ namespace MedEnthDesktop.Server
         public void Start()
         {
             // No-op if we are not listening.
-            if ( IsListening == false )
+            if( this.IsListening == false )
             {
                 this.listener.Start();
                 this.listeningThread.Start();
+                this.IsListening = true;
             }
         }
 
@@ -142,20 +144,32 @@ namespace MedEnthDesktop.Server
         public void Dispose()
         {
             // No-op if we are not listening.
-            if ( IsListening )
+            if( this.IsListening )
             {
-                if ( this.cout != null )
+                if( this.cout != null )
                 {
                     this.cout( "Terminating server..." );
                 }
+                this.IsListening = false;
+                this.listeningThread.Join();
+
                 this.listener.Stop();
                 this.listener.Close();
-                this.listeningThread.Join();
-                if ( this.cout != null )
+                if( this.cout != null )
                 {
                     this.cout( "Terminating server...Done!" );
                 }
+
+                this.quitEvent.Set();
             }
+        }
+
+        /// <summary>
+        /// Blocks the calling thread(s) until the quit event is triggered.
+        /// </summary>
+        public void WaitForQuitEvent()
+        {
+            this.quitEvent.WaitOne();
         }
 
         /// <summary>
@@ -163,22 +177,23 @@ namespace MedEnthDesktop.Server
         /// </summary>
         /// <param name="api">The api to use.</param>
         /// <param name="listener">Http Listener Object.</param>
+        /// <param name="server">The server object to use.</param>
         /// <param name="consoleOutFunction">The function used to print to the console.</param>
-        private static void HandleRequest( Api api, HttpListener listener, Action<string> consoleOutFunction )
+        private static void HandleRequest( Api api, HttpListener listener, HttpServer server, Action<string> consoleOutFunction )
         {
-            while ( listener.IsListening )
+            while( server.IsListening )
             {
                 HttpListenerContext context = null;
                 try
                 {
                     context = listener.GetContext();
                 }
-                catch ( HttpListenerException err )
+                catch( HttpListenerException err )
                 {
                     // Error code 995 means GetContext got aborted (E.g. when shutting down).
                     // If that's the case, just start over.  The while loop will break out and
                     // the thread will exit cleanly.
-                    if ( err.ErrorCode == 995 )
+                    if( err.ErrorCode == 995 )
                     {
                         continue;
                     }
@@ -198,54 +213,67 @@ namespace MedEnthDesktop.Server
                     // Construct Response.
                     // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
                     string url = request.RawUrl.ToLower();
-                    if ( ( url == "/" ) || ( url == "/index.html" ) )
+                    if( ( url == "/" ) || ( url == "/index.html" ) )
                     {
                         responseString = GetHomePageHtml( api );
                     }
-                    else if ( url == "/logbook.html" )
+                    else if( url == "/logbook.html" )
                     {
                         responseString = GetLogbookHtml( api );
                     }
-                    else if ( url == "/meditate.html" )
+                    else if( url == "/meditate.html" )
                     {
                         bool isPost = request.HttpMethod == "POST"; // Whether or not this is a post request or not.
                         responseString = HandleMeditateRequest( api, request );
                     }
-                    else if ( url == "/about.html" )
+                    else if( url == "/about.html" )
                     {
                         responseString = GetAboutPage();
                     }
-                    else if ( url == "/css/meditation_logger.css" )
+                    else if( url == "/css/meditation_logger.css" )
                     {
                         responseString = GetCss();
                     }
-                    else if ( url == "/map.html" )
+                    else if( url == "/map.html" )
                     {
                         responseString = GetMapHtml( api );
                     }
-                    else if ( url == "/js/leaflet.js" )
+                    else if( url == "/js/leaflet.js" )
                     {
                         responseString = GetLeafletJs();
                     }
-                    else if ( url == "/css/leaflet.css" )
+                    else if( url == "/css/leaflet.css" )
                     {
                         responseString = GetLeafletCss();
                     }
-                    else if ( url == "/media/marker-icon.png" )
+                    else if( url == "/media/marker-icon.png" )
                     {
                         GetMarkerImage( response.OutputStream );
                     }
-                    else if ( url == "/export.html" )
+                    else if( url == "/export.html" )
                     {
                         responseString = GetExportPage();
                     }
-                    else if ( url == "/export/logbook.xml" )
+                    else if( url == "/export/logbook.xml" )
                     {
                         XmlExporter.ExportToXml( response.OutputStream, api.LogBook );
                     }
-                    else if ( url == "/export/logbook.json" )
+                    else if( url == "/export/logbook.json" )
                     {
                         JsonExporter.ExportJson( response.OutputStream, api.LogBook );
+                    }
+                    else if( url == "/quit.html" )
+                    {
+                        if( request.HttpMethod == "POST" )
+                        {
+                            HandleQuitEvent( server );
+                            responseString = "Service Shut down";
+                        }
+                        else
+                        {
+                            responseString = Get404Html();
+                            response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
+                        }
                     }
                     else
                     {
@@ -253,7 +281,7 @@ namespace MedEnthDesktop.Server
                         response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
                     }
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     responseString = GetErrorHtml( e );
                     response.StatusCode = Convert.ToInt32( HttpStatusCode.InternalServerError );
@@ -270,14 +298,14 @@ namespace MedEnthDesktop.Server
                         // Only send response if our string is not empty
                         // (Possible for an image, ExportToXml or ExportJson got called and didn't
                         // add the response string).
-                        if ( responseString.Length > 0 )
+                        if( responseString.Length > 0 )
                         {
                             byte[] buffer = Encoding.UTF8.GetBytes( responseString );
                             response.ContentLength64 = buffer.Length;
                             response.OutputStream.Write( buffer, 0, buffer.Length );
                         }
                     }
-                    catch ( Exception e )
+                    catch( Exception e )
                     {
                         consoleOutFunction( "**********" );
                         consoleOutFunction( "Caught Exception when writing response: " + e.Message );
@@ -303,7 +331,7 @@ namespace MedEnthDesktop.Server
         private static string GetErrorHtml( Exception e )
         {
             string html =
-@"<!DOCTYPE html>
+                @"<!DOCTYPE html>
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
@@ -313,10 +341,10 @@ namespace MedEnthDesktop.Server
     <h1>500: Internal System Error</h1>
     <h2>Error:</h2>
 ";
-            using ( StringReader reader = new StringReader( e.Message ) )
+            using( StringReader reader = new StringReader( e.Message ) )
             {
                 string line;
-                while ( ( line = reader.ReadLine() ) != null )
+                while( ( line = reader.ReadLine() ) != null )
                 {
                     html += "<p>" + line + "</p>" + Environment.NewLine;
                 }
@@ -324,10 +352,10 @@ namespace MedEnthDesktop.Server
 
             html += "<h2>Stack Trace:</h2>" + Environment.NewLine;
 
-            using ( StringReader reader = new StringReader( e.StackTrace ) )
+            using( StringReader reader = new StringReader( e.StackTrace ) )
             {
                 string line;
-                while ( ( line = reader.ReadLine() ) != null )
+                while( ( line = reader.ReadLine() ) != null )
                 {
                     html += "<p>" + line + "</p>" + Environment.NewLine;
                 }
@@ -349,7 +377,7 @@ namespace MedEnthDesktop.Server
         {
             string indexHtmlPath = Path.Combine( "html", "index.html" );
             string html = string.Empty;
-            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -359,7 +387,7 @@ namespace MedEnthDesktop.Server
             html = html.Replace( "{%TotalSessions%}", api.LogBook.Logs.Count.ToString() );
 
             string latestSesssionString = string.Empty;
-            if ( api.LogBook.Logs.Count == 0 )
+            if( api.LogBook.Logs.Count == 0 )
             {
                 latestSesssionString = "Nothing yet.";
             }
@@ -382,13 +410,13 @@ namespace MedEnthDesktop.Server
         private static string HandleMeditateRequest( Api api, HttpListenerRequest request )
         {
             string errorString = string.Empty;
-            if ( request.HttpMethod == "POST" )
+            if( request.HttpMethod == "POST" )
             {
                 errorString = HandleMeditatePostRequest( api, request );
             }
 
             string html = string.Empty;
-            switch ( api.CurrentState )
+            switch( api.CurrentState )
             {
                 case Api.ApiState.Idle:
                     html = GetIdleStateHtml();
@@ -407,6 +435,15 @@ namespace MedEnthDesktop.Server
         }
 
         /// <summary>
+        /// Handles the quit event.
+        /// </summary>
+        /// <param name="server">server object to quit.</param>
+        private static void HandleQuitEvent( HttpServer server )
+        {
+            server.quitEvent.Set();
+        }
+
+        /// <summary>
         /// Handles a post request by changing the API state.
         /// </summary>
         /// <param name="api">Reference to an API object.</param>
@@ -414,7 +451,7 @@ namespace MedEnthDesktop.Server
         /// <returns>An error string.  string.Empty for no error.</returns>
         private static string HandleMeditatePostRequest( Api api, HttpListenerRequest request )
         {
-            switch ( api.CurrentState )
+            switch( api.CurrentState )
             {
                 case Api.ApiState.Idle:
                     // If we are idle, start the session.
@@ -433,7 +470,7 @@ namespace MedEnthDesktop.Server
 
                 case Api.ApiState.Stopped:
                     NameValueCollection queryString;
-                    using ( StreamReader reader = new StreamReader( request.InputStream ) )
+                    using( StreamReader reader = new StreamReader( request.InputStream ) )
                     {
                         queryString = HttpUtility.ParseQueryString( reader.ReadToEnd() );
                     }
@@ -447,13 +484,13 @@ namespace MedEnthDesktop.Server
                     decimal? lon = null;
 
                     decimal parsedLat;
-                    if ( decimal.TryParse( latStr, out parsedLat ) )
+                    if( decimal.TryParse( latStr, out parsedLat ) )
                     {
                         lat = parsedLat;
                     }
 
                     decimal parsedLon;
-                    if ( decimal.TryParse( longStr, out parsedLon ) )
+                    if( decimal.TryParse( longStr, out parsedLon ) )
                     {
                         lon = parsedLon;
                     }
@@ -465,7 +502,7 @@ namespace MedEnthDesktop.Server
                         api.ValidateAndSaveSession( technique, comments, lat, lon );
                         api.PopulateLogbook();
                     }
-                    catch ( LogValidationException err )
+                    catch( LogValidationException err )
                     {
                         return err.Message;
                     }
@@ -483,7 +520,7 @@ namespace MedEnthDesktop.Server
         {
             string html = string.Empty;
             string idleHtml = Path.Combine( "html", "start.html" );
-            using ( StreamReader inFile = new StreamReader( idleHtml ) )
+            using( StreamReader inFile = new StreamReader( idleHtml ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -500,7 +537,7 @@ namespace MedEnthDesktop.Server
         {
             string html = string.Empty;
             string startHtml = Path.Combine( "html", "meditate.html" );
-            using ( StreamReader inFile = new StreamReader( startHtml ) )
+            using( StreamReader inFile = new StreamReader( startHtml ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -524,13 +561,13 @@ namespace MedEnthDesktop.Server
         {
             string html = string.Empty;
             string endHtml = Path.Combine( "html", "end.html" );
-            using ( StreamReader inFile = new StreamReader( endHtml ) )
+            using( StreamReader inFile = new StreamReader( endHtml ) )
             {
                 html = inFile.ReadToEnd();
             }
 
             // Insert the total minutes meditated to the html.
-            if ( string.IsNullOrEmpty( errorString ) )
+            if( string.IsNullOrEmpty( errorString ) )
             {
                 html = html.Replace( "{%ErrorString%}", string.Empty );
             }
@@ -551,19 +588,19 @@ namespace MedEnthDesktop.Server
         {
             string mapPath = Path.Combine( "html", "logbook.html" );
             string html = string.Empty;
-            using ( StreamReader inFile = new StreamReader( mapPath ) )
+            using( StreamReader inFile = new StreamReader( mapPath ) )
             {
                 html = inFile.ReadToEnd();
             }
 
             string logHtml = string.Empty;
-            if ( api.LogBook.Logs.Count == 0 )
+            if( api.LogBook.Logs.Count == 0 )
             {
                 logHtml = "<p>No Sessions Yet.</p>";
             }
             else
             {
-                foreach ( ILog log in api.LogBook.Logs )
+                foreach( ILog log in api.LogBook.Logs )
                 {
                     logHtml +=
 @"
@@ -606,7 +643,7 @@ namespace MedEnthDesktop.Server
         {
             string mapPath = Path.Combine( "html", "map.html" );
             string html = string.Empty;
-            using ( StreamReader inFile = new StreamReader( mapPath ) )
+            using( StreamReader inFile = new StreamReader( mapPath ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -624,7 +661,7 @@ namespace MedEnthDesktop.Server
         {
             string path = Path.Combine( "html", "js", "leaflet.js" );
             string js = string.Empty;
-            using ( StreamReader inFile = new StreamReader( path ) )
+            using( StreamReader inFile = new StreamReader( path ) )
             {
                 js = inFile.ReadToEnd();
             }
@@ -640,7 +677,7 @@ namespace MedEnthDesktop.Server
         {
             string path = Path.Combine( "html", "css", "leaflet.css" );
             string css = string.Empty;
-            using ( StreamReader inFile = new StreamReader( path ) )
+            using( StreamReader inFile = new StreamReader( path ) )
             {
                 css = inFile.ReadToEnd();
             }
@@ -655,11 +692,11 @@ namespace MedEnthDesktop.Server
         private static void GetMarkerImage( Stream stream )
         {
             string markerPath = Path.Combine( "media", "marker-icon.png" );
-            using ( FileStream inFile = new FileStream( markerPath, FileMode.Open, FileAccess.Read ) )
+            using( FileStream inFile = new FileStream( markerPath, FileMode.Open, FileAccess.Read ) )
             {
-                using ( BinaryReader br = new BinaryReader( inFile ) )
+                using( BinaryReader br = new BinaryReader( inFile ) )
                 {
-                    while ( br.BaseStream.Position < br.BaseStream.Length )
+                    while( br.BaseStream.Position < br.BaseStream.Length )
                     {
                         stream.WriteByte( br.ReadByte() );
                     }
@@ -675,7 +712,7 @@ namespace MedEnthDesktop.Server
         {
             string exportPath = Path.Combine( "html", "export.html" );
             string html = string.Empty;
-            using ( StreamReader inFile = new StreamReader( exportPath ) )
+            using( StreamReader inFile = new StreamReader( exportPath ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -691,7 +728,7 @@ namespace MedEnthDesktop.Server
         {
             string indexHtmlPath = Path.Combine( "html", "about.html" );
             string html = string.Empty;
-            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
             {
                 html = inFile.ReadToEnd();
             }
@@ -737,7 +774,7 @@ namespace MedEnthDesktop.Server
         {
             string indexHtmlPath = Path.Combine( "html", "css", "meditation_logger.css" );
             string css = string.Empty;
-            using ( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
             {
                 css = inFile.ReadToEnd();
             }
