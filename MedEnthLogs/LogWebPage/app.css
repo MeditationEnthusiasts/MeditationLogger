@@ -1,0 +1,118 @@
+﻿/* 
+ Meditation Logger.
+ Copyright (C) 2015-2016  Seth Hendrick.
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* ------- Logbook Stuff -------- */
+.logbookEntry
+{
+    border:3px;
+    border-color: black;
+    border-style: solid;
+    margin: 5px;
+    padding: 10px;
+}
+
+/* -------- Nav Bar Stuff -------- */
+
+#navBar
+{
+    float: left;
+    clear: both;
+    font-size: 120%;
+    margin-left: 3em;
+    min-width: 750px;
+    margin-bottom: 2em;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    font-weight: bold;
+    background-color: white;
+}
+
+.navBarPiece
+{
+    float:left;
+    padding: 1em;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    font-size: 107%;
+}
+
+.navBarPiece:hover
+{
+    background-color: blue;
+}
+
+/* ---- Nav Bar Pieces ----*/
+
+#current
+{
+    color: black;
+    background: white;
+}
+
+#homeButton
+{
+    background-color: #FFaaaa;
+}
+
+#meditateButton
+{
+    background-color: #FFE0C0;
+}
+
+#logbookButton
+{
+    background-color: #FFFFC0;
+}
+
+#mapButton
+{
+    background-color: #E0ff88;
+}
+
+#exportButton
+{
+    background-color: #C0FFC0;
+}
+
+#aboutButton
+{
+    background-color: #C0FFFF
+}
+
+#main
+{
+    background-color: white;
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-bottom: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 2em;
+    max-width: 1100px;
+    font-size: 120%;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    line-height: 2em;
+    float: left;
+    clear: both;
+    min-width: 750px;
+}
