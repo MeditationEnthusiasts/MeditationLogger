@@ -242,6 +242,11 @@ namespace MedEnthDesktop.Server
                     else if( url.EndsWith( ".css" ) || url.EndsWith( ".js" ) )
                     {
                         responseString = GetJsOrCssFile( url );
+                        if( string.IsNullOrEmpty( responseString ) )
+                        {
+                            responseString = Get404Html();
+                            response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
+                        }
                     }
                     else if( url == "/media/marker-icon.png" )
                     {
@@ -273,12 +278,6 @@ namespace MedEnthDesktop.Server
                         }
                     }
                     else
-                    {
-                        responseString = Get404Html();
-                        response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
-                    }
-
-                    if( string.IsNullOrEmpty( responseString ) )
                     {
                         responseString = Get404Html();
                         response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
