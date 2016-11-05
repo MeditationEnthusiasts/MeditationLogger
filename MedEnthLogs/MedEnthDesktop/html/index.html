@@ -16,6 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -77,26 +78,42 @@
         <div id="main" class="pure-u-1">
             <h1>Remote Meditation Logger</h1>
 
-            <div class="pricing-table-header">
-                <h2>Total Minutes:</h2>
-                <span class="pricing-table-price">{%TotalMinutes%}</span>
-            </div>
+            <div class="info-tables">
+                <div class="info-table">
+                    <div class="info-table-free">
+                        <div class="info-table-header">
+                            <h2>Total Minutes:</h2>
+                            <span class="info-table-price">{%TotalMinutes%}</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="pricing-table-header">
-                <h2>Longest Session:</h2>
-                <span class="pricing-table-price">{%LongestSession%}</span>
-            </div>
+                <div class="info-table">
+                    <div class="info-table-biz">
+                        <div class="info-table-header">
+                            <h2>Longest Session:</h2>
+                            <span class="info-table-price">{%LongestSession%}</span>
+                        </div>
+                    </div>
+                </div>
 
-
-            <div class="pricing-table-header">
-                <h2>Total Sessions:</h2>
-                <span class="pricing-table-price">{%TotalSessions%}</span>
-            </div>
-
-            <div class="pricing-table-header">
-                <h2>Last Session:</h2>
-                <span class="pricing-table-price">{%LatestSession%}</span>
-            </div>
+                <div class="info-table">
+                    <div class="info-table-1">
+                        <div class="info-table-header">
+                            <h2>Total Sessions:</h2>
+                            <span class="info-table-price">{%TotalSessions%}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-table">
+                    <div class="info-table-2">
+                        <div class="info-table-header">
+                            <h2>Last Session:</h2>
+                            <span class="info-table-price">{%LatestSession%}</span>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Tables -->
         </div><!-- End Main -->
 
     </div> <!-- End Pure Layout -->
