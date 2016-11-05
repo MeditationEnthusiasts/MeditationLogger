@@ -1,6 +1,6 @@
 /MedEnthLogs/MedEnthLogsWin10/bin
 /MedEnthLogs/MedEnthLogsWin10/obj
-/MedEnthLogs/MedEnthLogsWin10/*.pfx
+*.pfx
 /MedEnthLogs/.vs
 /MedEnthLogs/MedEnthDesktop/bin
 /MedEnthLogs/MedEnthDesktop/obj
@@ -12,3 +12,4 @@
 bin
 Debug
 Release
+obj

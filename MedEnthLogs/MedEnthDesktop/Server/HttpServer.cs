@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -238,13 +239,9 @@ namespace MedEnthDesktop.Server
                     {
                         responseString = GetMapHtml( api );
                     }
-                    else if( url == "/js/leaflet.js" )
+                    else if( url.EndsWith( ".css" ) || url.EndsWith( ".js" ) )
                     {
-                        responseString = GetLeafletJs();
-                    }
-                    else if( url == "/css/leaflet.css" )
-                    {
-                        responseString = GetLeafletCss();
+                        responseString = GetJsOrCssFile( url );
                     }
                     else if( url == "/media/marker-icon.png" )
                     {
@@ -276,6 +273,12 @@ namespace MedEnthDesktop.Server
                         }
                     }
                     else
+                    {
+                        responseString = Get404Html();
+                        response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
+                    }
+
+                    if( string.IsNullOrEmpty( responseString ) )
                     {
                         responseString = Get404Html();
                         response.StatusCode = Convert.ToInt32( HttpStatusCode.NotFound );
@@ -653,36 +656,38 @@ namespace MedEnthDesktop.Server
             return html;
         }
 
-        /// <summary>
-        /// Gets the Javascript for Leaflet.js.
-        /// </summary>
-        /// <returns>The javascript for leaflet.js.</returns>
-        private static string GetLeafletJs()
-        {
-            string path = Path.Combine( "html", "js", "leaflet.js" );
-            string js = string.Empty;
-            using( StreamReader inFile = new StreamReader( path ) )
-            {
-                js = inFile.ReadToEnd();
-            }
-
-            return js;
-        }
+        private static Regex cssPattern = new Regex( @"/(?<jsOrCss>(js|css))/(?<pure>pure/)?(?<file>[\w-\d]+\.(css|js))", RegexOptions.Compiled );
 
         /// <summary>
-        /// Gets the CSS for Leaflet.js.
+        /// Reads in the given JS or CSS file.
         /// </summary>
-        /// <returns>The CSS for leaflet.js.</returns>
-        private static string GetLeafletCss()
+        /// <param name="url">The URL to grab.</param>
+        /// <returns>The CSS or JS contents.</returns>
+        private static string GetJsOrCssFile( string url )
         {
-            string path = Path.Combine( "html", "css", "leaflet.css" );
-            string css = string.Empty;
-            using( StreamReader inFile = new StreamReader( path ) )
+            string filePath;
+            Match cssMatch = cssPattern.Match( url );
+            if( cssMatch.Success )
             {
-                css = inFile.ReadToEnd();
+                filePath = Path.Combine(
+                    "html",
+                    cssMatch.Groups["jsOrCss"].Value,
+                    cssMatch.Groups["pure"].Value,
+                    cssMatch.Groups["file"].Value
+                );
+            }
+            else
+            {
+                return string.Empty;
             }
 
-            return css;
+            string html = string.Empty;
+            using( StreamReader inFile = new StreamReader( filePath ) )
+            {
+                html = inFile.ReadToEnd();
+            }
+
+            return html;
         }
 
         /// <summary>

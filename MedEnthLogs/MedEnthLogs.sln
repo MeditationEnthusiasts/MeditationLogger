@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApi", "MedEnthLogsApi\MedEnthLogsApi.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
 EndProject
@@ -43,15 +43,20 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsPhoneApp", "MedE
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{f6502a96-f278-41b5-87ef-a7075d415ab2}*SharedItemsImports = 13
-		TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
-		MedEnthLogsApi\MedEnthLogsApi.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
-		..\SethCS\SethCS\SethCS.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{0aa24bcd-933b-4465-b0ae-cd0f375dc085}*SharedItemsImports = 4
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{0fff41a3-b05d-4d3a-9439-900f1d413d67}*SharedItemsImports = 4
 		MedEnthLogsApi\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
+		MedEnthLogsApi\MedEnthLogsApi.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
+		..\SethCS\SethCS\SethCS.projitems*{4c5c9a21-33f1-4742-8776-8e7f6cf28635}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
-		MedEnthLogsApi\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{7e8b3126-cf97-447f-9d42-77f8dddce558}*SharedItemsImports = 4
 		TestCore\TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
+		TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{c7b773df-7019-491b-b076-7b0ad9679521}*SharedItemsImports = 4
+		MedEnthLogsApi\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{e895fd4e-f7e3-4aaa-98ab-bd0b221df57a}*SharedItemsImports = 4
+		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{f6502a96-f278-41b5-87ef-a7075d415ab2}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
