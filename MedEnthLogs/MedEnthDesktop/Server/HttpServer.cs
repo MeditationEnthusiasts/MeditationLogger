@@ -378,11 +378,7 @@ namespace MedEnthDesktop.Server
         private static string GetHomePageHtml( Api api )
         {
             string indexHtmlPath = Path.Combine( "html", "index.html" );
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string html = ReadFile( indexHtmlPath );
 
             html = html.Replace( "{%TotalMinutes%}", api.LogBook.TotalTime.ToString( "N2" ) );
             html = html.Replace( "{%LongestSession%}", api.LogBook.LongestTime.ToString( "N2" ) );
@@ -399,6 +395,8 @@ namespace MedEnthDesktop.Server
             }
 
             html = html.Replace( "{%LatestSession%}", latestSesssionString );
+
+            html = AddCommonHtml( html );
 
             return html;
         }
@@ -520,14 +518,8 @@ namespace MedEnthDesktop.Server
         /// <returns>The idle state html for the meditate page.</returns>
         private static string GetIdleStateHtml()
         {
-            string html = string.Empty;
             string idleHtml = Path.Combine( "html", "start.html" );
-            using( StreamReader inFile = new StreamReader( idleHtml ) )
-            {
-                html = inFile.ReadToEnd();
-            }
-
-            return html;
+            return ReadFile( idleHtml );
         }
 
         /// <summary>
@@ -537,12 +529,8 @@ namespace MedEnthDesktop.Server
         /// <returns>The started state html for the meditate page.</returns>
         private static string GetStartedStateHtml( Api api )
         {
-            string html = string.Empty;
             string startHtml = Path.Combine( "html", "meditate.html" );
-            using( StreamReader inFile = new StreamReader( startHtml ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string html = ReadFile( startHtml );
 
             // In case the user navigates from the page or the browser crashes,
             // get the diff between now and when we started the session.
@@ -561,12 +549,8 @@ namespace MedEnthDesktop.Server
         /// <returns>The ended state html for the meditate page.</returns>
         private static string GetEndedStateHtml( Api api, string errorString )
         {
-            string html = string.Empty;
             string endHtml = Path.Combine( "html", "end.html" );
-            using( StreamReader inFile = new StreamReader( endHtml ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string html = ReadFile( endHtml );
 
             // Insert the total minutes meditated to the html.
             if( string.IsNullOrEmpty( errorString ) )
@@ -588,12 +572,8 @@ namespace MedEnthDesktop.Server
         /// <returns>HTML for the logbook page in a string.</returns>
         private static string GetLogbookHtml( Api api )
         {
-            string mapPath = Path.Combine( "html", "logbook.html" );
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( mapPath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string logbookPath = Path.Combine( "html", "logbook.html" );
+            string html = ReadFile( logbookPath );
 
             string logHtml = string.Empty;
             if( api.LogBook.Logs.Count == 0 )
@@ -644,12 +624,8 @@ namespace MedEnthDesktop.Server
         private static string GetMapHtml( Api api )
         {
             string mapPath = Path.Combine( "html", "map.html" );
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( mapPath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
 
+            string html = ReadFile( mapPath );
             html = html.Replace( "{%leaflet_data%}", LeafletJS.GetMarkerHtml( api ) );
 
             return html;
@@ -680,13 +656,27 @@ namespace MedEnthDesktop.Server
                 return string.Empty;
             }
 
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( filePath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            return ReadFile( filePath );
+        }
 
-            return html;
+        /// <summary>
+        /// Reads the common header html from the file system and returns the contents.
+        /// </summary>
+        /// <returns>The common header html.</returns>
+        private static string GetCommonHeaderHtml()
+        {
+            string filePath = Path.Combine( "html", "common_head.html" );
+            return ReadFile( filePath );
+        }
+
+        /// <summary>
+        /// Reads the navbar html from the file system and returns the contents.
+        /// </summary>
+        /// <returns>The nav var html.</returns>
+        private static string GetNavbarHtml()
+        {
+            string filePath = Path.Combine( "html", "navbar.html" );
+            return ReadFile( filePath );
         }
 
         /// <summary>
@@ -715,11 +705,9 @@ namespace MedEnthDesktop.Server
         private static string GetExportPage()
         {
             string exportPath = Path.Combine( "html", "export.html" );
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( exportPath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string html = ReadFile( exportPath );
+
+            html = AddCommonHtml( html );
 
             return html;
         }
@@ -730,12 +718,8 @@ namespace MedEnthDesktop.Server
         /// <returns>The HTML for the about page.</returns>
         private static string GetAboutPage()
         {
-            string indexHtmlPath = Path.Combine( "html", "about.html" );
-            string html = string.Empty;
-            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
-            {
-                html = inFile.ReadToEnd();
-            }
+            string aboutHtmlPath = Path.Combine( "html", "about.html" );
+            string html = ReadFile( aboutHtmlPath );
 
             html = html.Replace( "{%VersionString%}", Api.VersionString );
 
@@ -776,13 +760,42 @@ namespace MedEnthDesktop.Server
         /// <returns>The CSS string.</returns>
         private static string GetCss()
         {
-            string indexHtmlPath = Path.Combine( "html", "css", "meditation_logger.css" );
-            string css = string.Empty;
-            using( StreamReader inFile = new StreamReader( indexHtmlPath ) )
+            string cssFile = Path.Combine( "html", "css", "meditation_logger.css" );
+            return ReadFile( cssFile );
+        }
+
+        /// <summary>
+        /// Reads the given file to the end.
+        /// Returns string.Empty if the file does not exist.
+        /// </summary>
+        /// <param name="path">The path to read.</param>
+        /// <returns>The string of the file.</returns>
+        private static string ReadFile( string path )
+        {
+            string fileConents = string.Empty;
+            if( File.Exists( path ) )
             {
-                css = inFile.ReadToEnd();
+                using( StreamReader inFile = new StreamReader( path ) )
+                {
+                    fileConents = inFile.ReadToEnd();
+                }
             }
-            return css;
+
+            return fileConents;
+        }
+
+        /// <summary>
+        /// Adds common HTML to the given HTML and returns the modified
+        /// HTML with the common HTML merged in it.
+        /// </summary>
+        /// <param name="html">The HTML that needs common things added to it.</param>
+        /// <returns>The same HTML passed in, but with common things added.</returns>
+        private static string AddCommonHtml( string html )
+        {
+            html = html.Replace( "{%NavBar%}", GetNavbarHtml() );
+            html = html.Replace( "{%CommonHead%}", GetCommonHeaderHtml() );
+
+            return html;
         }
     }
 }
