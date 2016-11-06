@@ -2,9 +2,14 @@
  * -- LAYOUT STYLES --
  * This layout consists of two main elements, `#nav` (navigation bar), and `#main` (content). All 2 elements are within `#layout`
  */
-#layout, #nav, #main {
+#layout, #nav {
     margin: 0;
     padding: 0;
+}
+
+#main {
+    margin: 0;
+    padding: 2em;
 }
 
 /*
@@ -67,7 +72,7 @@
     #main {
         position: fixed;
         margin: 0;
-        padding: 0;
+        padding: 2em;
     }
 }
 

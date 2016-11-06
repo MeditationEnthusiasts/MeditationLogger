@@ -519,7 +519,11 @@ namespace MedEnthDesktop.Server
         private static string GetIdleStateHtml()
         {
             string idleHtml = Path.Combine( "html", "start.html" );
-            return ReadFile( idleHtml );
+
+            string html = ReadFile( idleHtml );
+            html = AddCommonHtml( html );
+
+            return html;
         }
 
         /// <summary>

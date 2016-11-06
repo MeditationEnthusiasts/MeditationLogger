@@ -1,4 +1,5 @@
-﻿<!--
+﻿<!DOCTYPE html>
+<!--
  Meditation Logger.
  Copyright (C) 2015-2016  Seth Hendrick.
 
@@ -15,42 +16,30 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
-<!DOCTYPE html>
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link type="text/css" rel="stylesheet" href="css/meditation_logger.css" media="screen" />
-    <style>
-        body 
-        {
-            background-color: #FFE0C0;
-        }
-    </style>
+    {%CommonHead%}
+    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
 </head>
 <body>
-    <div id="navBar">
-        <a href="index.html"><div class="navBarPiece" id="homeButton">Home</div></a>
-        <div class="navBarPiece" id="current">Meditate!</div>
-        <a href="logbook.html"><div class="navBarPiece" id="logbookButton">View Logbook</div></a>
-        <a href="map.html"><div class="navBarPiece" id="mapButton">View Map</div></a>
-        <a href="export.html"><div class="navBarPiece" id="exportButton">Export</div></a>
-        <a href="about.html"><div class="navBarPiece" id="aboutButton">About</div></a>
-    </div>
-    <div id="main">
-        <h1>Meditate!</h1>
-        <p>
-            Click the button below to start your meditation session.  You will be redirected to a new page during your session.
-            When you are done, click the "Finish" button.  You will then be asked for your comments about the session and whether or not
-            you want to save your location.  Hit the "Save" button, and your session will be saved.
-        </p>
-        <p>
-            If your browser somehow crashes or you accidently refresh or leave the page, don't worry, the timer will pick up where it left off.
-        </p>
-        <form action="" method="post">
-            <input name="startButton" type="submit" value="Start Meditating"/>
-        </form>
+    <div id="layout" class="content pure-g">
+        <!-- Start Pure layout -->
+        {%NavBar%}
+        <div id="main" class="pure-u-1">
+            <h1>Meditate!</h1>
+            <p>
+                Click the button below to start your meditation session.  You will be redirected to a new page during your session.
+                When you are done, click the "Finish" button.  You will then be asked for your comments about the session and whether or not
+                you want to save your location.  Hit the "Save" button, and your session will be saved.
+            </p>
+            <p>
+                If your browser somehow crashes or you accidently refresh or leave the page, don't worry, the timer will pick up where it left off.
+            </p>
+            <form action="" method="post">
+                <input class="primary-button pure-button" name="startButton" type="submit" value="Start Meditating" />
+            </form>
+        </div>
     </div>
 </body>
 </html>
