@@ -264,6 +264,14 @@ namespace MedEnthDesktop.Server
                     {
                         JsonExporter.ExportJson( response.OutputStream, api.LogBook );
                     }
+                    else if( url == "/about/credits.txt" )
+                    {
+                        responseString = GetCredits();
+                    }
+                    else if( url == "/about/license.txt" )
+                    {
+                        responseString = GetLicense();
+                    }
                     else if( url == "/quit.html" )
                     {
                         if( request.HttpMethod == "POST" )
@@ -705,6 +713,24 @@ namespace MedEnthDesktop.Server
         }
 
         /// <summary>
+        /// Gets the license text.
+        /// </summary>
+        /// <returns>The license text.</returns>
+        private static string GetLicense()
+        {
+            return License.MedEnthLicense;
+        }
+
+        /// <summary>
+        /// Gets the credits text.
+        /// </summary>
+        /// <returns>The credits text.</returns>
+        private static string GetCredits()
+        {
+            return License.ExternalLicenses;
+        }
+
+        /// <summary>
         /// Gets the export page HTML.
         /// </summary>
         /// <returns>The HTML for the export page.</returns>
@@ -728,6 +754,7 @@ namespace MedEnthDesktop.Server
             string html = ReadFile( aboutHtmlPath );
 
             html = html.Replace( "{%VersionString%}", Api.VersionString );
+            html = AddCommonHtml( html );
 
             return html;
         }

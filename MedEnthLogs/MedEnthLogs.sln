@@ -41,6 +41,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsPhoneApp.Windows
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsPhoneApp", "MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.shproj", "{F6502A96-F278-41B5-87EF-A7075D415AB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD6909CB-2A4D-42D4-8B70-94B669E76C19}"
+	ProjectSection(SolutionItems) = preProject
+		..\CREDITS.txt = ..\CREDITS.txt
+		..\LICENSE.txt = ..\LICENSE.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MedEnthLogsPhoneApp\MedEnthLogsPhoneApp\MedEnthLogsPhoneApp.projitems*{0aa24bcd-933b-4465-b0ae-cd0f375dc085}*SharedItemsImports = 4
