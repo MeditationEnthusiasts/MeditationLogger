@@ -542,6 +542,7 @@ namespace MedEnthDesktop.Server
             // we send back.
             TimeSpan diff = DateTime.UtcNow - api.CurrentLog.StartTime;
             html = html.Replace( "{%startingSeconds%}", diff.TotalSeconds.ToString() );
+            html = AddCommonHtml( html );
             return html;
         }
 
@@ -566,6 +567,7 @@ namespace MedEnthDesktop.Server
                 html = html.Replace( "{%ErrorString%}", "Error: " + errorString );
             }
             html = html.Replace( "{%minutesMeditated%}", api.CurrentLog.Duration.TotalMinutes.ToString( "N2" ) );
+            html = AddCommonHtml( html );
             return html;
         }
 

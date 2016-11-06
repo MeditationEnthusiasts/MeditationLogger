@@ -1,4 +1,5 @@
-﻿<!--
+﻿<!DOCTYPE html>
+<!--
  Meditation Logger.
  Copyright (C) 2015-2016  Seth Hendrick.
 
@@ -16,17 +17,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE html>
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link type="text/css" rel="stylesheet" href="css/meditation_logger.css" media="screen" />
-    <style>
-        body {
-            background-color: #FFE0C0;
-        }
-    </style>
+    {%CommonHead%}
+    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
     <script type="text/javascript">
         var saveButton;
 
@@ -42,7 +37,7 @@
                     'Location:\n' +
                     '<input id="latTextbox" name="lat" type="text" readonly="readonly" />\n' +
                     '<input id="lonTextbox" name="lon" type="text" readonly="readonly" />\n' +
-                    '<input id="getLocationButton" name="getLocationButton" type="button" onclick="GetLocation()" value="Get Location"/>';
+                    '<input id="getLocationButton" class="primary-button pure-button" name="getLocationButton" type="button" onclick="GetLocation()" value="Get Location"/>';
             }
             else
             {
@@ -128,34 +123,30 @@
     </script>
 </head>
 <body>
-    <div id="navBar">
-        <a href="index.html"><div class="navBarPiece" id="homeButton">Home</div></a>
-        <div class="navBarPiece" id="current">Meditate!</div>
-        <a href="logbook.html"><div class="navBarPiece" id="logbookButton">View Logbook</div></a>
-        <a href="map.html"><div class="navBarPiece" id="mapButton">View Map</div></a>
-        <a href="export.html"><div class="navBarPiece" id="exportButton">Export</div></a>
-        <a href="about.html"><div class="navBarPiece" id="aboutButton">About</div></a>
-    </div>
-    <div id="main">
-        {%ErrorString%}
-        <h1>Finished!</h1>
-        <p><strong>Minutes Meditated: </strong>{%minutesMeditated%}</p>
-        <p>
-            Fill out the below form and hit "Save" to record this session.  Type the &quot;Get Location&quot; button to save your location.
-            If you do not wish to save your location, do not click this button.
-        </p>
-        <noscript>
-            <p>No javascript detected.  You'll still be able to save your session, but not your location</p>
-        </noscript>
-        <form action="/meditate.html" method="post">
-            <p>Technique: <input name="technique" type="text" /></p>
-            <p id="locationText">
-                Location: No Javascript Detected.  Can not save location.
+    <div id="layout" class="content pure-g">
+        <!-- Start Pure layout -->
+        {%NavBar%}
+        <div id="main" class="pure-u-1">
+            {%ErrorString%}
+            <h1>Finished!</h1>
+            <p><strong>Minutes Meditated: </strong>{%minutesMeditated%}</p>
+            <p>
+                Fill out the below form and hit "Save" to record this session.  Type the &quot;Get Location&quot; button to save your location.
+                If you do not wish to save your location, do not click this button.
             </p>
-            <p>Comments:</p>
-            <textarea id="comments" rows="10" cols="80" name="comments"></textarea>
-            <p><input id="saveButton" name="saveButton" type="submit" value="Save Session" /></p>
-        </form>
+            <noscript>
+                <p>No javascript detected.  You'll still be able to save your session, but not your location</p>
+            </noscript>
+            <form action="/meditate.html" method="post">
+                <p>Technique: <input name="technique" type="text" /></p>
+                <p id="locationText">
+                    Location: No Javascript Detected.  Can not save location.
+                </p>
+                <p>Comments:</p>
+                <textarea id="comments" rows="10" cols="80" name="comments"></textarea>
+                <p><input class="primary-button pure-button" id="saveButton" name="saveButton" type="submit" value="Save Session" /></p>
+            </form>
+        </div>
     </div>
 </body>
 </html>
