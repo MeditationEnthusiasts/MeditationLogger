@@ -588,6 +588,7 @@ namespace MedEnthDesktop.Server
         {
             string logbookPath = Path.Combine( "html", "logbook.html" );
             string html = ReadFile( logbookPath );
+            html = AddCommonHtml( html );
 
             string logHtml = string.Empty;
             if( api.LogBook.Logs.Count == 0 )
@@ -598,34 +599,40 @@ namespace MedEnthDesktop.Server
             {
                 foreach( ILog log in api.LogBook.Logs )
                 {
+                    string listCommentString = log.Comments;
+                    if( listCommentString.Length >= 100 )
+                    {
+                        listCommentString = listCommentString.Substring( 0, 100 ) + "...";
+                    }
+
+                    // Show the technique's first letter in a window so it could easily be eye-balled.
+                    char techniqueLetter;
+                    if( string.IsNullOrEmpty( log.Technique ) )
+                    {
+                        techniqueLetter = '-';
+                    }
+                    else
+                    {
+                        techniqueLetter = log.Technique[0];
+                    }
+
                     logHtml +=
 @"
-        <div class=""logbookEntry"">
-            <p><strong>" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</strong></p>
-            <table cellspacing=""0"" cellpadding=""5px"">
-                <tr>
-                    <td><strong>Duration:</strong></td>
-                    <td>" + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" minutes</td>
-                </tr>
-                <tr>
-                    <td><strong>Technique:</strong></td>
-                    <td>" + log.Technique + @"</td>
-                </tr>
-                <tr>
-                    <td><strong>Comments:</strong></td>
-                </tr>
-            </table>
-            <div>
-                <blockquote>
-                    " + log.Comments + @"
-                </blockquote>
+        <div class=""email-item pure-g"">
+            <div class=""pure-u"" style=""padding-right:0.5em;""> <!-- Minutes in a small div -->
+                <h2>" + char.ToUpper( techniqueLetter ) + @"</h2>
+            </div>
+            <div class=""pure-u-3-4"">
+                <h5 class=""email-name"">" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</h5>
+                <h4 class=""email-subject"">" + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" min.</h4>
+                <p class=""email-desc"">" + listCommentString + @"</p>
             </div>
         </div>
 ";
                 }
             }
 
-            html = html.Replace( "{%LogbookTable%}", logHtml );
+            html = html.Replace( "{%LogbookList%}", logHtml );
 
             return html;
         }
