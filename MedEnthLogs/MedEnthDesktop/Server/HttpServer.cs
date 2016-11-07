@@ -640,6 +640,7 @@ namespace MedEnthDesktop.Server
             string mapPath = Path.Combine( "html", "map.html" );
 
             string html = ReadFile( mapPath );
+            html = AddCommonHtml( html );
             html = html.Replace( "{%leaflet_data%}", LeafletJS.GetMarkerHtml( api ) );
 
             return html;
