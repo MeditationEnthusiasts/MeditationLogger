@@ -618,7 +618,7 @@ namespace MedEnthDesktop.Server
 
                     logHtml +=
 @"
-        <div class=""email-item pure-g"">
+        <div class=""email-item pure-g"" id=""" + log.Guid + @""" onclick=""logSelected('" + log.Guid + @"');"">
             <div class=""pure-u"" style=""padding-right:0.5em;""> <!-- Minutes in a small div -->
                 <h2>" + char.ToUpper( techniqueLetter ) + @"</h2>
             </div>
@@ -632,7 +632,39 @@ namespace MedEnthDesktop.Server
                 }
             }
 
+                string jsData =
+@"<script>
+    var logData = " + JsonExporter.ExportJsonToString( api.LogBook ) + @"
+</script>";
             html = html.Replace( "{%LogbookList%}", logHtml );
+            html = html.Replace( "{%LogbookData%}", jsData );
+
+            if( api.LogBook.Logs.Count == 0 )
+            {
+                html = html.Replace( "{%MainTechnique%}", "-" );
+                html = html.Replace( "{%MainDuration%}", "-" );
+                html = html.Replace( "{%MainStartTime%}", "-" );
+                html = html.Replace( "{%MainEndTime%}", "-" );
+                html = html.Replace( "{%MainComments%}", string.Empty );
+            }
+            else
+            {
+                ILog firstLog = api.LogBook.Logs[0];
+                string techniqueString;
+                if( string.IsNullOrEmpty( firstLog.Technique ) )
+                {
+                    techniqueString = "Unknown Technique";
+                }
+                else
+                {
+                    techniqueString = firstLog.Technique;
+                }
+                html = html.Replace( "{%MainTechnique%}", techniqueString );
+                html = html.Replace( "{%MainDuration%}", firstLog.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) );
+                html = html.Replace( "{%MainStartTime%}", firstLog.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) );
+                html = html.Replace( "{%MainEndTime%}", firstLog.EndTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) );
+                html = html.Replace( "{%MainComments%}", firstLog.Comments );
+            }
 
             return html;
         }

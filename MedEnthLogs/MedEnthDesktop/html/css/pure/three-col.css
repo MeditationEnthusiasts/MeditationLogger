@@ -2,9 +2,14 @@
  * -- LAYOUT STYLES --
  * This layout consists of three main elements, `#nav` (navigation bar), `#list` (email list), and `#main` (email content). All 3 elements are within `#layout`
  */
-#layout, #nav, #list, #main {
+#layout, #nav, #list {
     margin: 0;
     padding: 0;
+}
+
+#main {
+    margin: 0;
+    padding: 2em;
 }
 
 /*
@@ -82,7 +87,7 @@
     #main {
         position: static;
         margin: 0;
-        padding: 0;
+        padding: 2em;
     }
 }
 

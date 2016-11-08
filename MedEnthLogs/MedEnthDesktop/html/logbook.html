@@ -1,4 +1,5 @@
-﻿<!--
+﻿<!DOCTYPE html>
+<!--
  Meditation Logger.
  Copyright (C) 2015-2016  Seth Hendrick.
 
@@ -16,13 +17,103 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE html>
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
     {%CommonHead%}
     <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
     <link type="text/css" rel="stylesheet" href="css/pure/three-col.css" />
+    {%LogbookData%}
+    <script>
+
+        var mainTechniqueHeader;
+        var mainDurationHeader;
+        var mainStartTime;
+        var mainEndTime;
+        var mainDuration;
+        var mainTechique;
+        var mainComments;
+        var selectedGuid;
+        var selectedLog;
+
+        let setLog = function(log) {
+            var startDate = new Date(log.StartTime);
+            var endDate = new Date(log.EndTime);
+            var duration = endDate - startDate;
+
+            var techniqueString = log.Technique;
+            if (techniqueString.length === 0) {
+                techniqueString = "Unknown Technique";
+            }
+
+            // The difference between two dates becomes milliseconds.
+            // Therefore, subtract the two dates, and divide by 1000 (seconds)
+            // and then 60 (minutes).
+            var minutes = (endDate - startDate) / 1000 / 60;
+
+            mainTechniqueHeader.innerHTML = techniqueString;
+            mainDurationHeader.innerHTML = minutes;
+            mainStartTime.innerHTML = startDate.toDateString() + ", " + startDate.getHours() + ":" + startDate.getMinutes() + ":" + startDate.getSeconds();
+            mainEndTime.innerHTML = endDate.toDateString() + ", " + endDate.getHours() + ":" + endDate.getMinutes() + ":" + endDate.getSeconds();
+            mainDuration.innerHTML = minutes;
+            mainTechique.innerHTML = techniqueString;
+            mainComments.innerHTML = log.Comments;
+
+            selectedGuid = log.Guid;
+            selectedLog = log;
+        };
+
+        let logSelected = function (guid) {
+            if (selectedGuid === guid) {
+                return;
+            }
+            for (var i = 0; i < logData.length; ++i) {
+                if (logData[i].Guid === guid) {
+                    setLog(logData[i]);
+                    break;
+                }
+            }
+
+            updateList();
+        };
+
+        let updateList = function () {
+            if (selectedLog === null) {
+                return;
+            }
+
+            for (var i = 0; i < logData.length; ++i) {
+                if (logData[i] === selectedLog) {
+                    var logDiv = document.getElementById(logData[i].Guid);
+                    logDiv.className = "email-item email-item-selected pure-g";
+                }
+                else {
+                    var logDiv = document.getElementById(logData[i].Guid);
+                    logDiv.className = "email-item pure-g";
+                }
+            }
+        };
+
+        window.onload = function() {
+            // Set all the divs.
+            mainTechniqueHeader = document.getElementById("mainTechniqueHeader");
+            mainDurationHeader = document.getElementById("mainDurationHeader");
+            mainStartTime = document.getElementById("mainStartTime");
+            mainEndTime = document.getElementById("mainEndTime");
+            mainDuration = document.getElementById("mainDuration");
+            mainTechique = document.getElementById("mainTechique");
+            mainComments = document.getElementById("mainComments");
+
+            if ( logData.length === 0 )
+            {
+                return;
+            }
+            var firstLog = logData[0];
+            selectedGuid = null;
+            setLog(firstLog);
+            updateList();
+        };
+    </script>
 </head>
 <body>
     <div id="layout" class="content pure-g">
@@ -32,7 +123,53 @@
             {%LogbookList%}
         </div>
         <div id="main" class="pure-u-1">
-            <p>Nothing Yet...</p>
+            <div class="email-content">
+                <!-- Start Log Header -->
+                <div class="email-content-header pure-g">
+                    <div class="pure-u-1-2">
+                        <h1 class="email-content-title" id="mainTechniqueHeader">{%MainTechnique%}</h1>
+                        <p class="email-content-subtitle">for <span id="mainDurationHeader">{%MainDuration%}</span> minutes</p>
+                    </div>
+                    <div class="email-content-controls pure-u-1-2">
+                        <button class="secondary-button pure-button">Edit</button>
+                        <button class="secondary-button pure-button">Delete</button>
+                        <button class="secondary-button pure-button">XML Export</button>
+                        <button class="secondary-button pure-button">JSON Export</button>
+                    </div>
+                </div>
+                <!-- End Log Header -->
+                <!-- Start Log Content -->
+                <div class="email-content-body">
+                    <noscript>
+                        <p><strong>Can only show latest log information without JavaScript enabled.</strong></p>
+                    </noscript>
+                    <table>
+                        <tr>
+                            <td><strong>Start Time:</strong></td>
+                            <td id="mainStartTime">{%MainStartTime%}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>End Time:</strong></td>
+                            <td id="mainEndTime">{%MainEndTime%}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Time:</strong></td>
+                            <td id="mainDuration">{%MainDuration%} Minutes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technique:</strong></td>
+                            <td id="mainTechique">{%MainTechnique%}</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 2em;">
+                        <strong>Comments:</strong>
+                        <div id="mainComments">
+                            {%MainComments%}
+                        </div>
+                    </div>
+                </div>
+                <!-- End Log Content-->
+            </div>
         </div>
     </div>
 </body>

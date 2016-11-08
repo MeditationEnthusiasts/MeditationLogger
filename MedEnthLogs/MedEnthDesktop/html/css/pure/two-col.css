@@ -25,17 +25,14 @@
         position: relative;
     }
 
-    /* These are position:fixed; elements that will be in the left 500px of the screen */
-    #nav{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        overflow: auto;
-    }
     #nav {
         margin-left:-500px; /* "left col (nav + list)" width */
         width:150px;
         height: 100%;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        overflow: auto;
     }
 
     /* Show the menu items on the larger screen */

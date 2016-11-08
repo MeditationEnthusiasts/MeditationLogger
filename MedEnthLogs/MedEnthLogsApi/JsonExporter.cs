@@ -40,28 +40,44 @@ namespace MedEnthLogsApi
         {
             using ( StreamWriter writer = new StreamWriter( outFile ) )
             {
-                JArray array = new JArray();
-                for( int i = 0; i < logBook.Logs.Count; ++i )
-                {
-                    JObject o = new JObject();
-                    o[Log.GuidString] = logBook.Logs[i].Guid.ToString();
-                    o[Log.EditTimeString] = logBook.Logs[i].EditTime.ToString( "o" );
-                    o[Log.StartTimeString] = logBook.Logs[i].StartTime.ToString( "o" );
-                    o[Log.EndTimeString] = logBook.Logs[i].EndTime.ToString( "o" );
-                    o[Log.TechniqueString] = logBook.Logs[i].Technique;
-                    o[Log.CommentsString] = logBook.Logs[i].Comments;
-                    o[Log.LatitudeString] = logBook.Logs[i].Latitude.HasValue ? logBook.Logs[i].Latitude.ToString() : string.Empty;
-                    o[Log.LongitudeString] = logBook.Logs[i].Longitude.HasValue ? logBook.Logs[i].Longitude.ToString() : string.Empty;
-
-                    array.Add( o );
-
-                    if ( onStep != null )
-                    {
-                        onStep( i + 1, logBook.Logs.Count );
-                    }
-                }
-                writer.WriteLine( array.ToString() );
+                writer.WriteLine( ExportJsonToString( logBook, onStep ) );
             }
+        }
+
+        /// <summary>
+        /// Exports the given logbook to json in the form of a string.
+        /// </summary>
+        /// <param name="logBook">The logbook to convert to json.</param>
+        /// <param name="onStep">
+        /// Action to take on each step during the process. Parameter 1 is the current step
+        /// we are on.  Parameter 2 is the total number of steps the function will take.
+        /// Null for no-op.
+        /// </param>
+        /// <returns>Raw Json in the form of a string.</returns>
+        public static string ExportJsonToString( LogBook logBook, Action<int, int> onStep = null )
+        {
+            JArray array = new JArray();
+            for( int i = 0; i < logBook.Logs.Count; ++i )
+            {
+                JObject o = new JObject();
+                o[Log.GuidString] = logBook.Logs[i].Guid.ToString();
+                o[Log.EditTimeString] = logBook.Logs[i].EditTime.ToString( "o" );
+                o[Log.StartTimeString] = logBook.Logs[i].StartTime.ToString( "o" );
+                o[Log.EndTimeString] = logBook.Logs[i].EndTime.ToString( "o" );
+                o[Log.TechniqueString] = logBook.Logs[i].Technique;
+                o[Log.CommentsString] = logBook.Logs[i].Comments;
+                o[Log.LatitudeString] = logBook.Logs[i].Latitude.HasValue ? logBook.Logs[i].Latitude.ToString() : string.Empty;
+                o[Log.LongitudeString] = logBook.Logs[i].Longitude.HasValue ? logBook.Logs[i].Longitude.ToString() : string.Empty;
+
+                array.Add( o );
+
+                if( onStep != null )
+                {
+                    onStep( i + 1, logBook.Logs.Count );
+                }
+            }
+
+            return array.ToString();
         }
 
         /// <summary>
