@@ -5,7 +5,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApiMono", "MedEn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthDesktopMono", "MedEnthDesktop\MedEnthDesktopMono.csproj", "{807F6E54-4092-4532-96D2-9E2AC20FD3C1}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\SethCS\SethCS\SethCSMono.shproj", "{9406B11B-3C52-4266-91F6-B6C176593B01}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{9406B11B-3C52-4266-91F6-B6C176593B01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsCliMono", "MedEnthLogsCli\MedEnthLogsCliMono.csproj", "{54461C1F-9E77-43A5-BC40-F574B2C36F73}"
 EndProject
