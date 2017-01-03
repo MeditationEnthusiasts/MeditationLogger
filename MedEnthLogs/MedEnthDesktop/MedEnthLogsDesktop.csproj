@@ -131,6 +131,7 @@
     <Compile Include="SaveView.Designer.cs">
       <DependentUpon>SaveView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Server\HttpResponseHandler.cs" />
     <Compile Include="Server\HttpServer.cs" />
     <Compile Include="Win32LocationDetector.cs" />
     <Compile Include="Win32Program.cs" />

@@ -413,10 +413,12 @@ namespace TestDesktop
             {
                 if ( this.serverProcess != null )
                 {
-                    using ( StreamWriter writer = this.serverProcess.StandardInput )
-                    {
-                        writer.Write( Environment.NewLine );
-                    }
+                    HttpWebRequest request = WebRequest.CreateHttp( url + "/quit.html" );
+                    request.Method = "POST";
+
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
 
                     this.serverProcess.WaitForExit();
                     Assert.AreEqual( 0, this.serverProcess.ExitCode );
