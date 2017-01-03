@@ -1,6 +1,6 @@
 ﻿// 
 // Meditation Logger.
-// Copyright (C) 2015-2016  Seth Hendrick.
+// Copyright (C) 2015-2017  Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
+using System.Security.Policy;
 using MedEnthDesktop;
 using MedEnthDesktop.Server;
 using MedEnthLogsApi;
@@ -90,7 +94,7 @@ namespace MedEnthLogsCli
                 }
                 else if( args[0] == "launch_server" )
                 {
-                    int returnCode = LaunchServer( HttpServer.DefaultPort );
+                    int returnCode = LaunchServer( HttpServer.DefaultPort, args );
                     if( returnCode == ErrorCodes.AdminNeeded )
                     {
                         PrintAdminMessage( HttpServer.DefaultPort );
@@ -142,7 +146,7 @@ namespace MedEnthLogsCli
                     short port;
                     if( short.TryParse( args[1], out port ) )
                     {
-                        int code = LaunchServer( port );
+                        int code = LaunchServer( port, args );
                         if( code == ErrorCodes.AdminNeeded )
                         {
                             PrintAdminMessage( port );
@@ -267,8 +271,37 @@ namespace MedEnthLogsCli
         /// </summary>
         /// <param name="port">Port to listen on.  Defaulted to 80</param>
         /// <returns></returns>
-        static int LaunchServer( short port )
+        static int LaunchServer( short port, string[] args )
         {
+            // Required for the Razor Engine:
+            // https://github.com/Antaris/RazorEngine
+            if( AppDomain.CurrentDomain.IsDefaultAppDomain() )
+            {
+                // RazorEngine cannot clean up from the default appdomain...
+                Console.WriteLine( "Switching to second AppDomain, for RazorEngine..." );
+                AppDomainSetup adSetup = new AppDomainSetup();
+                adSetup.ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+                AppDomain current = AppDomain.CurrentDomain;
+                // You only need to add strongnames when your appdomain is not a full trust environment.
+                var strongNames = new StrongName[0];
+
+                AppDomain domain = AppDomain.CreateDomain(
+                    "MeditationLoggerDomain", null,
+                    current.SetupInformation,
+                    new PermissionSet( PermissionState.Unrestricted ),
+                    strongNames
+                );
+
+                int exitCode = domain.ExecuteAssembly(
+                    Assembly.GetExecutingAssembly().Location,
+                    args
+                );
+
+                // RazorEngine will cleanup. 
+                AppDomain.Unload( domain );
+                return exitCode;
+            }
+
             Api api = null;
             try
             {

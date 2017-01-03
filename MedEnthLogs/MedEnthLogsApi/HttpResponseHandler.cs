@@ -29,6 +29,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using MedEnthLogsApi;
+using MedEnthLogsApi.Razor;
+using RazorEngine;
+using RazorEngine.Configuration;
+using RazorEngine.Templating;
+using RazorEngine.Text;
 
 namespace MedEnthLogsApi
 {
@@ -87,6 +92,31 @@ namespace MedEnthLogsApi
         private static Regex cssPattern =
             new Regex( @"/(?<jsOrCss>(js|css))/(?<pure>pure/)?(?<file>[\w-\d]+\.(css|js))", RegexOptions.Compiled );
 
+        // -------- Page Names --------
+
+        public const string CreditsUrl = "/about/credits.txt";
+        public const string LicenseUrl = "/about/license.txt";
+        public const string AboutUrl = "/about.html";
+
+        // -------- Templates --------
+        
+        /// <summary>
+        /// Template for the common head html.
+        /// </summary>
+        private string commonHeadTemplate;
+        
+        /// <summary>
+        /// Template for the nav bar.
+        /// </summary>
+        private string navBarTemplate;
+
+        // -------- Constant Page Returns --------
+
+        // These pages will NEVER change once compiled.  Might as well
+        // cache them.
+
+        private string aboutPageHtml;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -96,9 +126,45 @@ namespace MedEnthLogsApi
         public HttpResponseHandler( Api api )
         {
             this.api = api;
+            TemplateServiceConfiguration config = new TemplateServiceConfiguration();
+            config.Language = Language.CSharp;
+            config.EncodedStringFactory = new HtmlEncodedStringFactory();
+            config.BaseTemplateType = typeof( RawHtmlTemplate<> );
+
+            IRazorEngineService service = RazorEngineService.Create( config );
+            Engine.Razor = service;
+#if DEBUG
+            config.Debug = true;
+#endif
         }
 
         // ---------------- Functions ----------------
+
+        /// <summary>
+        /// Inits all the templates.
+        /// </summary>
+        public void InitTemplates()
+        {
+            this.commonHeadTemplate = GetCommonHeaderHtml();
+            this.navBarTemplate = GetNavbarHtml();
+
+            // Compile Templates
+
+            // About page.
+            string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
+
+            // About page will NEVER change, just cache it.
+            this.aboutPageHtml = Engine.Razor.RunCompile(
+                aboutPageTemplate,
+                AboutUrl,
+                null,
+                new {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    VersionString = Api.VersionString
+                }
+            );
+        }
 
         /// <summary>
         /// Gets what to send to the client.
@@ -130,39 +196,39 @@ namespace MedEnthLogsApi
             // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
             if( ( url == "/" ) || ( url == "/index.html" ) )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetHomePageHtml() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetHomePageHtml() );
             }
             else if( url == "/logbook.html" )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetLogbookHtml() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetLogbookHtml() );
             }
             else if( url == "/meditate.html" )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( HandleMeditateRequest( method, httpQueryString ) );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( HandleMeditateRequest( method, httpQueryString ) );
             }
-            else if( url == "/about.html" )
+            else if( url == AboutUrl )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetAboutPage() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( this.aboutPageHtml );
             }
             else if( url == "/css/meditation_logger.css" )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetCss() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetCss() );
             }
             else if( url == "/map.html" )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetMapHtml( api ) );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetMapHtml( api ) );
             }
             else if( url.EndsWith( ".css" ) || url.EndsWith( ".js" ) )
             {
                 string responseString = GetJsOrCssFile( url );
                 if( string.IsNullOrEmpty( responseString ) )
                 {
-                    info.ResponseBuffer = Encoding.UTF8.GetBytes( Get404Html() );
+                    info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( Get404Html() );
                     info.StatusCode = HttpStatusCode.NotFound;
                 }
                 else
                 {
-                    info.ResponseBuffer = Encoding.UTF8.GetBytes( responseString );
+                    info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( responseString );
                     if( url.EndsWith( ".css" ) )
                     {
                         info.ContentType = "text/css";
@@ -179,7 +245,7 @@ namespace MedEnthLogsApi
             }
             else if( url == "/export.html" )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetExportPage() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetExportPage() );
             }
             else if( url == "/export/logbook.xml" )
             {
@@ -199,14 +265,14 @@ namespace MedEnthLogsApi
                     info.ContentType = "text/json";
                 }
             }
-            else if( url == "/about/credits.txt" )
+            else if( url == CreditsUrl )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetCredits() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( License.ExternalLicenses );
                 info.ContentType = "text/plain";
             }
-            else if( url == "/about/license.txt" )
+            else if( url == LicenseUrl )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( GetLicense() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( License.MedEnthLicense );
                 info.ContentType = "text/plain";
             }
             else if( url == "/quit.html" )
@@ -214,18 +280,18 @@ namespace MedEnthLogsApi
                 if( method == "POST" )
                 {
                     HandleQuitEvent();
-                    info.ResponseBuffer = Encoding.UTF8.GetBytes( "Service Shut down" );
+                    info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( "Service Shut down" );
                     info.ContentType = "text/plain";
                 }
                 else
                 {
-                    info.ResponseBuffer = Encoding.UTF8.GetBytes( Get404Html() );
+                    info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( Get404Html() );
                     info.StatusCode = HttpStatusCode.NotFound;
                 }
             }
             else
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( Get404Html() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( Get404Html() );
                 info.StatusCode = HttpStatusCode.NotFound;
             }
 
@@ -635,7 +701,7 @@ namespace MedEnthLogsApi
         {
             if( File.Exists( path ) == false )
             {
-                info.ResponseBuffer = Encoding.UTF8.GetBytes( Get404Html() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( Get404Html() );
                 info.StatusCode = HttpStatusCode.NotFound;
                 return;
             }
@@ -664,24 +730,6 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
-        /// Gets the license text.
-        /// </summary>
-        /// <returns>The license text.</returns>
-        private static string GetLicense()
-        {
-            return License.MedEnthLicense;
-        }
-
-        /// <summary>
-        /// Gets the credits text.
-        /// </summary>
-        /// <returns>The credits text.</returns>
-        private static string GetCredits()
-        {
-            return License.ExternalLicenses;
-        }
-
-        /// <summary>
         /// Gets the export page HTML.
         /// </summary>
         /// <returns>The HTML for the export page.</returns>
@@ -690,21 +738,6 @@ namespace MedEnthLogsApi
             string exportPath = Path.Combine( "html", "export.html" );
             string html = ReadFile( exportPath );
 
-            html = AddCommonHtml( html );
-
-            return html;
-        }
-
-        /// <summary>
-        /// Gets the about page HTML.
-        /// </summary>
-        /// <returns>The HTML for the about page.</returns>
-        private static string GetAboutPage()
-        {
-            string aboutHtmlPath = Path.Combine( "html", "about.html" );
-            string html = ReadFile( aboutHtmlPath );
-
-            html = html.Replace( "{%VersionString%}", Api.VersionString );
             html = AddCommonHtml( html );
 
             return html;

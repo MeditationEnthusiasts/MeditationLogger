@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MedEnthLogsApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MlgExporter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MlgSync.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Razor\RawHtmlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SessionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XmlExporter.cs" />
   </ItemGroup>

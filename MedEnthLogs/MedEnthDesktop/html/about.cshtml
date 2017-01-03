@@ -17,16 +17,17 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!-- Unit Test: about.cshtml -->
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw(Model.CommonHead)
     <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
     <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
 </head>
 <body>
     <div id="layout" class="content pure-g">
-        {%NavBar%}
+        @Html.Raw(Model.NavBar)
         <div id="main" class="pure-u-1">
             <h1>About:</h1>
 
@@ -35,7 +36,7 @@
                     <div class="info-table-free">
                         <div class="info-table-header">
                             <h2>Version:</h2>
-                            <span class="info-table-price">{%VersionString%}</span>
+                            <span class="info-table-price">@Model.VersionString</span>
                         </div>
                     </div>
                 </div>
@@ -48,15 +49,15 @@
                 </tr>
                 <tr>
                     <td><strong>Report a Bug:</strong></td>
-                    <td><a href="https://meditationenthusiasts.org/development/mantis/" target="_blank">https://meditationenthusiasts.org/development/mantis/</a></td>
+                    <td><a href="https://github.com/MeditationEnthusiasts/MeditationLogger/issues" target="_blank">https://github.com/MeditationEnthusiasts/MeditationLogger/issues</a></td>
                 </tr>
                 <tr>
                     <td><strong>View Wiki:</strong></td>
-                    <td><a href="https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start" target="_blank">https://meditationenthusiasts.org/development/dokuwiki/doku.php?id=mantis:meditation_logger:start</a></td>
+                    <td><a href="https://github.com/MeditationEnthusiasts/MeditationLogger/wiki" target="_blank">https://github.com/MeditationEnthusiasts/MeditationLogger/wiki</a></td>
                 </tr>
                 <tr>
                     <td><strong>View Source:</strong></td>
-                    <td><a href="https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src" target="_blank">https://bitbucket.org/meditationenthusiasts/meditation-logs-desktop/src</a></td>
+                    <td><a href="https://github.com/MeditationEnthusiasts/MeditationLogger" target="_blank">https://github.com/MeditationEnthusiasts/MeditationLogger</a></td>
                 </tr>
             </table>
 

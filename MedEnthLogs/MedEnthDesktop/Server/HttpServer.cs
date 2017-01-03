@@ -140,6 +140,7 @@ namespace MedEnthDesktop.Server
             // No-op if we are not listening.
             if( this.IsListening == false )
             {
+                this.responseHandler.InitTemplates();
                 this.listener.Start();
                 this.listeningThread.Start();
                 this.IsListening = true;
