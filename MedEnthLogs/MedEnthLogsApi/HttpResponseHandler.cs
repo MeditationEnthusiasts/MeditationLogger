@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MedEnthLogsApi;
 
-namespace MedEnthDesktop.Server
+namespace MedEnthLogsApi
 {
     public class HtmlInfo
     {

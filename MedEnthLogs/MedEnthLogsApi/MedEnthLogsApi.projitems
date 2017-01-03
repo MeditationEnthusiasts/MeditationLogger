@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCodes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpResponseHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonExporter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILocationDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILog.cs" />
