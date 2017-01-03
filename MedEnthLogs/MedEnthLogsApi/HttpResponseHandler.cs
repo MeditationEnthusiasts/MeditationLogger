@@ -94,6 +94,7 @@ namespace MedEnthLogsApi
 
         // -------- Page Names --------
 
+        public const string IndexUrl = "/index.html";
         public const string CreditsUrl = "/about/credits.txt";
         public const string LicenseUrl = "/about/license.txt";
         public const string AboutUrl = "/about.html";
@@ -151,6 +152,7 @@ namespace MedEnthLogsApi
             // Compile Templates
 
             // About page.
+            string indexPageTemplate = ReadFile( Path.Combine( "html", "index.cshtml" ) );
             string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
 
             // About page will NEVER change, just cache it.
@@ -163,6 +165,13 @@ namespace MedEnthLogsApi
                     NavBar = this.navBarTemplate,
                     VersionString = Api.VersionString
                 }
+            );
+
+            // Compile the index page.
+            Engine.Razor.Compile(
+                indexPageTemplate,
+                IndexUrl,
+                null
             );
         }
 
@@ -194,7 +203,7 @@ namespace MedEnthLogsApi
         {
             // Construct Response.
             // Taken from https://msdn.microsoft.com/en-us/library/system.net.httplistener.begingetcontext%28v=vs.110%29.aspx
-            if( ( url == "/" ) || ( url == "/index.html" ) )
+            if( ( url == "/" ) || ( url == IndexUrl ) )
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetHomePageHtml() );
             }
@@ -348,32 +357,19 @@ namespace MedEnthLogsApi
         /// <summary>
         /// Get the home page's html to display.
         /// </summary>
-        /// <param name="api">Reference to an API object.</param>
         /// <returns>HTML for the home page in a string.</returns>
         private string GetHomePageHtml()
         {
-            string indexHtmlPath = Path.Combine( "html", "index.html" );
-            string html = ReadFile( indexHtmlPath );
-
-            html = html.Replace( "{%TotalMinutes%}", api.LogBook.TotalTime.ToString( "N2" ) );
-            html = html.Replace( "{%LongestSession%}", api.LogBook.LongestTime.ToString( "N2" ) );
-            html = html.Replace( "{%TotalSessions%}", api.LogBook.Logs.Count.ToString() );
-
-            string latestSesssionString = string.Empty;
-            if( api.LogBook.Logs.Count == 0 )
-            {
-                latestSesssionString = "Nothing yet.";
-            }
-            else
-            {
-                latestSesssionString = api.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" );
-            }
-
-            html = html.Replace( "{%LatestSession%}", latestSesssionString );
-
-            html = AddCommonHtml( html );
-
-            return html;
+            return Engine.Razor.Run(
+                IndexUrl,
+                null,
+                new
+                {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    LogBook = this.api.LogBook
+                }
+            );
         }
 
         /// <summary>

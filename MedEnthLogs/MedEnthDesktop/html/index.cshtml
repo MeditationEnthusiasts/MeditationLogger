@@ -16,16 +16,19 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+
+<!-- Unit Test: index.cshtml -->
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw( Model.CommonHead )
     <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
-    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css"/>
+    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
 </head>
 <body>
-    <div id="layout" class="content pure-g"> <!-- Start Pure layout -->
-        {%NavBar%}
+    <div id="layout" class="content pure-g">
+        <!-- Start Pure layout -->
+        @Html.Raw( Model.NavBar )
         <div id="main" class="pure-u-1">
             <h1>Remote Meditation Logger</h1>
 
@@ -34,7 +37,9 @@
                     <div class="info-table-free">
                         <div class="info-table-header">
                             <h2>Total Minutes:</h2>
-                            <span class="info-table-price">{%TotalMinutes%}</span>
+                            <span class="info-table-price">
+                                @Model.LogBook.TotalTime.ToString( "N2" )
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -43,7 +48,9 @@
                     <div class="info-table-biz">
                         <div class="info-table-header">
                             <h2>Longest Session:</h2>
-                            <span class="info-table-price">{%LongestSession%}</span>
+                            <span class="info-table-price">
+                                @Model.LogBook.LongestTime.ToString( "N2" )
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +59,9 @@
                     <div class="info-table-1">
                         <div class="info-table-header">
                             <h2>Total Sessions:</h2>
-                            <span class="info-table-price">{%TotalSessions%}</span>
+                            <span class="info-table-price">
+                                @Model.LogBook.Logs.Count
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -60,7 +69,18 @@
                     <div class="info-table-2">
                         <div class="info-table-header">
                             <h2>Last Session:</h2>
-                            <span class="info-table-price">{%LatestSession%}</span>
+                            <span class="info-table-price">
+                                @{
+                                    if( Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:Nothing Yet.
+                                    }
+                                    else
+                                    {
+                                        @Model.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" )
+                                    }
+                                }
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -69,4 +89,5 @@
 
     </div> <!-- End Pure Layout -->
 </body>
+
 </html>
