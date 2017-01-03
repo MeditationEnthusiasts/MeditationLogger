@@ -1,9 +1,9 @@
 [bugtraq]
 	url = https://github.com/MeditationEnthusiasts/MeditationLogger/issues/%BUGID%
-	label = Issue ID:
+	label = "Issue ID: #"
 	append = false
 	number = true
 	warnifnoissue = false
-	logregex = \\*\\s+Issue:\\s+#\\d+\n\\d+
+	logregex = "\\*\\s+Issue: #?\\d+\n\\d+"
+	message = "Issue: #%BUGID%"
 [bugtraq]
-	message = Issue: #%BUGID%
