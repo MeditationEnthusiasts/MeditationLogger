@@ -16,17 +16,19 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!-- Unit Test: export.cshtml -->
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw( Model.CommonHead )
     <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
 </head>
 <body>
     <div id="layout" class="content pure-g">
         <!-- Start Pure layout -->
-        {%NavBar%}
+        @Html.Raw( Model.NavBar )
         <div id="main" class="pure-u-1">
             <h1>Export Logbook</h1>
             <p>You are able to export your logbook as .xml or .json.  Click one of the options below to download your lobook.</p>

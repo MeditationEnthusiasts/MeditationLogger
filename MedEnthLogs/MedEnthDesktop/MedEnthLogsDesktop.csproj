@@ -363,9 +363,9 @@
     <None Include="html\end.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="html\export.html">
+    <None Include="html\export.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="html\js\leaflet.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

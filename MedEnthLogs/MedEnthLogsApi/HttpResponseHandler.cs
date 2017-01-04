@@ -96,6 +96,9 @@ namespace MedEnthLogsApi
 
         public const string IndexUrl = "/index.html";
         public const string MeditateUrl = "/meditate.html";
+        public const string ExportUrl = "/export.html";
+        public const string ExportXmlUrl = "/export/logbook.xml";
+        public const string ExportJsonUrl = "/export/logbook.json.xml";
         public const string CreditsUrl = "/about/credits.txt";
         public const string LicenseUrl = "/about/license.txt";
         public const string AboutUrl = "/about.html";
@@ -118,6 +121,7 @@ namespace MedEnthLogsApi
         // cache them.
 
         private string meditateStartPageHtml;
+        private string exportPageHtml;
         private string aboutPageHtml;
 
         // -------- Razor Keys --------
@@ -160,19 +164,13 @@ namespace MedEnthLogsApi
 
             // Compile Templates
 
-            // About page will NEVER change, just cache it.
+            // Compile the index page.
             {
-                string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
-                this.aboutPageHtml = Engine.Razor.RunCompile(
-                    aboutPageTemplate,
-                    AboutUrl,
-                    null,
-                    new
-                    {
-                        CommonHead = this.commonHeadTemplate,
-                        NavBar = this.navBarTemplate,
-                        VersionString = Api.VersionString
-                    }
+                string indexPageTemplate = ReadFile( Path.Combine( "html", "index.cshtml" ) );
+                Engine.Razor.Compile(
+                    indexPageTemplate,
+                    IndexUrl,
+                    null
                 );
             }
 
@@ -211,13 +209,35 @@ namespace MedEnthLogsApi
                 );
             }
 
-            // Compile the index page.
+
+            // Export page will NEVER change, just cache it.
             {
-                string indexPageTemplate = ReadFile( Path.Combine( "html", "index.cshtml" ) );
-                Engine.Razor.Compile(
-                    indexPageTemplate,
-                    IndexUrl,
-                    null
+                string exportPageTemplate = ReadFile( Path.Combine( "html", "export.cshtml" ) );
+                this.exportPageHtml = Engine.Razor.RunCompile(
+                    exportPageTemplate,
+                    ExportUrl,
+                    null,
+                    new
+                    {
+                        CommonHead = this.commonHeadTemplate,
+                        NavBar = this.navBarTemplate
+                    }
+                );
+            }
+
+            // About page will NEVER change, just cache it.
+            {
+                string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
+                this.aboutPageHtml = Engine.Razor.RunCompile(
+                    aboutPageTemplate,
+                    AboutUrl,
+                    null,
+                    new
+                    {
+                        CommonHead = this.commonHeadTemplate,
+                        NavBar = this.navBarTemplate,
+                        VersionString = Api.VersionString
+                    }
                 );
             }
         }
@@ -299,11 +319,11 @@ namespace MedEnthLogsApi
             {
                 GetMarkerImage( info );
             }
-            else if( url == "/export.html" )
+            else if( url == ExportUrl )
             {
-                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetExportPage() );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( this.exportPageHtml );
             }
-            else if( url == "/export/logbook.xml" )
+            else if( url == ExportXmlUrl )
             {
                 using( MemoryStream ms = new MemoryStream() )
                 {
@@ -312,7 +332,7 @@ namespace MedEnthLogsApi
                     info.ContentType = "text/xml";
                 }
             }
-            else if( url == "/export/logbook.json" )
+            else if( url == ExportJsonUrl )
             {
                 using( MemoryStream ms = new MemoryStream() )
                 {
@@ -772,20 +792,6 @@ namespace MedEnthLogsApi
             }
 
             info.ResponseBuffer = pictureContents;
-        }
-
-        /// <summary>
-        /// Gets the export page HTML.
-        /// </summary>
-        /// <returns>The HTML for the export page.</returns>
-        private static string GetExportPage()
-        {
-            string exportPath = Path.Combine( "html", "export.html" );
-            string html = ReadFile( exportPath );
-
-            html = AddCommonHtml( html );
-
-            return html;
         }
 
         /// <summary>
