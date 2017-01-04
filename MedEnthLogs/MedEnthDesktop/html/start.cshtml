@@ -16,16 +16,19 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+
+<!-- Unit Test: start.cshtml -->
+
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw( Model.CommonHead )
     <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
 </head>
 <body>
     <div id="layout" class="content pure-g">
         <!-- Start Pure layout -->
-        {%NavBar%}
+        @Html.Raw( Model.NavBar )
         <div id="main" class="pure-u-1">
             <h1>Meditate!</h1>
             <p>

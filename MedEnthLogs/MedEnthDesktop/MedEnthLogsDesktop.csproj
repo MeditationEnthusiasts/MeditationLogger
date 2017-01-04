@@ -360,9 +360,9 @@
     <Content Include="html\css\pure\two-col.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\end.html">
+    <None Include="html\end.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="html\export.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -378,12 +378,12 @@
     <Content Include="html\map.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\meditate.html">
+    <None Include="html\meditate.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="html\start.html">
+    </None>
+    <None Include="html\start.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="media\homeLogo.png" />
     <Content Include="media\mainlogo.ico" />
     <Content Include="media\marker-icon.png">

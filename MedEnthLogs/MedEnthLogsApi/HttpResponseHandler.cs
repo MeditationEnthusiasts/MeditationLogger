@@ -95,6 +95,7 @@ namespace MedEnthLogsApi
         // -------- Page Names --------
 
         public const string IndexUrl = "/index.html";
+        public const string MeditateUrl = "/meditate.html";
         public const string CreditsUrl = "/about/credits.txt";
         public const string LicenseUrl = "/about/license.txt";
         public const string AboutUrl = "/about.html";
@@ -116,7 +117,15 @@ namespace MedEnthLogsApi
         // These pages will NEVER change once compiled.  Might as well
         // cache them.
 
+        private string meditateStartPageHtml;
         private string aboutPageHtml;
+
+        // -------- Razor Keys --------
+
+        // These are keys to the razor engine templates that are NOT page names.
+
+        private const string startMeditateKey = "start" + MeditateUrl;
+        private const string endMeditateKey = "end" + MeditateUrl;
 
         // ---------------- Constructor ----------------
 
@@ -151,28 +160,66 @@ namespace MedEnthLogsApi
 
             // Compile Templates
 
-            // About page.
-            string indexPageTemplate = ReadFile( Path.Combine( "html", "index.cshtml" ) );
-            string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
-
             // About page will NEVER change, just cache it.
-            this.aboutPageHtml = Engine.Razor.RunCompile(
-                aboutPageTemplate,
-                AboutUrl,
-                null,
-                new {
-                    CommonHead = this.commonHeadTemplate,
-                    NavBar = this.navBarTemplate,
-                    VersionString = Api.VersionString
-                }
-            );
+            {
+                string aboutPageTemplate = ReadFile( Path.Combine( "html", "about.cshtml" ) );
+                this.aboutPageHtml = Engine.Razor.RunCompile(
+                    aboutPageTemplate,
+                    AboutUrl,
+                    null,
+                    new
+                    {
+                        CommonHead = this.commonHeadTemplate,
+                        NavBar = this.navBarTemplate,
+                        VersionString = Api.VersionString
+                    }
+                );
+            }
+
+            // Meditate start page will NEVER change, just cache it.
+            {
+                string meditateStartPageTemplate = ReadFile( Path.Combine( "html", "start.cshtml" ) );
+                this.meditateStartPageHtml = Engine.Razor.RunCompile(
+                    meditateStartPageTemplate,
+                    startMeditateKey,
+                    null,
+                    new
+                    {
+                        CommonHead = this.commonHeadTemplate,
+                        NavBar = this.navBarTemplate
+                    }
+                );
+            }
+
+            // Compile the meditate page.
+            {
+                string medtatePageTemplate = ReadFile( Path.Combine( "html", "meditate.cshtml" ) );
+                Engine.Razor.Compile(
+                    medtatePageTemplate,
+                    MeditateUrl,
+                    null
+                );
+            }
+
+            // Compile the finish meditating page.
+            {
+                string meditateEndPageTemplate = ReadFile( Path.Combine( "html", "end.cshtml" ) );
+                Engine.Razor.Compile(
+                    meditateEndPageTemplate,
+                    endMeditateKey,
+                    null
+                );
+            }
 
             // Compile the index page.
-            Engine.Razor.Compile(
-                indexPageTemplate,
-                IndexUrl,
-                null
-            );
+            {
+                string indexPageTemplate = ReadFile( Path.Combine( "html", "index.cshtml" ) );
+                Engine.Razor.Compile(
+                    indexPageTemplate,
+                    IndexUrl,
+                    null
+                );
+            }
         }
 
         /// <summary>
@@ -211,7 +258,7 @@ namespace MedEnthLogsApi
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetLogbookHtml() );
             }
-            else if( url == "/meditate.html" )
+            else if( url == MeditateUrl )
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( HandleMeditateRequest( method, httpQueryString ) );
             }
@@ -480,12 +527,7 @@ namespace MedEnthLogsApi
         /// <returns>The idle state html for the meditate page.</returns>
         private string GetIdleStateHtml()
         {
-            string idleHtml = Path.Combine( "html", "start.html" );
-
-            string html = ReadFile( idleHtml );
-            html = AddCommonHtml( html );
-
-            return html;
+            return this.meditateStartPageHtml;
         }
 
         /// <summary>
@@ -494,17 +536,22 @@ namespace MedEnthLogsApi
         /// <returns>The started state html for the meditate page.</returns>
         private string GetStartedStateHtml()
         {
-            string startHtml = Path.Combine( "html", "meditate.html" );
-            string html = ReadFile( startHtml );
-
             // In case the user navigates from the page or the browser crashes,
             // get the diff between now and when we started the session.
             // Make the total seconds of that diff the starting time on the webpage
             // we send back.
-            TimeSpan diff = DateTime.UtcNow - api.CurrentLog.StartTime;
-            html = html.Replace( "{%startingSeconds%}", diff.TotalSeconds.ToString() );
-            html = AddCommonHtml( html );
-            return html;
+            TimeSpan diff = DateTime.UtcNow - this.api.CurrentLog.StartTime;
+
+            return Engine.Razor.Run(
+                MeditateUrl,
+                null,
+                new
+                {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    StartingSeconds = diff.TotalSeconds.ToString()
+                }
+            );
         }
 
         /// <summary>
@@ -514,21 +561,23 @@ namespace MedEnthLogsApi
         /// <returns>The ended state html for the meditate page.</returns>
         private string GetEndedStateHtml( string errorString )
         {
-            string endHtml = Path.Combine( "html", "end.html" );
-            string html = ReadFile( endHtml );
-
             // Insert the total minutes meditated to the html.
-            if( string.IsNullOrEmpty( errorString ) )
+            if( string.IsNullOrEmpty( errorString ) == false )
             {
-                html = html.Replace( "{%ErrorString%}", string.Empty );
+                errorString = "Error: " + errorString;
             }
-            else
-            {
-                html = html.Replace( "{%ErrorString%}", "Error: " + errorString );
-            }
-            html = html.Replace( "{%minutesMeditated%}", api.CurrentLog.Duration.TotalMinutes.ToString( "N2" ) );
-            html = AddCommonHtml( html );
-            return html;
+
+            return Engine.Razor.Run(
+                endMeditateKey,
+                null,
+                new
+                {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    ErrorString = errorString,
+                    MinutesMeditated = api.CurrentLog.Duration.TotalMinutes.ToString( "N2" )
+                }
+            );
         }
 
         /// <summary>

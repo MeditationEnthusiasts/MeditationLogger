@@ -17,10 +17,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!-- Unit Test: end.cshtml -->
+
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw( Model.CommonHead )
     <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
     <script type="text/javascript">
         var saveButton;
@@ -125,11 +127,11 @@
 <body>
     <div id="layout" class="content pure-g">
         <!-- Start Pure layout -->
-        {%NavBar%}
+        @Html.Raw( Model.NavBar )
         <div id="main" class="pure-u-1">
-            {%ErrorString%}
+            @Model.ErrorString
             <h1>Finished!</h1>
-            <p><strong>Minutes Meditated: </strong>{%minutesMeditated%}</p>
+            <p><strong>Minutes Meditated: </strong>@Model.MinutesMeditated</p>
             <p>
                 Fill out the below form and hit "Save" to record this session.  Type the &quot;Get Location&quot; button to save your location.
                 If you do not wish to save your location, do not click this button.
