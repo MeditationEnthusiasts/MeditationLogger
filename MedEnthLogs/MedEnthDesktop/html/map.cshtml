@@ -17,10 +17,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!-- Unit Test: map.cshtml -->
+
 <html>
 <head>
     <title>Meditation Enthusiasts Logger</title>
-    {%CommonHead%}
+    @Html.Raw( Model.CommonHead )
     <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
     <link type="text/css" rel="stylesheet" href="css/leaflet.css" />
     <script src="js/leaflet.js"></script>
@@ -54,13 +56,28 @@
             });
 
             // Insert the data.
-            {%leaflet_data%}
+            @foreach( var log in @Model.LogBook.Logs )
+            {
+                if( log.Latitude != null && log.Longitude != null )
+                {
+                    <text>
+                    var markerHTML@(log.Id) = '<div class="left" style="overflow: auto; color: black;">' +
+                    '<p><strong>@(log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ))</strong></p>' +
+                    '<p><strong>Duration:</strong> @(log.Duration.TotalMinutes.ToString( "F" )) minutes</p>' +
+                    '<p><strong>Technique:</strong> @(log.Technique)</p>' +
+                    '<p><strong>Comments:</strong>@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))</p>';
+
+                    var newPopup@(log.Id) = L.popup({maxwidth:500}).setContent(markerHTML@(log.Id));
+                    var newMarker@(log.Id) = L.marker([@(log.Latitude), @(log.Longitude)]).setIcon(icon).addTo(map).bindPopup(newPopup@(log.Id));
+                    </text>
+                }
+            }
         }
     </script>
 </head>
 <body>
     <div id="layout" class="content pure-g">
-        {%NavBar%}
+        @Html.Raw( Model.NavBar )
         <div id="main" class="pure-u-1">
             <h1>The places you have meditated!</h1>
             <noscript><p>Javascript is required... Sorry :(</p></noscript>

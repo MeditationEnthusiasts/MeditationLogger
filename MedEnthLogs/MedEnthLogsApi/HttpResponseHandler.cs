@@ -96,6 +96,7 @@ namespace MedEnthLogsApi
 
         public const string IndexUrl = "/index.html";
         public const string MeditateUrl = "/meditate.html";
+        public const string MapUrl = "/map.html";
         public const string ExportUrl = "/export.html";
         public const string ExportXmlUrl = "/export/logbook.xml";
         public const string ExportJsonUrl = "/export/logbook.json.xml";
@@ -209,6 +210,15 @@ namespace MedEnthLogsApi
                 );
             }
 
+            // Compile the map page.
+            {
+                string mapTemplate = ReadFile( Path.Combine( "html", "map.cshtml" ) );
+                Engine.Razor.Compile(
+                    mapTemplate,
+                    MapUrl,
+                    null
+                );
+            }
 
             // Export page will NEVER change, just cache it.
             {
@@ -290,9 +300,9 @@ namespace MedEnthLogsApi
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetCss() );
             }
-            else if( url == "/map.html" )
+            else if( url == MapUrl )
             {
-                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetMapHtml( api ) );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetMapHtml() );
             }
             else if( url.EndsWith( ".css" ) || url.EndsWith( ".js" ) )
             {
@@ -692,17 +702,19 @@ namespace MedEnthLogsApi
         /// <summary>
         /// Gets the map view HTML.
         /// </summary>
-        /// <param name="api">The API object.</param>
         /// <returns>The html of the map page.</returns>
-        private static string GetMapHtml( Api api )
+        private string GetMapHtml()
         {
-            string mapPath = Path.Combine( "html", "map.html" );
-
-            string html = ReadFile( mapPath );
-            html = AddCommonHtml( html );
-            html = html.Replace( "{%leaflet_data%}", LeafletJS.GetMarkerHtml( api ) );
-
-            return html;
+            return Engine.Razor.Run(
+                MapUrl,
+                null,
+                new
+                {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    LogBook = this.api.LogBook
+                }
+            );
         }
 
         /// <summary>

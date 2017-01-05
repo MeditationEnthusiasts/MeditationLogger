@@ -375,9 +375,9 @@
     <Content Include="html\logbook.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\map.html">
+    <None Include="html\map.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="html\meditate.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
