@@ -96,6 +96,7 @@ namespace MedEnthLogsApi
 
         public const string IndexUrl = "/index.html";
         public const string MeditateUrl = "/meditate.html";
+        public const string LogbookUrl = "/logbook.html";
         public const string MapUrl = "/map.html";
         public const string ExportUrl = "/export.html";
         public const string ExportXmlUrl = "/export/logbook.xml";
@@ -210,6 +211,16 @@ namespace MedEnthLogsApi
                 );
             }
 
+            // Compile the logbook page
+            {
+                string logbookTemplate = ReadFile( Path.Combine( "html", "logbook.cshtml" ) );
+                Engine.Razor.Compile(
+                    logbookTemplate,
+                    LogbookUrl,
+                    null
+                );
+            }
+
             // Compile the map page.
             {
                 string mapTemplate = ReadFile( Path.Combine( "html", "map.cshtml" ) );
@@ -284,7 +295,7 @@ namespace MedEnthLogsApi
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetHomePageHtml() );
             }
-            else if( url == "/logbook.html" )
+            else if( url == LogbookUrl )
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetLogbookHtml() );
             }
@@ -616,87 +627,22 @@ namespace MedEnthLogsApi
         /// <returns>HTML for the logbook page in a string.</returns>
         private string GetLogbookHtml()
         {
-            string logbookPath = Path.Combine( "html", "logbook.html" );
-            string html = ReadFile( logbookPath );
-            html = AddCommonHtml( html );
-
-            string logHtml = string.Empty;
-            if( api.LogBook.Logs.Count == 0 )
-            {
-                logHtml = "<p>No Sessions Yet.</p>";
-            }
-            else
-            {
-                foreach( ILog log in api.LogBook.Logs )
-                {
-                    string listCommentString = log.Comments;
-                    if( listCommentString.Length >= 100 )
-                    {
-                        listCommentString = listCommentString.Substring( 0, 100 ) + "...";
-                    }
-
-                    // Show the technique's first letter in a window so it could easily be eye-balled.
-                    char techniqueLetter;
-                    if( string.IsNullOrEmpty( log.Technique ) )
-                    {
-                        techniqueLetter = '-';
-                    }
-                    else
-                    {
-                        techniqueLetter = log.Technique[0];
-                    }
-
-                    logHtml +=
-@"
-        <div class=""email-item pure-g"" id=""" + log.Guid + @""" onclick=""logSelected('" + log.Guid + @"');"">
-            <div class=""pure-u"" style=""padding-right:0.5em;""> <!-- Minutes in a small div -->
-                <h2>" + char.ToUpper( techniqueLetter ) + @"</h2>
-            </div>
-            <div class=""pure-u-3-4"">
-                <h5 class=""email-name"">" + log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) + @"</h5>
-                <h4 class=""email-subject"">" + log.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) + @" min.</h4>
-                <p class=""email-desc"">" + listCommentString + @"</p>
-            </div>
-        </div>
-";
-                }
-            }
-
             string jsData =
 @"<script>
     var logData = " + JsonExporter.ExportJsonToString( api.LogBook ) + @"
 </script>";
-            html = html.Replace( "{%LogbookList%}", logHtml );
-            html = html.Replace( "{%LogbookData%}", jsData );
 
-            if( api.LogBook.Logs.Count == 0 )
-            {
-                html = html.Replace( "{%MainTechnique%}", "-" );
-                html = html.Replace( "{%MainDuration%}", "-" );
-                html = html.Replace( "{%MainStartTime%}", "-" );
-                html = html.Replace( "{%MainEndTime%}", "-" );
-                html = html.Replace( "{%MainComments%}", string.Empty );
-            }
-            else
-            {
-                ILog firstLog = api.LogBook.Logs[0];
-                string techniqueString;
-                if( string.IsNullOrEmpty( firstLog.Technique ) )
+            return Engine.Razor.Run(
+                LogbookUrl,
+                null,
+                new
                 {
-                    techniqueString = "Unknown Technique";
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    LogBook = this.api.LogBook,
+                    LogData = jsData
                 }
-                else
-                {
-                    techniqueString = firstLog.Technique;
-                }
-                html = html.Replace( "{%MainTechnique%}", techniqueString );
-                html = html.Replace( "{%MainDuration%}", firstLog.Duration.TotalMinutes.ToString( "F", CultureInfo.InvariantCulture ) );
-                html = html.Replace( "{%MainStartTime%}", firstLog.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) );
-                html = html.Replace( "{%MainEndTime%}", firstLog.EndTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ) );
-                html = html.Replace( "{%MainComments%}", firstLog.Comments );
-            }
-
-            return html;
+            );
         }
 
         /// <summary>

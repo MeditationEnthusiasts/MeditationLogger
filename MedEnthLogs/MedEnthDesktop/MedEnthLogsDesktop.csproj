@@ -372,9 +372,9 @@
     <Content Include="html\js\yui-min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\logbook.html">
+    <None Include="html\logbook.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="html\map.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

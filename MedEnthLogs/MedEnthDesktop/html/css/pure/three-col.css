@@ -88,6 +88,7 @@
         position: static;
         margin: 0;
         padding: 2em;
+        width: 100%; /* so that it's not 100% */
     }
 }
 

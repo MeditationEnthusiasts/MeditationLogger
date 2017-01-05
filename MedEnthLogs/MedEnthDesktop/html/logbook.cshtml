@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<!--
+ Meditation Logger.
+ Copyright (C) 2015-2016  Seth Hendrick.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- Unit Test: logbook.cshtml -->
+
+<html>
+<head>
+    <title>Meditation Enthusiasts Logger</title>
+    @Html.Raw( Model.CommonHead )
+    <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
+    <link type="text/css" rel="stylesheet" href="css/pure/three-col.css" />
+    <link type="text/css" rel="stylesheet" href="css/leaflet.css"/>
+    <script src="js/leaflet.js"></script>
+
+    <!-- Logbook information will appear here in script tags, set as var-->
+    @Html.Raw( Model.LogData )
+    <script>
+        var map;
+        var mapIcon;
+        var mapMarker;
+        var mainTechniqueHeader;
+        var mainDurationHeader;
+        var mainStartTime;
+        var mainEndTime;
+        var mainDuration;
+        var mainTechique;
+        var mainComments;
+        var selectedGuid;
+        var selectedLog;
+
+        let setLog = function(log) {
+            var startDate = new Date(log.StartTime);
+            var endDate = new Date(log.EndTime);
+            var duration = endDate - startDate;
+
+            var techniqueString = log.Technique;
+            if (techniqueString.length === 0) {
+                techniqueString = "Unknown Technique";
+            }
+
+            // Update map... if any exist.
+            if ((log.Latitude !== null) && (log.Latitude !== undefined) && (log.Longitude !== null) && (log.Longitude !== undefined)) {
+                if ((log.Latitude.length > 0) && (log.Longitude.length > 0)) {
+                    var lat = parseFloat(log.Latitude);
+                    var lon = parseFloat(log.Longitude);
+                    if (mapMarker === null) {
+                        mapMarker = L.marker([lat, lon]).setIcon(mapIcon).addTo(map)
+                    }
+                    else {
+                        mapMarker.setLatLng([lat, lon]);
+                        mapMarker.update();
+                    }
+                    mapMarker.setOpacity(100);
+                    map.setView([lat, lon], 13);
+                }
+                else {
+                    if (mapMarker !== null) {
+                        mapMarker.setOpacity(0);
+                    }
+                    map.setView([0, 0], 13);
+                }
+            }
+
+            // The difference between two dates becomes milliseconds.
+            // Therefore, subtract the two dates, and divide by 1000 (seconds)
+            // and then 60 (minutes).
+            var minutes = (endDate - startDate) / 1000 / 60;
+
+            mainTechniqueHeader.innerHTML = techniqueString;
+            mainDurationHeader.innerHTML = minutes;
+            mainStartTime.innerHTML = startDate.toDateString() + ", " + startDate.getHours() + ":" + startDate.getMinutes() + ":" + startDate.getSeconds();
+            mainEndTime.innerHTML = endDate.toDateString() + ", " + endDate.getHours() + ":" + endDate.getMinutes() + ":" + endDate.getSeconds();
+            mainDuration.innerHTML = minutes;
+            mainTechique.innerHTML = techniqueString;
+            mainComments.innerHTML = log.Comments;
+
+            selectedGuid = log.Guid;
+            selectedLog = log;
+        };
+
+        let logSelected = function (guid) {
+            if (selectedGuid === guid) {
+                return;
+            }
+            for (var i = 0; i < logData.length; ++i) {
+                if (logData[i].Guid === guid) {
+                    setLog(logData[i]);
+                    break;
+                }
+            }
+
+            updateList();
+        };
+
+        let updateList = function () {
+            if (selectedLog === null) {
+                return;
+            }
+
+            for (var i = 0; i < logData.length; ++i) {
+                if (logData[i] === selectedLog) {
+                    var logDiv = document.getElementById(logData[i].Guid);
+                    logDiv.className = "email-item email-item-selected pure-g";
+                }
+                else {
+                    var logDiv = document.getElementById(logData[i].Guid);
+                    logDiv.className = "email-item pure-g";
+                }
+            }
+        };
+
+        window.onload = function() {
+            // Set all the divs.
+            mainTechniqueHeader = document.getElementById("mainTechniqueHeader");
+            mainDurationHeader = document.getElementById("mainDurationHeader");
+            mainStartTime = document.getElementById("mainStartTime");
+            mainEndTime = document.getElementById("mainEndTime");
+            mainDuration = document.getElementById("mainDuration");
+            mainTechique = document.getElementById("mainTechique");
+            mainComments = document.getElementById("mainComments");
+
+            // Create Map
+            map = L.map('map').setView([0, 0], 13);
+            mapIcon = L.icon({
+                iconUrl: "media/marker-icon.png",
+                iconSize: [25, 41],
+                iconAnchor:[12.5, 41],
+                popupAnchor:[0, -30]
+            });
+            mapMarker = null;
+
+            // Pull from the OSM API
+            var osmURL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+            // In order to use open street map, we need to attribute to it.
+            var osmAttrib = 'Map Data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+            // Create the OSM layer.
+            var osm = new L.TileLayer(osmURL, { minZoom: 0, maxZoom: 18, attribution: osmAttrib });
+
+            // Add the osm layer to the map
+            map.addLayer(osm);
+
+            if ( logData.length === 0 )
+            {
+                return;
+            }
+            var firstLog = logData[0];
+            selectedGuid = null;
+            setLog(firstLog);
+            updateList();
+        };
+
+        let notImplemented = function () {
+            alert("Not Implemented Yet :(");
+        }
+    </script>
+</head>
+<body>
+    <div id="layout" class="content pure-g">
+        <!-- Start Pure layout -->
+        @Html.Raw( Model.NavBar )
+        <div id="list" class="pure-u-1">
+            @{
+                if( @Model.LogBook.Logs.Count > 0 )
+                {
+                    foreach( var log in @Model.LogBook.Logs )
+                    {
+                        var techniqueLetter = "-";
+                        if( string.IsNullOrEmpty( log.Technique ) == false )
+                        {
+                            techniqueLetter = ( "" + log.Technique[0] ).ToUpper();
+                        }
+
+                        <text>
+                            <div class="email-item pure-g" id="@(log.Guid)" onclick="logSelected('@(log.Guid)');">
+                                <div class="pure-u" style="padding-right:0.5em;">
+                                    <!-- Minutes in a small div -->
+                                    <h2>@(techniqueLetter)</h2>
+                                </div>
+                                <div class="pure-u-3-4">
+                                    <h5 class="email-name">@(log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ))</h5>
+                                    <h4 class="email-subject">@(log.Duration.TotalMinutes.ToString( "F" ))</h4>
+                                    <p class="email-desc">@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))</p>
+                                </div>
+                            </div>
+                        </text>
+                    }
+                }
+                else
+                {
+                    @:<p>No Sessions Yet.</p>
+                }
+            }
+        </div>
+        <div id="main" class="pure-u-1">
+            <div class="email-content">
+                <!-- Start Log Header -->
+                <div class="email-content-header pure-g">
+                    <div class="pure-u-1-2">
+                        <h1 class="email-content-title" id="mainTechniqueHeader">
+                            @{
+                                if( @Model.LogBook.Logs.Count == 0 )
+                                {
+                                    @:No Sessions Yet
+                                }
+                                else
+                                {
+                                    @(Model.LogBook.Logs[0].Technique.Replace( '\n', ' ' ).Replace( '\r', ' ' ))
+                                }
+                            }
+                        </h1>
+                        @{
+                            if( @Model.LogBook.Logs.Count > 0 )
+                            {
+                                @:<p class="email-content-subtitle">
+                                @:    for <span id="mainDurationHeader">@(Model.LogBook.Logs[0].Duration.TotalMinutes.ToString( "F" ))</span> minutes
+                                @:</p>
+                            }
+                        }
+                    </div>
+                    <div class="email-content-controls pure-u-1-2">
+                        <button class="secondary-button pure-button" onclick="notImplemented();">Edit</button>
+                        <button class="secondary-button pure-button" onclick="notImplemented();">Delete</button>
+                        <button class="secondary-button pure-button" onclick="notImplemented();">XML Export</button>
+                        <button class="secondary-button pure-button" onclick="notImplemented();">JSON Export</button>
+                    </div>
+                </div>
+                <!-- End Log Header -->
+                <!-- Start Log Content -->
+                <div class="email-content-body">
+                    <noscript>
+                        <p><strong>Can only show latest log information without JavaScript enabled.</strong></p>
+                    </noscript>
+                    <table>
+                        <tr>
+                            <td><strong>Start Time:</strong></td>
+                            <td id="mainStartTime">
+                                @{
+                                    if( @Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:-
+                                    }
+                                    else
+                                    {
+                                        @(Model.LogBook.Logs[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ))
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>End Time:</strong></td>
+                            <td id="mainEndTime">
+                                @{
+                                    if( @Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:-
+                                    }
+                                    else
+                                    {
+                                        @(Model.LogBook.Logs[0].EndTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ))
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Time:</strong></td>
+                            <td id="mainDuration">
+                                @{
+                                    if( @Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:-
+                                    }
+                                    else
+                                    {
+                                        @:@(Model.LogBook.Logs[0].Duration.TotalMinutes.ToString( "F" )) Minutes
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technique:</strong></td>
+                            <td id="mainTechique">
+                                @{
+                                    if( @Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:-
+                                    }
+                                    else
+                                    {
+                                        @(Model.LogBook.Logs[0].Technique.Replace( '\n', ' ' ).Replace( '\r', ' ' ))
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 2em;">
+                        <strong>Comments:</strong>
+                        <div id="mainComments">
+                            <p>
+                                @{
+                                    if( @Model.LogBook.Logs.Count == 0 )
+                                    {
+                                        @:No sessions yet.  Go ahead and add one!
+                                }
+                                    else
+                                    {
+                                        @(Model.LogBook.Logs[0].Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 2em;"><strong>Location:</strong></p>
+                    <div class="center" id="map" style="height:500px; padding-right:2em">
+                    </div>
+                </div>
+                <!-- End Log Content-->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
