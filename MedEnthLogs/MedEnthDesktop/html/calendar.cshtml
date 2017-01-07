@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<!--
+ Meditation Logger.
+ Copyright (C) 2015-2016  Seth Hendrick.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- Unit Test: about.cshtml -->
+<html>
+<head>
+    <title>Meditation Enthusiasts Logger</title>
+    @Html.Raw( Model.CommonHead )
+    <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
+    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
+
+    <link rel="stylesheet" href="css/fullcalendar/fullcalendar.min.css" />
+    <link rel="stylesheet" href="css/fullcalendar/fullcalendar.print.min.css" media="print" />
+    <link rel="stylesheet" href="css/qtip/jquery.qtip.min.css" />
+
+    <script src="js/moment.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.qtip.min.js"></script>
+    <script src="js/fullcalendar.min.js"></script>
+
+    <script>
+        // QTip stuff taken from the FullCalendar demo
+        // at qtip2.com/demos.
+        $(document).ready(function () {
+            var tooltip = $('<div/>').qtip({
+                id: 'fullcalendar',
+                prerender: true,
+                content: {
+                    text: "",
+                    title: {
+                        button: true
+                    }
+                },
+                position: {
+                    my: "bottom center",
+                    at: "top center",
+                    target: "event",
+                    viewport: $('#calendar'),
+                    adjust: {
+                        mouse: false,
+                        scroll: true,
+                    }
+                },
+                show: false,
+                hide: false,
+                style: 'qtip-light'
+            }).qtip('api');
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                defaultDate: '@(DateTime.Now.ToString( "yyyy-MM-dd" ))',
+                navLinks: true, // can click day/week names to navigate views
+                editable: false,
+                eventLimit: false, // allow "more" link when too many events
+                eventClick: function (calEvent, jsEvent, view) {
+                    var content = "<h3>" + calEvent.title + "</h3>" +
+                        "<p><strong>Start:</strong> " + calEvent.start + "</p>" +
+                        (calEvent.end && '<p><strong>End:</strong> ' + calEvent.end + '</p>' || '') +
+                        (calEvent.comments && '<p><strong>Comments:</strong> ' + calEvent.comments + '</p>' || '');
+                    tooltip.set({
+                        'content.text': content
+                    });
+                    tooltip.show(jsEvent);
+                },
+                dayClick: function () { tootip.hide(); },
+                eventResizeStart: function () { tooltip.hide(); },
+                eventDragStart: function () { tooltip.hide(); },
+                viewDisplay: function () { tooltip.hide(); },
+                navLinkDayClick: function () { tooltip.hide(); },
+                navLinkWeekClick: function () { tooltip.hide(); },
+                viewDestroy: function (view, element) { tooltip.hide(); },
+                events: [
+                    @foreach(var log in Model.LogBook.Logs)
+                    {
+                        @:{
+                            @:title: '@(log.Duration.TotalMinutes.ToString( "F" )) Min. @(log.Technique.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',
+                            @:start: '@(log.StartTime.ToLocalTime().ToString( "O" ))',
+                            @:end: '@(log.EndTime.ToLocalTime().ToString( "O" ))',
+                            @:comments: '@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',
+                            @:id: @(log.Id)
+                        @:},
+                    }
+                ]
+            });
+        });
+
+    </script>
+
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="layout" class="content pure-g">
+        @Html.Raw( Model.NavBar )
+        <div id="main" class="pure-u-1">
+            <div class="header">
+                <h1>Calendar</h1>
+                <h2>Days you've meditated!</h2>
+            </div>
+
+            <noscript>Java Script required for calendar view :(</noscript>
+            <div class="content">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -90,7 +90,7 @@ namespace MedEnthLogsApi
         private Api api;
 
         private static Regex cssPattern =
-            new Regex( @"/(?<jsOrCss>(js|css))/(?<pure>pure/)?(?<file>[\w-\d]+\.(css|js))", RegexOptions.Compiled );
+            new Regex( @"/(?<jsOrCss>(js|css))/(?<dir>(pure/)|(fullcalendar/)|(qtip/))?(?<file>[\w-\d\.]+\.(css|js))", RegexOptions.Compiled );
 
         // -------- Page Names --------
 
@@ -98,6 +98,7 @@ namespace MedEnthLogsApi
         public const string MeditateUrl = "/meditate.html";
         public const string LogbookUrl = "/logbook.html";
         public const string MapUrl = "/map.html";
+        public const string CalendarUrl = "/calendar.html";
         public const string ExportUrl = "/export.html";
         public const string ExportXmlUrl = "/export/logbook.xml";
         public const string ExportJsonUrl = "/export/logbook.json.xml";
@@ -231,6 +232,16 @@ namespace MedEnthLogsApi
                 );
             }
 
+            // Compile the calendar page.
+            {
+                string calTemplate = ReadFile( Path.Combine( "html", "calendar.cshtml" ) );
+                Engine.Razor.Compile(
+                    calTemplate,
+                    CalendarUrl,
+                    null
+                );
+            }
+
             // Export page will NEVER change, just cache it.
             {
                 string exportPageTemplate = ReadFile( Path.Combine( "html", "export.cshtml" ) );
@@ -314,6 +325,10 @@ namespace MedEnthLogsApi
             else if( url == MapUrl )
             {
                 info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetMapHtml() );
+            }
+            else if( url == CalendarUrl )
+            {
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( GetCalendarHtml() );
             }
             else if( url.EndsWith( ".css" ) || url.EndsWith( ".js" ) )
             {
@@ -664,6 +679,24 @@ namespace MedEnthLogsApi
         }
 
         /// <summary>
+        /// Gets the calendar view HTML.
+        /// </summary>
+        /// <returns>The html of the calendar page.</returns>
+        private string GetCalendarHtml()
+        {
+            return Engine.Razor.Run(
+                CalendarUrl,
+                null,
+                new
+                {
+                    CommonHead = this.commonHeadTemplate,
+                    NavBar = this.navBarTemplate,
+                    LogBook = this.api.LogBook
+                }
+            );
+        }
+
+        /// <summary>
         /// Reads in the given JS or CSS file.
         /// </summary>
         /// <param name="url">The URL to grab.</param>
@@ -677,7 +710,7 @@ namespace MedEnthLogsApi
                 filePath = Path.Combine(
                     "html",
                     cssMatch.Groups["jsOrCss"].Value,
-                    cssMatch.Groups["pure"].Value,
+                    cssMatch.Groups["dir"].Value,
                     cssMatch.Groups["file"].Value
                 );
             }

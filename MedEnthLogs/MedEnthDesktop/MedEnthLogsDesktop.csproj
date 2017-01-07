@@ -171,6 +171,9 @@
     <None Include="html\about.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="html\calendar.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="html\css\pure\bower.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
