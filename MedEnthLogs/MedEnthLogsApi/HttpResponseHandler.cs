@@ -761,6 +761,7 @@ namespace MedEnthLogsApi
             return
 @"
 <!doctype html>
+<!-- Unit Test: 404 not found -->
 <head>
     <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
     <title>Meditation Logger.  Not Found.</title>
@@ -808,20 +809,6 @@ namespace MedEnthLogsApi
             }
 
             return fileConents;
-        }
-
-        /// <summary>
-        /// Adds common HTML to the given HTML and returns the modified
-        /// HTML with the common HTML merged in it.
-        /// </summary>
-        /// <param name="html">The HTML that needs common things added to it.</param>
-        /// <returns>The same HTML passed in, but with common things added.</returns>
-        private static string AddCommonHtml( string html )
-        {
-            html = html.Replace( "{%NavBar%}", GetNavbarHtml() );
-            html = html.Replace( "{%CommonHead%}", GetCommonHeaderHtml() );
-
-            return html;
         }
     }
 }
