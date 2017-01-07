@@ -4,27 +4,4 @@
     <link type="text/css" rel="stylesheet" href="css/pure/grids-responsive-min.css" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <script src="js/yui-min.js"></script>
-    <script>
-            YUI().use('node-base', 'node-event-delegate', function (Y) {
-
-                var menuButton = Y.one('.nav-menu-button'),
-                    nav        = Y.one('#nav');
-
-                // Setting the active class name expands the menu vertically on small screens.
-                menuButton.on('click', function (e) {
-                    nav.toggleClass('active');
-                });
-
-            });
-    </script>
-    <script>
-            app.yui.use('node-base', 'node-event-delegate', function (Y) {
-                // This just makes sure that the href="#" attached to the <a> elements
-                // don't scroll you back up the page.
-                Y.one('body').delegate('click', function (e) {
-                    e.preventDefault();
-                },
-                'a[href="#"]');
-	        });
-    </script>
     <!-- End Common Stuff in the head tag -->
