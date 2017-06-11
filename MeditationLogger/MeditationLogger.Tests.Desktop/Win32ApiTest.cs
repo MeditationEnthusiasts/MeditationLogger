@@ -35,7 +35,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// <summary>
         /// Where the TestCore project is located relative to the .dll.
         /// </summary>
-        public const string TestCoreDir = @"..\..\..\TestCore";
+        public const string TestCoreDir = @"..\..\..\MeditationLogger.TestCore";
 
         /// <summary>
         /// The location detector to use.

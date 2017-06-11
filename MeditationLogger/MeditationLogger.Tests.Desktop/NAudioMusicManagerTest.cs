@@ -40,12 +40,12 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// <summary>
         /// Public domain mp3 from http://publicsounds.org/
         /// </summary>
-        const string mp3FileLocation = @"..\..\..\TestCore\TestFiles\thunder.mp3";
+        const string mp3FileLocation = @"..\..\..\MeditationLogger.TestCore\TestFiles\thunder.mp3";
 
         /// <summary>
         /// Public domain wav (converted from mp3) from http://publicsounds.org/
         /// </summary>
-        const string wavFileLocation = @"..\..\..\TestCore\TestFiles\thunder.wav";
+        const string wavFileLocation = @"..\..\..\MeditationLogger.TestCore\TestFiles\thunder.wav";
 
 
         // -------- Setup/Teardown --------
@@ -110,7 +110,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             Assert.Throws<PlatformNotSupportedException>(
                 delegate ()
                 {
-                    this.uut.Validate( @"..\..\..\TestCore\TestFiles\MissingLat.xml" );
+                    this.uut.Validate( @"..\..\..\MeditationLogger.TestCore\TestFiles\MissingLat.xml" );
                 }
             );
         }
