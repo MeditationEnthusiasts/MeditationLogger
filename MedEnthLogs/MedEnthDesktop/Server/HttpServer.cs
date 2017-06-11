@@ -28,7 +28,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 
 namespace MedEnthDesktop.Server
 {

@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using MedEnthDesktop;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using NUnit.Framework;
 using TestCore;
 using TestCore.Mocks;

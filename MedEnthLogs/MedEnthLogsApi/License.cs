@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// This class contains the license information

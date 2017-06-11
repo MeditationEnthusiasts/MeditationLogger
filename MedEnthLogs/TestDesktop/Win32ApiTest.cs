@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using MedEnthLogsDesktop;
 using SQLite.Net.Interop;
 using TestCore.Mocks;

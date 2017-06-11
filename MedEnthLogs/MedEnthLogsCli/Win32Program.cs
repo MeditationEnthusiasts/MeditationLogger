@@ -18,7 +18,7 @@
 
 using System;
 using MedEnthDesktop;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using MedEnthLogsDesktop;
 
 namespace MedEnthLogsCli
@@ -31,7 +31,7 @@ namespace MedEnthLogsCli
         /// <returns>The Linux API.</returns>
         static Api GetApi()
         {
-            return new MedEnthLogsApi.Api(
+            return new Api(
                 new Win32LocationDetector(),
                 new Win32Timer(),
                 new NAudioMusicManager(),

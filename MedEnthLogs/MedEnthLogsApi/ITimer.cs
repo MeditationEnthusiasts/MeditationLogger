@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// A countdown or countup timer interface.

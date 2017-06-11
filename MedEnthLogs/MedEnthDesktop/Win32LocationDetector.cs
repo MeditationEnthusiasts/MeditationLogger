@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 
 namespace MedEnthLogsDesktop
 {

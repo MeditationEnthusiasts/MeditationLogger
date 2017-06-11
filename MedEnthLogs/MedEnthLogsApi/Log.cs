@@ -19,7 +19,7 @@
 using System;
 using SQLite.Net.Attributes;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// Exception thrown when a log fails validation.

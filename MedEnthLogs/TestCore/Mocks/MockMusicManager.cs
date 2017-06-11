@@ -18,7 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 
 namespace TestCore.Mocks
 {

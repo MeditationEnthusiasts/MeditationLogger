@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogWebPage", "LogWebPage\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsDesktop", "MedEnthDesktop\MedEnthLogsDesktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApi", "MedEnthLogsApi\MedEnthLogsApi.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsCli", "MedEnthLogsCli\MedEnthLogsCli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TestCore", "TestCore\TestCore.shproj", "{8D1D8BC8-F9DC-403D-B481-3A5FE3556D5F}"
@@ -20,6 +18,8 @@ EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Win32Install", "Win32Install\Win32Install.wixproj", "{848AF5DD-573A-499F-9B02-F218D5A48273}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.Api", "MedEnthLogsApi\MeditationLogger.Api.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MedEnthDesktop;
 using MedEnthDesktop.Properties;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using SethCS.Basic;
 
 namespace MedEnthLogsDesktop
@@ -39,7 +39,7 @@ namespace MedEnthLogsDesktop
         /// <summary>
         /// Reference to the API.
         /// </summary>
-        private MedEnthLogsApi.Api api;
+        private MeditationEnthusiasts.MeditationLogger.Api.Api api;
 
         List<LogView> logViews;
 
@@ -79,14 +79,14 @@ namespace MedEnthLogsDesktop
         /// </summary>
         /// <param name="api">The API to use.</param>
         /// <param name="timesUpMusicManager">The music manager to use when times up (just create it).</param>
-        public HomePage( MedEnthLogsApi.Api api, IMusicManager timesUpMusicManager )
+        public HomePage( MeditationEnthusiasts.MeditationLogger.Api.Api api, IMusicManager timesUpMusicManager )
         {
             InitializeComponent();
 
             this.isNoTaskInProgress = true;
 
-            this.GplTextBox.Text = MedEnthLogsApi.License.MedEnthLicense;
-            this.ExternalLibTextBox.Text = MedEnthLogsApi.License.ExternalLicenses;
+            this.GplTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.MedEnthLicense;
+            this.ExternalLibTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.ExternalLicenses;
             this.VersionValueLabel.Text = Api.VersionString;
 
             this.logViews = new List<LogView>();

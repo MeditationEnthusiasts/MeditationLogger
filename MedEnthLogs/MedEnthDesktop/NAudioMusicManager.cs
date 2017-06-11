@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using NAudio.Wave;
 
 namespace MedEnthDesktop

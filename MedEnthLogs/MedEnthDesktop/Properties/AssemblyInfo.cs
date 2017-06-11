@@ -50,5 +50,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( MedEnthLogsApi.Api.VersionString )]
-[assembly: AssemblyFileVersion( MedEnthLogsApi.Api.VersionString )]
+[assembly: AssemblyVersion( MeditationEnthusiasts.MeditationLogger.Api.Api.VersionString )]
+[assembly: AssemblyFileVersion( MeditationEnthusiasts.MeditationLogger.Api.Api.VersionString )]

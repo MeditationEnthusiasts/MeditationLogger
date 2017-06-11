@@ -17,7 +17,7 @@
 //
 
 using System;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using NUnit.Framework;
 
 namespace TestCore

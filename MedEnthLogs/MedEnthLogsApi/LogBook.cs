@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using SQLite.Net;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// This class represents a book of logs.

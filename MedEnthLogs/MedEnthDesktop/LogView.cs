@@ -17,7 +17,7 @@
 //
 
 using System.Windows.Forms;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using System.Globalization;
 
 namespace MedEnthDesktop

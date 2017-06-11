@@ -22,7 +22,7 @@ using System.IO;
 using System.Xml;
 using SQLite.Net;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     public class XmlExporter
     {

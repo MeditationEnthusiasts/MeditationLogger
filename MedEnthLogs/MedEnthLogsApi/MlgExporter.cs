@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// Handles Importing / Exporting the logbook from .mlg.

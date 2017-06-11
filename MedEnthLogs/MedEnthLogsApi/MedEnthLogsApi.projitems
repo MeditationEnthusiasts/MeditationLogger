@@ -6,7 +6,7 @@
     <SharedGUID>c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>MedEnthLogsApi</Import_RootNamespace>
+    <Import_RootNamespace>MeditationEnthusiasts.MeditationLogger.Api</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCodes.cs" />

@@ -22,7 +22,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using SQLite.Net;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     public class JsonExporter
     {

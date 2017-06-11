@@ -22,7 +22,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net.Interop;

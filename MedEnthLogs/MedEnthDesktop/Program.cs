@@ -30,7 +30,7 @@ namespace MedEnthLogsDesktop
     {
         // -------- Fields ---------
 
-        private static MedEnthLogsApi.Api api;
+        private static MeditationEnthusiasts.MeditationLogger.Api.Api api;
 
         /// <summary>
         /// The main entry point for the application.
@@ -47,7 +47,7 @@ namespace MedEnthLogsDesktop
                 Directory.CreateDirectory( Constants.DatabaseFolderLocation );
             }
 
-            api.Open( Path.Combine( Constants.DatabaseFolderLocation, MedEnthLogsApi.Api.LogbookFileName ) );
+            api.Open( Path.Combine( Constants.DatabaseFolderLocation, MeditationEnthusiasts.MeditationLogger.Api.Api.LogbookFileName ) );
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );

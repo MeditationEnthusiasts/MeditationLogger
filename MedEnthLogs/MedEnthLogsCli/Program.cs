@@ -25,7 +25,7 @@ using System.Security.Permissions;
 using System.Security.Policy;
 using MedEnthDesktop;
 using MedEnthDesktop.Server;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using SethCS.IO;
 
 namespace MedEnthLogsCli
@@ -82,11 +82,11 @@ namespace MedEnthLogsCli
                 }
                 else if( ( args[0] == "--license" ) || args[0] == "-l" )
                 {
-                    Console.WriteLine( MedEnthLogsApi.License.MedEnthLicense );
+                    Console.WriteLine( MeditationEnthusiasts.MeditationLogger.Api.License.MedEnthLicense );
                 }
                 else if( ( args[0] == "--external" ) || args[0] == "-e" )
                 {
-                    Console.WriteLine( MedEnthLogsApi.License.ExternalLicenses );
+                    Console.WriteLine( MeditationEnthusiasts.MeditationLogger.Api.License.ExternalLicenses );
                 }
                 else if( args[0] == "meditate" )
                 {

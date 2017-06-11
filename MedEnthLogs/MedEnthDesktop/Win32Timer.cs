@@ -18,7 +18,7 @@
 
 using System;
 using System.Timers;
-using MedEnthLogsApi;
+using MeditationEnthusiasts.MeditationLogger.Api;
 
 namespace MedEnthDesktop
 {

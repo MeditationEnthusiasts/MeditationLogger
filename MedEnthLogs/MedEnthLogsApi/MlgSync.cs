@@ -21,7 +21,7 @@ using System.IO;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     public class MlgSync
     {

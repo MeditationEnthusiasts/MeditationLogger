@@ -18,7 +18,7 @@
 
 using System.Globalization;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// This class is the CSS or JS for leaflet.JS.

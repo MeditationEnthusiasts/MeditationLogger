@@ -18,7 +18,7 @@
 
 using System;
 
-namespace MedEnthLogsApi
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     public class SessionConfig
     {
