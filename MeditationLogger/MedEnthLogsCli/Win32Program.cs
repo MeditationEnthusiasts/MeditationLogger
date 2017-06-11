@@ -21,7 +21,7 @@ using MedEnthDesktop;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MedEnthLogsDesktop;
 
-namespace MedEnthLogsCli
+namespace MeditationEnthusiasts.MeditationLogger.Cli
 {
     static partial class Program
     {
@@ -29,9 +29,9 @@ namespace MedEnthLogsCli
         /// Gets a linux API.
         /// </summary>
         /// <returns>The Linux API.</returns>
-        static Api GetApi()
+        static Api.Api GetApi()
         {
-            return new Api(
+            return new Api.Api(
                 new Win32LocationDetector(),
                 new Win32Timer(),
                 new NAudioMusicManager(),

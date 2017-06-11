@@ -110,9 +110,9 @@
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
       <Name>MedEnthLogsDesktop</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MedEnthLogsCli\MedEnthLogsCli.csproj">
+    <ProjectReference Include="..\MedEnthLogsCli\MeditationLogger.Cli.csproj">
       <Project>{8fd66191-747c-48b8-b27b-0e41e40a4c4e}</Project>
-      <Name>MedEnthLogsCli</Name>
+      <Name>MeditationLogger.Cli</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestCoreDesktop\TestCoreDesktop.csproj">
       <Project>{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}</Project>

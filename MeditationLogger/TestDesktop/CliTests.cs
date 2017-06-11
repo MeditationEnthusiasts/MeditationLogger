@@ -364,7 +364,7 @@ namespace TestDesktop
             startInfo.UseShellExecute = false;
 
             // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
-            startInfo.FileName = "MedEnthLogsCli.exe";
+            startInfo.FileName = "MeditationLogger.Cli.exe";
 
             int exitCode = -1;
             using ( Process process = Process.Start( startInfo ) )

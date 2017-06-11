@@ -7,8 +7,8 @@
     <ProjectGuid>{8FD66191-747C-48B8-B27B-0E41E40A4C4E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MedEnthLogsCli</RootNamespace>
-    <AssemblyName>MedEnthLogsCli</AssemblyName>
+    <RootNamespace>MeditationEnthusiasts.MeditationLogger.Cli</RootNamespace>
+    <AssemblyName>MeditationLogger.Cli</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

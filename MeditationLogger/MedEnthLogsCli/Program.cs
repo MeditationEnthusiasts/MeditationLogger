@@ -28,7 +28,7 @@ using MedEnthDesktop.Server;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using SethCS.IO;
 
-namespace MedEnthLogsCli
+namespace MeditationEnthusiasts.MeditationLogger.Cli
 {
     public static partial class Program
     {
@@ -41,9 +41,9 @@ namespace MedEnthLogsCli
         /// Opens and returns the API.
         /// </summary>
         /// <returns></returns>
-        static Api OpenApi()
+        static Api.Api OpenApi()
         {
-            Api api = GetApi();
+            Api.Api api = GetApi();
             string dbLocation = Constants.DatabaseFolderLocation;
 
             if( Directory.Exists( dbLocation ) == false )
@@ -51,7 +51,7 @@ namespace MedEnthLogsCli
                 Directory.CreateDirectory( dbLocation );
             }
 
-            api.Open( Path.Combine( dbLocation, Api.LogbookFileName ) );
+            api.Open( Path.Combine( dbLocation, Api.Api.LogbookFileName ) );
 
             api.timer.OnUpdate = delegate ( string time )
             {
@@ -78,7 +78,7 @@ namespace MedEnthLogsCli
                 }
                 else if( ( args[0] == "--version" ) || ( args[0] == "-v" ) )
                 {
-                    Console.WriteLine( "Medition Logger Version: " + Api.VersionString );
+                    Console.WriteLine( "Medition Logger Version: " + Api.Api.VersionString );
                 }
                 else if( ( args[0] == "--license" ) || args[0] == "-l" )
                 {
@@ -106,7 +106,7 @@ namespace MedEnthLogsCli
             {
                 if( ( args[0] == "import" ) || ( args[0] == "export" ) || ( args[0] == "sync" ) )
                 {
-                    Api api = null;
+                    Api.Api api = null;
                     try
                     {
                         api = OpenApi();
@@ -198,7 +198,7 @@ namespace MedEnthLogsCli
         /// </summary>
         static int DoSession()
         {
-            Api api = null;
+            Api.Api api = null;
             try
             {
                 api = OpenApi();
@@ -302,7 +302,7 @@ namespace MedEnthLogsCli
                 return exitCode;
             }
 
-            Api api = null;
+            Api.Api api = null;
             try
             {
                 Console.WriteLine( "Opening Database..." );
