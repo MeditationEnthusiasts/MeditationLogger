@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogWebPage", "LogWebPage\LogWebPage.csproj", "{A349C6A4-4862-4EA9-8F1C-1FE07233ACB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsDesktop", "MedEnthDesktop\MedEnthLogsDesktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Desktop", "MedEnthDesktop\MeditationLogger.Desktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "MeditationLogger.Cli\MeditationLogger.Cli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
 EndProject

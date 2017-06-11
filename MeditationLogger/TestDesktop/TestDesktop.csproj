@@ -106,9 +106,9 @@
     <Compile Include="Win32ApiTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MedEnthDesktop\MedEnthLogsDesktop.csproj">
+    <ProjectReference Include="..\MedEnthDesktop\MeditationLogger.Desktop.csproj">
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
-      <Name>MedEnthLogsDesktop</Name>
+      <Name>MeditationLogger.Desktop</Name>
     </ProjectReference>
     <ProjectReference Include="..\MeditationLogger.Cli\MeditationLogger.Cli.csproj">
       <Project>{8fd66191-747c-48b8-b27b-0e41e40a4c4e}</Project>
