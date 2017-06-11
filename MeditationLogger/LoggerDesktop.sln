@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogWebPage", "LogWebPage\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsDesktop", "MedEnthDesktop\MedEnthLogsDesktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "MedEnthLogsCli\MeditationLogger.Cli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "MeditationLogger.Cli\MeditationLogger.Cli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TestCore", "TestCore\TestCore.shproj", "{8D1D8BC8-F9DC-403D-B481-3A5FE3556D5F}"
 EndProject
