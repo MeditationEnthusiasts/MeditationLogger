@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using TestCore;
 
-namespace TestDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
     /// <summary>
     /// Tests the Api Class.

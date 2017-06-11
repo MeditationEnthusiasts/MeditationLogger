@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
 using NUnit.Framework;
 
-namespace Test
+namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
     [TestFixture]
     public class NAudioMusicManagerTest

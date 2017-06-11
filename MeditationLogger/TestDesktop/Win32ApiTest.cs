@@ -21,7 +21,7 @@ using MeditationEnthusiasts.MeditationLogger.Desktop;
 using SQLite.Net.Interop;
 using TestCore.Mocks;
 
-namespace TestDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
     /// <summary>
     /// This class is platform-specific for Win32 Desktop.

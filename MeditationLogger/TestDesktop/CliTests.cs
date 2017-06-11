@@ -27,7 +27,7 @@ using NUnit.Framework;
 using TestCore;
 using TestCore.Mocks;
 
-namespace TestDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
     /// <summary>
     /// Regression tests for the Desktop Command Line.
@@ -61,7 +61,7 @@ namespace TestDesktop
         /// <summary>
         /// Api (needed to read from the database).
         /// </summary>
-        private Api api;
+        private Api.Api api;
 
         // -------- Setup / Teardown --------
 
@@ -70,7 +70,7 @@ namespace TestDesktop
         {
             // Backup the original log file (Don't want some poor tester losing their log).
             this.backedUpLogbook = null;
-            this.logbookLocation = Path.Combine( Constants.DatabaseFolderLocation, Api.LogbookFileName );
+            this.logbookLocation = Path.Combine( Constants.DatabaseFolderLocation, Api.Api.LogbookFileName );
 
             if ( File.Exists ( logbookLocation ) )
             {
@@ -107,7 +107,7 @@ namespace TestDesktop
                 File.Delete( logbookLocation );
             }
 
-            this.api = new Api(
+            this.api = new Api.Api(
                 LogsApiTest.LocationDetector,
                 new MockTimer(),
                 new MockMusicManager(),
