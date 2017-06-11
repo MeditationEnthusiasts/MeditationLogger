@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Desktop", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "MeditationLogger.Cli\MeditationLogger.Cli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.TestCore", "TestCore\MeditationLogger.TestCore.shproj", "{8D1D8BC8-F9DC-403D-B481-3A5FE3556D5F}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.TestCore", "MeditationLogger.TestCore\MeditationLogger.TestCore.shproj", "{8D1D8BC8-F9DC-403D-B481-3A5FE3556D5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.TestCore.Desktop", "MeditationLogger.TestCore.Desktop\MeditationLogger.TestCore.Desktop.csproj", "{B8BCE3B9-2568-49FA-90AA-7484E1B67E8A}"
 EndProject
@@ -26,8 +26,8 @@ Global
 		MeditationLogger.Api\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
-		TestCore\TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
-		TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
+		MeditationLogger.TestCore\TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
+		MeditationLogger.TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
 		MeditationLogger.Api\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
