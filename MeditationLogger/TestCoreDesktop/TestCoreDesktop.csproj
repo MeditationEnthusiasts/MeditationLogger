@@ -58,7 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MedEnthDesktop\MeditationLogger.Desktop.csproj">
+    <ProjectReference Include="..\MeditationLogger.Desktop\MeditationLogger.Desktop.csproj">
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
       <Name>MeditationLogger.Desktop</Name>
     </ProjectReference>
