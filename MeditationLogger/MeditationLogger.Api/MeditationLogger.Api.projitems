@@ -9,6 +9,7 @@
     <Import_RootNamespace>MeditationEnthusiasts.MeditationLogger.Api</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCodes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpResponseHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonExporter.cs" />

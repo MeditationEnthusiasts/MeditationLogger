@@ -17,13 +17,9 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MeditationEnthusiasts.MeditationLogger.Desktop
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
     /// Constants for the Desktop application.
