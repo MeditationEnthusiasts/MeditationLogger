@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MedEnthDesktop;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
 using NUnit.Framework;
 
 namespace Test

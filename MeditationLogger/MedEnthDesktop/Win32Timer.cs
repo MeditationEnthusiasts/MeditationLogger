@@ -20,7 +20,7 @@ using System;
 using System.Timers;
 using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace MedEnthDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     public class Win32Timer : ITimer
     {

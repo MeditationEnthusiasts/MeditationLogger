@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using NAudio.Wave;
 
-namespace MedEnthDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     /// <summary>
     /// Music Manager that uses NAudio as the engine.

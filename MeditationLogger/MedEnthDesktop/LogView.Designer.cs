@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-namespace MedEnthDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     partial class LogView
     {

@@ -20,7 +20,7 @@ using System.Windows.Forms;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using System.Globalization;
 
-namespace MedEnthDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     public partial class LogView : UserControl
     {

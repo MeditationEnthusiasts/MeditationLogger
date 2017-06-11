@@ -7,8 +7,8 @@
     <ProjectGuid>{4815671C-B7D0-4FE8-8F16-F4C12BC07221}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MedEnthDesktop</RootNamespace>
-    <AssemblyName>MedEnthDesktop</AssemblyName>
+    <RootNamespace>MeditationEnthusiasts.MeditationLogger.Desktop</RootNamespace>
+    <AssemblyName>MeditationLogger.Desktop</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

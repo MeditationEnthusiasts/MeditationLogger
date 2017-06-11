@@ -23,9 +23,8 @@ using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
-using MedEnthDesktop;
-using MedEnthDesktop.Server;
 using MeditationEnthusiasts.MeditationLogger.Api;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
 using SethCS.IO;
 
 namespace MeditationEnthusiasts.MeditationLogger.Cli

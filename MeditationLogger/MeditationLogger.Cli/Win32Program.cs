@@ -17,9 +17,8 @@
 //
 
 using System;
-using MedEnthDesktop;
 using MeditationEnthusiasts.MeditationLogger.Api;
-using MedEnthLogsDesktop;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
 
 namespace MeditationEnthusiasts.MeditationLogger.Cli
 {

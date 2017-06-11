@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MedEnthDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     /// <summary>
     /// Constants for the Desktop application.

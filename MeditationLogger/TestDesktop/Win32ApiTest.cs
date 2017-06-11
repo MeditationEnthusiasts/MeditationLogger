@@ -17,7 +17,7 @@
 //
 
 using MeditationEnthusiasts.MeditationLogger.Api;
-using MedEnthLogsDesktop;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
 using SQLite.Net.Interop;
 using TestCore.Mocks;
 

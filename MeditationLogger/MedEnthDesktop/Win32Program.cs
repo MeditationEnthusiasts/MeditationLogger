@@ -16,10 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using MedEnthDesktop;
 using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace MedEnthLogsDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     static partial class Program
     {
@@ -27,9 +26,9 @@ namespace MedEnthLogsDesktop
         /// Gets a linux API.
         /// </summary>
         /// <returns>The Linux API.</returns>
-        static Api GetApi()
+        static Api.Api GetApi()
         {
-            return new Api(
+            return new Api.Api(
                 new Win32LocationDetector(),
                 new Win32Timer(),
                 new NAudioMusicManager(),

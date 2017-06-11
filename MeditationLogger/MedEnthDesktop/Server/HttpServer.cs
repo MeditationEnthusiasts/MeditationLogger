@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace MedEnthDesktop.Server
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     public class HttpServer : IDisposable
     {
@@ -65,7 +65,7 @@ namespace MedEnthDesktop.Server
         /// <summary>
         /// The api to use.
         /// </summary>
-        private Api api;
+        private Api.Api api;
 
         private readonly ManualResetEvent quitEvent;
 
@@ -80,7 +80,7 @@ namespace MedEnthDesktop.Server
         /// </param>
         /// <exception cref="PlatformNotSupportedException">This platform doesn't support an HTTP Server.</exception>
         /// <exception cref="ArgumentException">Api is not open.</exception>
-        public HttpServer( Api api, short port = DefaultPort, Action<string> consoleOutFunction = null )
+        public HttpServer( Api.Api api, short port = DefaultPort, Action<string> consoleOutFunction = null )
         {
             if( HttpListener.IsSupported == false )
             {

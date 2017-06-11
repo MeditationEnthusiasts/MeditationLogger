@@ -25,12 +25,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MedEnthDesktop;
-using MedEnthDesktop.Properties;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using SethCS.Basic;
 
-namespace MedEnthLogsDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     public partial class HomePage : Form
     {
@@ -87,7 +87,7 @@ namespace MedEnthLogsDesktop
 
             this.GplTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.MedEnthLicense;
             this.ExternalLibTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.ExternalLicenses;
-            this.VersionValueLabel.Text = Api.VersionString;
+            this.VersionValueLabel.Text = Api.Api.VersionString;
 
             this.logViews = new List<LogView>();
 
@@ -117,7 +117,7 @@ namespace MedEnthLogsDesktop
             this.api.timer.OnComplete =
                 delegate ()
                 {
-                    if ( this.api.CurrentState == Api.ApiState.Started )
+                    if ( this.api.CurrentState == Api.Api.ApiState.Started )
                     {
                         this.timesUpSound.Play( exeDirectory + "/media/temple_bell.wav" );
                         GoToNextState();
@@ -654,17 +654,17 @@ namespace MedEnthLogsDesktop
         {
             switch ( this.api.CurrentState )
             {
-                case Api.ApiState.Idle:
+                case Api.Api.ApiState.Idle:
                     this.optionView.Visible = true;
                     this.meditateView.Visible = false;
                     this.saveView.Visible = false;
                     break;
-                case Api.ApiState.Started:
+                case Api.Api.ApiState.Started:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = true;
                     this.saveView.Visible = false;
                     break;
-                case Api.ApiState.Stopped:
+                case Api.Api.ApiState.Stopped:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = false;
                     this.saveView.Visible = true;
@@ -683,7 +683,7 @@ namespace MedEnthLogsDesktop
             {
                 switch ( this.api.CurrentState )
                 {
-                    case Api.ApiState.Idle:
+                    case Api.Api.ApiState.Idle:
                         // API calls
                         SessionConfig config = new SessionConfig();
                         if ( this.optionView.EnableTimerCheckbox.Checked )
@@ -734,7 +734,7 @@ namespace MedEnthLogsDesktop
                         this.StartButton.Text = "Finish";
                         break;
 
-                    case Api.ApiState.Started:
+                    case Api.Api.ApiState.Started:
                         // API Calls
                         this.api.StopSession();
 
@@ -749,7 +749,7 @@ namespace MedEnthLogsDesktop
                         this.StartTableLayout.BackColor = originalColor;
                         break;
 
-                    case Api.ApiState.Stopped:
+                    case Api.Api.ApiState.Stopped:
                         // API Calls
                         decimal? latitude = null;
                         decimal? longitude = null;
@@ -807,13 +807,13 @@ namespace MedEnthLogsDesktop
                 string errorStr = "Error when ";
                 switch ( this.api.CurrentState )
                 {
-                    case Api.ApiState.Idle:
+                    case Api.Api.ApiState.Idle:
                         errorStr = errorStr + "starting the session.";
                         break;
-                    case Api.ApiState.Started:
+                    case Api.Api.ApiState.Started:
                         errorStr = errorStr + "ending the session.";
                         break;
-                    case Api.ApiState.Stopped:
+                    case Api.Api.ApiState.Stopped:
                         errorStr = errorStr + "saving the session.";
                         break;
                 }
@@ -954,7 +954,7 @@ namespace MedEnthLogsDesktop
                             {
                                 // If version from the server if newer than this program's
                                 // return true.
-                                if ( version > Api.Version )
+                                if ( version > Api.Api.Version )
                                 {
                                     return true;
                                 }

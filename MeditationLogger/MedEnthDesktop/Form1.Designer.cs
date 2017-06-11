@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-namespace MedEnthLogsDesktop
+namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
     partial class HomePage
     {
