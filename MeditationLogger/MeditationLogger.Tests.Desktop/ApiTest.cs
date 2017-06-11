@@ -22,7 +22,7 @@ using System.Xml;
 using MedEnthLogsApi;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using MeditationLogger.TestCore;
+using MeditationEnthuisasts.MeditationLogger.TestCore;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {

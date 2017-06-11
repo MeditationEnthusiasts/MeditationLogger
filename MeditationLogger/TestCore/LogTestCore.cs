@@ -20,7 +20,7 @@ using System;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using NUnit.Framework;
 
-namespace MeditationLogger.TestCore
+namespace MeditationEnthuisasts.MeditationLogger.TestCore
 {
     public class LogTestCore
     {

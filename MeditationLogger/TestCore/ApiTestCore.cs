@@ -28,7 +28,7 @@ using NUnit.Framework;
 using SQLite.Net.Interop;
 using MeditationLogger.TestCore.Mocks;
 
-namespace MeditationLogger.TestCore
+namespace MeditationEnthuisasts.MeditationLogger.TestCore
 {
     /// <summary>
     /// Test for the the API class.
