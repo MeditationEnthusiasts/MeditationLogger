@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "Med
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TestCore", "TestCore\TestCore.shproj", "{8D1D8BC8-F9DC-403D-B481-3A5FE3556D5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.TestCore.Desktop", "TestCoreDesktop\MeditationLogger.TestCore.Desktop.csproj", "{B8BCE3B9-2568-49FA-90AA-7484E1B67E8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.TestCore.Desktop", "MeditationLogger.TestCore.Desktop\MeditationLogger.TestCore.Desktop.csproj", "{B8BCE3B9-2568-49FA-90AA-7484E1B67E8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Tests.Desktop", "MeditationLogger.Tests.Desktop\MeditationLogger.Tests.Desktop.csproj", "{BC011879-54BF-481F-BC61-35190927ADDE}"
 EndProject

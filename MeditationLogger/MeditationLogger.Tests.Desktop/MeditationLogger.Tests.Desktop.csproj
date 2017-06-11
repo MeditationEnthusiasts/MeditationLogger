@@ -114,7 +114,7 @@
       <Project>{8fd66191-747c-48b8-b27b-0e41e40a4c4e}</Project>
       <Name>MeditationLogger.Cli</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestCoreDesktop\MeditationLogger.TestCore.Desktop.csproj">
+    <ProjectReference Include="..\MeditationLogger.TestCore.Desktop\MeditationLogger.TestCore.Desktop.csproj">
       <Project>{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}</Project>
       <Name>MeditationLogger.TestCore.Desktop</Name>
     </ProjectReference>
