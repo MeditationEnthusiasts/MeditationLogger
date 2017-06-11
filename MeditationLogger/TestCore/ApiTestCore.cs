@@ -541,7 +541,7 @@ namespace TestCore
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MeditationLogger.Api", "Schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
@@ -576,7 +576,7 @@ namespace TestCore
             uut.Export( fileName );
             try
             {
-                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MedEnthLogsApi", "schemas", "LogXmlSchema.xsd" ) );
+                XmlReader reader = XmlReader.Create( Path.Combine( projectDir, "..", "MeditationLogger.Api", "Schemas", "LogXmlSchema.xsd" ) );
 
                 XmlSchema schema = XmlSchema.Read( reader, null );
 
