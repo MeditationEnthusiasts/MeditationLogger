@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LogBookTestCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogTestCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)TestFiles\BadLogBook.xml" />

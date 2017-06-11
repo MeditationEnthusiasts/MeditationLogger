@@ -1,6 +1,6 @@
 ﻿//
 // Meditation Logger.
-// Copyright (C) 2015-2017  Seth Hendrick.
+// Copyright (C) 2017  Seth Hendrick.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,28 +17,25 @@
 //
 
 using System.IO;
-using MeditationEnthusiasts.MeditationLogger.Api;
-using MeditationEnthusiasts.MeditationLogger.Desktop;
 using NUnit.Framework;
 
-namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
+namespace MeditationEnthuisasts.MeditationLogger.TestCore
 {
-    /// <summary>
-    /// This class is platform-specific for Win32 Desktop.
-    /// </summary>
-    public partial class LogsApiTest
+    public static class TestConstants
     {
+        // ---------------- Fields ----------------
+
         /// <summary>
         /// Where the TestCore project is located relative to the .dll.
         /// </summary>
         public static readonly string TestCoreDir;
 
-        /// <summary>
-        /// The location detector to use.
-        /// </summary>
-        public static readonly ILocationDetector LocationDetector = new Win32LocationDetector();
+        // ---------------- Constructor ----------------
 
-        static LogsApiTest()
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        static TestConstants()
         {
             TestCoreDir = Path.Combine(
                 TestContext.CurrentContext.TestDirectory,

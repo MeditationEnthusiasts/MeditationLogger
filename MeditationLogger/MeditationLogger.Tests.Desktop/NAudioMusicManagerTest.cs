@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using MeditationEnthuisasts.MeditationLogger.TestCore;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
 using NUnit.Framework;
 
@@ -49,13 +50,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         public void TestFixtureSetup()
         {
             this.mp3FileLocation = Path.Combine(
-                LogsApiTest.TestCoreDir,
+                TestConstants.TestCoreDir,
                 "TestFiles",
                 "thunder.mp3"
             );
 
             this.wavFileLocation = Path.Combine(
-                LogsApiTest.TestCoreDir,
+                TestConstants.TestCoreDir,
                 "TestFiles",
                 "thunder.wav"
             );
@@ -122,7 +123,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 delegate ()
                 {
                     this.uut.Validate( 
-                        Path.Combine( LogsApiTest.TestCoreDir, "TestFiles", "MissingLat.xml" )
+                        Path.Combine( TestConstants.TestCoreDir, "TestFiles", "MissingLat.xml" )
                     );
                 }
             );

@@ -17,6 +17,7 @@
 //
 
 using MeditationEnthuisasts.MeditationLogger.TestCore;
+using MeditationEnthusiasts.MeditationLogger.Api;
 using NUnit.Framework;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
@@ -36,7 +37,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         [SetUp]
         public void TestSetup()
         {
-            this.apiTestCore = new ApiTestCore( LocationDetector, TestCoreDir );
+            this.apiTestCore = new ApiTestCore( new DefaultLocationDetector(), TestConstants.TestCoreDir );
             this.apiTestCore.Startup();
         }
 

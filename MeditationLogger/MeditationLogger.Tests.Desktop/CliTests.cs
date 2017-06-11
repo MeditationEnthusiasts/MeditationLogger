@@ -116,7 +116,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             this.mockAudio = new Mock<IMusicManager>( MockBehavior.Strict );
 
             this.api = new Api.Api(
-                LogsApiTest.LocationDetector,
+                new DefaultLocationDetector(),
                 new MockTimer(),
                 this.mockAudio.Object
             );
