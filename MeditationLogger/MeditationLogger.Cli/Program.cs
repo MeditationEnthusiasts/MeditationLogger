@@ -24,7 +24,6 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 using MeditationEnthusiasts.MeditationLogger.Api;
-using MeditationEnthusiasts.MeditationLogger.Desktop;
 using MeditationEnthusiasts.MeditationLogger.Server;
 using SethCS.IO;
 
