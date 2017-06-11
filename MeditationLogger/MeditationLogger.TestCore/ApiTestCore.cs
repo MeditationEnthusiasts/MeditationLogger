@@ -22,6 +22,7 @@ using System.Xml;
 using System.Xml.Schema;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationLogger.TestCore.Mocks;
+using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -41,7 +42,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
 
         private MockTimer mockTimer;
 
-        private MockMusicManager mockAudio;
+        private Mock<IMusicManager> mockAudio;
 
         private readonly ILocationDetector locationDetector;
 
@@ -76,8 +77,8 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             }
 
             this.mockTimer = new MockTimer();
-            this.mockAudio = new MockMusicManager();
-            this.uut = new Api( this.locationDetector, this.mockTimer, this.mockAudio );
+            this.mockAudio = new Mock<IMusicManager>( MockBehavior.Strict );
+            this.uut = new Api( this.locationDetector, this.mockTimer, this.mockAudio.Object );
         }
 
         /// <summary>
@@ -140,50 +141,57 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             // Ensure we start in the idle state.
             Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
 
+            SessionConfig config = new SessionConfig();
+
             // ---- Start Session ----
+            {
+                // Only validate should be called, Play should not be.
+                this.mockAudio.Setup( a => a.Validate( config.AudioFile ) );
 
-            this.uut.StartSession( new SessionConfig() );
-            Assert.IsTrue( mockTimer.IsRunning );
-            Assert.IsFalse( mockAudio.IsPlaying ); // Default setting passed in, should not be playing.
+                this.uut.StartSession( config );
+                Assert.IsTrue( mockTimer.IsRunning );
 
-            // Ensure the expected edit time is close to DateTime.Now;
-            DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
-            TimeSpan delta = expectedCreationTime - uut.currentLog.EditTime;
-            double deltaTime = delta.TotalSeconds;
-            Assert.LessOrEqual( deltaTime, 5 );
+                // Ensure the expected edit time is close to DateTime.Now;
+                DateTime expectedCreationTime = DateTime.Now.ToUniversalTime();
+                TimeSpan delta = expectedCreationTime - uut.currentLog.EditTime;
+                double deltaTime = delta.TotalSeconds;
+                Assert.LessOrEqual( deltaTime, 5 );
 
-            // Ensure start time and edit time match the creation time.
-            Assert.AreEqual( uut.CurrentLog.EditTime, uut.CurrentLog.StartTime );
+                // Ensure start time and edit time match the creation time.
+                Assert.AreEqual( uut.CurrentLog.EditTime, uut.CurrentLog.StartTime );
 
-            // Should be in the started time.
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
+                // Should be in the started time.
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
 
-            // Validation should fail, as we haven't stopped a session yet.
-            CheckValidationFailed();
+                // Validation should fail, as we haven't stopped a session yet.
+                CheckValidationFailed();
+            }
 
             // ---- Start when started ----
+            {
+                // Calling start again should result in a no-op
+                DateTime oldTime = uut.CurrentLog.EditTime;
+                uut.StartSession( new SessionConfig() );
 
-            // Calling start again should result in a no-op
-            DateTime oldTime = uut.CurrentLog.EditTime;
-            uut.StartSession( new SessionConfig() );
+                // Ensure the times didn't change.
+                Assert.AreEqual( oldTime, uut.CurrentLog.StartTime );
+                Assert.AreEqual( oldTime, uut.CurrentLog.EditTime );
 
-            // Ensure the times didn't change.
-            Assert.AreEqual( oldTime, uut.CurrentLog.StartTime );
-            Assert.AreEqual( oldTime, uut.CurrentLog.EditTime );
-
-            // Should still be in the started state.
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
-            Assert.IsTrue( mockTimer.IsRunning );
+                // Should still be in the started state.
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState );
+                Assert.IsTrue( mockTimer.IsRunning );
+            }
 
             // ---- Attempt to save when we're not stopped ----
-
-            // Lastly, ensure if we call save, we get an exception.
-            Assert.Catch<InvalidOperationException>(
-                delegate ()
-                {
-                    uut.ValidateAndSaveSession();
-                }
-            );
+            {
+                // Lastly, ensure if we call save, we get an exception.
+                Assert.Catch<InvalidOperationException>(
+                    delegate ()
+                    {
+                        uut.ValidateAndSaveSession();
+                    }
+                );
+            }
         }
 
         /// <summary>
@@ -198,21 +206,30 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             config.Length = new TimeSpan( 0, 1, 0 );
             config.AudioFile = "test.mp3";
 
-            // Start idle
-            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
-
             // Start the session.
-            this.uut.StartSession( config );
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure our state is started.
-            Assert.IsTrue( mockAudio.IsPlaying );
-            Assert.IsTrue( mockTimer.IsRunning );
-            Assert.AreEqual( config.Length, mockTimer.Time );
+            {
+                this.mockAudio.Setup( a => a.Validate( config.AudioFile ) );
+                this.mockAudio.SetupSet( a => a.OnStop = It.IsAny<Action>() );
+                this.mockAudio.Setup( a => a.Play( config.AudioFile ) ); // Expect play to be called.
 
-            uut.StopSession();
-            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure our state is stopped.
-            Assert.IsFalse( mockAudio.IsPlaying );
-            Assert.IsFalse( mockTimer.IsRunning );
-            Assert.AreEqual( null, mockTimer.Time );
+                // Start idle
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
+
+                this.uut.StartSession( config );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure our state is started.
+                Assert.IsTrue( mockTimer.IsRunning );
+                Assert.AreEqual( config.Length, mockTimer.Time );
+            }
+
+            // Stop the session
+            {
+                this.mockAudio.Setup( a => a.Stop() );
+                uut.StopSession();
+
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure our state is stopped.
+                Assert.IsFalse( mockTimer.IsRunning );
+                Assert.AreEqual( null, mockTimer.Time );
+            }
         }
 
         /// <summary>
@@ -230,9 +247,13 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             // Start idle
             Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
 
+            // Start the session
+
+            // Play should not be called, just validate.
+            this.mockAudio.Setup( a => a.Validate( config.AudioFile ) );
+
             this.uut.StartSession( config );
             Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure our state is started.
-            Assert.IsFalse( mockAudio.IsPlaying ); // Play music is false, this should be false.
             Assert.IsTrue( mockTimer.IsRunning );
             Assert.AreEqual( config.Length, mockTimer.Time );
         }
@@ -249,7 +270,9 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             config.Length = new TimeSpan( 0, 1, 0 );
             config.AudioFile = "doesNotExist.mp3";
 
-            mockAudio.ThrownFromValidate = new Exception( "I got thrown" );
+            Exception err = new Exception( "I got thrown!" );
+
+            this.mockAudio.Setup( a => a.Validate( config.AudioFile ) ).Throws( err );
 
             Assert.Throws<Exception>(
                 delegate ()
@@ -260,7 +283,6 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
 
             // Ensure that we are not running, and the log was reset.
             Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState );
-            Assert.IsFalse( mockAudio.IsPlaying );
             Assert.IsFalse( mockTimer.IsRunning );
             Assert.AreEqual( null, mockTimer.Time );
             Assert.AreEqual( new Log(), uut.CurrentLog );
@@ -278,25 +300,35 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             config.Length = new TimeSpan( 0, 1, 0 );
             config.AudioFile = "test.mp3";
 
-            this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
+            TimeSpan length = new TimeSpan( 1, 0, 0 );
 
-            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
+            // Start session.
+            {
+                this.mockAudio.Setup( a => a.Validate( config.AudioFile ) );
+                this.mockAudio.Setup( a => a.GetLengthOfFile( config.AudioFile ) ).Returns( length );
+                this.mockAudio.Setup( a => a.Play( config.AudioFile ) ); // Expect play to be called.
 
-            uut.StartSession( config );
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
-            Assert.IsTrue( mockAudio.IsPlaying );
-            Assert.IsTrue( mockTimer.IsRunning );
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
 
-            // Ensure if play-though once that config's length is ignored, and
-            // is more than the audio's playtime.
-            Assert.Greater( mockTimer.Time, config.Length );
-            Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
+                uut.StartSession( config );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
+                Assert.IsTrue( mockTimer.IsRunning );
 
-            uut.StopSession();
-            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
-            Assert.IsFalse( mockAudio.IsPlaying );
-            Assert.IsFalse( mockTimer.IsRunning );
-            Assert.AreEqual( null, mockTimer.Time );
+                // Ensure if play-though once that config's length is ignored, and
+                // is more than the audio's playtime.
+                Assert.Greater( mockTimer.Time, config.Length );
+                Assert.Greater( mockTimer.Time, length );
+            }
+
+            // Stop session.
+            {
+                this.mockAudio.Setup( a => a.Stop() );
+
+                uut.StopSession();
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
+                Assert.IsFalse( mockTimer.IsRunning );
+                Assert.AreEqual( null, mockTimer.Time );
+            }
         }
 
         /// <summary>
@@ -311,25 +343,35 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             config.Length = null;
             config.AudioFile = "test.mp3";
 
-            this.mockAudio.GetLengthOfFileReturn = new TimeSpan( 1, 0, 0 );
+            TimeSpan length = new TimeSpan( 1, 0, 0 );
 
-            Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
+            // Start Session
+            {
+                this.mockAudio.Setup( a => a.Validate( config.AudioFile ) );
+                this.mockAudio.SetupSet( a => a.OnStop = It.IsAny<Action>() );
+                this.mockAudio.Setup( a => a.GetLengthOfFile( config.AudioFile ) ).Returns( length );
+                this.mockAudio.Setup( a => a.Play( config.AudioFile ) ); // Expect play to be called.
 
-            uut.StartSession( config );
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
-            Assert.IsTrue( mockAudio.IsPlaying );
-            Assert.IsTrue( mockTimer.IsRunning );
+                Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
 
-            // Ensure if play-though once that config's length is ignored, and
-            // is more than the audio's playtime.
-            Assert.NotNull( mockTimer.Time );
-            Assert.Greater( mockTimer.Time, mockAudio.GetLengthOfFileReturn );
+                uut.StartSession( config );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // We are started.
+                Assert.IsTrue( mockTimer.IsRunning );
 
-            uut.StopSession();
-            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
-            Assert.IsFalse( mockAudio.IsPlaying );
-            Assert.IsFalse( mockTimer.IsRunning );
-            Assert.AreEqual( null, mockTimer.Time );
+                // Ensure if play-though once that config's length is ignored, and
+                // is more than the audio's playtime.
+                Assert.NotNull( mockTimer.Time );
+                Assert.Greater( mockTimer.Time, length );
+            }
+
+            // Stop Session
+            {
+                this.mockAudio.Setup( a => a.Stop() );
+                uut.StopSession();
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // We are Stopped.
+                Assert.IsFalse( mockTimer.IsRunning );
+                Assert.AreEqual( null, mockTimer.Time );
+            }
         }
 
         /// <summary>
@@ -362,29 +404,34 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start Idle
 
             // First, start the session.
-            uut.StartSession( new SessionConfig() );
-            Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure we are started.
-            Assert.IsTrue( mockTimer.IsRunning );
-            Assert.IsFalse( mockAudio.IsPlaying ); // Default config, should not be playing.
+            {
+                uut.StartSession( new SessionConfig() );
+                Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure we are started.
+                Assert.IsTrue( mockTimer.IsRunning );
+            }
 
             DateTime oldEditTime = uut.CurrentLog.EditTime;
 
             // Now, end it.
-            uut.StopSession();
-            Assert.IsFalse( mockTimer.IsRunning );
+            {
+                this.mockAudio.Setup( a => a.Stop() );
 
-            // Ensure the expected end time is close to DateTime.Now;
-            DateTime expectedEndTime = DateTime.Now.ToUniversalTime();
-            TimeSpan delta = expectedEndTime - uut.currentLog.EndTime;
-            double deltaTime = delta.TotalSeconds;
-            Assert.LessOrEqual( deltaTime, 5 );
+                uut.StopSession();
+                Assert.IsFalse( mockTimer.IsRunning );
 
-            // Ensure the edit time is greater or equal
-            // to what it was when we called start.
-            Assert.GreaterOrEqual( uut.CurrentLog.EditTime, oldEditTime );
+                // Ensure the expected end time is close to DateTime.Now;
+                DateTime expectedEndTime = DateTime.Now.ToUniversalTime();
+                TimeSpan delta = expectedEndTime - uut.currentLog.EndTime;
+                double deltaTime = delta.TotalSeconds;
+                Assert.LessOrEqual( deltaTime, 5 );
 
-            // Ensure the session is no longer in progress.
-            Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are stopped.
+                // Ensure the edit time is greater or equal
+                // to what it was when we called start.
+                Assert.GreaterOrEqual( uut.CurrentLog.EditTime, oldEditTime );
+
+                // Ensure the session is no longer in progress.
+                Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are stopped.
+            }
         }
 
         // ---- Save Tests ----
@@ -516,7 +563,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// </summary>
         public void DoPopulateLogBookMultipleTimes()
         {
-            DoSaveTest( this.uut, 10 );
+            DoSaveTest( this.uut, 10, this.mockAudio );
         }
 
         // ---- Xml Tests ----
@@ -530,7 +577,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         {
             const string fileName = "XmlSchemaTest1.xml";
 
-            DoSaveTest( this.uut, 5 );
+            DoSaveTest( this.uut, 5, this.mockAudio );
 
             uut.Export( fileName );
             try
@@ -778,11 +825,11 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             try
             {
                 // Create an inital logbook.
-                DoSaveTest( this.uut, 3, dbLocation );
+                DoSaveTest( this.uut, 3, this.mockAudio, dbLocation );
 
                 LogBook oldBook = this.uut.LogBook;
 
-                DoSaveTest( this.uut, 3, newDbLocation );
+                DoSaveTest( this.uut, 3, this.mockAudio, newDbLocation );
 
                 LogBook newBook = this.uut.LogBook;
 
@@ -805,7 +852,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// </summary>
         public void DoMlgSyncDifferentEdits()
         {
-            DoSaveTest( this.uut, 2, dbLocation );
+            DoSaveTest( this.uut, 2, this.mockAudio, dbLocation );
             LogBook localBook = uut.LogBook;
 
             // External log 1 is older than the one in the local book.
@@ -1003,7 +1050,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             const string newDb = "test2.db";
             DoSaveTest();
             DoSaveTest();
-            DoSaveTest( this.uut, 5 );
+            DoSaveTest( this.uut, 5, this.mockAudio );
 
             uut.Export( fileName );
 
@@ -1184,6 +1231,8 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
                 Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start idle.
                 uut.StartSession( new SessionConfig() );
                 Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Should be started.
+
+                this.mockAudio.Setup( a => a.Stop() );
                 uut.StopSession();
                 Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Should be stopped.
                 uut.ValidateAndSaveSession( technique, comments, latitude, longitude );
@@ -1215,7 +1264,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// <param name="numberOfEntries">The number of entries to add.</param>
         /// <param name="location">The location to save to.</param>
         /// <returns>Logbook of the database after saving the data.</returns>
-        public static LogBook DoSaveTest( Api api, int numberOfEntries, string location = dbLocation )
+        public static LogBook DoSaveTest( Api api, int numberOfEntries, Mock<IMusicManager> musicManager, string location = dbLocation )
         {
             LogBook logBook = null;
 
@@ -1227,6 +1276,8 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
                     Assert.AreEqual( Api.ApiState.Idle, api.CurrentState ); // Start idle.
                     api.StartSession( new SessionConfig() );
                     Assert.AreEqual( Api.ApiState.Started, api.CurrentState ); // Now started
+
+                    musicManager.Setup( a => a.Stop() );
                     api.StopSession();
                     Assert.AreEqual( Api.ApiState.Stopped, api.CurrentState ); // Now Stopped
 
@@ -1279,6 +1330,8 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
                 Assert.AreEqual( Api.ApiState.Idle, this.uut.CurrentState ); // Start idle.
                 uut.StartSession( new SessionConfig() );
                 Assert.AreEqual( Api.ApiState.Started, this.uut.CurrentState ); // Ensure we are started.
+
+                this.mockAudio.Setup( a => a.Stop() );
                 uut.StopSession();
                 Assert.AreEqual( Api.ApiState.Stopped, this.uut.CurrentState ); // Ensure we are stopped.
 

@@ -25,6 +25,7 @@ using MeditationEnthuisasts.MeditationLogger.TestCore;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
 using MeditationLogger.TestCore.Mocks;
+using Moq;
 using NUnit.Framework;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
@@ -64,6 +65,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// Api (needed to read from the database).
         /// </summary>
         private Api.Api api;
+
+        private Mock<IMusicManager> mockAudio;
 
         // -------- Setup / Teardown --------
 
@@ -110,10 +113,12 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 File.Delete( logbookLocation );
             }
 
+            this.mockAudio = new Mock<IMusicManager>( MockBehavior.Strict );
+
             this.api = new Api.Api(
                 LogsApiTest.LocationDetector,
                 new MockTimer(),
-                new MockMusicManager()
+                this.mockAudio.Object
             );
         }
 
@@ -165,13 +170,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         public void CliSyncTest()
         {
             // First, create 3 entries in the database.
-            LogBook originalLogbook = ApiTestCore.DoSaveTest( this.api, 3, this.logbookLocation );
+            LogBook originalLogbook = ApiTestCore.DoSaveTest( this.api, 3, this.mockAudio, this.logbookLocation );
 
             string logbook2Location = "logbook2.mlg";
             try
             {
                 // Then, create 3 entries in a random logbook.
-                LogBook newLogbook = ApiTestCore.DoSaveTest( this.api, 3, logbook2Location );
+                LogBook newLogbook = ApiTestCore.DoSaveTest( this.api, 3, this.mockAudio, logbook2Location );
 
                 // Call the process and do a sync.
                 int exitCode = LaunchProcess( "sync " + logbook2Location );
@@ -280,7 +285,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         private void DoImportExportTest( string exportedFile )
         {
             // First, create 5 entries in the database.
-            LogBook originalLogbook = ApiTestCore.DoSaveTest( this.api, 5, this.logbookLocation );
+            LogBook originalLogbook = ApiTestCore.DoSaveTest( this.api, 5, this.mockAudio, this.logbookLocation );
 
             // Next, go ahead and do the export.
             int exitCode = LaunchProcess( "export " + exportedFile );
