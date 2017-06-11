@@ -30,7 +30,7 @@ using SethCS.IO;
 
 namespace MeditationEnthusiasts.MeditationLogger.Cli
 {
-    public static partial class Program
+    public partial class Program
     {
         /// <summary>
         /// The executable name.
@@ -43,7 +43,12 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// <returns></returns>
         private static Api.Api OpenApi()
         {
-            Api.Api api = GetApi();
+            Api.Api api = new Api.Api(
+                new DefaultLocationDetector(),
+                new LoggerTimer(),
+                new EmptyMusicManager()
+            );
+
             string dbLocation = Constants.DatabaseFolderLocation;
 
             if( Directory.Exists( dbLocation ) == false )

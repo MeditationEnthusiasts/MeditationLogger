@@ -22,10 +22,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MeditationEnthusiasts.MeditationLogger.Api;
 
 namespace MeditationEnthusiasts.MeditationLogger.Desktop
 {
-    static partial class Program
+    static class Program
     {
         // -------- Fields ---------
 
@@ -37,8 +38,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         [STAThread]
         private static void Main()
         {
-            // Get Api() is in a partial class.  GetApi creates an API for the current platform.
-            api = GetApi();
+            IMusicManager musicManager = new NAudioMusicManager();
+
+            api = new Api.Api(
+                new Win32LocationDetector(),
+                new LoggerTimer(),
+                musicManager
+            );
 
             // Create the folder if it doesn't exist.
             if( Directory.Exists( Constants.DatabaseFolderLocation ) == false )
@@ -53,7 +59,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
             try
             {
-                Application.Run( new HomePage( api, GetMusicManager() ) );
+                Application.Run( new HomePage( api, musicManager ) );
             }
             catch( Exception e )
             {
