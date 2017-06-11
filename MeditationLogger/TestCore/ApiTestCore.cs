@@ -26,9 +26,9 @@ using MeditationEnthusiasts.MeditationLogger.Api;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net.Interop;
-using TestCore.Mocks;
+using MeditationLogger.TestCore.Mocks;
 
-namespace TestCore
+namespace MeditationLogger.TestCore
 {
     /// <summary>
     /// Test for the the API class.

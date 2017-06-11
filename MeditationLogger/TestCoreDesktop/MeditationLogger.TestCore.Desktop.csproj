@@ -7,8 +7,8 @@
     <ProjectGuid>{B8BCE3B9-2568-49FA-90AA-7484E1B67E8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCoreDesktop</RootNamespace>
-    <AssemblyName>TestCoreDesktop</AssemblyName>
+    <RootNamespace>MeditationEnthusiasts.MeditationLogger.TestCore.Desktop</RootNamespace>
+    <AssemblyName>MeditationLogger.TestCore.Desktop</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

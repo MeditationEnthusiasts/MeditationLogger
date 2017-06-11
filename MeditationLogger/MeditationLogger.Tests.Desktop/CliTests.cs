@@ -24,8 +24,8 @@ using System.Net;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
 using NUnit.Framework;
-using TestCore;
-using TestCore.Mocks;
+using MeditationLogger.TestCore;
+using MeditationLogger.TestCore.Mocks;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {

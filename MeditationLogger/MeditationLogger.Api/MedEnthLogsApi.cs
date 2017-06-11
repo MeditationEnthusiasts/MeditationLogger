@@ -24,9 +24,8 @@ using SethCS.Basic;
 using SQLite.Net;
 using SQLite.Net.Interop;
 
-[assembly: InternalsVisibleTo( "Test" )]
-[assembly: InternalsVisibleTo( "TestCoreDesktop" )]
-[assembly: InternalsVisibleTo( "MedEnthLogsTestMono" )]
+[assembly: InternalsVisibleTo( "MeditationLogger.Tests.Desktop" )]
+[assembly: InternalsVisibleTo( "MeditationLogger.TestCore.Desktop" )]
 namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>

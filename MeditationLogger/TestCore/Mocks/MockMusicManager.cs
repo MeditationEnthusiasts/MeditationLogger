@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace TestCore.Mocks
+namespace MeditationLogger.TestCore.Mocks
 {
     public class MockMusicManager : IMusicManager
     {

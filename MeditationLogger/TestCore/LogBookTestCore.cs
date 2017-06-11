@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using NUnit.Framework;
 
-namespace TestCore
+namespace MeditationLogger.TestCore
 {
     public class LogBookTestCore
     {

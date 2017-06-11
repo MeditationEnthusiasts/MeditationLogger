@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace TestCore.Mocks
+namespace MeditationLogger.TestCore.Mocks
 {
     public class MockTimer : ITimer
     {
