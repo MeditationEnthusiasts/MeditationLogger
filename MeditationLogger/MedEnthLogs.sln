@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApi", "MedEnthLogsApi\MedEnthLogsApi.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MedEnthLogsApi", "MeditationLogger.Api\MedEnthLogsApi.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedEnthLogsDesktop", "MedEnthDesktop\MedEnthLogsDesktop.csproj", "{4815671C-B7D0-4FE8-8F16-F4C12BC07221}"
 EndProject

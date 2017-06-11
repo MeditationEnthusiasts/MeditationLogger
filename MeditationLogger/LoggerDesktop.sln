@@ -19,16 +19,16 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Win32Install", "Win32Instal
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.Api", "MedEnthLogsApi\MeditationLogger.Api.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.Api", "MeditationLogger.Api\MeditationLogger.Api.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MedEnthLogsApi\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
+		MeditationLogger.Api\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
 		TestCore\TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
 		TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
-		MedEnthLogsApi\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
+		MeditationLogger.Api\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
