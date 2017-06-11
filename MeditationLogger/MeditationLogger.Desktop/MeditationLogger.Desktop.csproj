@@ -121,7 +121,6 @@
     </Compile>
     <Compile Include="Win32LocationDetector.cs" />
     <Compile Include="Win32Program.cs" />
-    <Compile Include="Win32Timer.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

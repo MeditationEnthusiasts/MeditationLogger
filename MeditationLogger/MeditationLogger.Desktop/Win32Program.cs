@@ -30,8 +30,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         {
             return new Api.Api(
                 new Win32LocationDetector(),
-                new Win32Timer(),
-                new NAudioMusicManager()
+                new LoggerTimer(),
+                GetMusicManager()
             );
         }
 

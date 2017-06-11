@@ -1,6 +1,6 @@
 ﻿//
 // Meditation Logger.
-// Copyright (C) 2015-2017  Seth Hendrick.
+// Copyright (C) 2017  Seth Hendrick.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,11 +18,13 @@
 
 using System;
 using System.Timers;
-using MeditationEnthusiasts.MeditationLogger.Api;
 
-namespace MeditationEnthusiasts.MeditationLogger.Desktop
+namespace MeditationEnthusiasts.MeditationLogger.Api
 {
-    public class Win32Timer : ITimer
+    /// <summary>
+    /// Wrapper for a system timer.
+    /// </summary>
+    public class LoggerTimer : ITimer
     {
         // -------- Fields --------
 
@@ -63,7 +65,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// <summary>
         /// Constructor
         /// </summary>
-        public Win32Timer()
+        public LoggerTimer()
         {
             this.timer = new Timer();
             this.IsRunning = false;

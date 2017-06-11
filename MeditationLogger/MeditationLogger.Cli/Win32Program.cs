@@ -31,18 +31,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         {
             return new Api.Api(
                 new Win32LocationDetector(),
-                new Win32Timer(),
-                new NAudioMusicManager()
+                new LoggerTimer(),
+                new EmptyMusicManager()
             );
-        }
-
-        /// <summary>
-        /// Returns the Music Manager to use for Linux.
-        /// </summary>
-        /// <returns>The music manager for linux.</returns>
-        private static IMusicManager GetMusicManager()
-        {
-            return new NAudioMusicManager();
         }
     }
 }
