@@ -32,8 +32,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
             return new Api.Api(
                 new Win32LocationDetector(),
                 new Win32Timer(),
-                new NAudioMusicManager(),
-                new SQLite.Net.Platform.Win32.SQLitePlatformWin32()
+                new NAudioMusicManager()
             );
         }
 

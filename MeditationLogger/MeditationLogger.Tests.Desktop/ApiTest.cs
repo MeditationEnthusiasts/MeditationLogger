@@ -36,7 +36,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         [SetUp]
         public void TestSetup()
         {
-            this.apiTestCore = new ApiTestCore( Platform, LocationDetector, TestCoreDir );
+            this.apiTestCore = new ApiTestCore( LocationDetector, TestCoreDir );
             this.apiTestCore.Startup();
         }
 

@@ -24,7 +24,6 @@ using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationLogger.TestCore.Mocks;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SQLite.Net.Interop;
 
 namespace MeditationEnthuisasts.MeditationLogger.TestCore
 {
@@ -46,8 +45,6 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
 
         private readonly ILocationDetector locationDetector;
 
-        private readonly ISQLitePlatform sqlitePlatform;
-
         private const string dbLocation = "test.mlg";
 
         private readonly string projectDir;
@@ -60,9 +57,8 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// <param name="platform">The SQLite platform to use.</param>
         /// <param name="locationDetector">The location detector to use.</param>
         /// <param name="projectDir">Relative path where the TestCore project is located to the .dll</param>
-        public ApiTestCore( ISQLitePlatform platform, ILocationDetector locationDetector, string projectDir )
+        public ApiTestCore( ILocationDetector locationDetector, string projectDir )
         {
-            this.sqlitePlatform = platform;
             this.locationDetector = locationDetector;
             this.projectDir = projectDir;
         }
@@ -81,7 +77,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
 
             this.mockTimer = new MockTimer();
             this.mockAudio = new MockMusicManager();
-            this.uut = new Api( this.locationDetector, this.mockTimer, this.mockAudio, this.sqlitePlatform );
+            this.uut = new Api( this.locationDetector, this.mockTimer, this.mockAudio );
         }
 
         /// <summary>

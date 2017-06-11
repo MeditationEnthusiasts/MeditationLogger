@@ -65,7 +65,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 
         // -------- Setup / Teardown --------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetup()
         {
             // Backup the original log file (Don't want some poor tester losing their log).
@@ -83,7 +83,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             }
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTeardown()
         {
             // Delete logbook, and restore the backed-up logbook (if it exists).
@@ -109,8 +109,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             this.api = new Api.Api(
                 LogsApiTest.LocationDetector,
                 new MockTimer(),
-                new MockMusicManager(),
-                LogsApiTest.Platform
+                new MockMusicManager()
             );
         }
 

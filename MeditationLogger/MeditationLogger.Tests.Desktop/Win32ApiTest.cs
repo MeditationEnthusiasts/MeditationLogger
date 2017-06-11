@@ -18,7 +18,6 @@
 
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
-using SQLite.Net.Interop;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
@@ -27,11 +26,6 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
     /// </summary>
     public partial class LogsApiTest
     {
-        /// <summary>
-        /// The SQLite platform we are using.
-        /// </summary>
-        public static readonly ISQLitePlatform Platform = new SQLite.Net.Platform.Win32.SQLitePlatformWin32();
-
         /// <summary>
         /// Where the TestCore project is located relative to the .dll.
         /// </summary>

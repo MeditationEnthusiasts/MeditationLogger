@@ -120,11 +120,20 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// <param name="timer">The timing engine to use.</param>
         /// <param name="musicManager">The music manager to use.</param>
         /// <param name="platform">The sqlite platform we are using.</param>
-        public Api( ILocationDetector locationDetector, ITimer timer, IMusicManager musicManager, ISQLitePlatform platform )
+        public Api( ILocationDetector locationDetector, ITimer timer, IMusicManager musicManager )
         {
+            if( Environment.OSVersion.Platform.Equals( PlatformID.Win32NT ) )
+            {
+                this.platform = new SQLite.Net.Platform.Win32.SQLitePlatformWin32();
+            }
+            else
+            {
+                // Requires the SQLite.so (shared object) files to be installed.
+                this.platform = new SQLite.Net.Platform.Generic.SQLitePlatformGeneric();
+            }
+
             this.sqlite = null;
             this.LogBook = null;
-            this.platform = platform;
             this.LocationDetector = locationDetector;
             this.timer = timer;
             this.musicManager = musicManager;
