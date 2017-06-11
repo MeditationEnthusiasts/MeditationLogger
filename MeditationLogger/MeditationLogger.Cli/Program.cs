@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -34,13 +34,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// <summary>
         /// The executable name.
         /// </summary>
-        const string exeName = "MedEnthLogsCli.exe";
+        private const string exeName = "MedEnthLogsCli.exe";
 
         /// <summary>
         /// Opens and returns the API.
         /// </summary>
         /// <returns></returns>
-        static Api.Api OpenApi()
+        private static Api.Api OpenApi()
         {
             Api.Api api = GetApi();
             string dbLocation = Constants.DatabaseFolderLocation;
@@ -67,7 +67,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// </summary>
         /// <param name="args">Command line arguments.</param>
         /// <returns>0 for success, else failure.</returns>
-        static int Main( string[] args )
+        private static int Main( string[] args )
         {
             if( args.Length == 1 )
             {
@@ -174,7 +174,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// <summary>
         /// Prints the help to the command line.
         /// </summary>
-        static void PrintHelp()
+        private static void PrintHelp()
         {
             Console.WriteLine( "Command Line Interface for Meditation Logger." );
             Console.WriteLine();
@@ -195,7 +195,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// <summary>
         /// Do a simple meditation session.
         /// </summary>
-        static int DoSession()
+        private static int DoSession()
         {
             Api.Api api = null;
             try
@@ -270,7 +270,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// </summary>
         /// <param name="port">Port to listen on.  Defaulted to 80</param>
         /// <returns></returns>
-        static int LaunchServer( short port, string[] args )
+        private static int LaunchServer( short port, string[] args )
         {
             // Required for the Razor Engine:
             // https://github.com/Antaris/RazorEngine
@@ -296,7 +296,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
                     args
                 );
 
-                // RazorEngine will cleanup. 
+                // RazorEngine will cleanup.
                 AppDomain.Unload( domain );
                 return exitCode;
             }
@@ -311,7 +311,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
                 Console.WriteLine();
 
                 using(
-                    HttpServer server = 
+                    HttpServer server =
                         new HttpServer(
                             api,
                             port,
@@ -350,7 +350,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
         /// <summary>
         /// Prompts the user permission to get Admin Access to launch the server.
         /// </summary>
-        static void PrintAdminMessage( int port )
+        private static void PrintAdminMessage( int port )
         {
             Console.WriteLine( "Admin is needed to launch the server." );
             Console.WriteLine( "Please relaunch the process as admin (right click->Run As Administrator)" );

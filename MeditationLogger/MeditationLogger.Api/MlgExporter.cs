@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -41,13 +41,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// </param>
         public static void ExportMlg( string outFile, LogBook logBook, ISQLitePlatform platform, Action<int, int> onStep = null )
         {
-            using ( SQLiteConnection sqlite = new SQLiteConnection( platform, outFile, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite ) )
+            using( SQLiteConnection sqlite = new SQLiteConnection( platform, outFile, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite ) )
             {
                 sqlite.CreateTable<Log>();
                 for( int i = 0; i < logBook.Logs.Count; ++i )
                 {
                     sqlite.Insert( logBook.Logs[i] );
-                    if ( onStep != null )
+                    if( onStep != null )
                     {
                         onStep( i + 1, logBook.Logs.Count );
                     }
@@ -73,12 +73,12 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         {
             List<Log> logs = new List<Log>();
 
-            using ( SQLiteConnection sqlite = new SQLiteConnection( platform, inFile, SQLiteOpenFlags.ReadOnly ) )
+            using( SQLiteConnection sqlite = new SQLiteConnection( platform, inFile, SQLiteOpenFlags.ReadOnly ) )
             {
                 var query = sqlite.Table<Log>().Where( x => x.Id > 0 );
 
                 int step = 1;
-                foreach ( Log q in query )
+                foreach( Log q in query )
                 {
                     Log log = q;
 
@@ -87,7 +87,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                     Guid guid = Guid.NewGuid();
 
                     // Keep looking until we have a unique guid.
-                    while ( logBook.LogExists( guid ) || ( logs.Find( i => i.Guid == guid ) != null ) )
+                    while( logBook.LogExists( guid ) || ( logs.Find( i => i.Guid == guid ) != null ) )
                     {
                         guid = Guid.NewGuid();
                     }
@@ -97,7 +97,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                     log.Validate();
                     logs.Add( log );
 
-                    if ( onStep != null )
+                    if( onStep != null )
                     {
                         onStep( step++, query.Count() );
                     }
@@ -105,9 +105,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                 sqlite.Close();
             }
 
-            if ( logs.Count != 0 )
+            if( logs.Count != 0 )
             {
-                foreach ( Log newLog in logs )
+                foreach( Log newLog in logs )
                 {
                     logSqlite.Insert( newLog );
                 }

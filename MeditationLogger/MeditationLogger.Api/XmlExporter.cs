@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -26,7 +26,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     public class XmlExporter
     {
-        const string xmlNameSpace = "http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd";
+        private const string xmlNameSpace = "http://app.meditationenthusiasts.org/schemas/logs/2015/LogXmlSchema.xsd";
 
         /// <summary>
         /// Imports logs from XML to the database.
@@ -48,7 +48,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             List<Log> logs = new List<Log>();
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != "logbook" )
+            if( rootNode.Name != "logbook" )
             {
                 throw new XmlException(
                     "Root node should be named \"logbook\".  Got: " + rootNode.Name
@@ -59,7 +59,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             {
                 XmlNode node = rootNode.ChildNodes[i];
 
-                if ( node.Name != "log" )
+                if( node.Name != "log" )
                 {
                     throw new XmlException(
                         "Element is not a log.  Got: " + node.Name
@@ -68,9 +68,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
                 Log log = new Log();
 
-                foreach ( XmlAttribute attr in node.Attributes )
+                foreach( XmlAttribute attr in node.Attributes )
                 {
-                    switch ( attr.Name )
+                    switch( attr.Name )
                     {
                         case ( Log.StartTimeString ):
                             log.StartTime = DateTime.Parse( attr.Value );
@@ -91,7 +91,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                         case ( Log.LatitudeString ):
                             // Try to parse the latitude.  If fails, just make it empty.
                             decimal lat;
-                            if ( decimal.TryParse( attr.Value, out lat ) )
+                            if( decimal.TryParse( attr.Value, out lat ) )
                             {
                                 log.Latitude = lat;
                             }
@@ -104,7 +104,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                         case ( Log.LongitudeString ):
                             // Try to parse the Longitude.  If fails, just make it empty.
                             decimal lon;
-                            if ( decimal.TryParse( attr.Value, out lon ) )
+                            if( decimal.TryParse( attr.Value, out lon ) )
                             {
                                 log.Longitude = lon;
                             }
@@ -121,7 +121,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                 Guid guid = Guid.NewGuid();
 
                 // Keep looking until we have a unique guid.
-                while ( logBook.LogExists( guid ) || ( logs.Find( l => l.Guid == guid ) != null ) )
+                while( logBook.LogExists( guid ) || ( logs.Find( l => l.Guid == guid ) != null ) )
                 {
                     guid = Guid.NewGuid();
                 }
@@ -134,16 +134,16 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                 // Add to list.
                 logs.Add( log );
 
-                if ( onStep != null )
+                if( onStep != null )
                 {
                     onStep( i + 1, rootNode.ChildNodes.Count );
                 }
             }
 
             // Last thing to do is add the new logs to the database.
-            if ( logs.Count != 0 )
+            if( logs.Count != 0 )
             {
-                foreach ( Log newLog in logs )
+                foreach( Log newLog in logs )
                 {
                     sqlite.Insert( newLog );
                 }
@@ -175,7 +175,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
             XmlNode logbookNode = doc.CreateNode( XmlNodeType.Element, "logbook", xmlNameSpace );
 
-            for ( int i = 0; i < logbook.Logs.Count; ++i )
+            for( int i = 0; i < logbook.Logs.Count; ++i )
             {
                 XmlNode logNode = doc.CreateNode( XmlNodeType.Element, "log", xmlNameSpace );
 
@@ -239,7 +239,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
                 logbookNode.AppendChild( logNode );
 
-                if ( onStep != null )
+                if( onStep != null )
                 {
                     onStep( i + 1, logbook.Logs.Count );
                 }

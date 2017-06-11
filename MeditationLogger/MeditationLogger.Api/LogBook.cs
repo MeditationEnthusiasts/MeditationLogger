@@ -1,20 +1,20 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
         /// <summary>
         /// A list of logs in the order from which the start time is,
-        /// where the most current is index 0, and the earliest is 
+        /// where the most current is index 0, and the earliest is
         /// the last element in the list.
         /// </summary>
         private List<ILog> logTableByStartTime;
@@ -51,7 +51,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// <returns>A logbook fromt he sqlite connection.</returns>
         public static LogBook FromSqlite( SQLiteConnection sqlite )
         {
-            if ( sqlite == null )
+            if( sqlite == null )
             {
                 throw new ArgumentNullException(
                     nameof( sqlite )
@@ -61,7 +61,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             List<ILog> logs = new List<ILog>();
 
             var query = sqlite.Table<Log>().Where( x => x.Id > 0 );
-            foreach ( Log q in query )
+            foreach( Log q in query )
             {
                 logs.Add( q );
             }
@@ -71,11 +71,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
         /// <summary>
         /// Constructor.
-        /// 
+        ///
         /// Note, to save on memory, the logs are not copied from
         /// the logs parameter.  If you want the logbook to contain copies,
         /// create a new list with copies and pass that list in.
-        /// 
+        ///
         /// Note, if any logs have conflicting guids, the one that appears
         /// later in the list will be saved, and the older one discarded.
         /// Please ensure you check for this before calling this if you
@@ -86,7 +86,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         {
             // Populate Dictionary.
             this.logTable = new Dictionary<Guid, ILog>();
-            foreach ( ILog log in logs )
+            foreach( ILog log in logs )
             {
                 logTable[log.Guid] = log;
             }
@@ -104,7 +104,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
             this.TotalTime = 0;
             this.LongestTime = 0;
-            foreach ( ILog log in this.Logs )
+            foreach( ILog log in this.Logs )
             {
                 this.TotalTime += log.Duration.TotalMinutes;
                 this.LongestTime = Math.Max( log.Duration.TotalMinutes, this.LongestTime );
@@ -146,7 +146,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
         /// <summary>
         /// Returns the reference to a log based on the Guid.
-        /// 
+        ///
         /// Throws KeyNotFoundException if time does not exist.
         /// </summary>
         /// <param name="guid">The Guid to check.</param>

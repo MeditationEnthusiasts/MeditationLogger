@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -25,9 +25,11 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MeditationEnthusiasts.MeditationLogger.Desktop;
-using MeditationEnthusiasts.MeditationLogger.Desktop;
 using MeditationEnthusiasts.MeditationLogger.Api;
+using MeditationEnthusiasts.MeditationLogger.Desktop;
+
+using MeditationEnthusiasts.MeditationLogger.Desktop;
+
 using SethCS.Basic;
 
 namespace MeditationEnthusiasts.MeditationLogger.Desktop
@@ -41,7 +43,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private MeditationEnthusiasts.MeditationLogger.Api.Api api;
 
-        List<LogView> logViews;
+        private List<LogView> logViews;
 
         /// <summary>
         /// Where the execution direcotry is.
@@ -64,9 +66,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         // ---- Views ----
 
-        OptionsView optionView;
-        MeditateView meditateView;
-        SaveView saveView;
+        private OptionsView optionView;
+        private MeditateView meditateView;
+        private SaveView saveView;
 
         // ---- Delegates ----
 
@@ -117,7 +119,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             this.api.timer.OnComplete =
                 delegate ()
                 {
-                    if ( this.api.CurrentState == Api.Api.ApiState.Started )
+                    if( this.api.CurrentState == Api.Api.ApiState.Started )
                     {
                         this.timesUpSound.Play( exeDirectory + "/media/temple_bell.wav" );
                         GoToNextState();
@@ -137,9 +139,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
             // Add progress bar controls:
             this.ExportProgressBar.Minimum = 0;
-            this.exportProgressBarDelegate = delegate( int step, int totalSteps )
+            this.exportProgressBarDelegate = delegate ( int step, int totalSteps )
             {
-                if ( this.InvokeRequired )
+                if( this.InvokeRequired )
                 {
                     this.BeginInvoke( this.exportProgressBarDelegate, step, totalSteps );
                 }
@@ -151,9 +153,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             };
 
             this.ImportProgressBar.Minimum = 0;
-            this.importProgressBarDelegate = delegate( int step, int totalSteps )
+            this.importProgressBarDelegate = delegate ( int step, int totalSteps )
             {
-                if ( this.InvokeRequired )
+                if( this.InvokeRequired )
                 {
                     this.BeginInvoke( this.importProgressBarDelegate, step, totalSteps );
                 }
@@ -165,9 +167,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             };
 
             this.SyncProgressBar.Minimum = 0;
-            this.syncProgressBarDelegate = delegate( int step, int totalSteps )
+            this.syncProgressBarDelegate = delegate ( int step, int totalSteps )
             {
-                if ( this.InvokeRequired )
+                if( this.InvokeRequired )
                 {
                     this.BeginInvoke( this.syncProgressBarDelegate, step, totalSteps );
                 }
@@ -179,7 +181,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             };
         }
 
-        readonly string mapHtmlStart = @"
+        private readonly string mapHtmlStart = @"
 <!doctype html>
 <head>
     <meta http-equiv=""content-type"" content=""text/html; charset=utf-8"" />
@@ -230,7 +232,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             // Insert the data.
         ";
 
-        const string mapHtmlEnd = @"
+        private const string mapHtmlEnd = @"
         }
     </script>
 </head>
@@ -246,7 +248,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private Task ReloadLogsAsync()
         {
             return Task.Run(
-                delegate()
+                delegate ()
                 {
                     ReloadLogs();
                 }
@@ -268,7 +270,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private void UpdateUiForReloadingLogs()
         {
-            if ( this.InvokeRequired )
+            if( this.InvokeRequired )
             {
                 this.BeginInvoke( new Action( this.UpdateUiForReloadingLogs ) );
             }
@@ -287,14 +289,14 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private void UpdateUiAfterLoadingLogs()
         {
-            if ( this.InvokeRequired )
+            if( this.InvokeRequired )
             {
                 this.BeginInvoke( new Action( this.UpdateUiAfterLoadingLogs ) );
             }
             else
             {
                 this.logViews = new List<LogView>();
-                foreach ( ILog log in this.api.LogBook.Logs )
+                foreach( ILog log in this.api.LogBook.Logs )
                 {
                     this.logViews.Add(
                         new LogView( log )
@@ -304,7 +306,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                 this.TotalMinutesValueLabel.Text = this.api.LogBook.TotalTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
                 this.LongestSessionValueLabel.Text = this.api.LogBook.LongestTime.ToString( "F", CultureInfo.InvariantCulture ) + " Minutes.";
                 this.TotalSessionsValueLabel.Text = this.api.LogBook.Logs.Count.ToString() + " Sessions.";
-                if ( this.api.LogBook.Logs.Count == 0 )
+                if( this.api.LogBook.Logs.Count == 0 )
                 {
                     this.LastSessionValueLabel.Text = "Nothing yet.";
                 }
@@ -330,7 +332,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private void SyncBrowseButton_Click( object sender, EventArgs e )
         {
             DialogResult openResult = SyncOpenDialog.ShowDialog();
-            if ( openResult == DialogResult.OK )
+            if( openResult == DialogResult.OK )
             {
                 SyncLocationText.Text = SyncOpenDialog.FileName;
             }
@@ -338,9 +340,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void SyncLocationText_KeyPress( object sender, KeyPressEventArgs e )
         {
-            if ( e.KeyChar == (char)Keys.Enter )
+            if( e.KeyChar == (char)Keys.Enter )
             {
-                if (
+                if(
                     string.IsNullOrEmpty( SyncLocationText.Text ) ||
                     string.IsNullOrWhiteSpace( SyncLocationText.Text )
                 )
@@ -363,11 +365,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private async void HandleSyncEvent()
         {
             // No-op if things things are being written to.
-            if ( isNoTaskInProgress == false )
+            if( isNoTaskInProgress == false )
             {
                 return;
             }
-            else if (
+            else if(
                 string.IsNullOrEmpty( SyncLocationText.Text ) ||
                 string.IsNullOrWhiteSpace( SyncLocationText.Text )
             )
@@ -393,7 +395,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
                     this.SyncLocationText.Text = string.Empty;
                 }
-                catch ( Exception err )
+                catch( Exception err )
                 {
                     // Show failure.
                     MessageBox.Show(
@@ -431,7 +433,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private void ImportBrowseButton_Click( object sender, EventArgs e )
         {
             DialogResult openResult = ImportOpenDialog.ShowDialog();
-            if ( openResult == DialogResult.OK )
+            if( openResult == DialogResult.OK )
             {
                 ImportFileLocation.Text = ImportOpenDialog.FileName;
             }
@@ -439,9 +441,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void ImportFileLocation_KeyPress( object sender, KeyPressEventArgs e )
         {
-            if ( e.KeyChar == ( char ) Keys.Enter )
+            if( e.KeyChar == (char)Keys.Enter )
             {
-                if (
+                if(
                     string.IsNullOrEmpty( ImportFileLocation.Text ) ||
                     string.IsNullOrWhiteSpace( ImportFileLocation.Text )
                 )
@@ -465,11 +467,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private async void HandleImportEvent()
         {
             // No-op if things things are being written to.
-            if ( isNoTaskInProgress == false )
+            if( isNoTaskInProgress == false )
             {
                 return;
             }
-            else if (
+            else if(
                 string.IsNullOrEmpty( ImportFileLocation.Text ) ||
                 string.IsNullOrWhiteSpace( ImportFileLocation.Text )
             )
@@ -494,7 +496,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
                     this.ImportFileLocation.Text = string.Empty;
                 }
-                catch ( Exception err )
+                catch( Exception err )
                 {
                     MessageBox.Show(
                         err.Message,
@@ -534,9 +536,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void ExportLocationText_KeyPress( object sender, KeyPressEventArgs e )
         {
-            if ( e.KeyChar == (char) Keys.Return )
+            if( e.KeyChar == (char)Keys.Return )
             {
-                if (
+                if(
                      string.IsNullOrEmpty( ExportLocationText.Text ) ||
                      string.IsNullOrWhiteSpace( ExportLocationText.Text )
                 )
@@ -552,7 +554,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private void ExportBrowseButton_Click( object sender, EventArgs e )
         {
             DialogResult saveResult = ExportSaveDialog.ShowDialog();
-            if ( saveResult == DialogResult.OK )
+            if( saveResult == DialogResult.OK )
             {
                 ExportLocationText.Text = ExportSaveDialog.FileName;
             }
@@ -569,11 +571,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         private async void HandleExportEvent()
         {
             // No-op if things things are being written to.
-            if ( isNoTaskInProgress == false )
+            if( isNoTaskInProgress == false )
             {
                 return;
             }
-            else if (
+            else if(
                  string.IsNullOrEmpty( ExportLocationText.Text ) ||
                  string.IsNullOrWhiteSpace( ExportLocationText.Text )
             )
@@ -598,7 +600,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
                     this.ExportLocationText.Text = string.Empty;
                 }
-                catch ( Exception err )
+                catch( Exception err )
                 {
                     MessageBox.Show(
                         err.Message,
@@ -633,14 +635,14 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void LogbookView_Enter( object sender, EventArgs e )
         {
-            if ( this.logViews.Count == 0 )
+            if( this.logViews.Count == 0 )
             {
                 // No-op
             }
             else
             {
                 this.StandardLogView.Controls.Clear();
-                foreach ( LogView view in this.logViews )
+                foreach( LogView view in this.logViews )
                 {
                     view.Width = this.StandardLogView.Width;
                     this.StandardLogView.Controls.Add( view );
@@ -652,18 +654,20 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void StartTab_Enter( object sender, EventArgs e )
         {
-            switch ( this.api.CurrentState )
+            switch( this.api.CurrentState )
             {
                 case Api.Api.ApiState.Idle:
                     this.optionView.Visible = true;
                     this.meditateView.Visible = false;
                     this.saveView.Visible = false;
                     break;
+
                 case Api.Api.ApiState.Started:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = true;
                     this.saveView.Visible = false;
                     break;
+
                 case Api.Api.ApiState.Stopped:
                     this.optionView.Visible = false;
                     this.meditateView.Visible = false;
@@ -681,18 +685,18 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         {
             try
             {
-                switch ( this.api.CurrentState )
+                switch( this.api.CurrentState )
                 {
                     case Api.Api.ApiState.Idle:
                         // API calls
                         SessionConfig config = new SessionConfig();
-                        if ( this.optionView.EnableTimerCheckbox.Checked )
+                        if( this.optionView.EnableTimerCheckbox.Checked )
                         {
                             int minutes = Convert.ToInt32( this.optionView.MinuteListBox.Value );
                             int hours = Convert.ToInt32( this.optionView.HourListBox.Value );
 
                             // Do not start the session if we are in a non-guided timed session and our timer is set to 00:00.
-                            if ( ( minutes <= 0 ) && ( hours <= 0 ) && ( this.optionView.MusicPlayOnceRadioButton.Checked == false ) )
+                            if( ( minutes <= 0 ) && ( hours <= 0 ) && ( this.optionView.MusicPlayOnceRadioButton.Checked == false ) )
                             {
                                 MessageBox.Show(
                                     "Timer must be longer than 00:00",
@@ -717,7 +721,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                             config.Length = null;
                         }
 
-                        config.PlayMusic = ( this.optionView.LoopMusicRadioButton.Checked ) || 
+                        config.PlayMusic = ( this.optionView.LoopMusicRadioButton.Checked ) ||
                                            ( this.optionView.MusicPlayOnceRadioButton.Checked );
                         config.LoopMusic = this.optionView.LoopMusicRadioButton.Checked;
                         config.AudioFile = this.optionView.MusicLocationTextBox.Text;
@@ -754,10 +758,10 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                         decimal? latitude = null;
                         decimal? longitude = null;
 
-                        if ( this.saveView.UseLocationCheckbox.Checked )
+                        if( this.saveView.UseLocationCheckbox.Checked )
                         {
                             this.api.LocationDetector.RefreshPosition();
-                            if ( this.api.LocationDetector.IsReady )
+                            if( this.api.LocationDetector.IsReady )
                             {
                                 latitude = this.api.LocationDetector.Latitude;
                                 longitude = this.api.LocationDetector.Longitude;
@@ -802,17 +806,19 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                         break;
                 }
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
                 string errorStr = "Error when ";
-                switch ( this.api.CurrentState )
+                switch( this.api.CurrentState )
                 {
                     case Api.Api.ApiState.Idle:
                         errorStr = errorStr + "starting the session.";
                         break;
+
                     case Api.Api.ApiState.Started:
                         errorStr = errorStr + "ending the session.";
                         break;
+
                     case Api.Api.ApiState.Stopped:
                         errorStr = errorStr + "saving the session.";
                         break;
@@ -846,7 +852,6 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void LogbookView_Click( object sender, EventArgs e )
         {
-
         }
 
         // --------- About View Events ---------
@@ -868,7 +873,6 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
 
         private void tableLayoutPanel1_Paint( object sender, PaintEventArgs e )
         {
-
         }
 
         private void ViewWikiValueLabel_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
@@ -883,7 +887,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             this.CheckForUpdatesButton.Text = "Checking...";
             try
             {
-                if ( await CheckForUpdate() )
+                if( await CheckForUpdate() )
                 {
                     DialogResult result = MessageBox.Show(
                         "There's a new version.  Open browser to download?",
@@ -892,7 +896,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                         MessageBoxIcon.Information
                     );
 
-                    if ( result == DialogResult.Yes )
+                    if( result == DialogResult.Yes )
                     {
                         System.Diagnostics.Process.Start( "http://app.meditationenthusiasts.org/software/logger/latest/win32/" );
                     }
@@ -907,7 +911,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                     );
                 }
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
                 MessageBox.Show(
                     err.Message,
@@ -935,26 +939,26 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                     WebRequest request = WebRequest.Create( "http://app.meditationenthusiasts.org/software/logger/latest/version.txt" );
                     request.Method = "GET";
 
-                    using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse )
+                    using( HttpWebResponse response = request.GetResponse() as HttpWebResponse )
                     {
-                        if ( response.StatusCode != HttpStatusCode.OK )
+                        if( response.StatusCode != HttpStatusCode.OK )
                         {
                             throw new ApplicationException(
                                 "http request returned invalid status: " + response.StatusCode
                             );
                         }
 
-                        using ( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
+                        using( StreamReader reader = new StreamReader( response.GetResponseStream() ) )
                         {
                             string versionStr = reader.ReadToEnd();
                             versionStr = versionStr.Trim();
 
                             SemanticVersion version;
-                            if ( SemanticVersion.TryParse( versionStr, out version ) )
+                            if( SemanticVersion.TryParse( versionStr, out version ) )
                             {
                                 // If version from the server if newer than this program's
                                 // return true.
-                                if ( version > Api.Api.Version )
+                                if( version > Api.Api.Version )
                                 {
                                     return true;
                                 }
@@ -972,7 +976,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// <param name="enable">Whether or not to enable the buttons.</param>
         private void EnableButtons( bool enable )
         {
-            if ( this.InvokeRequired )
+            if( this.InvokeRequired )
             {
                 this.BeginInvoke( new Action<bool>( EnableButtons ), enable );
             }
@@ -991,7 +995,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private void EnableImportButton()
         {
-            if (
+            if(
                 string.IsNullOrEmpty( ImportFileLocation.Text ) ||
                 string.IsNullOrWhiteSpace( ImportFileLocation.Text )
             )
@@ -1009,7 +1013,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private void EnableExportButton()
         {
-            if (
+            if(
                 string.IsNullOrEmpty( ExportLocationText.Text ) ||
                 string.IsNullOrWhiteSpace( ExportLocationText.Text )
             )
@@ -1027,7 +1031,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         private void EnableSyncButton()
         {
-            if (
+            if(
                 string.IsNullOrEmpty( SyncLocationText.Text ) ||
                 string.IsNullOrWhiteSpace( SyncLocationText.Text )
             )

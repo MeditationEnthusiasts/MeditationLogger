@@ -1,28 +1,23 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.IO;
-using System.Xml;
-using MedEnthLogsApi;
-using Newtonsoft.Json;
-using NUnit.Framework;
 using MeditationEnthuisasts.MeditationLogger.TestCore;
+using NUnit.Framework;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
@@ -34,8 +29,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
     {
         // -------- Fields --------
 
-        ApiTestCore apiTestCore;
-        
+        private ApiTestCore apiTestCore;
+
         // -------- Setup/Teardown --------
 
         [SetUp]
@@ -261,7 +256,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         }
 
         // ---- Xml Tests ----
-        
+
         // -- XML Schema Tests --
 
         /// <summary>
@@ -395,7 +390,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         {
             this.apiTestCore.DoJsonImportNoStartTime();
         }
-        
+
         /// <summary>
         /// Ensures having a missing latitude while having a longitude
         /// (or vice vera) results in a failure.
@@ -405,7 +400,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         {
             this.apiTestCore.DoJsonImportBadMissingLat();
         }
-    
+
         /// <summary>
         /// Ensures importing a Json file with no logs results
         /// in no error.  Nothing is added.
@@ -425,7 +420,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         {
             this.apiTestCore.DoJsonImportJustStartAndEnd();
         }
-        
+
         /// <summary>
         /// Ensures importing an XML file with lat and long
         /// set to not numbers results in no error, but both

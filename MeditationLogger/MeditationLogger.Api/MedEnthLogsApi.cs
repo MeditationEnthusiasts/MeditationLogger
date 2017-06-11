@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -26,6 +26,7 @@ using SQLite.Net.Interop;
 
 [assembly: InternalsVisibleTo( "MeditationLogger.Tests.Desktop" )]
 [assembly: InternalsVisibleTo( "MeditationLogger.TestCore.Desktop" )]
+
 namespace MeditationEnthusiasts.MeditationLogger.Api
 {
     /// <summary>
@@ -186,7 +187,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// <remarks>If a databse is already open, it will be closed first.</remarks>
         public void Open( string path )
         {
-            if ( this.sqlite != null )
+            if( this.sqlite != null )
             {
                 this.Close();
             }
@@ -209,34 +210,34 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// Inserts the given log to the database.
         /// This will not show up in the logbook, call
         /// PopulateLogbook() to do that.
-        /// 
+        ///
         /// If the log's GUID already exists in the logbook,
         /// it will be overwritten.
         /// </summary>
         /// <param name="log">The log to add.</param>
         public void InsertLog( Log log )
         {
-            if ( log == null )
+            if( log == null )
             {
                 throw new ArgumentNullException(
                     nameof( log )
                 );
             }
             // If sqlite is not open, throw exeption.
-            else if ( this.sqlite == null )
+            else if( this.sqlite == null )
             {
                 throw new InvalidOperationException(
                     DatabaseNotOpenMessage
                 );
             }
-            else if ( this.LogBook == null )
+            else if( this.LogBook == null )
             {
                 throw new InvalidOperationException(
                     nullLogbook
                 );
             }
 
-            if ( this.LogBook.LogExists( log.Guid ) )
+            if( this.LogBook.LogExists( log.Guid ) )
             {
                 log.Id = this.LogBook.GetLog( log.Guid ).Id;
                 this.sqlite.InsertOrReplace( log );
@@ -257,14 +258,14 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// <param name="config">The config for the session.</param>
         public void StartSession( SessionConfig config )
         {
-            if ( config == null )
+            if( config == null )
             {
                 throw new ArgumentNullException( "config" );
             }
 
             try
             {
-                if ( this.CurrentState == ApiState.Idle )
+                if( this.CurrentState == ApiState.Idle )
                 {
                     this.currentLog = new Log();
                     this.currentLog.StartTime = DateTime.UtcNow;
@@ -272,10 +273,10 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
                     TimeSpan? length = config.Length;
 
-                    if ( config.PlayMusic )
+                    if( config.PlayMusic )
                     {
                         this.musicManager.Validate( config.AudioFile );
-                        if ( config.LoopMusic )
+                        if( config.LoopMusic )
                         {
                             this.musicManager.OnStop =
                                 delegate ()
@@ -283,7 +284,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                                     // If our state is still in the started state, and we want
                                     // to loop the music, stop the current music in progress, then
                                     // restart it.
-                                    if ( this.CurrentState == ApiState.Started )
+                                    if( this.CurrentState == ApiState.Started )
                                     {
                                         this.musicManager.Stop();
                                         this.musicManager.Play( config.AudioFile );
@@ -302,7 +303,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                     this.CurrentState = ApiState.Started;
                 }
             }
-            catch ( Exception )
+            catch( Exception )
             {
                 this.currentLog = new Log();
                 throw;
@@ -315,7 +316,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// </summary>
         public void StopSession()
         {
-            if ( this.CurrentState == ApiState.Started )
+            if( this.CurrentState == ApiState.Started )
             {
                 this.timer.StopAndResetTimer();
                 this.currentLog.EndTime = DateTime.UtcNow;
@@ -327,14 +328,14 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
 
         /// <summary>
         /// Validates and saves the CurrentSession to the database.
-        /// 
+        ///
         /// Throws InvalidOperationException if the current state is not "stopped" or database is not opened.
-        /// 
+        ///
         /// Throws LogValidationException if the CurrentLog is not valid.
-        /// 
+        ///
         /// This does NOT reset the current log.  Call ResetCurrentLog() for that.
-        /// 
-        /// If either latitude or longitude is null, but the other is not, a LogValidationException will be thrown. 
+        ///
+        /// If either latitude or longitude is null, but the other is not, a LogValidationException will be thrown.
         /// </summary>
         /// <param name="technique">The technique information for the session, if any (null for no technique).</param>
         /// <param name="comments">The comments for the session, if any (null for no comments).</param>
@@ -343,14 +344,14 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public void ValidateAndSaveSession( string technique = null, string comments = null, decimal? latitude = null, decimal? longitude = null )
         {
             // If sqlite is not open, throw exeption.
-            if ( this.sqlite == null )
+            if( this.sqlite == null )
             {
                 throw new InvalidOperationException(
                     DatabaseNotOpenMessage
                 );
             }
             // If a session is in progress, throw.
-            else if ( this.CurrentState != ApiState.Stopped )
+            else if( this.CurrentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException(
                     SessionInProgressMessage
@@ -364,13 +365,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             this.CurrentLog.Validate();
 
             // Otherwise, Edit the log one last time and save it to the database.
-            if ( technique != null )
+            if( technique != null )
             {
                 this.currentLog.Technique = technique;
                 this.currentLog.EditTime = DateTime.UtcNow;
             }
 
-            if ( comments != null )
+            if( comments != null )
             {
                 this.currentLog.Comments = comments;
                 this.currentLog.EditTime = DateTime.UtcNow;
@@ -388,7 +389,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public void PopulateLogbook()
         {
             // If sqlite is not open, throw exeption.
-            if ( this.sqlite == null )
+            if( this.sqlite == null )
             {
                 throw new InvalidOperationException(
                     DatabaseNotOpenMessage
@@ -404,7 +405,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// Performs an Import.
         /// The type of Import (XML, JSON, MLG) depends on the
         /// file extension (case doesn't matter).
-        /// 
+        ///
         /// This does not repopulate the logbook automatically,
         /// call "PopulateLogbook" after this function to do that.
         /// </summary>
@@ -417,24 +418,26 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public void Import( string fileName, Action<int, int> onStep = null )
         {
             string[] splitString = fileName.Split( '.' );
-            switch ( splitString[splitString.Length - 1].ToLower() )
+            switch( splitString[splitString.Length - 1].ToLower() )
             {
                 case "xml":
-                    using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+                    using( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
                         XmlExporter.ImportFromXml( outFile, this.LogBook, this.sqlite, onStep );
                     }
                     break;
 
                 case "json":
-                    using ( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+                    using( FileStream outFile = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
                     {
                         JsonExporter.ImportFromJson( outFile, this.LogBook, this.sqlite, onStep );
                     }
                     break;
+
                 case "mlg":
                     MlgExporter.ImportMlg( fileName, this.LogBook, this.platform, this.sqlite, onStep );
                     break;
+
                 default:
                     throw new ArgumentException(
                         "Invalid filename passed into Import, can only be .xml, .json, .mlg.",
@@ -459,24 +462,26 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public void Export( string fileName, Action<int, int> onStep = null )
         {
             string[] splitString = fileName.Split( '.' );
-            switch ( splitString[splitString.Length - 1].ToLower() )
+            switch( splitString[splitString.Length - 1].ToLower() )
             {
                 case "xml":
-                    using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
+                    using( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
                         XmlExporter.ExportToXml( outFile, this.LogBook, onStep );
                     }
                     break;
 
                 case "json":
-                    using ( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
+                    using( FileStream outFile = new FileStream( fileName, FileMode.Create, FileAccess.Write ) )
                     {
                         JsonExporter.ExportJson( outFile, this.LogBook, onStep );
                     }
                     break;
+
                 case "mlg":
                     MlgExporter.ExportMlg( fileName, this.LogBook, this.platform, onStep );
                     break;
+
                 default:
                     throw new ArgumentException(
                         "Invalid filename passed into Export, can only be .xml, .json, .mlg.",
@@ -499,13 +504,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public void Sync( string externalLogbook, Action<int, int> onStep = null )
         {
             // If sqlite is not open, throw exeption.
-            if ( this.sqlite == null )
+            if( this.sqlite == null )
             {
                 throw new InvalidOperationException(
                     DatabaseNotOpenMessage
                 );
             }
-            else if ( this.LogBook == null )
+            else if( this.LogBook == null )
             {
                 throw new InvalidOperationException(
                     nullLogbook
@@ -520,7 +525,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// </summary>
         public void Close()
         {
-            if ( this.sqlite != null )
+            if( this.sqlite != null )
             {
                 this.sqlite.Close();
                 this.sqlite = null;

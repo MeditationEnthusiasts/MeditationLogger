@@ -504,7 +504,7 @@ th {
     /* IE10 uses display: flexbox */
     display: -ms-flexbox;
     -ms-flex-flow: row wrap;
-    
+
     /* Prevents distributing space between rows */
     -ms-align-content: flex-start;
 	-webkit-align-content: flex-start;
@@ -892,13 +892,11 @@ since IE8 won't execute CSS that contains a CSS3 selector.
     box-sizing: border-box;
 }
 
-
 /* Chrome (as of v.32/34 on OS X) needs additional room for color to display. */
 /* May be able to remove this tweak as color inputs become more standardized across browsers. */
 .pure-form input[type="color"] {
     padding: 0.2em 0.5em;
 }
-
 
 .pure-form input[type="text"]:focus,
 .pure-form input[type="password"]:focus,
@@ -1396,7 +1394,6 @@ striping:
 .pure-table-bordered tbody > tr:last-child > td {
     border-bottom-width: 0;
 }
-
 
 /* HORIZONTAL BORDERED TABLES */
 

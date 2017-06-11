@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -29,7 +29,6 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public LogValidationException( string message ) :
             base( message )
         {
-
         }
     }
 
@@ -109,7 +108,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// The string for Latitude when importing/exporting.
         /// </summary>
         public const string LongitudeString = "Longitude";
-        
+
         /// <summary>
         /// The maximum time we support.
         /// Mainly here for unit testing purposes.
@@ -131,9 +130,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             // Fun fact!  DateTime.MinValue seems to return local time, not UTC time.
             this.EndTime = DateTime.MinValue.ToUniversalTime();
 
-            // Make start time ahead of end time, 
+            // Make start time ahead of end time,
             // this will make the log in an invalid state, as the
-            // start time is ahead of the end time which is not allowed.            
+            // start time is ahead of the end time which is not allowed.
             this.StartTime = MaxTime;
 
             this.Guid = Guid.NewGuid();
@@ -216,7 +215,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             }
             set
             {
-                if ( value == null )
+                if( value == null )
                 {
                     throw new ArgumentNullException( "value", "Log comments can not be null" );
                 }
@@ -236,7 +235,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             }
             set
             {
-                if ( value == null )
+                if( value == null )
                 {
                     throw new ArgumentNullException( "value", "Log technique can not be null" );
                 }
@@ -268,7 +267,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public override bool Equals( object obj )
         {
             ILog other = obj as ILog;
-            if ( other == null )
+            if( other == null )
             {
                 return false;
             }
@@ -313,19 +312,19 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// Throws LogValidationException if:
         /// Start time > End Time.
         /// Latitude exists, longitude does not.
-        /// Longitude exists, latitude does not. 
+        /// Longitude exists, latitude does not.
         /// </summary>
         public void Validate()
         {
-            if ( this.EndTime < this.StartTime )
+            if( this.EndTime < this.StartTime )
             {
                 throw new LogValidationException( EndTimeLessThanStartTimeMessage );
             }
-            else if ( ( this.Latitude == null ) && ( this.Longitude != null ) )
+            else if( ( this.Latitude == null ) && ( this.Longitude != null ) )
             {
                 throw new LogValidationException( LongitudeSetNoLatitude );
             }
-            else if ( ( this.Longitude == null ) && ( this.Latitude != null ) )
+            else if( ( this.Longitude == null ) && ( this.Latitude != null ) )
             {
                 throw new LogValidationException( LatitudeSetNoLongitude );
             }
@@ -338,7 +337,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         /// <returns>A clone of this object.</returns>
         public Log Clone()
         {
-            return (Log) this.MemberwiseClone();
+            return (Log)this.MemberwiseClone();
         }
 
         /// <summary>
@@ -352,20 +351,20 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public static void Sync( ref Log log1, ref Log log2 )
         {
             // Can only sync logs that match GUIDs
-            if ( log1.Guid != log2.Guid )
+            if( log1.Guid != log2.Guid )
             {
                 throw new InvalidOperationException(
                     "Can only sync logs that have matching GUIDs"
                 );
             }
             // No-op if they already are equal.
-            else if ( log1.Equals( log2 ) )
+            else if( log1.Equals( log2 ) )
             {
                 return;
             }
 
             // If log1 is older than log2, make log1 become log2.
-            else if ( log1.EditTime < log2.EditTime )
+            else if( log1.EditTime < log2.EditTime )
             {
                 log1.Comments = log2.Comments;
                 log1.Latitude = log2.Latitude;
@@ -376,7 +375,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                 log1.Technique = log2.Technique;
             }
             // If log2 is older than log1, make log2 become log1.
-            else if ( log1.EditTime > log2.EditTime )
+            else if( log1.EditTime > log2.EditTime )
             {
                 log2.Comments = log1.Comments;
                 log2.Latitude = log1.Latitude;

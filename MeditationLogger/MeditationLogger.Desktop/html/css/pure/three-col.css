@@ -18,7 +18,6 @@
  * of the mobile styles.
  */
 @media (min-width: 40em) {
-
     /* Move the layout over so we can fit the nav + list in on the left */
     #layout {
         padding-left:500px; /* "left col (nav + list)" width */
@@ -65,7 +64,6 @@
         overflow: auto;
         width: auto; /* so that it's not 100% */
     }
-
 }
 
 /*
@@ -74,7 +72,6 @@
  * of the mobile styles.
  */
 @media (min-width: 60em) {
-
     /* This will take up the entire height, and be a little thinner */
     #list {
         margin-left: -350px;
@@ -91,4 +88,3 @@
         width: 100%; /* so that it's not 100% */
     }
 }
-

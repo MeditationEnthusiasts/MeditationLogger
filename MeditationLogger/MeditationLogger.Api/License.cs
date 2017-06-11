@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -26,10 +26,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
     public class License
     {
         #region MedEnthLicense
+
         /// <summary>
         /// License for this application.
         /// </summary>
-        public const string MedEnthLicense = 
+        public const string MedEnthLicense =
 @"GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007
 
@@ -706,7 +707,8 @@ Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
 ";
-        #endregion MedEndthLicense
+
+        #endregion MedEnthLicense
 
         #region ExternalLicenses
 
@@ -744,7 +746,6 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
         ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
         ( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 Normalize.css License
 =====================
@@ -796,7 +797,6 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 TORT( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 -------- JSON.Net --------
 
 http://www.newtonsoft.com/json
@@ -821,7 +821,6 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 
 -------- SQLite.Net-PCL --------
 
@@ -975,7 +974,7 @@ http://antaris.github.io/RazorEngine/
 Apache License
 ==============
 
-_Version 2.0, January 2004_  
+_Version 2.0, January 2004_
 _&lt;<http://www.apache.org/licenses/>&gt;_
 
 ### Terms and Conditions for use, reproduction, and distribution
@@ -1179,7 +1178,6 @@ A ""contributor"" is any person that distributes its contribution under this lic
 
 (E) The software is licensed ""as-is."" You bear the risk of using it. The contributors give no express warranties, guarantees or conditions.You may have additional consumer rights under your local laws which this license cannot change.To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
 
-
 -------- Sound Effects --------
 
 Zen Buddhist Temple Bell Sound
@@ -1188,6 +1186,6 @@ Zen Buddhist Temple Bell Sound
 
 ";
 
-        #endregion External Licenses
+        #endregion ExternalLicenses
     }
 }

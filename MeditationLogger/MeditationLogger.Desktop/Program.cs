@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -35,13 +35,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             // Get Api() is in a partial class.  GetApi creates an API for the current platform.
             api = GetApi();
 
             // Create the folder if it doesn't exist.
-            if ( Directory.Exists( Constants.DatabaseFolderLocation ) == false )
+            if( Directory.Exists( Constants.DatabaseFolderLocation ) == false )
             {
                 Directory.CreateDirectory( Constants.DatabaseFolderLocation );
             }
@@ -55,7 +55,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             {
                 Application.Run( new HomePage( api, GetMusicManager() ) );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
                 MessageBox.Show( e.Message, "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error );
             }

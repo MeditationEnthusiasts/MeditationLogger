@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2016  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -21,11 +21,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using MeditationEnthuisasts.MeditationLogger.TestCore;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
-using NUnit.Framework;
 using MeditationLogger.TestCore.Mocks;
-using MeditationEnthuisasts.MeditationLogger.TestCore;
+using NUnit.Framework;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
@@ -72,11 +72,11 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             this.backedUpLogbook = null;
             this.logbookLocation = Path.Combine( Constants.DatabaseFolderLocation, Api.Api.LogbookFileName );
 
-            if ( File.Exists ( logbookLocation ) )
+            if( File.Exists( logbookLocation ) )
             {
                 // Move the original file.
-                this.backedUpLogbook = Path.Combine( 
-                    Constants.DatabaseFolderLocation, 
+                this.backedUpLogbook = Path.Combine(
+                    Constants.DatabaseFolderLocation,
                     "Backed_up_logbook_" + DateTime.Now.ToString( "MM_dd_yyyy_HH_mm_ss" ) + ".mlg"
                 );
                 File.Move( logbookLocation, backedUpLogbook );
@@ -87,22 +87,21 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         public void TestFixtureTeardown()
         {
             // Delete logbook, and restore the backed-up logbook (if it exists).
-            if ( File.Exists( logbookLocation ) )
+            if( File.Exists( logbookLocation ) )
             {
                 File.Delete( logbookLocation );
             }
-            if ( backedUpLogbook != null )
+            if( backedUpLogbook != null )
             {
                 File.Move( backedUpLogbook, logbookLocation );
             }
-
         }
 
         [SetUp]
         public void TestSetup()
         {
             // Delete logbook before starting.
-            if ( File.Exists( logbookLocation ) )
+            if( File.Exists( logbookLocation ) )
             {
                 File.Delete( logbookLocation );
             }
@@ -121,7 +120,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             this.api = null;
 
             // Delete logbook before moving on.
-            if ( File.Exists( logbookLocation ) )
+            if( File.Exists( logbookLocation ) )
             {
                 File.Delete( logbookLocation );
             }
@@ -185,7 +184,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         }
 
         // ---- Meditate Tests ----
-        
+
         /// <summary>
         /// Tests to make sure we can save a session with nothing extra saved.
         /// </summary>
@@ -231,7 +230,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 HttpResponseHandler.LicenseUrl
             };
 
-            using ( ServerLauncher server = new ServerLauncher( port ) )
+            using( ServerLauncher server = new ServerLauncher( port ) )
             {
                 try
                 {
@@ -333,7 +332,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 
                 Assert.AreEqual( expectedTechnique, this.api.LogBook.Logs[0].Technique );
                 Assert.AreEqual( expectedComments, this.api.LogBook.Logs[0].Comments );
-                if ( expectLocation )
+                if( expectLocation )
                 {
                     Assert.IsNotNull( this.api.LogBook.Logs[0].Latitude );
                     Assert.IsNotNull( this.api.LogBook.Logs[0].Longitude );
@@ -367,9 +366,9 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             startInfo.FileName = "MeditationLogger.Cli.exe";
 
             int exitCode = -1;
-            using ( Process process = Process.Start( startInfo ) )
+            using( Process process = Process.Start( startInfo ) )
             {
-                if ( standardInput != null )
+                if( standardInput != null )
                 {
                     using( StreamWriter writer = process.StandardInput )
                     {
@@ -422,7 +421,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             /// </summary>
             public void Dispose()
             {
-                if ( this.serverProcess != null )
+                if( this.serverProcess != null )
                 {
                     HttpWebRequest request = WebRequest.CreateHttp( url + "/quit.html" );
                     request.Method = "POST";

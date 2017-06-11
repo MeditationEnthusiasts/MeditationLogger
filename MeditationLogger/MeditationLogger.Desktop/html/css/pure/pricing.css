@@ -78,7 +78,6 @@ p {
     background: #5800ff;
 }
 
-
 /*
  * -- INFO TABLE HEADER --
  * By default, a header is black/white, and has some styles for its <h2> name.
@@ -94,7 +93,6 @@ p {
     font-size: 1em;
     font-weight: normal;
 }
-
 
 /*
  * -- INFO TABLE PRICE --
@@ -124,7 +122,6 @@ p {
     .info-table{
         margin-bottom: 0;
     }
-
 }
 
 /*

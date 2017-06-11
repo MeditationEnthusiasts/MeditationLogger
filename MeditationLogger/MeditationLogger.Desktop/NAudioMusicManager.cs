@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -93,16 +93,16 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         public TimeSpan GetLengthOfFile( string fileLocation )
         {
             Validate( fileLocation );
-            if ( Path.GetExtension( fileLocation ).ToLower() == ".mp3" )
+            if( Path.GetExtension( fileLocation ).ToLower() == ".mp3" )
             {
-                using ( Mp3FileReader reader = new Mp3FileReader( fileLocation ) )
+                using( Mp3FileReader reader = new Mp3FileReader( fileLocation ) )
                 {
                     return reader.TotalTime;
                 }
             }
             else // Only other option is .wav.
             {
-                using ( WaveFileReader reader = new WaveFileReader( fileLocation ) )
+                using( WaveFileReader reader = new WaveFileReader( fileLocation ) )
                 {
                     return reader.TotalTime;
                 }
@@ -118,7 +118,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// <param name="audioFile">The audio file to play.</param>
         public void Play( string audioFile )
         {
-            if ( this.IsPlaying )
+            if( this.IsPlaying )
             {
                 throw new InvalidOperationException(
                     "File already playing!"
@@ -131,7 +131,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
                 this.wavePlayer = new WaveOut();
                 this.audioFileReader = new AudioFileReader( audioFile );
 
-                if ( this.OnStop != null )
+                if( this.OnStop != null )
                 {
                     this.wavePlayer.PlaybackStopped += ( pbss, pbse ) => this.OnStop();
                 }
@@ -149,7 +149,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         /// </summary>
         public void Stop()
         {
-            if ( this.IsPlaying )
+            if( this.IsPlaying )
             {
                 this.wavePlayer.Stop();
 
@@ -172,19 +172,19 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
         public void Validate( string audioFile )
         {
             // Throw if null or empty.
-            if ( string.IsNullOrEmpty( audioFile ) )
+            if( string.IsNullOrEmpty( audioFile ) )
             {
                 throw new ArgumentException(
                     "Audio file can not be empty."
                 );
             }
             // Fail if it doesn't exist.
-            else if ( File.Exists( audioFile ) == false )
+            else if( File.Exists( audioFile ) == false )
             {
                 throw new FileNotFoundException( "Could not open audio file: " + audioFile );
             }
             // Fail if we dont support the file type.
-            else if ( this.SupportedFormats.Contains( Path.GetExtension( audioFile ).ToLower() ) == false )
+            else if( this.SupportedFormats.Contains( Path.GetExtension( audioFile ).ToLower() ) == false )
             {
                 throw new PlatformNotSupportedException(
                     "This version does not support " + Path.GetExtension( audioFile ) + " files"

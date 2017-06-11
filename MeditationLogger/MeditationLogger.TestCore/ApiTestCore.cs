@@ -1,32 +1,30 @@
-﻿// 
+﻿//
 // Meditation Logger.
 // Copyright (C) 2015-2017  Seth Hendrick.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using MeditationEnthusiasts.MeditationLogger.Api;
+using MeditationLogger.TestCore.Mocks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net.Interop;
-using MeditationLogger.TestCore.Mocks;
 
 namespace MeditationEnthuisasts.MeditationLogger.TestCore
 {
@@ -76,7 +74,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// </summary>
         public void Startup()
         {
-            if ( File.Exists( dbLocation ) )
+            if( File.Exists( dbLocation ) )
             {
                 File.Delete( dbLocation );
             }
@@ -93,7 +91,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         {
             this.uut.Close();
 
-            if ( File.Exists( dbLocation ) )
+            if( File.Exists( dbLocation ) )
             {
                 File.Delete( dbLocation );
             }
@@ -108,7 +106,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         {
             uut.ResetStates();
 
-            // Ensure stagged log is the equivalent of 
+            // Ensure stagged log is the equivalent of
             Assert.AreEqual( new Log(), uut.CurrentLog );
         }
 
@@ -385,7 +383,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             double deltaTime = delta.TotalSeconds;
             Assert.LessOrEqual( deltaTime, 5 );
 
-            // Ensure the edit time is greater or equal 
+            // Ensure the edit time is greater or equal
             // to what it was when we called start.
             Assert.GreaterOrEqual( uut.CurrentLog.EditTime, oldEditTime );
 
@@ -955,21 +953,21 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         {
             try
             {
-                foreach ( string mlgToCheck in new string[] { oldBookLocation, newBookLocation } )
+                foreach( string mlgToCheck in new string[] { oldBookLocation, newBookLocation } )
                 {
                     api.Open( mlgToCheck );
                     api.PopulateLogbook();
                     LogBook syncedLogbook = api.LogBook;
 
                     // First, ensure all logs in the old book exist.
-                    foreach ( Log oldLog in oldBook.Logs )
+                    foreach( Log oldLog in oldBook.Logs )
                     {
                         Assert.IsTrue( syncedLogbook.LogExists( oldLog.Guid ) );
                         Assert.AreEqual( oldLog, syncedLogbook.GetLog( oldLog.Guid ) );
                     }
 
                     // Second, ensure all logs in the new book exist.
-                    foreach ( Log newLog in newBook.Logs )
+                    foreach( Log newLog in newBook.Logs )
                     {
                         Assert.IsTrue( syncedLogbook.LogExists( newLog.Guid ) );
                         Assert.AreEqual( newLog, syncedLogbook.GetLog( newLog.Guid ) );
@@ -977,13 +975,13 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
 
                     // Lastly, ensure all logs in the synced logbook did not magically appear;
                     // they should have came from somewhere.
-                    foreach ( Log log in syncedLogbook.Logs )
+                    foreach( Log log in syncedLogbook.Logs )
                     {
-                        if ( oldBook.LogExists( log.Guid ) )
+                        if( oldBook.LogExists( log.Guid ) )
                         {
                             Assert.AreEqual( log, syncedLogbook.GetLog( log.Guid ) );
                         }
-                        else if ( newBook.LogExists( log.Guid ) )
+                        else if( newBook.LogExists( log.Guid ) )
                         {
                             Assert.AreEqual( log, syncedLogbook.GetLog( log.Guid ) );
                         }
@@ -1053,7 +1051,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             // which should be newer (assuming our computer didnt time travel).
             Assert.AreEqual( oldBook.Logs.Count, newBook.Logs.Count );
 
-            for ( int i = 0; i < oldBook.Logs.Count; ++i )
+            for( int i = 0; i < oldBook.Logs.Count; ++i )
             {
                 Assert.AreEqual( oldBook.Logs[i].StartTime, newBook.Logs[i].StartTime );
                 Assert.AreEqual( oldBook.Logs[i].EndTime, newBook.Logs[i].EndTime );
@@ -1154,7 +1152,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
         /// <param name="expectedErrorStr">The expected error string. Set to null if don't-care.</param>
         private void CheckValidationFailed( string expectedErrorStr = null )
         {
-            if ( expectedErrorStr == null )
+            if( expectedErrorStr == null )
             {
                 Assert.Catch<LogValidationException>(
                     delegate ()
@@ -1228,7 +1226,7 @@ namespace MeditationEnthuisasts.MeditationLogger.TestCore
             api.Open( location );
             try
             {
-                for ( int i = 0; i < numberOfEntries; ++i )
+                for( int i = 0; i < numberOfEntries; ++i )
                 {
                     Assert.AreEqual( Api.ApiState.Idle, api.CurrentState ); // Start idle.
                     api.StartSession( new SessionConfig() );
