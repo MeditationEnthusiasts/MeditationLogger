@@ -58,6 +58,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// </summary>
         private string logbookLocation;
 
+        private string cliExeLocation;
+
         /// <summary>
         /// Api (needed to read from the database).
         /// </summary>
@@ -81,6 +83,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 );
                 File.Move( logbookLocation, backedUpLogbook );
             }
+
+            this.cliExeLocation = Path.Combine( TestContext.CurrentContext.TestDirectory, "MeditationLogger.Cli.Exe" );
         }
 
         [OneTimeTearDown]
@@ -229,7 +233,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 HttpResponseHandler.LicenseUrl
             };
 
-            using( ServerLauncher server = new ServerLauncher( port ) )
+            using( ServerLauncher server = new ServerLauncher( port, this.cliExeLocation ) )
             {
                 try
                 {
@@ -362,7 +366,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             startInfo.UseShellExecute = false;
 
             // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
-            startInfo.FileName = "MeditationLogger.Cli.exe";
+            startInfo.FileName = cliExeLocation;
 
             int exitCode = -1;
             using( Process process = Process.Start( startInfo ) )
@@ -400,7 +404,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             /// <summary>
             /// Constructor.  Launches the server.
             /// </summary>
-            public ServerLauncher( int port )
+            public ServerLauncher( int port, string cliExeLocation )
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.Arguments = "launch_server " + port;
@@ -408,7 +412,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 startInfo.UseShellExecute = false;
 
                 // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
-                startInfo.FileName = "MedEnthLogsCli.exe";
+                startInfo.FileName = cliExeLocation;
 
                 this.serverProcess = Process.Start( startInfo );
             }

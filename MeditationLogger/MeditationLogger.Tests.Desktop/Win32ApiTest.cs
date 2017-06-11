@@ -16,8 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System.IO;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
+using NUnit.Framework;
 
 namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 {
@@ -29,11 +31,22 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// <summary>
         /// Where the TestCore project is located relative to the .dll.
         /// </summary>
-        public const string TestCoreDir = @"..\..\..\MeditationLogger.TestCore";
+        public static readonly string TestCoreDir;
 
         /// <summary>
         /// The location detector to use.
         /// </summary>
         public static readonly ILocationDetector LocationDetector = new Win32LocationDetector();
+
+        static LogsApiTest()
+        {
+            TestCoreDir = Path.Combine(
+                TestContext.CurrentContext.TestDirectory,
+                "..",
+                "..",
+                "..",
+                "MeditationLogger.TestCore"
+            );
+        }
     }
 }
