@@ -62,6 +62,10 @@
       <Project>{4815671c-b7d0-4fe8-8f16-f4c12bc07221}</Project>
       <Name>MeditationLogger.Desktop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MeditationLogger.Server\MeditationLogger.Server.csproj">
+      <Project>{3231e3cb-e9a7-428e-ae6a-0d4fb4da0718}</Project>
+      <Name>MeditationLogger.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

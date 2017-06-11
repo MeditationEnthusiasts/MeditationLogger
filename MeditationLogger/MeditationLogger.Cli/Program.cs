@@ -25,6 +25,7 @@ using System.Security.Permissions;
 using System.Security.Policy;
 using MeditationEnthusiasts.MeditationLogger.Api;
 using MeditationEnthusiasts.MeditationLogger.Desktop;
+using MeditationEnthusiasts.MeditationLogger.Server;
 using SethCS.IO;
 
 namespace MeditationEnthusiasts.MeditationLogger.Cli
@@ -93,10 +94,10 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
                 }
                 else if( args[0] == "launch_server" )
                 {
-                    int returnCode = LaunchServer( HttpServer.DefaultPort, args );
+                    int returnCode = LaunchServer( MeditationServer.DefaultPort, args );
                     if( returnCode == ErrorCodes.AdminNeeded )
                     {
-                        PrintAdminMessage( HttpServer.DefaultPort );
+                        PrintAdminMessage( MeditationServer.DefaultPort );
                     }
                     return returnCode;
                 }
@@ -311,8 +312,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
                 Console.WriteLine();
 
                 using(
-                    HttpServer server =
-                        new HttpServer(
+                    MeditationServer server =
+                        new MeditationServer(
                             api,
                             port,
                             delegate ( string message )
