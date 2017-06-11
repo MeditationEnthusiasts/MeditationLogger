@@ -23,12 +23,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.Api", "Med
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MeditationLogger.Api\MedEnthLogsApi.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
+		MeditationLogger.Api\MeditationLogger.Api.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{4815671c-b7d0-4fe8-8f16-f4c12bc07221}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
-		MeditationLogger.TestCore\TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
-		MeditationLogger.TestCore\TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
-		MeditationLogger.Api\MedEnthLogsApi.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
+		MeditationLogger.TestCore\MeditationLogger.TestCore.projitems*{8d1d8bc8-f9dc-403d-b481-3a5fe3556d5f}*SharedItemsImports = 13
+		MeditationLogger.TestCore\MeditationLogger.TestCore.projitems*{b8bce3b9-2568-49fa-90aa-7484e1b67e8a}*SharedItemsImports = 4
+		MeditationLogger.Api\MeditationLogger.Api.projitems*{c90e9a74-9cb3-4a08-bfe0-6e3b759bcc2e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
