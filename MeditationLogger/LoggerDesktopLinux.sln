@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MeditationLogger.Api", "MeditationLogger.Api\MeditationLogger.Api.shproj", "{C90E9A74-9CB3-4A08-BFE0-6E3B759BCC2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMeditationLogger.Api", "LibMeditationLogger.Api\LibMeditationLogger.Api.csproj", "{21CA51FB-330E-4F31-AB19-69F4095EB20E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Cli", "MeditationLogger.Cli\MeditationLogger.Cli.csproj", "{8FD66191-747C-48B8-B27B-0E41E40A4C4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.Server", "MeditationLogger.Server\MeditationLogger.Server.csproj", "{3231E3CB-E9A7-428E-AE6A-0D4FB4DA0718}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21CA51FB-330E-4F31-AB19-69F4095EB20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CA51FB-330E-4F31-AB19-69F4095EB20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CA51FB-330E-4F31-AB19-69F4095EB20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CA51FB-330E-4F31-AB19-69F4095EB20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3231E3CB-E9A7-428E-AE6A-0D4FB4DA0718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3231E3CB-E9A7-428E-AE6A-0D4FB4DA0718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3231E3CB-E9A7-428E-AE6A-0D4FB4DA0718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3231E3CB-E9A7-428E-AE6A-0D4FB4DA0718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD66191-747C-48B8-B27B-0E41E40A4C4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD66191-747C-48B8-B27B-0E41E40A4C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD66191-747C-48B8-B27B-0E41E40A4C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD66191-747C-48B8-B27B-0E41E40A4C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
