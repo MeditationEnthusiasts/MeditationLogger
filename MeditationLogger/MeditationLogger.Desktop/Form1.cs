@@ -88,7 +88,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Desktop
             this.isNoTaskInProgress = true;
 
             this.GplTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.MedEnthLicense;
-            this.ExternalLibTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.ExternalLicenses;
+            this.ExternalLibTextBox.Text = MeditationEnthusiasts.MeditationLogger.Api.License.CreditsString;
             this.VersionValueLabel.Text = Api.Api.VersionString;
 
             this.logViews = new List<LogView>();

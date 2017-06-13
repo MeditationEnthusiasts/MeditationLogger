@@ -86,11 +86,13 @@ namespace MeditationEnthusiasts.MeditationLogger.Cli
                 }
                 else if( ( args[0] == "--license" ) || args[0] == "-l" )
                 {
-                    Console.WriteLine( MeditationEnthusiasts.MeditationLogger.Api.License.MedEnthLicense );
+                    Console.WriteLine( License.MedEnthLicense );
                 }
                 else if( ( args[0] == "--external" ) || args[0] == "-e" )
                 {
-                    Console.WriteLine( MeditationEnthusiasts.MeditationLogger.Api.License.ExternalLicenses );
+                    Console.WriteLine( "This project is made possible by several external libraries.  Below is a listing of all of them, and their corresponding license." );
+                    Console.WriteLine();
+                    Console.WriteLine( License.CreditsString );
                 }
                 else if( args[0] == "meditate" )
                 {

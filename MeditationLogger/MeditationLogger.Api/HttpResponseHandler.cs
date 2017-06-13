@@ -379,7 +379,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             }
             else if( url == CreditsUrl )
             {
-                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( License.ExternalLicenses );
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( License.CreditsString );
                 info.ContentType = "text/plain";
             }
             else if( url == LicenseUrl )
