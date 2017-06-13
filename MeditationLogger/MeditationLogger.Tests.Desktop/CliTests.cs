@@ -23,7 +23,6 @@ using System.IO;
 using System.Net;
 using MeditationEnthuisasts.MeditationLogger.TestCore;
 using MeditationEnthusiasts.MeditationLogger.Api;
-using MeditationEnthusiasts.MeditationLogger.Desktop;
 using MeditationLogger.TestCore.Mocks;
 using Moq;
 using NUnit.Framework;
@@ -46,7 +45,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         /// <summary>
         /// The URL to send requests to.
         /// </summary>
-        private static readonly string url = "http://localhost:" + port;
+        private static readonly string url = "http://127.0.0.1:" + port;
 
         /// <summary>
         /// If a logbook already exists, we don't want to accidently nuke it.
@@ -219,7 +218,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
         [Test]
         public void GetRequestTest()
         {
-            Assert.Ignore( "Ignoring for now, need to figure out why we can't GET request to the same machine.... strange." );
+            //Assert.Ignore( "Ignoring for now, need to figure out why we can't GET request to the same machine.... strange." );
 
             List<string> pages = new List<string> {
                 "/",
@@ -240,10 +239,12 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 
             using( ServerLauncher server = new ServerLauncher( port, this.cliExeLocation ) )
             {
+                string currentPage = string.Empty;
                 try
                 {
                     foreach( string page in pages )
                     {
+                        currentPage = page;
                         HttpWebRequest request = WebRequest.CreateHttp( url + page );
                         request.Method = "GET";
 
@@ -254,7 +255,8 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
 
                     // Ensure a bad page results in a 404.
                     {
-                        HttpWebRequest request = WebRequest.CreateHttp( url + "/derp.html" );
+                        currentPage = "/derp.html";
+                        HttpWebRequest request = WebRequest.CreateHttp( url + currentPage );
                         request.Method = "GET";
 
                         try
@@ -414,12 +416,25 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.Arguments = "launch_server " + port;
                 startInfo.RedirectStandardInput = true;
+                startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
 
                 // TestDesktop has a reference to the CLI, so it will appear in the same Dir as the test .dll.
                 startInfo.FileName = cliExeLocation;
+                startInfo.WorkingDirectory = TestContext.CurrentContext.TestDirectory;
 
                 this.serverProcess = Process.Start( startInfo );
+
+                string line = null;
+                do
+                {
+                    line = this.serverProcess.StandardOutput.ReadLine();
+                    if( line.Contains( "Happy Meditating!" ) )
+                    {
+                        return;
+                    }
+                }
+                while( line != null );
             }
 
             // -------- Functions --------
@@ -431,15 +446,23 @@ namespace MeditationEnthusiasts.MeditationLogger.Tests.Desktop
             {
                 if( this.serverProcess != null )
                 {
-                    HttpWebRequest request = WebRequest.CreateHttp( url + "/quit.html" );
-                    request.Method = "POST";
+                    try
+                    {
+                        HttpWebRequest request = WebRequest.CreateHttp( url + "/quit.html" );
+                        request.Method = "POST";
+                        request.ContentLength = 0; // <- REQUIRED for POST requests.
 
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                    Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
-
-                    this.serverProcess.WaitForExit();
-                    Assert.AreEqual( 0, this.serverProcess.ExitCode );
+                        Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
+                    }
+                    finally
+                    {
+                        if( this.serverProcess.WaitForExit( 5 * 1000 ) == false )
+                        {
+                            this.serverProcess.Kill();
+                        }
+                    }
                 }
             }
         }
