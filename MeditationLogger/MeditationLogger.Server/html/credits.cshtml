@@ -1,0 +1,82 @@
+﻿@using MeditationEnthusiasts.MeditationLogger.Api;
+
+<!DOCTYPE html>
+<!--
+ Meditation Logger.
+ Copyright (C) 2015-2017  Seth Hendrick.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses />.
+-->
+
+<!-- Unit Test: credits.cshtml -->
+
+<html>
+<head>
+    <title>Meditation Enthusiasts Logger</title>
+    @Html.Raw( Model.CommonHead )
+    <link type="text/css" rel="stylesheet" href="css/pure/pricing.css" />
+    <link type="text/css" rel="stylesheet" href="css/pure/two-col.css" />
+    <style type="text/css">
+        .tableHeader{
+            margin:1em;
+            width:100%;
+            height:100%;
+        }
+
+        .license{
+            width:100%;
+            height:100%;
+            margin:1em;
+        }
+
+        textarea{
+            width:90%;
+            box-sizing:border-box;
+            min-height:15em;
+        }
+
+        .info-table{
+            margin-top:1em;
+        }
+    </style>
+</head>
+<body>
+    <div id="layout" class="content pure-g">
+        <!-- Start Pure layout -->
+        @Html.Raw( Model.NavBar )
+        <div id="main" class="pure-u-1">
+            <h1>Credits</h1>
+            <p>This project is made possible by several external libraries.  Below is a listing of all of them, and their corresponding license.</p>
+
+            <div class="info-table">
+                @foreach( Credit credit in License.Credits )
+                {
+                    <div class="info-table">
+                        <div class="info-table-free">
+                            <div class="tableHeader">
+                                <h2>@credit.Name</h2>
+                                <p><a href="@credit.Website">@credit.Website</a></p>
+                            </div>
+                            <div class="license">
+                                <p><strong>License:</strong></p>
+                                <textarea>@credit.License</textarea>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

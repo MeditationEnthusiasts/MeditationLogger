@@ -722,7 +722,7 @@ Public License instead of this License.  But first, please read
         /// <summary>
         /// List of all the credits we use.
         /// </summary>
-        public static IReadOnlyList<Credit> Credits { get; private set; }
+        public static IList<Credit> Credits { get; private set; }
 
         /// <summary>
         /// A string of all the credits.

@@ -17,18 +17,11 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using MedEnthLogsApi;
 using MedEnthLogsApi.Razor;
 using RazorEngine;
 using RazorEngine.Configuration;
@@ -102,7 +95,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         public const string ExportUrl = "/export.html";
         public const string ExportXmlUrl = "/export/logbook.xml";
         public const string ExportJsonUrl = "/export/logbook.json.xml";
-        public const string CreditsUrl = "/about/credits.txt";
+        public const string CreditsUrl = "/about/credits.html";
         public const string LicenseUrl = "/about/license.txt";
         public const string AboutUrl = "/about.html";
 
@@ -126,6 +119,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
         private string meditateStartPageHtml;
         private string exportPageHtml;
         private string aboutPageHtml;
+        private string creditsPageHtml;
 
         // -------- Razor Keys --------
 
@@ -272,6 +266,21 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
                     }
                 );
             }
+
+            // Credits page will NEVER change, just cache it.
+            {
+                string creditsTemplate = ReadFile( Path.Combine( "html", "credits.cshtml" ) );
+                this.creditsPageHtml = Engine.Razor.RunCompile(
+                    creditsTemplate,
+                    CreditsUrl,
+                    null,
+                    new
+                    {
+                        CommonHead = this.commonHeadTemplate,
+                        NavBar = this.navBarTemplate
+                    }
+                );
+            }
         }
 
         /// <summary>
@@ -379,8 +388,7 @@ namespace MeditationEnthusiasts.MeditationLogger.Api
             }
             else if( url == CreditsUrl )
             {
-                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( License.CreditsString );
-                info.ContentType = "text/plain";
+                info.ResponseBuffer = System.Text.Encoding.UTF8.GetBytes( this.creditsPageHtml );
             }
             else if( url == LicenseUrl )
             {
